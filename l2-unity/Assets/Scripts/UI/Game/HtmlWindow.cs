@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Windows;
+using static UnityEngine.InputSystem.InputControlScheme.MatchResult;
+using Match = System.Text.RegularExpressions.Match;
 
 public class HtmlWindow : L2PopupWindow
 {
@@ -13,6 +16,9 @@ public class HtmlWindow : L2PopupWindow
     private static HtmlWindow _instance;
     private VisualElement _content;
     private Dictionary<string, string> _actionsHtml = new Dictionary<string, string>();
+    private Dictionary<string, VisualElement> _textFieldHtml = new Dictionary<string, VisualElement>();
+    private VisualTreeAsset _fieldText;
+    private readonly string _defaultIdTextField = "UserInputField";
     public static HtmlWindow Instance
     {
         get { return _instance; }
@@ -22,7 +28,6 @@ public class HtmlWindow : L2PopupWindow
         if (_instance == null)
         {
             _instance = this;
-            _actionsHtml = new Dictionary<string, string>();
         }
         else
         {
@@ -38,6 +43,7 @@ public class HtmlWindow : L2PopupWindow
     protected override void LoadAssets()
     {
         _windowTemplate = LoadAsset("Data/UI/_Elements/Game/HtmlWindow");
+        _fieldText = LoadAsset("Data/UI/_Elements/Template/TextField");
     }
 
     protected override void InitWindow(VisualElement root)
@@ -59,6 +65,7 @@ public class HtmlWindow : L2PopupWindow
     {
         _actionsHtml.Clear();
         _content.Clear();
+        _textFieldHtml.Clear();
 
         foreach (IElementsUI element in elements)
         {
@@ -92,6 +99,13 @@ public class HtmlWindow : L2PopupWindow
                 //no concat font color
                 _latTextElement = null;
                 _fontColorFirst = null;
+            }else if (element.GetType() == typeof(ParseEdit))
+            {
+                ParseEdit editElement = (ParseEdit)element;
+                VisualElement fieldElement = ToolTipsUtils.CloneOne(_fieldText);
+                VisualElement textField = fieldElement.Q<TextField>(_defaultIdTextField);
+                _content.Add(fieldElement);
+                if(!_textFieldHtml.ContainsKey(editElement.GetVarName())) _textFieldHtml.Add(editElement.GetVarName(), textField);
             }
             else if (element.GetType() == typeof(ParseHref))
             {
@@ -154,11 +168,37 @@ public class HtmlWindow : L2PopupWindow
         string action = _actionsHtml[labelName];
         if (!string.IsNullOrEmpty(action))
         {
+            action = ReplaceVarToStringData(action);
             HideWindow();
             SendSenver(action);
         }
         
        // Debug.Log($"Вы нажали на Label с именем: {labelName}  , {action}");
+    }
+
+    public string ReplaceVarToStringData(string action)
+    {
+        string pattern = @"\$\w+(\s|\""|$)";
+        var matches = Regex.Matches(action, pattern);
+        string newAction = action;
+        Debug.Log("" + action);
+        if (matches != null && matches.Count > 0)
+        {
+            foreach (Match match in matches)
+            {
+                string fieldName = match.Value.Replace(@"$", "");
+                
+                if (_textFieldHtml.ContainsKey(fieldName))
+                {
+                    var element  = (TextField)_textFieldHtml[fieldName];
+                    newAction =  action.Replace(match.Value, element.value);
+                }
+            }
+
+        }
+
+        return newAction;
+  
     }
 
     public async Task SendSenver(string command )

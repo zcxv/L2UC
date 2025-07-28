@@ -155,6 +155,9 @@ public class ModelTable
         _weapons = new Dictionary<string, GameObject>();
         int success = 0;
         foreach (KeyValuePair<int, Weapon> kvp in ItemTable.Instance.Weapons) {
+
+
+
             if(_weapons.ContainsKey(kvp.Value.Weapongrp.Model)) {
                 continue;
             }

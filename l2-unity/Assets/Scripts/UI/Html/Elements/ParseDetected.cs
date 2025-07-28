@@ -3,13 +3,12 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ParseDetected : IParse
 {
 
-    //public List<IElementsUI> _elements = new List<IElementsUI>();
-    //HashSet<string> _uniqueTexts = new HashSet<string>();
     private Dictionary<string, IElementsUI> _elements = new Dictionary<string, IElementsUI>();
     private int _count = 0;
     public List<IElementsUI> GetElements()
@@ -19,70 +18,79 @@ public class ParseDetected : IParse
 
     public void Parse(string text)
     {
-       //ParseLabel label = new ParseLabel(text);
-        //_elements.Add(label);
+
     }
-    
+
     public void ParseNode(HtmlNode node)
     {
         try
         {
-            if (node.Name.Equals("#text"))
+            switch (node.Name)
             {
-                // ParseLabel label = new ParseLabel(node.InnerText);
-                if (!_elements.ContainsKey(node.InnerText))
-                {
-                    _elements.Add(node.InnerText, new ParseLabel(node.InnerText));
-                }
-
-            }
-            else if (node.Name.Equals("br") | node.Name.Equals("br1"))
-            {
-                //if (!_elements.ContainsKey(node.InnerText))
-                //{
-                _elements.Add("br" + _count++, new ParseBr());
-                //}
-            }
-            else if (node.Name.Equals("a"))
-            {
-
-                var href = node.Attributes.FirstOrDefault();
-                var name = node.InnerText;
-
-                if (!_elements.ContainsKey(name))
-                {
-                    _elements.Add(node.InnerText, new ParseHref(name, href.Value));
-                }
-                else
-                {
-                    AddDictNotUniq(node.InnerText, name, href.Value);
-                }
-
-            }
-            else if (node.Name.Equals("font"))
-            {
-                //_elements.Add("br" + _count++, new ParseFontColor());
-                var fontColor = node.Attributes.FirstOrDefault();
-                string color = fontColor.Value;
-                string name = fontColor.Name;
-                string text = node.InnerText;
-                ParseFontColor parseFontColor = new ParseFontColor(color, text);
-
-                if(!AddHrefColor(text, parseFontColor, _elements))
-                {
-                    _elements.Add(text, parseFontColor);
-                }
-                
-                //Debug.Log("");
+                case "#text":
+                    AddText(node);
+                    break;
+                case "br":
+                case "br1":
+                    AddBr(node);
+                    break;
+                case "a":
+                    AddHref(node);
+                    break;
+                case "font":
+                    AddFont(node);
+                    break;
+                case "edit":
+                    AddEdit(node);
+                    break;
+                default:
+                    // Можно добавить обработку для других случаев или оставить пустым
+                    break;
             }
         }
         catch (Exception ex)
         {
             Debug.LogWarning("HtmlMessage->ParseNode: error " + ex.ToString());
         }
-       
     }
 
+    private void AddText(HtmlNode node)
+    {
+        if (!_elements.ContainsKey(node.InnerText))
+        {
+            _elements.Add(node.InnerText, new ParseLabel(node.InnerText));
+        }
+    }
+    private void AddBr(HtmlNode node)
+    {
+       _elements.Add("br" + _count++, new ParseBr());
+    }
+    private void AddHref(HtmlNode node)
+    {
+        var href = node.Attributes.FirstOrDefault();
+        var name = node.InnerText;
+
+        if (!_elements.ContainsKey(name))
+        {
+            _elements.Add(name, new ParseHref(name, href.Value));
+        }
+        else
+        {
+            AddDictNotUniq(name, name, href.Value);
+        }
+    }
+    private void AddFont(HtmlNode node)
+    {
+        var fontColor = node.Attributes.FirstOrDefault();
+        string color = fontColor.Value;
+        string text = node.InnerText;
+        ParseFontColor parseFontColor = new ParseFontColor(color, text);
+
+        if (!AddHrefColor(text, parseFontColor, _elements))
+        {
+            _elements.Add(text, parseFontColor);
+        }
+    }
     private bool AddHrefColor(string textId , ParseFontColor color , Dictionary<string, IElementsUI> dict)
     {
         if (dict.ContainsKey(textId))
@@ -99,11 +107,27 @@ public class ParseDetected : IParse
         return false;
     }
 
-    private void AddDictNotUniq(string nameName , string name , string hrefValue)
+
+    private void AddEdit(HtmlNode node)
+    {
+        string text = node.Name;
+        var elementNameVar = "";
+        if (node.HasAttributes)
+        {
+            var attr = node.Attributes;
+            elementNameVar = attr.Where(p => p.Name.Equals("var"))
+                .FirstOrDefault().Value;
+        }
+        _elements.Add(text , new ParseEdit(elementNameVar));
+    }
+
+
+    private void AddDictNotUniq(string nameName, string name, string hrefValue)
     {
         _elements.Remove(name);
         _elements.Add(nameName, new ParseHref(name, hrefValue));
     }
 
-    
+
+
 }
