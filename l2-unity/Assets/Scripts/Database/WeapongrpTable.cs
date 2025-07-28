@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class WeapongrpTable {
     private static WeapongrpTable _instance;
@@ -171,10 +172,7 @@ public class WeapongrpTable {
                 {
                     string[] ids = line.Split('\t');
                     int id =  Int32.Parse(ids[1]);
-                    if(id == 102)
-                    {
-                        //Debug.Log("");
-                    }
+
                     if (_weaponGrps.ContainsKey(id))
                     {
                         Weapongrp grp = _weaponGrps[id];
@@ -191,9 +189,51 @@ public class WeapongrpTable {
 
                         grp.Soulshot =(byte) Int32.Parse(ids[52]);
                         grp.Spiritshot = (byte)Int32.Parse(ids[53]);
+                    }
+                    else
+                    {
+                        Weapongrp grp = new Weapongrp();
+
+                        var wp_model = ids[7];
+                        var texture = ids[10];
+                        var icon = ids[13];
+                        var weight = ids[19];
+                        var material = ids[20];
+                        var body_part = ids[24];
+                        var hadness = ids[25];
+                        var weapon_type_id = ids[44];
+                        var weaponType1 = WeaponTypeParser.Parse(weapon_type_id);
 
 
-                        //Debug.Log("");
+                        var model = DatUtils.ParseArray(wp_model);
+                        grp.Model = model[0];
+
+                        var modTex = DatUtils.ParseArray(texture);
+                        grp.Texture = modTex[0];
+
+
+                        grp.Icon = DatUtils.ParseArray(icon)[0];
+                        grp.Weight = int.Parse(weight);
+                        grp.Material = ItemMaterialParser.Parse(material);
+
+                        var weaponType = WeaponClassifier.GetType(weaponType1, grp, Int32.Parse(hadness));
+                        grp.WeaponType = weaponType;
+
+                        grp.PAtk = Int32.Parse(ids[41]);
+                        grp.Matk = Int32.Parse(ids[42]);
+                        grp.CriticalRate = Int32.Parse(ids[45]);
+
+                        grp.Dex = Int32.Parse(ids[47]);
+                        grp.ShieldPdef = Int32.Parse(ids[48]);
+                        grp.ShieldRate = Int32.Parse(ids[49]);
+
+                        grp.PAtkSpeed = Int32.Parse(ids[50]);
+                        grp.MpConsume = Int32.Parse(ids[51]);
+
+                        grp.Soulshot = (byte)Int32.Parse(ids[52]);
+                        grp.Spiritshot = (byte)Int32.Parse(ids[53]);
+
+                        _weaponGrps.Add(id , grp);
                     }
                 }
 

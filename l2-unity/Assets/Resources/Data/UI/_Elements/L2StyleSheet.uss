@@ -1415,6 +1415,8 @@
     color: rgb(220, 220, 220);
 }
 
+
+
 .quantity-window .unity-base-field__input {
     margin: 0;
     padding: 0;
