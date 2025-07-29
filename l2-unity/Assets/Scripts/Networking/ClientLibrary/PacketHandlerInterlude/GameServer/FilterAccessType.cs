@@ -134,6 +134,10 @@ public class FilterAccessType
         {
             return true;
         }
+        else if (item.PaketType() == GameInterludeServerPacketType.ExTypePacket)
+        {
+            return true;
+        }
         else if (item.PaketType() == GameInterludeServerPacketType.StatusUpdate)
         {
             return true;

@@ -62,26 +62,22 @@ public class GameClientReceiving : MonoBehaviour
                         {
                             //We convey one point to everyone. if the package id does not match, it will be ignored
                             ItemServer item = IncomingGameDataQueue.Instance().CreateItem(buffer, _asyncClient.InitPacket, _asyncClient.CryptEnabled);
-                            if (item.ByteType() == 0xFE)
-                            {
+                            //if (item.ByteType() == 0xFE)
+                            //{
 
-                                Debug.Log(" Size packet ExStorageMaxCount " + buffer.Length);
+                             //   Debug.Log(" Size packet ExStorageMaxCount " + buffer.Length);
                                 //46 ExStorageMaxCount
-                                Debug.Log("пришел пакет ex  попытка игнорировать>>>>>>");
-                            }
-                            else
-                            {
-                                //test slowdown of packets if they fly too fast some of them are dropped by the blocking collection a fix may be needed
-                                //if (item.ByteType() == 0x27)
-                                //{
-                                //    Debug.Log(" Inventory Update Server Get ");
-                               // }
+                              //  Debug.Log("пришел пакет ex  попытка игнорировать>>>>>>");
+                            //}
+                            //else
+                            //{
+
 
                                 IncomingGameCombatQueue.Instance().AddItem(item);
                                 IncomingGameDataQueue.Instance().AddItem(item);
                                 IncomingGameMessageQueue.Instance().AddItem(item);
-                                //Debug.Log("");
-                            }
+
+                            //}
                         }
                         else
                         {

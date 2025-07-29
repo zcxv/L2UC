@@ -1,16 +1,9 @@
-using L2_login;
-using NUnit.Framework;
-using System;
-using System.Collections;
+
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Security.Principal;
-using System.Threading;
 using System.Threading.Tasks;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.Rendering.GPUSort;
+using static UnityEditor.Progress;
+
 
 public class GameServerInterludePacketHandler : ServerPacketHandler
 {
@@ -19,34 +12,48 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     {
         ItemServer item = (ItemServer)itemQueue;
 
+        if (!IsExPacket(item))
+        {
+            UsePacket(item, itemQueue);
+        }
+        else
+        {
+           int type = item.ExPacketType();
+           UseExPacket(type, itemQueue);
+        }
+    }
+
+
+    private void UsePacket(ItemServer item , IData itemQueue)
+    {
         switch (item.PaketType())
         {
             case GameInterludeServerPacketType.InterludeKeyPacket:
-       
+
                 OnKeyReceive(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.CharSelectionInfo:
-            
+
                 OnCharSelectionInfo(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.CharTemplate:
-           
+
                 OnCharTemplate(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.CharCreateOk:
-         
+
                 OnCharCreateOk(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.CharSelected:
-       
+
                 OnCharSelected((itemQueue.DecodeData()));
                 break;
             case GameInterludeServerPacketType.CharCreateFail:
-          
+
                 OnCharCreateFail((itemQueue.DecodeData()));
                 break;
             case GameInterludeServerPacketType.SkillList:
-         
+
                 OnCharSkillList(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.UserInfo:
@@ -54,15 +61,15 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
                 OnCharUserInfo(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.SkillCoolTime:
-             
+
                 OnCharSkillCoolTime(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.MacroList:
-            
+
                 OnCharMacroList(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.NpcHtmlMessage:
-              
+
                 OnNpcHtmlMessage(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.PackageToList:
@@ -70,11 +77,11 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
                 OnPackageToList(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.TutorialShowHtml:
-            
+
                 OnTutorialShowHtml(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.BuyList:
-              
+
                 OnBuyList(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.ShopPreviewList:
@@ -84,11 +91,11 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
                 OnShopPreviewInfo(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.MultiSellList:
-           
+
                 OnMultisellList(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.SellList:
-           
+
                 OnSellList(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.WhDepositList:
@@ -104,51 +111,51 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
                 OnWhWithdrawList(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.ShortCutInit:
-    
+
                 OnCharShortCutInit(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.ShortCutRegister:
-           
+
                 OnCharShortCutRegister(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.SocialAction:
-            
+
                 OnSocialAction(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.TeleportToLocation:
-             
+
                 OnTeleportToLocation(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.Revive:
-        
+
                 OnRevive(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.HennaInfo:
-          
+
                 OnCharHennaInfo(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.QuestList:
-           
+
                 OnCharQuestList(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.NpcInfo:
-        
+
                 OnCharNpcInfo(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.DeleteObject:
-          
+
                 OnDeleteObject(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.CharMoveToLocation:
-       
+
                 OnMoveToLocation(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.ValidateLocation:
-     
+
                 OnValidateLocation(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.FriendList:
-   
+
                 OnFriendList(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.EtcStatusUpdate:
@@ -178,7 +185,18 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
                 break;
 
         }
+    }
 
+    private void UseExPacket(int exPacket, IData itemQueue)
+    {
+        switch (exPacket)
+        {
+            case (int)GameInterludeExServerPacketType.ExShowQuestInfo:
+                OnExShowQuestInfo(itemQueue.DecodeExData());
+                break;
+            default:
+                break;
+        }
     }
 
     //3 repeated packages are coming ignoring
@@ -759,6 +777,12 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
             });
         }
 
+    }
+
+    private void OnExShowQuestInfo(byte[] data)
+    {
+        ExShowQuestInfo etcStatusUpdate = new ExShowQuestInfo(data);
+        Debug.Log("Event Open QuestList Info");
     }
 
     private void OnStatusUpdate(byte[] data)

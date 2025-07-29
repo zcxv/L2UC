@@ -36,8 +36,15 @@ public class NpcInfo : ServerPacket
         Stats.MaxHp = 100;
 
         //Debug.Log("Начинаем обработку пакета NPCINFOOO");
-        Identity.Id = ReadI();
+        int objectId = ReadI();
+        Identity.Id = objectId;
         Identity.NpcId = ReadI() - 1000000; // npctype id (-1000000)
+
+        if(Identity.NpcId == 31775)
+        {
+            Debug.Log(" object NpcInfo 1 " + objectId);
+        }
+
         Identity.SetHideHp(Identity.NpcId);
         int isAttackable = ReadI();
         int x = ReadI();
@@ -46,6 +53,11 @@ public class NpcInfo : ServerPacket
         Identity.SetL2jPos(x, y, z);
         Identity.Heading = VectorUtils.ConvertHeadingL2jToUnity(ReadI());
         int empty = ReadI();
+
+        if (Identity.NpcId == 31775)
+        {
+            Debug.Log(" object NpcInfo  object 2 " + objectId);
+        }
 
         Stats.MAtkSpd = ReadI();
         Stats.PAtkSpd= ReadI();
@@ -97,6 +109,12 @@ public class NpcInfo : ServerPacket
         Appearance.CollisionRadius = (float)_collisionRadius;
         int _enchantEffect = ReadI();
         int isFlying = ReadI();
+
+        if (Identity.NpcId == 31775)
+        {
+            Debug.Log(" object NpcInfo  object 3 " + objectId);
+        }
+
         //Debug.Log("Завершили обработку пакета NPCINFOOO NPCID " + Identity.NpcId);
     }
 

@@ -76,4 +76,9 @@ public class ItemLogin : IData
     {
         throw new System.NotImplementedException();
     }
+
+    public byte[] DecodeExData()
+    {
+        throw new System.NotImplementedException();
+    }
 }
