@@ -41,4 +41,9 @@ public class ItemSendLogin : IData
     {
         return packet;
     }
+
+    public byte[] DecodeExData()
+    {
+        throw new System.NotImplementedException();
+    }
 }

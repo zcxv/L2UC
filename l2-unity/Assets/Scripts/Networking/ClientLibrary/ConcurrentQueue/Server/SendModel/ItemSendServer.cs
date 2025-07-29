@@ -19,18 +19,7 @@ public class ItemSendServer : IData
     {
         throw new System.NotImplementedException();
     }
-    //meybe delete
-    private void Encrypt(ClientPacket packet, bool encrypt)
-    {
-        if (encrypt)
-        {
-            byte[] data = packet.GetData();
-            NewCrypt.appendChecksum(data);
-            //NewCrypt.setKey(LoginClient.Instance.BlowfishKey);
-            //NewCrypt.GameServerEncrypt(data , 0 , data.Length);
-            Debug.Log("");
-        }
-    }
+
     //new version encrypt
     private void Blowfish(byte[] data, bool blowfish)
     {
@@ -46,5 +35,10 @@ public class ItemSendServer : IData
     public ClientPacket GetPacket()
     {
         return packet;
+    }
+
+    public byte[] DecodeExData()
+    {
+        throw new System.NotImplementedException();
     }
 }

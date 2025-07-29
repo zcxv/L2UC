@@ -160,8 +160,9 @@ public class World : MonoBehaviour {
 
     public void SpawnNpcInterlude(NetworkIdentityInterlude identity, NpcStatusInterlude status, Stats stats)
     {
-       
-        
+
+
+
         if (_npcs.ContainsKey(identity.Id)) return;
 
         Debug.Log("Запуск обработки Spawn Npc Interlude ++++++++++++++++++ ");
@@ -177,6 +178,11 @@ public class World : MonoBehaviour {
 
 
         GameObject go = ModelTable.Instance.GetNpc(npcgrp.Mesh);
+
+        if(identity.NpcId == 31775)
+        {
+            Debug.Log(" object NpcInfo 5 " + identity.Id);
+        }
 
         if (go != null)
         {
@@ -269,7 +275,7 @@ public class World : MonoBehaviour {
 
             RespawnPositionElseLoadingGame(identity, npcGo);
 
-           
+
 
             _npcs.Add(identity.Id, npc);
             _objects.Add(identity.Id, npc);
@@ -319,10 +325,7 @@ public class World : MonoBehaviour {
             m_entity.Running = npcInfo.Identity.IsRunning;
         }
 
-        if (entity.name.Equals("Leandro"))
-        {
-            Debug.Log("");
-        }
+
     }
 
 
@@ -371,14 +374,12 @@ public class World : MonoBehaviour {
         npc.GetComponent<NetworkAnimationController>().Initialize();
         MoveNpc moveNpc = npcGo.GetComponent<MoveNpc>();
 
+
         npcGo.GetComponent<Gear>().Initialize(npc.IdentityInterlude.Id, npc.RaceId);
         npc.Initialize();
         var nsm = npcGo.GetComponent<NpcStateMachine>();
         if (nsm != null)
         {
-            //Debug.Log("NPC IS RUNNING " + npc.IdentityInterlude.IsRunning);
-            //Debug.Log("NPC IS RunSpeed " + npc.Stats.RunSpeed);
-            //Debug.Log("NPC IS WalkSpeed " + npc.Stats.WalkSpeed);
             npc.UpdateNpcPAtkSpd((int)npc.Stats.PAtkSpd);
             npc.UpdateNpcRunningSpd(npc.Stats.RunRealSpeed);
             npc.UpdateNpcWalkSpd(npc.Stats.WalkRealSpeed);
@@ -431,16 +432,11 @@ public class World : MonoBehaviour {
 
     public async Task UpdateObjectPosition(int id, Vector3 position) {
             Entity entity = await GetEntityNoLock(id);
-            //var msm = e.GetComponent<MonsterStateMachine>();
+
             if(entity != null)
             {
-                //Debug.Log("VALIDATE POSITION Warning Not Working!!!!");
-                //Debug.Log("MoveTagetPosition Validate Vector3  Vector " + position);
-               // msm.ChangeIntention(MonsterIntention.INTENTION_TELEPORT_TO, position);
-
                 entity.transform.position = position;
-            //msm.ChangeIntention(MonsterIntention.INTENTION_MOVE_TO, position);
-        }
+            }
             else
             {
 
@@ -475,12 +471,7 @@ public class World : MonoBehaviour {
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
     }
 
-    private void SendAppearing()
-    {
-        Appearing sendPaket = CreatorPacketsUser.CreateAppearing();
-        bool enable = GameClient.Instance.IsCryptEnabled();
-        SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
-    }
+
 
     public Task UpdateObjectRotation(int id, float angle) {
         return ExecuteWithEntityAsync(id, e => {
@@ -533,23 +524,9 @@ public class World : MonoBehaviour {
         });
     }
 
-    //public Task EntityStartAutoAttacking(int id) {
-       // return ExecuteWithEntityAsync(id, e => {
-       //     WorldCombat.Instance.EntityStartAutoAttacking(e);
-       // });
-   // }
-
-    //public Task EntityStopAutoAttacking(int id) {
-       // return ExecuteWithEntityAsync(id, e => {
-       //     //WorldCombat.Instance.EntityStopAutoAttacking(e);
-        //});
-    //}
 
     public Task StatusUpdate(int id, List<StatusUpdatePacket.Attribute> attributes) {
         return ExecuteWithEntityAsync(id, e => {
-            //Debug.Log("Entity id status update  " + e.IdentityInterlude.Id + " Name " + e.IdentityInterlude.Name);
-            //Debug.Log("Entity name  status update" + e.IdentityInterlude.Name);
-            //TimeUtils.PrintFullTime("Attack Packet Update name " + e.IdentityInterlude.Name);
             if(WorldCombat.Instance != null)
             {
                 WorldCombat.Instance.StatusUpdate(e, attributes, id);

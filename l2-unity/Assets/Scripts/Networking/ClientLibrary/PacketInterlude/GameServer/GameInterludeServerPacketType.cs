@@ -35,6 +35,7 @@ public enum GameInterludeServerPacketType : byte
     FriendList = 0xFA,
     ValidateLocation = 0x61,
     EtcStatusUpdate = 0xF3,
+    ExTypePacket = 0xfe,
     StatusUpdate = 0x0E,
     TargetUnselected = 0x2A,
     SocialAction = 0x2D,

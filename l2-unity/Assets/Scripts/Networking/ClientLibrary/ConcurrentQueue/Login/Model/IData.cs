@@ -6,5 +6,6 @@ using UnityEngine;
 public interface IData
 {
     byte[] DecodeData();
+    byte[] DecodeExData();
     ClientPacket GetPacket();
 }
