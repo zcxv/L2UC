@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour {
         WeapongrpTable.Instance.Initialize();
         ItemTable.Instance.CacheItems();
         NpcgrpTable.Instance.Initialize();
+        QuestNameTable.Instance.Initialize();
         NpcNameTable.Instance.Initialize();
         ActionNameTable.Instance.Initialize();
         AnimLeghtTable.Instance.Initialize();
