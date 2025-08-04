@@ -175,6 +175,11 @@ public class L2GameUI : L2UI
             ShowListWindow.Instance.AddWindow(_rootVisualContainer);
             ShowListWindow.Instance.HideWindow();
         }
+        if (QuestListWindow.Instance != null)
+        {
+            QuestListWindow.Instance.AddWindow(_rootVisualContainer);
+            QuestListWindow.Instance.HideWindow();
+        }
     }
 
     public void EnableMouse()

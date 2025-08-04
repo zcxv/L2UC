@@ -14,8 +14,8 @@ public class QuestName
     private string _entity_name;
     private string _description_tooltip;
     private int _areaId;
-    //3 repeat
-    //2 not repaet
+    //3 not repeat
+    //2  repaet
     //0 - unk
     private int _repeat;
     private string _get_item_in_quest;

@@ -782,7 +782,15 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     private void OnExShowQuestInfo(byte[] data)
     {
         ExShowQuestInfo etcStatusUpdate = new ExShowQuestInfo(data);
-        Debug.Log("Event Open QuestList Info");
+        if (EventProcessor.Instance != null)
+        {
+            if (World.Instance != null)
+            {
+                EventProcessor.Instance.QueueEvent(() => QuestListWindow.Instance.ShowWindow());
+            }
+
+        }
+        Debug.Log("Event Open ExShowQuestInfo Info");
     }
 
     private void OnStatusUpdate(byte[] data)
