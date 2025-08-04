@@ -9,22 +9,22 @@ public class QuestNameTable
     private static QuestNameTable _instance;
     private static Dictionary<int, List<QuestName>> _questNames;
 
-    private readonly int indexQuestId = 1;
-    private readonly int indexQuestProg = 2;
-    private readonly int indexMainName = 3;
-    private readonly int indexProgname = 4;
-    private readonly int indexDescription = 5;
-    private readonly int indexDescriptionToolTips = 53;
-    private readonly int indexQuestType = 6;
+    private const int indexQuestId = 1;
+    private const int indexQuestProg = 2;
+    private const int indexMainName = 3;
+    private const int indexProgname = 4;
+    private const int indexDescription = 5;
+    private const int indexDescriptionToolTips = 53;
+    private const int indexQuestType = 6;
 
-    private readonly int indexLvlMin = 39;
-    private readonly int indexLvlMax = 40;
-    private readonly int indexRequirements = 50;
+    private const int indexLvlMin = 39;
+    private const int indexLvlMax = 40;
+    private const int indexRequirements = 50;
 
-    private readonly int indexEntity_name = 42;
+    private const int indexEntity_name = 42;
     //maybe not true
-    private readonly int indexRepaet= 41;
-    private readonly int indexAreaId = 131;
+    private const int indexRepaet= 41;
+    private const int indexAreaId = 131;
     public static QuestNameTable Instance
     {
         get
@@ -43,13 +43,22 @@ public class QuestNameTable
 
     public void Initialize()
     {
-        ReadArmorInterlude();
-        DebugPrint();
+        try
+        {
+            string dataPathE = Path.Combine(Application.streamingAssetsPath, "Data/Meta/Questname-e_interlude.txt");
+            string dataPathR = Path.Combine(Application.streamingAssetsPath, "Data/Meta/Questname-r_interlude.txt");
+            ReadArmorInterlude(dataPathE);
+            ReadArmorInterlude(dataPathR);
+            DebugPrint();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to initialize QuestNameTable: {ex.Message}");
+        }
     }
 
-    public void ReadArmorInterlude()
+    public void ReadArmorInterlude(string dataPath)
     {
-        string dataPath = Path.Combine(Application.streamingAssetsPath, "Data/Meta/Questname-e_interlude.txt");
 
         using (StreamReader reader = new StreamReader(dataPath))
         {
@@ -62,11 +71,6 @@ public class QuestNameTable
                     string[] ids = line.Split('\t');
                     int id = Int32.Parse(ids[indexQuestId]);
                     QuestName quest =  CreateModel(ids);
-
-                    if(id == 257)
-                    {
-                        Debug.Log("");
-                    }
 
                     if (!_questNames.ContainsKey(id))
                     {

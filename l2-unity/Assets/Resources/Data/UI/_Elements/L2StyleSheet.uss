@@ -4016,3 +4016,18 @@
 .dropdown-field .unity-base-popup-field__arrow:hover {
     background-image: resource('Data/UI/Assets/Button/Button_DF_Down');
 }
+
+
+.l2-table-header-name-bg{
+     background-image: resource('Data/UI/Assets/Tab/Table/ListCTRL_DF_Title');
+}
+
+.l2-table-header-name-bg-click{
+    background-image: resource('Data/UI/Assets/Tab/Table/ListCTRL_DF_Title_Down');
+}
+
+.l2-table-header-name-bg:hover {
+    background-image: resource('Data/UI/Assets/Tab/Table/ListCTRL_DF_Title_Over');
+}
+
+

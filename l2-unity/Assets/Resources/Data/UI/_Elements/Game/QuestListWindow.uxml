@@ -1,0 +1,9 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:Template name="WindowTemplate" src="project://database/Assets/Resources/Data/UI/_Elements/Template/WindowTemplate.uxml?fileID=9197481963319205126&amp;guid=57919e48a99c2de4787ca2b8810527ea&amp;type=3#WindowTemplate" />
+    <engine:Instance name="WindowTemplate" template="WindowTemplate" style="overflow: hidden; width: 650px; height: 400px; bottom: 0; position: absolute; max-width: none; max-height: none;">
+        <AttributeOverrides element-name="windows-name-label" text="QuestList" />
+        <engine:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" class="l2-scroll-windows" style="align-self: center; align-items: flex-start; position: absolute; width: 95%; height: 76%; max-width: none; max-height: none; top: 15%; justify-content: center; align-content: center;">
+            <engine:GroupBox name="Content" class="content" style="position: absolute; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: auto; align-self: flex-start; max-width: 300px; max-height: none; left: auto; min-width: auto; min-height: auto; align-items: flex-start; justify-content: flex-start; align-content: auto; flex-direction: column;" />
+        </engine:ScrollView>
+    </engine:Instance>
+</engine:UXML>

@@ -1,0 +1,8 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+ <Style src="project://database/Assets/Resources/Data/UI/_Elements/L2StyleSheet.uss?fileID=7433441132597879392&amp;guid=72e99cc94b130bf4ba100dceaa830b13&amp;type=3#L2StyleSheet" />    
+<engine:VisualElement name="columnInside" class="l2-table-header-name" style="flex-grow: 0; align-self: flex-start; margin-left: 0; justify-content: flex-start; margin-top: 2px; flex-direction: row; overflow: visible; visibility: visible; flex-shrink: 0; align-items: auto; padding-right: 0; padding-left: -2px; display: flex;">
+        <engine:VisualElement name="bgElement" class="l2-table-header-name-bg" style="flex-grow: 0; position: relative;  align-self: auto; width: auto; flex-shrink: 1; flex-direction: row; height: 17px; margin-top: -1px; justify-content: flex-start; display: flex; visibility: visible; overflow: visible; padding-right: 0;">
+            <engine:Label text="Setting1" name="columnLabel" style="font-size: 11px; color: rgb(227, 217, 187); margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-definition: resource(&apos;Data/UI/Assets/Font/tahoma&apos;);" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>
