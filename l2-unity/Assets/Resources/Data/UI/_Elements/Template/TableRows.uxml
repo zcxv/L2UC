@@ -1,12 +1,14 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:GroupBox name="List" style="margin-top: -5px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 96%;">
-        <engine:GroupBox name="Row0" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px;" />
-        <engine:GroupBox name="Row1" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; background-color: rgba(57, 56, 53, 0.79);" />
-        <engine:GroupBox name="Row2" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px;" />
-        <engine:GroupBox name="Row3" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; background-color: rgba(57, 56, 53, 0.79);" />
-        <engine:GroupBox name="Row4" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px;" />
-        <engine:GroupBox name="Row5" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; background-color: rgba(57, 56, 53, 0.79);" />
-        <engine:GroupBox name="Row6" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 16px;" />
-        <engine:GroupBox name="Row5" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; background-color: rgba(57, 56, 53, 0.79);" />
+    <engine:GroupBox name="List" style="margin-top: 3px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: auto; height: auto; flex-shrink: 1; flex-grow: 1; justify-content: flex-start; align-items: flex-start;">
+        <engine:GroupBox name="Row0" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; justify-content: flex-start; align-self: flex-start; align-items: flex-start;">
+            <engine:Label text="Letters of Love" style="margin-top: 1px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 11px; color: rgb(223, 222, 222); -unity-slice-left: 0; align-items: center;" />
+        </engine:GroupBox>
+        <engine:GroupBox name="Row1" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; background-color: rgba(57, 56, 53, 0.79); align-items: flex-start;" />
+        <engine:GroupBox name="Row2" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; align-items: flex-start;" />
+        <engine:GroupBox name="Row3" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; background-color: rgba(57, 56, 53, 0.79); align-items: flex-start;" />
+        <engine:GroupBox name="Row4" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; align-items: flex-start;" />
+        <engine:GroupBox name="Row5" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; background-color: rgba(57, 56, 53, 0.79); align-items: flex-start;" />
+        <engine:GroupBox name="Row6" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 16px; align-items: flex-start;" />
+        <engine:GroupBox name="Row7" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; background-color: rgba(57, 56, 53, 0.79); align-items: flex-start;" />
     </engine:GroupBox>
 </engine:UXML>
