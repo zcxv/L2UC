@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public interface ICreatorTables
 {
-    public void InitTable(VisualElement root);
+    public void InitTable(VisualElement content , VisualElement root);
     void LoadAsset(Func<string, VisualTreeAsset> loaderFunc);
-    void CreateTable(List<string> headersName);
+    void CreateTable(List<TableColumn> headersName);
 }

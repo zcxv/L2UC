@@ -42,13 +42,13 @@ public class QuestListWindow : L2PopupWindow
         yield return new WaitForEndOfFrame();
 
         var dragArea = GetElementByClass("drag-area");
-        _content = GetElementByClass("content");
+        _content = GetElementByClass("quest-content");
         DragManipulator drag = new DragManipulator(dragArea, _windowEle);
         dragArea.AddManipulator(drag);
 
-        _creatorTableWindows.InitTable(_content);
+        _creatorTableWindows.InitTable(_content , _windowEle);
         _creatorTableWindows.LoadAsset(LoadAsset);
-        _creatorTableWindows.CreateTable(new List<string>{"Cycle","Mission Name", "Status" });
+        _creatorTableWindows.CreateTable(new List<TableColumn> { new TableColumn(false, "Mission Name", 0) , new TableColumn(false, "Conditions", 0), new TableColumn(false, "Level", 0), new TableColumn(false, "Repeatable", 0), new TableColumn(false, "Source", 0)});
 
 
         RegisterCloseWindowEvent("btn-close-frame");
@@ -59,3 +59,4 @@ public class QuestListWindow : L2PopupWindow
 
 
 }
+

@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEditor.Rendering.FilterWindow;
 using static UnityEngine.Rendering.DebugUI;
+using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 public class CreatorTableWindows : ICreatorTables
 {
@@ -24,10 +28,37 @@ public class CreatorTableWindows : ICreatorTables
     private VisualTreeAsset _templateHeader;
     private VisualTreeAsset _templateInside;
     private VisualTreeAsset _templateRows;
+    private float width;
+    private float height;
 
-    public void InitTable(VisualElement content)
+
+    private VisualElement _table;
+    private List<VisualElement> _tableHeHeaderItem;
+    private VisualElement containerHeader;
+    public void InitTable(VisualElement content, VisualElement windowEle)
     {
-       _content = content;
+        _content = content;
+        //root.RegisterCallback<GeometryChangedEvent>(OnGeometryCallback);
+    }
+
+
+
+    private void DistributeHeaderItems(List<VisualElement> headerItems, float totalWidth)
+    {
+        if (headerItems == null || headerItems.Count == 0)
+        {
+            Debug.LogWarning("Header items list is empty or null");
+            return;
+        }
+
+        // Calculate width for each item (total width divided by number of items)
+        float itemWidth = totalWidth / headerItems.Count;
+
+        // Apply calculated width to each item
+        foreach (var item in headerItems)
+        {
+            item.style.width = itemWidth;
+        }
     }
 
     public void LoadAsset(Func<string, VisualTreeAsset> loaderFunc)
@@ -38,7 +69,7 @@ public class CreatorTableWindows : ICreatorTables
         _templateRows = loaderFunc(_templateRowsName);
     }
 
-    public void CreateTable(List<string>headersName)
+    public void CreateTable(List<TableColumn> headersName)
     {
         if(_templateTable == null || _templateHeader == null)
         {
@@ -46,16 +77,14 @@ public class CreatorTableWindows : ICreatorTables
             return;
         }
 
-         var _table = ToolTipsUtils.CloneOne(_templateTable);
-         var _tableHeHeaderItem = CreateHeaderItems(headersName);
+         _table = ToolTipsUtils.CloneOne(_templateTable);
+        _tableHeHeaderItem = CreateHeaderItems(headersName);
          VisualElement containerHeaderList = _table.Q<VisualElement>(_tableHeaderListName);
          VisualElement containerBodyList = _table.Q<VisualElement>(_tableBodyListName);
 
 
         InjectHeaderList(_tableHeHeaderItem, containerHeaderList);
-
-        var listRows = ToolTipsUtils.CloneOne(_templateRows);
-        InjectBodyList(containerBodyList, listRows);
+        //InjectBodyList(headersName , containerBodyList);
 
         _content.Add(_table);
     }
@@ -69,12 +98,9 @@ public class CreatorTableWindows : ICreatorTables
         }
     }
 
-    private void InjectBodyList(VisualElement containerBodyList , VisualElement litRows)
-    {
-        containerBodyList.Add(litRows);
-    }
 
-    public List<VisualElement> CreateHeaderItems(List<string> headersName)
+
+    public List<VisualElement> CreateHeaderItems(List<TableColumn> headersName)
     {
         if (_templateHeader == null)
         {
@@ -82,20 +108,52 @@ public class CreatorTableWindows : ICreatorTables
             return new List<VisualElement>();
         }
         //Create Header Box (Only BorderBox)
-        var headerItem = ToolTipsUtils.CloneOne(_templateHeader);
-        var headerBorder = headerItem.Q<VisualElement>(_tableHeaderBorder);
+        containerHeader = ToolTipsUtils.CloneOne(_templateHeader);
+        var headerBorder = containerHeader.Q<VisualElement>(_tableHeaderBorder);
+
         return headersName.Select(headerName =>
         {
             //Create Items Inside Header
-            var inside = ToolTipsUtils.CloneOne(_templateInside);
-            Label tableHeaderLabel = inside.Q<Label>(_tableHeaderLabelName);
-            VisualElement bgElement = inside.Q<VisualElement>("bgElement");
-            bgElement.RegisterCallback<MouseDownEvent>(evt=> ClickMouse(evt , bgElement));
-            bgElement.RegisterCallback<MouseUpEvent>(evt =>  UpClickMouse(evt, bgElement));
-            tableHeaderLabel.text = headerName;
-            headerBorder.Add(inside);
-            return headerItem;
+            var rootContainerHeader = ToolTipsUtils.CloneOne(_templateInside);
+            Label tableHeaderLabel = rootContainerHeader.Q<Label>(_tableHeaderLabelName);
+            VisualElement containerbgElement = rootContainerHeader.Q<VisualElement>("bgElement");
+            VisualElement containerListRows = rootContainerHeader.Q<VisualElement>("columnInsideListRows");
+
+            CreateHeader(tableHeaderLabel, containerbgElement, headerName);
+            CreateListRows(containerListRows , headerName);
+
+            headerBorder.Add(rootContainerHeader);
+            return containerHeader;
         }).ToList();
+    }
+
+    private void CreateHeader(Label tableHeaderLabel , VisualElement bgElement , TableColumn headerName)
+    {
+        bgElement.RegisterCallback<MouseDownEvent>(evt => ClickMouse(evt, bgElement));
+        bgElement.RegisterCallback<MouseUpEvent>(evt => UpClickMouse(evt, bgElement));
+        tableHeaderLabel.text = headerName.NameColumn;
+    }
+
+    private void CreateListRows(VisualElement insideListRows , TableColumn headerName)
+    {
+        var listRows = ToolTipsUtils.CloneOne(_templateRows);
+        AlignItem(listRows, headerName);
+        insideListRows.Add(listRows);
+    }
+
+    private void AlignItem(VisualElement listRows, TableColumn headerName)
+    {
+        foreach (VisualElement row in listRows.Children())
+        {
+            if (headerName.AlignTextCenter)
+            {
+                row.style.alignItems = new StyleEnum<Align>(Align.Center);
+            }
+            else
+            {
+                row.style.paddingLeft = 13;
+            }
+        }
     }
 
     public void ClickMouse(MouseDownEvent evt , VisualElement element)
@@ -112,3 +170,18 @@ public class CreatorTableWindows : ICreatorTables
 
 
 }
+
+public class TableColumn
+{
+    public bool AlignTextCenter;
+    public string NameColumn;
+    public float manualWidth;
+
+    public TableColumn(bool alignTextCenter, string nameColumn, float width)
+    {
+        AlignTextCenter = alignTextCenter;
+        NameColumn = nameColumn;
+        manualWidth = width;
+    }
+}
+

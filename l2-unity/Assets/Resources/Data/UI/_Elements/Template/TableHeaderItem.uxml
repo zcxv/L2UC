@@ -1,13 +1,7 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <engine:VisualElement style="flex-grow: 1; flex-direction: row; width: auto; height: 32px; align-items: auto;">
-        <engine:VisualElement name="columnHeading" style="flex-grow: 1; align-items: auto;">
-            <engine:VisualElement name="columnBorder" style="flex-grow: 1; background-image: resource(&apos;Data/UI/Assets/Tab/Table/ListCTRL_DF_Decoration&apos;); height: 32px; width: auto; flex-shrink: 0; margin-top: 0; align-self: auto; justify-content: flex-start; align-items: auto; -unity-slice-left: 9; -unity-slice-top: 9; -unity-slice-right: 9; -unity-slice-bottom: 9; position: relative; display: flex; visibility: visible; overflow: visible; flex-direction: row; padding-left: 2px; padding-right: 2px;">
-                <engine:VisualElement name="columnInside" style="flex-grow: 0; align-self: flex-start; margin-left: 0; justify-content: flex-start; margin-top: 2px; flex-direction: row; overflow: visible; visibility: hidden; flex-shrink: 0; align-items: auto; padding-right: 0; padding-left: -2px; display: none;">
-                    <engine:VisualElement style="flex-grow: 0; position: relative; background-image: resource(&apos;Data/UI/Assets/Tab/Table/ListCTRL_DF_Title&apos;); align-self: auto; width: auto; flex-shrink: 1; flex-direction: row; height: 17px; margin-top: -1px; justify-content: flex-start; display: flex; visibility: visible; overflow: visible; padding-right: 0;">
-                        <engine:Label text="Setting1" name="columnLabel" style="font-size: 11px; color: rgb(227, 217, 187); margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-definition: resource(&apos;Data/UI/Assets/Font/tahoma&apos;);" />
-                    </engine:VisualElement>
-                </engine:VisualElement>
-            </engine:VisualElement>
+    <engine:VisualElement style="flex-grow: 1; flex-direction: row; width: auto; height: auto; align-items: stretch; align-content: stretch; align-self: stretch; justify-content: flex-start;">
+        <engine:VisualElement name="columnHeading" style="flex-grow: 1; align-items: stretch; align-self: stretch; align-content: stretch;">
+            <engine:VisualElement name="columnBorder" style="flex-grow: 1; background-image: resource(&apos;Data/UI/Assets/Tab/Table/ListCTRL_DF_Decoration&apos;); height: 32px; width: auto; flex-shrink: 1; margin-top: 0; align-self: stretch; justify-content: flex-start; align-items: stretch; -unity-slice-left: 9; -unity-slice-top: 9; -unity-slice-right: 9; -unity-slice-bottom: 9; position: relative; display: flex; visibility: visible; overflow: visible; flex-direction: row; padding-left: 2px; padding-right: 2px;" />
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>
