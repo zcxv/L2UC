@@ -6,6 +6,5 @@
                 <engine:Label text="Setting1" name="columnLabel" style="font-size: 11px; color: rgb(227, 217, 187); margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-definition: resource(&apos;Data/UI/Assets/Font/tahoma&apos;);" />
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement name="columnInsideListRows" style="flex-grow: 1;" />
     </engine:VisualElement>
 </engine:UXML>

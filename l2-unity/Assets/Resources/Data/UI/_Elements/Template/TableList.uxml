@@ -1,11 +1,13 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/Data/UI/_Elements/L2StyleSheet.uss?fileID=7433441132597879392&amp;guid=72e99cc94b130bf4ba100dceaa830b13&amp;type=3#L2StyleSheet" />
     <engine:GroupBox name="content" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; align-self: stretch; align-content: stretch; flex-shrink: 1; flex-grow: 1;">
-        <engine:VisualElement name="header" style="flex-grow: 1; width: auto; align-self: stretch; align-content: stretch;">
-            <engine:VisualElement name="table_header" style="flex-grow: 1; flex-direction: row; width: auto; align-items: stretch;" />
+        <engine:VisualElement name="header" style="flex-grow: 0; width: auto; align-self: stretch; align-content: stretch;">
+            <engine:VisualElement name="table_header" style="flex-grow: 0; flex-direction: row; width: auto; align-items: stretch;" />
         </engine:VisualElement>
-        <engine:VisualElement name="body" style="flex-grow: 1;">
-            <engine:VisualElement name="table_body" style="flex-grow: 1; flex-direction: row; justify-content: center;" />
+        <engine:VisualElement name="body" style="flex-grow: 1; margin-top: -10px;">
+            <engine:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" class="l2-scroll-windows" style="align-self: stretch; align-items: stretch; position: relative; width: 100%; height: 99%; max-width: none; max-height: none; top: auto; justify-content: flex-start; align-content: stretch; flex-grow: 1; flex-direction: row;">
+                <engine:VisualElement name="table_body" style="flex-grow: 1; flex-direction: row; justify-content: center;" />
+            </engine:ScrollView>
         </engine:VisualElement>
         <engine:VisualElement name="footer" style="flex-grow: 1;" />
     </engine:GroupBox>

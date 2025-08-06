@@ -48,7 +48,12 @@ public class QuestListWindow : L2PopupWindow
 
         _creatorTableWindows.InitTable(_content , _windowEle);
         _creatorTableWindows.LoadAsset(LoadAsset);
-        _creatorTableWindows.CreateTable(new List<TableColumn> { new TableColumn(false, "Mission Name", 0) , new TableColumn(false, "Conditions", 0), new TableColumn(false, "Level", 0), new TableColumn(false, "Repeatable", 0), new TableColumn(false, "Source", 0)});
+        _creatorTableWindows.CreateTable(new List<TableColumn> { new TableColumn(false, "Mission Name", 13 , 
+                                         new List<string> { "Letters of Love" , "What Women Want", "Will the Seal Be Broken" } , 13) ,
+                                         new TableColumn(false, "Conditions", 0, new List<string> { "No Requirements" , "Elf,Human", "Dark Elf" } ,13),
+                                         new TableColumn(true, "Level", 0, new List<string> { "2-5" , "2-5" , "16-26" } , 0), 
+                                         new TableColumn(true, "Repeatable", 0 , new List<string> { "1"  , "1"  , "1" } , 0), 
+                                         new TableColumn(false, "Source", 0 , new List<string> { "Darin" , "Arujien", "Talloth" }, 18)});
 
 
         RegisterCloseWindowEvent("btn-close-frame");
