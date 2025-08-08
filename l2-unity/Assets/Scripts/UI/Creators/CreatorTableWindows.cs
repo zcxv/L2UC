@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Rendering.FilterWindow;
-using static UnityEngine.Rendering.DebugUI;
-using static UnityEngine.Rendering.DebugUI.MessageBox;
 using static UnityEngine.Rendering.DebugUI.Table;
+
 
 public class CreatorTableWindows : ICreatorTables
 {
@@ -117,6 +112,8 @@ public class CreatorTableWindows : ICreatorTables
             VisualElement containerBgElement = rootContainerHeader.Q<VisualElement>("bgElement");
             //VisualElement containerListRows = rootContainerHeader.Q<VisualElement>("columnInsideListRows");
 
+
+            SetManualWidth(containerBgElement, headerName.ManualWidth);
             CreateHeader(tableHeaderLabel, containerBgElement, headerName);
             CreateListRows(containerBodyList, headerName);
 
@@ -126,6 +123,17 @@ public class CreatorTableWindows : ICreatorTables
         }).ToList();
     }
 
+    public void SetManualWidth(VisualElement containerBgElement, float width)
+    {
+        if (width > 0)
+        {
+            containerBgElement.style.flexBasis = width;    
+            containerBgElement.style.flexGrow = 1;       
+            containerBgElement.style.flexShrink = 0;
+        }
+    }
+
+
 
     void OnHeaderGeometryChanged(GeometryChangedEvent evt , VisualElement containerHeader , VisualElement containerBodyList)
     {
@@ -133,7 +141,7 @@ public class CreatorTableWindows : ICreatorTables
         {
             var headerItem = containerHeader[i];
             var bodyItem = containerBodyList[i];
-
+            Label labelText = bodyItem.Q<Label>("labelText");
             float width = headerItem.layout.width;
             bodyItem.style.width = width;
 
@@ -194,6 +202,7 @@ public class CreatorTableWindows : ICreatorTables
             string text = headerName.ListData[i];
             row = GetNewRow( i);
             Label labelText = row.Q<Label>("labelText");
+            CleapText(labelText);
 
             if (labelText !=  null)
             {
@@ -206,6 +215,12 @@ public class CreatorTableWindows : ICreatorTables
         return rows;
     }
 
+    private void CleapText(Label rowLabel)
+    {
+        //rowLabel.style.width = 200;                   // фикс. ширина
+        rowLabel.style.whiteSpace = WhiteSpace.NoWrap; // запретить перенос
+        rowLabel.style.textOverflow = TextOverflow.Clip; // обрезать
+    }
 
     private VisualElement GetNewRow(int i)
     {
@@ -251,6 +266,8 @@ public class TableColumn
         _leftIndent = leftIndent;
 
     }
+
+   
 
     public bool AlignTextCenter
     {

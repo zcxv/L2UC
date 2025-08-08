@@ -39,17 +39,29 @@ public class QuestNameTable
         }
     }
 
-    
+    public List<QuestName> GetQuestsWithLastSubtask()
+    {
+        List<QuestName> quests = new List<QuestName>();
+
+        foreach (var entry in _questNames)
+        {
+            QuestName lastQuest = entry.Value[entry.Value.Count - 1];
+            quests.Add(lastQuest);
+        }
+
+        return quests;
+    }
+
 
     public void Initialize()
     {
         try
         {
             string dataPathE = Path.Combine(Application.streamingAssetsPath, "Data/Meta/Questname-e_interlude.txt");
-            string dataPathR = Path.Combine(Application.streamingAssetsPath, "Data/Meta/Questname-r_interlude.txt");
+            //string dataPathR = Path.Combine(Application.streamingAssetsPath, "Data/Meta/Questname-r_interlude.txt");
             ReadArmorInterlude(dataPathE);
-            ReadArmorInterlude(dataPathR);
-            DebugPrint();
+            //ReadArmorInterlude(dataPathR);
+            //DebugPrint();
         }
         catch (Exception ex)
         {
@@ -70,7 +82,7 @@ public class QuestNameTable
                 {
                     string[] ids = line.Split('\t');
                     int id = Int32.Parse(ids[indexQuestId]);
-                    QuestName quest =  CreateModel(ids);
+                    QuestName quest =  CreateModel(ids , id);
 
                     if (!_questNames.ContainsKey(id))
                     {
@@ -89,7 +101,7 @@ public class QuestNameTable
 
     }
 
-    private QuestName CreateModel(string[] ids)
+    private QuestName CreateModel(string[] ids , int quest_id)
     {
         QuestName quest = new QuestName();
 
@@ -106,7 +118,7 @@ public class QuestNameTable
         int repeat = int.Parse(ids[indexRepaet]);
         int areaId = int.Parse(ids[indexAreaId]);
 
-
+        quest.Quest_id = quest_id;
         quest.QuestProg = questProg;
         quest.Main_name = mainName;
         quest.ProgName = progName;

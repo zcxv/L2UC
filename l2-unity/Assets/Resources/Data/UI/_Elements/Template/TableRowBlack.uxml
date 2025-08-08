@@ -1,5 +1,5 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <engine:GroupBox name="RowBlack" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; justify-content: flex-start; align-self: flex-start; align-items: flex-start;">
-        <engine:Label text="Letters of Love" name="labelText" style="margin-top: 1px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 11px; color: rgb(223, 222, 222); -unity-slice-left: 0; align-items: center;" />
+        <engine:Label text="Letters of Loveasdadasdasdsadasdsadsaadasdas" name="labelText" selectable="false" parse-escape-sequences="false" style="margin-top: 1px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 11px; color: rgb(223, 222, 222); -unity-slice-left: 0; align-items: center; max-width: 100px; text-overflow: ellipsis; overflow: hidden;" />
     </engine:GroupBox>
 </engine:UXML>
