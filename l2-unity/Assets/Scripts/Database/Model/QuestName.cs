@@ -24,6 +24,28 @@ public class QuestName
     private int _contact_npc_y;
     private int _contact_npc_z;
     private string _requirements;
+
+    private string[] _titlesToRemove = new string[]
+    {
+        "Tetrarch",
+        "Grand Master",
+        "Master",
+        "Hermit",
+        "Magister",
+        "Hierarch",
+        "Sentinel",
+        "Blacksmith",
+        "Abyssal",
+        "Abandoned",
+        "Captain",
+        "Priest",
+        "Celebrant",
+        "Warehouse",
+        "High Priest",
+        "Sentry",
+        "Trader"
+    };
+
     public int Quest_id { get => _quest_id; set => _quest_id = value; }
 
     public int QuestProg { get => _quest_prog; set => _quest_prog = value; }
@@ -50,4 +72,49 @@ public class QuestName
     public int ContactNpcX { get => _contact_npc_x; set => _contact_npc_x = value; }
     public int ContactNpcY { get => _contact_npc_y; set => _contact_npc_y = value; }
     public int ContactNpcZ { get => _contact_npc_z; set => _contact_npc_z = value; }
+
+    public string GetSource()
+    {
+        if (string.IsNullOrEmpty(_entity_name))
+            return string.Empty;
+
+        string result = _entity_name;
+
+        foreach (var title in _titlesToRemove)
+        {
+            result = result.Replace(title, "").Trim();
+        }
+
+        // Убираем лишние пробелы, которые могли остаться после удаления
+        result = System.Text.RegularExpressions.Regex.Replace(result, @"\s+", " ").Trim();
+
+        return result;
+    }
+
+    public string GetLevelRange()
+    {
+        if (_lvl_max == 0)
+        {
+            return $"{_lvl_min}";
+        }
+        return $"{_lvl_min} - {_lvl_max}";
+    }
+
+    public string GetRepetable()
+    {
+        //3 not repeat
+        //2  repaet
+        //0 - unk
+
+        if (_repeat == 3)
+        {
+            return "1";
+        }else if (_repeat < 3)
+        {
+            return "repeat";
+        }
+
+        return "1";
+    }
+
 }
