@@ -1,260 +1,102 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FilterAccessType
 {
+    private static readonly Dictionary<GameInterludeServerPacketType, bool> GamePacketTypes = new Dictionary<GameInterludeServerPacketType, bool>
+    {
+        { GameInterludeServerPacketType.InterludeKeyPacket, true },
+        { GameInterludeServerPacketType.CharSelectionInfo, true },
+        { GameInterludeServerPacketType.CharTemplate, true },
+        { GameInterludeServerPacketType.CharCreateOk, true },
+        { GameInterludeServerPacketType.SocialAction, true },
+        { GameInterludeServerPacketType.CharSelected, true },
+        { GameInterludeServerPacketType.CharCreateFail, true },
+        { GameInterludeServerPacketType.SkillList, true },
+        { GameInterludeServerPacketType.UserInfo, true },
+        { GameInterludeServerPacketType.SkillCoolTime, true },
+        { GameInterludeServerPacketType.MacroList, true },
+        { GameInterludeServerPacketType.NpcHtmlMessage, true },
+        { GameInterludeServerPacketType.PackageToList, true },
+        { GameInterludeServerPacketType.TutorialShowHtml, true },
+        { GameInterludeServerPacketType.BuyList, true },
+        { GameInterludeServerPacketType.ShopPreviewList, true },
+        { GameInterludeServerPacketType.ShopPreviewInfo, true },
+        { GameInterludeServerPacketType.MultiSellList, true },
+        { GameInterludeServerPacketType.SellList, true },
+        { GameInterludeServerPacketType.WhDepositList, true },
+        { GameInterludeServerPacketType.PackageSendableList, true },
+        { GameInterludeServerPacketType.WhWithdrawList, true },
+        { GameInterludeServerPacketType.ShortCutInit, true },
+        { GameInterludeServerPacketType.ShortCutRegister, true },
+        { GameInterludeServerPacketType.HennaInfo, true },
+        { GameInterludeServerPacketType.QuestList, true },
+        { GameInterludeServerPacketType.NpcInfo, true },
+        { GameInterludeServerPacketType.DeleteObject, true },
+        { GameInterludeServerPacketType.CharMoveToLocation, true },
+        { GameInterludeServerPacketType.ValidateLocation, true },
+        { GameInterludeServerPacketType.FriendList, true },
+        { GameInterludeServerPacketType.EtcStatusUpdate, true },
+        { GameInterludeServerPacketType.ExTypePacket, true },
+        { GameInterludeServerPacketType.StatusUpdate, true },
+        { GameInterludeServerPacketType.TargetUnselected, true },
+        { GameInterludeServerPacketType.TeleportToLocation, true },
+        { GameInterludeServerPacketType.Revive, true },
+        { GameInterludeServerPacketType.AbnormalStatusUpdate, true },
+        { GameInterludeServerPacketType.AcquireSkillList, true },
+        { GameInterludeServerPacketType.AcquireSkillInfo, true }
+    };
+
+    private static readonly Dictionary<GSInterludeCombatPacketType, bool> CombatPacketTypes = new Dictionary<GSInterludeCombatPacketType, bool>
+    {
+        { GSInterludeCombatPacketType.MyTargetSelected, true },
+        { GSInterludeCombatPacketType.MoveToPawn, true },
+        { GSInterludeCombatPacketType.STOP_MOVE, true },
+        { GSInterludeCombatPacketType.ATTACK, true },
+        { GSInterludeCombatPacketType.ActionFailed, true },
+        { GSInterludeCombatPacketType.AUTO_ATTACK_START, true },
+        { GSInterludeCombatPacketType.AUTO_ATTACK_STOP, true },
+        { GSInterludeCombatPacketType.DIE, true },
+        { GSInterludeCombatPacketType.MagicSkillUse, true },
+        { GSInterludeCombatPacketType.SetupGauge, true },
+        { GSInterludeCombatPacketType.ItemList, true },
+        { GSInterludeCombatPacketType.InventoryUpdate, true },
+        { GSInterludeCombatPacketType.ChooseInventoryItem, true },
+        { GSInterludeCombatPacketType.EnchantResult, true },
+        { GSInterludeCombatPacketType.MagicSkillLaunched, true }
+    };
+
+    private static readonly Dictionary<GSInterludeMessagePacketType, bool> MessagePacketTypes = new Dictionary<GSInterludeMessagePacketType, bool>
+    {
+        { GSInterludeMessagePacketType.SystemMessage, true },
+        { GSInterludeMessagePacketType.CreatureSay, true },
+        { GSInterludeMessagePacketType.NpcSay, true }
+    };
+
     public static bool IsAccessTypeGame(ItemServer item)
     {
-        if(item.PaketType() == GameInterludeServerPacketType.InterludeKeyPacket)
-        {
-            return true;
-        }else if (item.PaketType() ==  GameInterludeServerPacketType.CharSelectionInfo)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.CharTemplate)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.CharCreateOk)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.SocialAction)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.CharSelected)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.CharCreateFail)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.SkillList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.UserInfo)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.SkillCoolTime)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.MacroList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.NpcHtmlMessage)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.PackageToList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.TutorialShowHtml)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.BuyList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.ShopPreviewList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.ShopPreviewInfo)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.MultiSellList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.SellList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.WhDepositList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.PackageSendableList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.WhWithdrawList)
-        {
-            return true;
-        }
-
-        else if (item.PaketType() == GameInterludeServerPacketType.ShortCutInit)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.ShortCutRegister)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.HennaInfo)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.QuestList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.NpcInfo)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.DeleteObject)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.CharMoveToLocation)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.ValidateLocation)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.FriendList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.EtcStatusUpdate)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.ExTypePacket)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.StatusUpdate)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.TargetUnselected)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.TeleportToLocation)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.Revive)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.AbnormalStatusUpdate)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.AcquireSkillList)
-        {
-            return true;
-        }
-        else if (item.PaketType() == GameInterludeServerPacketType.AcquireSkillInfo)
-        {
-            return true;
-        }
-        return false;
+        return GamePacketTypes.ContainsKey(item.PaketType());
     }
+
     public static bool IsAccessTypeCombat(ItemServer item)
     {
-        GSInterludeCombatPacketType type = (GSInterludeCombatPacketType)item.ByteType();
-         if (type == GSInterludeCombatPacketType.MyTargetSelected)
-         {
-            return true;
-         }else if (type == GSInterludeCombatPacketType.MoveToPawn)
-         {
-            return true;
-         }
-        else if (type == GSInterludeCombatPacketType.STOP_MOVE)
+        GSInterludeCombatPacketType type;
+        if (Enum.TryParse(item.ByteType().ToString(), out type))
         {
-            return true;
+            return CombatPacketTypes.ContainsKey(type);
         }
-        else if (type == GSInterludeCombatPacketType.ATTACK)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.ActionFailed)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.AUTO_ATTACK_START)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.AUTO_ATTACK_STOP)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.DIE)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.MagicSkillUse)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.SetupGauge)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.ItemList)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.InventoryUpdate)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.ChooseInventoryItem)
-        {
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.EnchantResult)
-        {
-            Debug.Log("Enchanted inventory 1");
-            return true;
-        }
-        else if (type == GSInterludeCombatPacketType.MagicSkillLaunched)
-        {
-            return true;
-        }
-        //else if (type == GSInterludeCombatPacketType.CharMoveToLocation)
-        // {
-        //     return true;
-        // }
         return false;
     }
+
     public static bool IsAccessTypeMessage(ItemServer item)
     {
-        GSInterludeMessagePacketType type = (GSInterludeMessagePacketType)item.ByteType();
-
-        if (type == GSInterludeMessagePacketType.SystemMessage)
+        GSInterludeMessagePacketType type;
+        if (Enum.TryParse(item.ByteType().ToString(), out type))
         {
-            Debug.Log("Enchanted inventory 2");
-            return true;
+            return MessagePacketTypes.ContainsKey(type);
         }
-        else if (type == GSInterludeMessagePacketType.CreatureSay)
-        {
-            return true;
-        }
-        else if (type == GSInterludeMessagePacketType.NpcSay)
-        {
-            return true;
-        }
-
         return false;
     }
 }
