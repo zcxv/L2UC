@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.Rendering.FilterWindow;
 using static UnityEngine.Rendering.DebugUI.Table;
 
 
@@ -30,9 +31,7 @@ public class CreatorTableWindows : ICreatorTables
     private VisualTreeAsset _templateRowBlack;
     private VisualTreeAsset _templateRowWhite;
 
-    private float width;
-    private float height;
-
+    private int _lastElementIndex = -1;
 
     private VisualElement _table;
     private List<VisualElement> _tableHeHeaderItem;
@@ -103,7 +102,7 @@ public class CreatorTableWindows : ICreatorTables
         var headerBorder = containerHeader.Q<VisualElement>(_tableHeaderBorder);
 
         headerBorder.RegisterCallback<GeometryChangedEvent>(evt => OnHeaderGeometryChanged(evt , headerBorder , containerBodyList));
-
+       
         return headersName.Select(headerName =>
         {
             //Create Items Inside Header
@@ -144,8 +143,6 @@ public class CreatorTableWindows : ICreatorTables
             Label labelText = bodyItem.Q<Label>("labelText");
             float width = headerItem.layout.width;
             bodyItem.style.width = width;
-
-            Debug.Log($"Layout iteration Width: {width}, Height: {height} " + "container body list " + containerBodyList.childCount);
         }
     }
     private void CreateHeader(Label tableHeaderLabel , VisualElement bgElement , TableColumn headerName)
@@ -167,8 +164,11 @@ public class CreatorTableWindows : ICreatorTables
 
     private void AddRowInListRows(VisualElement listRows , List<VisualElement> rows)
     {
-        foreach (var row in rows)
+        for (int i =0; i < rows.Count; i++)
         {
+            var row = rows[i];
+            int index = i;
+            row.RegisterCallback<MouseDownEvent>(evt => ClickRow(evt , index));
             listRows.Add(row);
         }
 
@@ -187,7 +187,8 @@ public class CreatorTableWindows : ICreatorTables
             }
             else
             {
-                row.style.paddingLeft = headerName.LeftIndent;
+                var label = row.Q<Label>("labelText");
+                label.style.paddingLeft = headerName.LeftIndent;
             }
         }
     }
@@ -238,6 +239,68 @@ public class CreatorTableWindows : ICreatorTables
     {
         element.RemoveFromClassList("l2-table-header-name-bg");
         element.AddToClassList("l2-table-header-name-bg-click");
+    }
+
+    public void ClickRow(MouseDownEvent evt , int index)
+    {
+        if(evt.target != null)
+        {
+            VisualElement row = evt.target as VisualElement;
+            VisualElement hihtlite = row.parent;
+            VisualElement rowContainer = hihtlite.parent;
+            VisualElement listColumn = rowContainer.parent;
+            //VisualElement bodyContainer = listColumn.parent;
+            SetSelectElement(listColumn, index);
+            _lastElementIndex = index;
+        }
+    }
+
+    private void SetSelectElement(VisualElement listColumn, int index)
+    {
+        for (int i = 0; i < listColumn.childCount; i++)
+        {
+            VisualElement column = listColumn[i];
+            if (column.childCount > 0)
+            {
+                IEnumerable<VisualElement> childrenRows = column.Children();
+                List<VisualElement> childrenList = childrenRows.ToList();
+
+                if (_lastElementIndex != -1)
+                {
+                    VisualElement rowLast = childrenList[_lastElementIndex];
+                    ResetSelect(rowLast , index);
+                }
+
+
+                VisualElement row1 = childrenList[index];
+
+                ShowSelectHighLight(row1, listColumn.childCount - 1, i);
+            }
+        }
+    }
+    private void ResetSelect(VisualElement rowLast , int index)
+    {
+        VisualElement highlightLast = rowLast.Q<VisualElement>("highlight");
+        VisualElement highlightLastTile = rowLast.Q<VisualElement>("highlightTile");
+
+        if (highlightLast != null) highlightLast.style.display = DisplayStyle.None;
+        if (highlightLastTile != null) highlightLastTile.style.display = DisplayStyle.None;
+
+
+        //if (index % 2 == 1)
+        //{
+        //    rowLast.style.backgroundColor = new StyleColor(new Color(0.2196f, 0.2196f, 0.2078f, 0.79f)); // #393835 in RGB
+       // }
+       // else
+       // {
+        //    rowLast.style.backgroundColor = new StyleColor(Color.clear);
+       // }
+    }
+    private void ShowSelectHighLight(VisualElement row1 , int childCount , int i)
+    {
+       // row1.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0));
+        VisualElement highlight = row1.Q<VisualElement>(i == childCount ? "highlightTile" : "highlight");
+        highlight.style.display = DisplayStyle.Flex;
     }
 
     public void UpClickMouse(MouseUpEvent evt , VisualElement element)

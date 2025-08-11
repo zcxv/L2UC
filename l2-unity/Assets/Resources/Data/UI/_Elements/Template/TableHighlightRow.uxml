@@ -1,0 +1,6 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement name="content" style="flex-grow: 1; flex-direction: row;">
+        <engine:VisualElement name="highlight" style="flex-grow: 1; background-image: resource(&apos;Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight&apos;); -unity-slice-left: 9; -unity-slice-top: 9; -unity-slice-right: 9; -unity-slice-bottom: 9; align-self: stretch; height: auto; width: auto; flex-basis: 70%;" />
+        <engine:VisualElement name="highlightTile" style="flex-grow: 1; background-image: resource(&apos;Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight_Tail&apos;); -unity-slice-left: 9; -unity-slice-top: 9; -unity-slice-right: 9; -unity-slice-bottom: 9;" />
+    </engine:VisualElement>
+</engine:UXML>

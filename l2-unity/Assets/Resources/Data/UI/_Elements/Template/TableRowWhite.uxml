@@ -1,5 +1,12 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <engine:GroupBox name="RowWhite" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%; height: 18px; background-color: rgba(57, 56, 53, 0.79); align-items: flex-start;">
+        <engine:VisualElement name="content_highlight" style="flex-grow: 1; flex-direction: row; position: absolute; align-self: stretch; justify-content: center; width: 100%; height: 100%; opacity: 0.7; align-content: stretch;">
+            <engine:VisualElement name="highlight" style="flex-grow: 1; background-image: resource(&apos;Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight&apos;); -unity-slice-left: 9; -unity-slice-top: 9; -unity-slice-right: 9; -unity-slice-bottom: 9; align-self: stretch; height: auto; width: auto; flex-basis: auto; opacity: 1; display: none;" />
+            <engine:VisualElement name="highlightTile" style="flex-grow: 1; background-image: none; -unity-slice-left: 13; -unity-slice-top: 13; -unity-slice-right: 13; -unity-slice-bottom: 13; opacity: 1; display: none; flex-direction: row;">
+                <engine:VisualElement style="flex-grow: 1; background-image: resource(&apos;Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight&apos;); flex-basis: 30%;" />
+                <engine:VisualElement style="flex-grow: 1; background-image: resource(&apos;Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight_Tail&apos;);" />
+            </engine:VisualElement>
+        </engine:VisualElement>
         <engine:Label text="Letters of Loveasdasdsadasdasd" name="labelText" style="margin-top: 1px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 11px; color: rgb(223, 222, 222); -unity-slice-left: 0; align-items: center; max-width: 100px; overflow: hidden; text-overflow: ellipsis;" />
     </engine:GroupBox>
 </engine:UXML>
