@@ -179,7 +179,7 @@ public class World : MonoBehaviour {
 
         GameObject go = ModelTable.Instance.GetNpc(npcgrp.Mesh);
 
-        if(identity.NpcId == 31775)
+        if(identity.NpcId == 35103)
         {
             Debug.Log(" object NpcInfo 5 " + identity.Id);
         }
@@ -263,7 +263,12 @@ public class World : MonoBehaviour {
             npcGo.transform.name = identity.Name;
             npcGo.SetActive(true);
 
-            if(npc.GetType() == typeof(MonsterEntity))
+            if (identity.NpcId == 35103)
+            {
+                Debug.Log(" object NpcInfo 5 " + identity.Id);
+            }
+
+            if (npc.GetType() == typeof(MonsterEntity))
             {
                 InitMonster(npc, npcGo);
             }
@@ -272,6 +277,10 @@ public class World : MonoBehaviour {
                 InitNpc(npc, npcGo);
             }
 
+            if (identity.NpcId == 35103)
+            {
+                Debug.Log(" object NpcInfo 5 " + identity.Id);
+            }
 
             RespawnPositionElseLoadingGame(identity, npcGo);
 
