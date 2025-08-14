@@ -42,6 +42,13 @@ public abstract class ServerPacket : Packet
 
     protected int ReadSh()
     {
+
+        if (_packetData == null || _iterator + 2 > _packetData.Length)
+        {
+            Debug.LogError("Not enough bytes available to read short value");
+            return 0; // или можно выбросить исключение
+        }
+
         byte[] data = new byte[2];
         Array.Copy(_packetData, _iterator, data, 0, 2);
         Array.Reverse(data);

@@ -9,6 +9,6 @@
                 <engine:VisualElement name="table_body" style="flex-grow: 1; flex-direction: row; justify-content: center; max-height: 90%;" />
             </engine:ScrollView>
         </engine:VisualElement>
-        <engine:VisualElement name="footer" style="flex-grow: 1;" />
+        <engine:VisualElement name="footer" style="flex-grow: 1; display: none; visibility: hidden; overflow: hidden;" />
     </engine:GroupBox>
 </engine:UXML>

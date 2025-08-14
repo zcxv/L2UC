@@ -7,8 +7,6 @@ public class QuestListWindow : L2PopupWindow
 {
     private static QuestListWindow _instance;
     private VisualElement _content;
-    private VisualTreeAsset _templaTable;
-    private VisualTreeAsset _templateHeader;
     private ICreatorTables _creatorTableWindows;
     public static QuestListWindow Instance { get { return _instance; } }
 

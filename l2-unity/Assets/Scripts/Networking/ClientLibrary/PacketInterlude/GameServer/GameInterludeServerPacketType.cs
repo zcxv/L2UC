@@ -22,6 +22,7 @@ public enum GameInterludeServerPacketType : byte
     WhDepositList = 0x41,
     PackageSendableList = 0xC3,
     WhWithdrawList = 0x42,
+    BuyListSeed = 0xE8,
     NpcHtmlMessage = 0x0F,
     PackageToList = 0xC2,
     TutorialShowHtml = 0xa0,

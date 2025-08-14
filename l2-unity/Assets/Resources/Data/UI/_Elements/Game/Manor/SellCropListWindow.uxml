@@ -1,0 +1,23 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:Template name="WindowTemplate" src="project://database/Assets/Resources/Data/UI/_Elements/Template/WindowTemplate.uxml?fileID=9197481963319205126&amp;guid=57919e48a99c2de4787ca2b8810527ea&amp;type=3#WindowTemplate" />
+    <engine:Instance name="WindowTemplate" template="WindowTemplate" style="overflow: hidden; width: 650px; height: 400px; bottom: 0; position: absolute; max-width: none; max-height: none; flex-grow: 1;">
+        <AttributeOverrides element-name="windows-name-label" text="Sale Of Harvest" />
+        <engine:VisualElement name="content" style="flex-grow: 1; position: absolute; top: 14%; left: 4%; width: 92%; height: 80%;">
+            <engine:VisualElement name="seedContent" class="quest-content" style="flex-grow: 1; position: relative; align-self: stretch; align-content: stretch; top: auto; left: auto; height: auto; width: auto; margin-bottom: 5px;" />
+            <engine:VisualElement name="buttons" style="flex-grow: 0; flex-basis: auto; flex-direction: row; align-content: flex-end; align-items: flex-end; align-self: flex-end; width: auto; flex-shrink: 0; height: 10%;">
+                <engine:Button text="SuccessButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Change" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); align-self: auto; align-items: stretch;">
+                    <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
+                    <engine:Label text="Change Сity" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
+                </engine:Button>
+                <engine:Button text="SuccessButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SuccessButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
+                    <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
+                    <engine:Label text="Sale" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
+                </engine:Button>
+                <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CloseButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
+                    <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
+                    <engine:Label text="Cancel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
+                </engine:Button>
+            </engine:VisualElement>
+        </engine:VisualElement>
+    </engine:Instance>
+</engine:UXML>
