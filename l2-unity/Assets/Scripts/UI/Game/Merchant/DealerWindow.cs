@@ -462,6 +462,9 @@ public class DealerWindow : L2PopupWindow
                     SystemMessageWindow.Instance.OnButtonClosed += OnСancel;
                     SystemMessageWindow.Instance.ShowWindowDialogYesOrNot("The try-on state lasts only 5 seconds. When the character's state changes, it can be canceled.");
                     break;
+                case ProductType.BUY_SEED:
+                    Debug.LogWarning("Не реализован пакет отправка BUY_SEED ");
+                    break;
             }
         }
         else
@@ -484,6 +487,9 @@ public class DealerWindow : L2PopupWindow
                     int playerObjectId = _listId;
                     var packetSendable = CreatorPacketsUser.RequestPackageSend(playerObjectId , _listSell);
                     SendServer(packetSendable);
+                    break;
+                case ProductType.BUY_SEED:
+                    Debug.LogWarning("Не реализован пакет отправка BUY_SEED ");
                     break;
             }
         }

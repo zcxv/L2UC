@@ -110,6 +110,10 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
                 OnWhWithdrawList(itemQueue.DecodeData());
                 break;
+            case GameInterludeServerPacketType.BuyListSeed:
+
+                OnBuyListSeed(itemQueue.DecodeData());
+                break;
             case GameInterludeServerPacketType.ShortCutInit:
 
                 OnCharShortCutInit(itemQueue.DecodeData());
@@ -194,10 +198,15 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
             case (int)GameInterludeExServerPacketType.ExShowQuestInfo:
                 OnExShowQuestInfo(itemQueue.DecodeExData());
                 break;
+            case (int)GameInterludeExServerPacketType.ExShowSellCropList:
+                OnExShowSellCropList(itemQueue.DecodeExData());
+                break;
             default:
                 break;
         }
     }
+
+
 
     //3 repeated packages are coming ignoring
     private void OnKeyReceive(byte[] data)
@@ -561,7 +570,22 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         });
     }
 
-   
+    public void OnBuyListSeed(byte[] data)
+    {
+        BuyListSeed listSeed = new BuyListSeed(data);
+        EventProcessor.Instance.QueueEvent(() => {
+            UserInfo info = StorageNpc.getInstance().GetFirstUser();
+            DealerWindow.Instance.SetWindowName("Estate");
+            DealerWindow.Instance.SetHeaderNameSellPanel("Sale");
+            DealerWindow.Instance.SetHeaderNameBuyPanel("Purchase");
+            DealerWindow.Instance.SetProductType(ProductType.BUY_SEED);
+            DealerWindow.Instance.UpdateBuyData(listSeed.List, true, listSeed.ManorId);
+            DealerWindow.Instance.UpdateDataForm(listSeed.CurrentMoney, info.PlayerInfoInterlude.Stats.WeightPercent(), info.PlayerInfoInterlude.Stats.CurrWeight, info.PlayerInfoInterlude.Stats.MaxWeight);
+            DealerWindow.Instance.ShowWindow();
+        });
+    }
+
+
 
     private void OnCharShortCutInit(byte[] data)
     {
@@ -791,6 +815,17 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
         }
         Debug.Log("Event Open ExShowQuestInfo Info");
+    }
+
+    public void  OnExShowSellCropList(byte[] data)
+    {
+        ExShowSellCropList showSellCropList = new ExShowSellCropList(data);
+
+        EventProcessor.Instance.QueueEvent(() => {
+            SellCropListWindow.Instance.ShowWindow();
+            SellCropListWindow.Instance.SetDataTable(showSellCropList);
+ 
+        });
     }
 
     private void OnStatusUpdate(byte[] data)

@@ -180,6 +180,11 @@ public class L2GameUI : L2UI
             QuestListWindow.Instance.AddWindow(_rootVisualContainer);
             QuestListWindow.Instance.HideWindow();
         }
+        if (SellCropListWindow.Instance != null)
+        {
+            SellCropListWindow.Instance.AddWindow(_rootVisualContainer);
+            SellCropListWindow.Instance.HideWindow();
+        }
     }
 
     public void EnableMouse()

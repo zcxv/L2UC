@@ -29,6 +29,7 @@ public class FilterAccessType
         { GameInterludeServerPacketType.WhDepositList, true },
         { GameInterludeServerPacketType.PackageSendableList, true },
         { GameInterludeServerPacketType.WhWithdrawList, true },
+        { GameInterludeServerPacketType.BuyListSeed, true },
         { GameInterludeServerPacketType.ShortCutInit, true },
         { GameInterludeServerPacketType.ShortCutRegister, true },
         { GameInterludeServerPacketType.HennaInfo, true },

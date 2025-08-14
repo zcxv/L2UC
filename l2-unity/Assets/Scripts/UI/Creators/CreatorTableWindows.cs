@@ -143,6 +143,7 @@ public class CreatorTableWindows : ICreatorTables
             Label labelText = bodyItem.Q<Label>("labelText");
             float width = headerItem.layout.width;
             bodyItem.style.width = width;
+            Debug.Log("OnHeaderGeometryChanged > " + width);
         }
     }
     private void CreateHeader(Label tableHeaderLabel , VisualElement bgElement , TableColumn headerName)

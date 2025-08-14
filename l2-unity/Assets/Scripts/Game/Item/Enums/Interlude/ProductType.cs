@@ -8,5 +8,6 @@ public enum ProductType
     WHDepositList,
     PackageSendableList,
     WHWithdrawList,
+    BUY_SEED,
     NONE
 }
