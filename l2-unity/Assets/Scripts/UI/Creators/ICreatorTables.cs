@@ -8,4 +8,9 @@ public interface ICreatorTables
     public void InitTable(VisualElement content , VisualElement root);
     void LoadAsset(Func<string, VisualTreeAsset> loaderFunc);
     void CreateTable(List<TableColumn> headersName);
+    void UpdateTableData(List<TableColumn> headersName);
+
+    void ClearTable();
+
+    void DestroyTable();
 }

@@ -3,5 +3,6 @@ using UnityEngine;
 public enum GameInterludeExServerPacketType : byte
 {
     ExShowQuestInfo = 0x19,
-    ExShowSellCropList = 0x21
+    ExShowSellCropList = 0x21,
+    ExShowSeedInfo = 0x1C,
 }
