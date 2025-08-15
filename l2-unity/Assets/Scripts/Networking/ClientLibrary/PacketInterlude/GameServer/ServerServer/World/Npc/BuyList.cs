@@ -85,6 +85,8 @@ public class Product : AbstractServerItem
     private int _enchant;
     private int _price;
     private int _itemId;
+    private int id;
+
     public int ItemId { get { return _itemId; } }
 
     public int Count { get { return _count; } }
@@ -118,6 +120,10 @@ public class Product : AbstractServerItem
        // Debug.Log("item id " + _itemId + " count " + _count + " _itemType2 " + _itemType2 + " _itemType1" + _itemType1);
     }
 
+    public Product(int id)
+    {
+        this.id = id;
+    }
 
     public Product Clone()
     {

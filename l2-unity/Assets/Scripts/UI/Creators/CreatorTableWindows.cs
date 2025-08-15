@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEditor.Rendering.FilterWindow;
@@ -39,7 +40,6 @@ public class CreatorTableWindows : ICreatorTables
     public void InitTable(VisualElement content, VisualElement windowEle)
     {
         _content = content;
-        //root.RegisterCallback<GeometryChangedEvent>(OnGeometryCallback);
     }
 
 
@@ -67,19 +67,11 @@ public class CreatorTableWindows : ICreatorTables
         VisualElement containerBodyList = _table.Q<VisualElement>(_tableBodyListName);
         _tableHeHeaderItem = CreateHeaderItems(headersName , containerBodyList);
          VisualElement containerHeaderList = _table.Q<VisualElement>(_tableHeaderListName);
-
-
-
         InjectHeaderList(_tableHeHeaderItem, containerHeaderList);
-
-
-
-        //InjectBodyList(headersName , containerBodyList);
-
         _content.Add(_table);
     }
 
-
+   
     private void InjectHeaderList(List<VisualElement> _tableHeHeaderItem , VisualElement containerHeaderList)
     {
         foreach (var header in _tableHeHeaderItem)
@@ -102,7 +94,7 @@ public class CreatorTableWindows : ICreatorTables
         var headerBorder = containerHeader.Q<VisualElement>(_tableHeaderBorder);
 
         headerBorder.RegisterCallback<GeometryChangedEvent>(evt => OnHeaderGeometryChanged(evt , headerBorder , containerBodyList));
-       
+        int index = 0;
         return headersName.Select(headerName =>
         {
             //Create Items Inside Header
@@ -114,7 +106,7 @@ public class CreatorTableWindows : ICreatorTables
 
             SetManualWidth(containerBgElement, headerName.ManualWidth);
             CreateHeader(tableHeaderLabel, containerBgElement, headerName);
-            CreateListRows(containerBodyList, headerName);
+            CreateListRows(containerBodyList, headerName , ref index);
 
             headerBorder.Add(rootContainerHeader);
 
@@ -134,18 +126,106 @@ public class CreatorTableWindows : ICreatorTables
 
 
 
-    void OnHeaderGeometryChanged(GeometryChangedEvent evt , VisualElement containerHeader , VisualElement containerBodyList)
+    void OnHeaderGeometryChanged(GeometryChangedEvent evt, VisualElement containerHeader, VisualElement containerBodyList)
     {
-        for (int i=0; i < containerHeader.childCount; i++)
+        EditorApplication.delayCall += () =>
         {
-            var headerItem = containerHeader[i];
-            var bodyItem = containerBodyList[i];
-            Label labelText = bodyItem.Q<Label>("labelText");
-            float width = headerItem.layout.width;
-            bodyItem.style.width = width;
-            Debug.Log("OnHeaderGeometryChanged > " + width);
+            bool isFirst = true;
+
+            for (int i = 0; i < containerHeader.childCount; i++)
+            {
+                var headerItem = containerHeader[i];
+                var bodyItem = containerBodyList[i];
+                float headerWidth = headerItem.resolvedStyle.width;
+
+                float newWidth = isFirst ? headerWidth + 2 : headerWidth;
+                isFirst = false;
+                bodyItem.style.flexBasis = newWidth;
+                bodyItem.style.flexShrink = 0;
+                bodyItem.MarkDirtyRepaint();
+
+               // Debug.Log("OnHeaderGeometryChanged > " + headerWidth + " Name header " + headerItem.name);
+            }
+        };
+    }
+
+
+    public void UpdateTableData(List<TableColumn> headersName)
+    {
+        if (_table == null)
+        {
+            Debug.LogError("Table is not created. Call CreateTable first.");
+            return;
+        }
+
+
+        VisualElement containerBodyList = _table.Q<VisualElement>(_tableBodyListName);
+
+
+        RemoveFromHierarchy(containerBodyList);
+
+
+        int index = 0;
+        foreach (var headerName in headersName)
+        {
+            var column = containerBodyList.Q<VisualElement>("body_column_" + index);
+            if (column != null)
+            {
+
+                foreach (var row in column.Children().ToList())
+                {
+                    row.RemoveFromHierarchy();
+                }
+
+
+                List<VisualElement> rows = CreateRows(headerName);
+                AddRowInListRows(column, rows);
+                AlignItem(column, headerName);
+            }
+            index++;
+        }
+
+
+        _table.MarkDirtyRepaint();
+    }
+
+    // Add this method to clear the table completely if needed
+    public void DestroyTable()
+    {
+        if (_table != null)
+        {
+            _content.Remove(_table);
+            _table = null;
+            _tableHeHeaderItem = null;
+            containerHeader = null;
+            _lastElementIndex = -1;
         }
     }
+
+    public void ClearTable()
+    {
+        if (_table == null)
+        {
+            return;
+        }
+        Debug.Log("Clear Table");
+        VisualElement containerBodyList = _table.Q<VisualElement>(_tableBodyListName);
+        RemoveFromHierarchy(containerBodyList);
+    }
+
+    private void RemoveFromHierarchy(VisualElement containerBodyList)
+    {
+        foreach (var column in containerBodyList.Children().ToList())
+        {
+
+            foreach (var row in column.Children().ToList())
+            {
+                row.RemoveFromHierarchy();
+            }
+        }
+    }
+
+
     private void CreateHeader(Label tableHeaderLabel , VisualElement bgElement , TableColumn headerName)
     {
         bgElement.RegisterCallback<MouseDownEvent>(evt => ClickMouse(evt, bgElement));
@@ -153,11 +233,11 @@ public class CreatorTableWindows : ICreatorTables
         tableHeaderLabel.text = headerName.NameColumn;
     }
 
-    private void CreateListRows(VisualElement insideListRows , TableColumn headerName)
+    private void CreateListRows(VisualElement insideListRows , TableColumn headerName , ref int index)
     {
         var listRows = ToolTipsUtils.CloneOne(_templateRows);
         List<VisualElement> rows =  CreateRows(headerName);
-
+        listRows.name = "body_column_" + index++;
         AddRowInListRows(listRows, rows);
         AlignItem(listRows, headerName);
         insideListRows.Add(listRows);
@@ -250,7 +330,7 @@ public class CreatorTableWindows : ICreatorTables
             VisualElement hihtlite = row.parent;
             VisualElement rowContainer = hihtlite.parent;
             VisualElement listColumn = rowContainer.parent;
-            //VisualElement bodyContainer = listColumn.parent;
+           
             SetSelectElement(listColumn, index);
             _lastElementIndex = index;
         }
@@ -261,6 +341,9 @@ public class CreatorTableWindows : ICreatorTables
         for (int i = 0; i < listColumn.childCount; i++)
         {
             VisualElement column = listColumn[i];
+
+    
+
             if (column.childCount > 0)
             {
                 IEnumerable<VisualElement> childrenRows = column.Children();
@@ -287,15 +370,6 @@ public class CreatorTableWindows : ICreatorTables
         if (highlightLast != null) highlightLast.style.display = DisplayStyle.None;
         if (highlightLastTile != null) highlightLastTile.style.display = DisplayStyle.None;
 
-
-        //if (index % 2 == 1)
-        //{
-        //    rowLast.style.backgroundColor = new StyleColor(new Color(0.2196f, 0.2196f, 0.2078f, 0.79f)); // #393835 in RGB
-       // }
-       // else
-       // {
-        //    rowLast.style.backgroundColor = new StyleColor(Color.clear);
-       // }
     }
     private void ShowSelectHighLight(VisualElement row1 , int childCount , int i)
     {
@@ -310,8 +384,10 @@ public class CreatorTableWindows : ICreatorTables
         element.AddToClassList("l2-table-header-name-bg");
     }
 
-
+  
 }
+
+
 
 public class TableColumn
 {
@@ -332,7 +408,15 @@ public class TableColumn
     }
 
    
-
+    public void SetData(List<string> listData)
+    {
+        if(_listData != null)
+        {
+            _listData.Clear();
+            _listData = null;
+        }
+        _listData = listData;
+    }
     public bool AlignTextCenter
     {
         get { return _alignTextCenter; }

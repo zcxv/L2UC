@@ -201,6 +201,9 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
             case (int)GameInterludeExServerPacketType.ExShowSellCropList:
                 OnExShowSellCropList(itemQueue.DecodeExData());
                 break;
+            case (int)GameInterludeExServerPacketType.ExShowSeedInfo:
+                OnExShowSeedInfo(itemQueue.DecodeExData());
+                break;
             default:
                 break;
         }
@@ -826,6 +829,12 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
             SellCropListWindow.Instance.SetDataTable(showSellCropList);
  
         });
+    }
+
+    public void OnExShowSeedInfo(byte[] data)
+    {
+        ExShowSeedInfo showSellCropList = new ExShowSeedInfo(data);
+        Debug.Log("OnExShowSeedInfo");
     }
 
     private void OnStatusUpdate(byte[] data)
