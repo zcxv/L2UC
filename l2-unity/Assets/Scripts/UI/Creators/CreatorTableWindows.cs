@@ -37,12 +37,10 @@ public class CreatorTableWindows : ICreatorTables
     private VisualElement _table;
     private List<VisualElement> _tableHeHeaderItem;
     private VisualElement containerHeader;
-    public void InitTable(VisualElement content, VisualElement windowEle)
+    public void InitTable(VisualElement content)
     {
         _content = content;
     }
-
-
 
 
     public void LoadAsset(Func<string, VisualTreeAsset> loaderFunc)
@@ -54,6 +52,8 @@ public class CreatorTableWindows : ICreatorTables
         _templateRowBlack = loaderFunc(_templateRowBlackName);
         _templateRowWhite = loaderFunc(_templateRowWhiteName);
     }
+
+
 
     public void CreateTable(List<TableColumn> headersName)
     {
@@ -213,6 +213,21 @@ public class CreatorTableWindows : ICreatorTables
         RemoveFromHierarchy(containerBodyList);
     }
 
+    public bool HasTable(VisualElement element)
+    {
+        if (element == null)
+            return false;
+
+      
+        bool hasTableBody = element.Q<VisualElement>("table_body") != null;
+        bool hasTableHeader = element.Q<VisualElement>("table_header") != null;
+
+        bool hasTableClasses = element.ClassListContains("l2-table") ||
+                              element.ClassListContains("table-container");
+
+        return hasTableBody && hasTableHeader || hasTableClasses;
+    }
+
     private void RemoveFromHierarchy(VisualElement containerBodyList)
     {
         foreach (var column in containerBodyList.Children().ToList())
@@ -271,7 +286,18 @@ public class CreatorTableWindows : ICreatorTables
                 var label = row.Q<Label>("labelText");
                 label.style.paddingLeft = headerName.LeftIndent;
             }
+
+            if(headerName.MaxTextSize != 0)
+            {
+                var label = row.Q<Label>("labelText");
+                MaxLabelSize(label, headerName.MaxTextSize);
+            }
         }
+    }
+
+    public void MaxLabelSize(Label label , int maxSize)
+    {
+        label.style.maxWidth = maxSize;
     }
 
     public List<VisualElement> CreateRows(TableColumn headerName)
@@ -396,6 +422,7 @@ public class TableColumn
     public float _manualWidth;
     public List<string> _listData;
     public float _leftIndent;
+    public int _maxTextSize;
 
     public TableColumn(bool alignTextCenter, string nameColumn, float width , List<string> listData , float leftIndent)
     {
@@ -404,10 +431,20 @@ public class TableColumn
         _manualWidth = width;
         _listData = listData;
         _leftIndent = leftIndent;
-
+        _maxTextSize = 0;
     }
 
-   
+    public TableColumn(bool alignTextCenter, string nameColumn, float width, List<string> listData, float leftIndent , int maxTextSize)
+    {
+        _alignTextCenter = alignTextCenter;
+        _nameColumn = nameColumn;
+        _manualWidth = width;
+        _listData = listData;
+        _leftIndent = leftIndent;
+        _maxTextSize = maxTextSize;
+    }
+
+
     public void SetData(List<string> listData)
     {
         if(_listData != null)
@@ -433,6 +470,12 @@ public class TableColumn
     {
         get { return _manualWidth; }
         set { _manualWidth = value; }
+    }
+
+    public int MaxTextSize
+    {
+        get { return _maxTextSize; }
+        set { _maxTextSize = value; }
     }
 
     public List<string> ListData

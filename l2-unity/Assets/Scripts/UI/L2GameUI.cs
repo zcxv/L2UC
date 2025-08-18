@@ -185,6 +185,11 @@ public class L2GameUI : L2UI
             SellCropListWindow.Instance.AddWindow(_rootVisualContainer);
             SellCropListWindow.Instance.HideWindow();
         }
+        if (SeedInfoWindow.Instance != null)
+        {
+            SeedInfoWindow.Instance.AddWindow(_rootVisualContainer);
+            SeedInfoWindow.Instance.HideWindow();
+        }
     }
 
     public void EnableMouse()

@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public interface ICreatorTables
 {
-    public void InitTable(VisualElement content , VisualElement root);
+    public void InitTable(VisualElement content);
     void LoadAsset(Func<string, VisualTreeAsset> loaderFunc);
     void CreateTable(List<TableColumn> headersName);
     void UpdateTableData(List<TableColumn> headersName);
@@ -13,4 +13,6 @@ public interface ICreatorTables
     void ClearTable();
 
     void DestroyTable();
+
+    bool HasTable(VisualElement element);
 }

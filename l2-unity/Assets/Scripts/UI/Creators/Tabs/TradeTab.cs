@@ -1,26 +1,16 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using static L2Slot;
-using static UnityEngine.Rendering.DebugUI;
+using static UnityEditor.Progress;
 
-public class TradeTab
+public class TradeTab : AbstractTab, ITab
 {
     private TradingSlot[] _tradeSlots;
-    
-    private string _tabName = "Tab";
     private int _defaultCountSlot = 0;
     private CreateScroller _createScroller;
-    private bool _mainTab = false;
-    public string TabName { get { return _tabName; } }
 
-    private VisualElement _tabContainer;
-    private VisualElement _tabHeader;
-    private VisualElement _contentContainer;
-    public event Action<TradeTab> EventSwitch;
-    public event Action<int , ItemCategory , int > EventLeftClick;
     private int _selectedSlot = -1;
     public TradeTab(string tabName , int countSlot , VisualElement tabContainer, VisualElement tabHeader, bool initEmpty)
     {
@@ -36,16 +26,17 @@ public class TradeTab
     }
 
 
-    private void OnRegisterClickTab(VisualElement tabHeader)
+    public void OnRegisterClickTab(VisualElement tabHeader)
     {
 
             tabHeader.RegisterCallback<MouseDownEvent>(evt => {
-                EventSwitch?.Invoke(this);
+                //EventSwitch?.Invoke(this);
+                OnEventSwitch(this , true);
             }, TrickleDown.TrickleDown);
     }
-    
 
-    private void CreateEmptyInventory(bool initEmty)
+
+    public void CreateEmptyInventory(bool initEmty)
     {
         if (_contentContainer != null && initEmty)
         {
@@ -120,7 +111,8 @@ public class TradeTab
             TradingSlot slot = _tradeSlots[slotPosition];
             if (slot != null)
             {
-                EventLeftClick?.Invoke(slot.GetItemId() , slot.GetItemCategory() , slotPosition);
+                OnEventLeftClick(slot.GetItemId(), slot.GetItemCategory(), slotPosition);
+                //EventLeftClick?.Invoke(slot.GetItemId() , slot.GetItemCategory() , slotPosition);
             }
             
         }
@@ -138,42 +130,9 @@ public class TradeTab
     {
         return new TradingSlot(model);
     }
-    public bool GetMainTab()
+
+    public VisualElement GetContentElement()
     {
-        return _mainTab;
+        return null;
     }
-    public void SetMainTab(bool main)
-    {
-        _mainTab = main;
-    }
-
-    public void UnselectTabContainerClass()
-    {
-        if(_tabContainer != null && _tabHeader != null)
-        {
-            _tabContainer.AddToClassList("unselected-tab");
-            _tabHeader.RemoveFromClassList("active");
-        }
-        else
-        {
-            Debug.LogError("TradeTab > RefreshTabContainerClass Not Found _tabContainer or _tabHeader");
-        }
-
-    }
-
-    public void SelectTabContainerClass()
-    {
-        if (_tabContainer != null && _tabHeader != null)
-        {
-            _tabContainer.RemoveFromClassList("unselected-tab");
-            _tabHeader.AddToClassList("active");
-        }
-        else
-        {
-            Debug.LogError("TradeTab > RefreshTabContainerClass Not Found _tabContainer or _tabHeader");
-        }
-
-    }
-
-
 }

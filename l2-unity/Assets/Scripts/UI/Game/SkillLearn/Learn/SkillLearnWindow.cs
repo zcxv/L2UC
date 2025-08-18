@@ -47,7 +47,7 @@ public class SkillLearnWindow : L2PopupWindow
         _spLabel = (Label)GetElementById("spCount");
 
 
-        _creatorWindow.InitTabs(new string[] { "ALL", "Other" });
+        _creatorWindow.InitTradeTabs(new string[] { "ALL", "Other" });
         _creatorWindow.CreateTabs(content, null, _rowsTemplate);
         _creatorWindow.EventLeftClick += ClickItem;
 

@@ -81,8 +81,8 @@ public class MultiSellWindow : L2PopupWindow
          var exchangeButton = (Button)GetElementById("ExchangeButton");
         _inventoryTabView = GetElementById("InventoryTabView");
 
-        _creatorWindow.InitTabs(new string[] { "ALL" , "Other" });
-        _creatorWindow.CreateTabs(_inventoryTabView, _tabTemplate, _tabHeaderTemplate);
+        _creatorWindow.InitTradeTabs(new string[] { "ALL" , "Other" });
+        _creatorWindow.CreateTradeTabs(_inventoryTabView, _tabTemplate, _tabHeaderTemplate);
 
         _scrollView1 = (ScrollView)GetElementById("1Panel-ScrollView");
         _scrollView2 = (ScrollView)GetElementById("2Panel-ScrollView");
