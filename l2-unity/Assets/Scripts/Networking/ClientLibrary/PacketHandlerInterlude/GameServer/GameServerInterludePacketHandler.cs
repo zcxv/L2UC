@@ -834,7 +834,9 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     public void OnExShowSeedInfo(byte[] data)
     {
         ExShowSeedInfo showSellCropList = new ExShowSeedInfo(data);
-        Debug.Log("OnExShowSeedInfo");
+        EventProcessor.Instance.QueueEvent(() => {
+            SeedInfoWindow.Instance.ShowWindow();
+        });
     }
 
     private void OnStatusUpdate(byte[] data)

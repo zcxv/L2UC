@@ -44,7 +44,7 @@ public class QuestListWindow : L2PopupWindow
         DragManipulator drag = new DragManipulator(dragArea, _windowEle);
         dragArea.AddManipulator(drag);
 
-        _creatorTableWindows.InitTable(_content , _windowEle);
+        _creatorTableWindows.InitTable(_content);
         _creatorTableWindows.LoadAsset(LoadAsset);
         List<QuestName> listQuest = QuestNameTable.Instance.GetQuestsWithLastSubtask();
         ForEachQuest(listQuest, _creatorTableWindows);

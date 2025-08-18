@@ -47,7 +47,7 @@ public class SellCropListWindow : L2PopupWindow
         DragManipulator drag = new DragManipulator(dragArea, _windowEle);
         dragArea.AddManipulator(drag);
 
-        _creatorTableWindows.InitTable(_content, _windowEle);
+        _creatorTableWindows.InitTable(_content);
         _creatorTableWindows.LoadAsset(LoadAsset);
 
 

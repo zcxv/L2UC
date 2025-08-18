@@ -32,13 +32,17 @@ public class CreatorVerticalScrollWindows : ICreator
         _content = _scrollView.contentContainer;
         _templateItems = templateItems;
     }
+    public void CreateTradeTabs(VisualElement _inventoryTabView, VisualTreeAsset _tabTemplate, VisualTreeAsset _tabHeaderTemplate)
+    {
+        throw new NotImplementedException();
+    }
 
     public ItemInstance GetActiveByPosition(int position)
     {
         throw new NotImplementedException();
     }
 
-    public void InitTabs(string[] nameTabs)
+    public void InitTradeTabs(string[] nameTabs)
     {
         _nameTabs = nameTabs ?? new string[0];
     }
@@ -48,7 +52,7 @@ public class CreatorVerticalScrollWindows : ICreator
         throw new NotImplementedException();
     }
 
-    private VisualElement CloneTemplte(VisualTreeAsset templateItems)
+    private VisualElement CloneTemplate(VisualTreeAsset templateItems)
     {
         return ToolTipsUtils.CloneOne(templateItems);
     }
@@ -73,7 +77,7 @@ public class CreatorVerticalScrollWindows : ICreator
             {
                 AcquireData item = (AcquireData)allItems[i].GetOtherModel();
 
-                VisualElement _slotElement = CloneTemplte(_templateItems);
+                VisualElement _slotElement = CloneTemplate(_templateItems);
                 _dataProvider.AddLearnSkill(item.GetId(), item.GetCost(), item.GetValue1(), _slotElement);
                 _slotElement.RegisterCallback<MouseDownEvent>(evt => HandleClickDown(evt, item), TrickleDown.TrickleDown);
                 _content.Add(_slotElement);
@@ -94,5 +98,17 @@ public class CreatorVerticalScrollWindows : ICreator
     private void OnLeftClick(int itemId, ItemCategory category, int position)
     {
         EventLeftClick?.Invoke(itemId, category, position);
+    }
+
+
+    //not use in TradeWindow
+    public void InitContentTabs(string[] nameTabs)
+    {
+        throw new NotImplementedException();
+    }
+    //not use in TradeWindow
+    public void InsertTablesIntoContent(ICreatorTables creatorTable, List<TableColumn> dataColumn, bool useAllTabs)
+    {
+        throw new NotImplementedException();
     }
 }
