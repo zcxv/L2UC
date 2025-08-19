@@ -43,5 +43,8 @@ public class ContentTab : AbstractTab , ITab
         }, TrickleDown.TrickleDown);
     }
 
-
+    public string GetTabName()
+    {
+        return _tabName;
+    }
 }

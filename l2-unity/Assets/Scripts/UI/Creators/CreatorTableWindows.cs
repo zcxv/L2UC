@@ -37,6 +37,7 @@ public class CreatorTableWindows : ICreatorTables
     private VisualElement _table;
     private List<VisualElement> _tableHeHeaderItem;
     private VisualElement containerHeader;
+    private List<VisualElement> childrenList;
     public void InitTable(VisualElement content)
     {
         _content = content;
@@ -71,6 +72,11 @@ public class CreatorTableWindows : ICreatorTables
         _content.Add(_table);
     }
 
+    public void ReCreateTable(List<TableColumn> headersName)
+    {
+        DestroyTable();
+        CreateTable(headersName);
+    }
    
     private void InjectHeaderList(List<VisualElement> _tableHeHeaderItem , VisualElement containerHeaderList)
     {
@@ -162,7 +168,10 @@ public class CreatorTableWindows : ICreatorTables
         VisualElement containerBodyList = _table.Q<VisualElement>(_tableBodyListName);
 
 
-        RemoveFromHierarchy(containerBodyList);
+
+
+
+        //RemoveFromHierarchy(containerBodyList);
 
 
         int index = 0;
@@ -171,8 +180,11 @@ public class CreatorTableWindows : ICreatorTables
             var column = containerBodyList.Q<VisualElement>("body_column_" + index);
             if (column != null)
             {
+                IEnumerable<VisualElement> childrenRows = column.Children();
+                List<VisualElement> childrenList = childrenRows.ToList();
 
-                foreach (var row in column.Children().ToList())
+
+                foreach (var row in childrenList)
                 {
                     row.RemoveFromHierarchy();
                 }
@@ -184,7 +196,6 @@ public class CreatorTableWindows : ICreatorTables
             }
             index++;
         }
-
 
         _table.MarkDirtyRepaint();
     }
@@ -208,7 +219,7 @@ public class CreatorTableWindows : ICreatorTables
         {
             return;
         }
-        Debug.Log("Clear Table");
+
         VisualElement containerBodyList = _table.Q<VisualElement>(_tableBodyListName);
         RemoveFromHierarchy(containerBodyList);
     }
@@ -355,9 +366,9 @@ public class CreatorTableWindows : ICreatorTables
             VisualElement row = evt.target as VisualElement;
             VisualElement hihtlite = row.parent;
             VisualElement rowContainer = hihtlite.parent;
-            VisualElement listColumn = rowContainer.parent;
+            var _selectListColumn = rowContainer.parent;
            
-            SetSelectElement(listColumn, index);
+            SetSelectElement(_selectListColumn, index);
             _lastElementIndex = index;
         }
     }
@@ -388,6 +399,28 @@ public class CreatorTableWindows : ICreatorTables
             }
         }
     }
+
+    public void ResetSelectList(VisualElement listColumn, int index)
+    {
+
+        for (int i = 0; i < listColumn.childCount; i++)
+        {
+            VisualElement column = listColumn[i];
+
+            if (column.childCount > 0)
+            {
+                IEnumerable<VisualElement> childrenRows = column.Children();
+                List<VisualElement> childrenList = childrenRows.ToList();
+
+                if (_lastElementIndex != -1)
+                {
+                    VisualElement rowLast = childrenList[_lastElementIndex];
+                    ResetSelect(rowLast, index);
+                }
+
+            }
+        }
+    }
     private void ResetSelect(VisualElement rowLast , int index)
     {
         VisualElement highlightLast = rowLast.Q<VisualElement>("highlight");
@@ -410,7 +443,18 @@ public class CreatorTableWindows : ICreatorTables
         element.AddToClassList("l2-table-header-name-bg");
     }
 
-  
+    public void SetSelectRow(int rowId)
+    {
+        if(rowId == -1)
+        {
+            //if(_selectListColumn != null)
+            //{
+             //   ResetSelectList(_selectListColumn, rowId);
+             //   _lastElementIndex = rowId;
+            //}
+
+        }
+    }
 }
 
 

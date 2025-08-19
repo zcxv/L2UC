@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -20,6 +21,16 @@ public class SeedProduction
     {
         _seed = seed;
     }
+
+    public int GetSeedId() { return _seedId; }
+    public int GetPrice() { return _price; }
+
+    public int GetStartAmount() { return _startAmount; }
+
+    public int GetAmount() { return _amount; }
+
+    public Seed GetSeed() { return _seed; }
+
 }
 
 

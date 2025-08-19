@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class CreatorTradingWindows : AbstractCreator , ICreator
 {
+    public event Action<int> EventSwitchTabByIndexOfTab;
 
     public void SetClickActiveTab(int position)
     {
@@ -61,6 +62,11 @@ public class CreatorTradingWindows : AbstractCreator , ICreator
     }
     //not use in TradeWindow
     public void InsertTablesIntoContent(ICreatorTables creatorTable, List<TableColumn> dataColumn, bool useAllTabs)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RefreshDataColumns(List<TableColumn> dataColumns)
     {
         throw new NotImplementedException();
     }

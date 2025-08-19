@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,6 +10,8 @@ public class CreatorTabsWindows : AbstractCreator, ICreator
     private bool _useAllTabs;
     private ICreatorTables _creatorTable;
     private List<TableColumn> _dataColumn;
+    public event Action<int> EventSwitchTabByIndexOfTab;
+
     public CreatorTabsWindows()
     {
         EventSwitchOut += OnSwitchEventOut;
@@ -26,6 +29,16 @@ public class CreatorTabsWindows : AbstractCreator, ICreator
     public ItemInstance GetActiveByPosition(int position)
     {
         throw new System.NotImplementedException();
+    }
+
+    public void UpdateDataInColumn(List<TableColumn> dataColumn)
+    {
+        VisualElement element = GetActiveContent();
+
+        if(dataColumn != null)
+        {
+            _creatorTable.UpdateTableData(dataColumn);
+        }
     }
 
     public void InsertTablesIntoContent(ICreatorTables creatorTable, List<TableColumn> dataColumn , bool useAllTabs)
@@ -57,6 +70,8 @@ public class CreatorTabsWindows : AbstractCreator, ICreator
     {
         if (_useAllTabs)
         {
+            OnEventSwitchTab(FindTabByName(tab.GetTabName()));
+
             VisualElement element = GetActiveContent();
 
             if (element != null && !_creatorTable.HasTable(element))
@@ -66,13 +81,30 @@ public class CreatorTabsWindows : AbstractCreator, ICreator
             }
             else if(element != null && _creatorTable.HasTable(element))
             {
-                _creatorTable.UpdateTableData(_dataColumn);
+                //_creatorTable.UpdateTableData(_dataColumn);
+                _creatorTable.ReCreateTable(_dataColumn);
             }
             else
             {
                 Debug.LogError("CreatorTabsWindows >>> InsertTablesIntoContent Not Found Content Element!!!");
             }
+
+
         }
 
+    }
+
+    public void OnEventSwitchTab(int tabIndex)
+    {
+     
+        if (EventSwitchTabByIndexOfTab != null)
+        {
+            EventSwitchTabByIndexOfTab(tabIndex);
+        }
+    }
+
+    public void RefreshDataColumns(List<TableColumn> dataColumns)
+    {
+        _dataColumn = dataColumns;
     }
 }

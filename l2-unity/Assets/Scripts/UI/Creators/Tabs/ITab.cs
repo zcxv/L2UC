@@ -17,4 +17,6 @@ public interface ITab
     ItemInstance GetSlotByPosition(int position);
 
     public VisualElement GetContentElement();
+
+    public string GetTabName();
 }

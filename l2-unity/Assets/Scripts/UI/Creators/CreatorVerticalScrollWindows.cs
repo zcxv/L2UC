@@ -7,6 +7,8 @@ using static UnityEditor.Progress;
 public class CreatorVerticalScrollWindows : ICreator
 {
     public event Action<int, ItemCategory, int> EventLeftClick;
+    public event Action<int> EventSwitchTabByIndexOfTab;
+
     private ScrollView _scrollView;
     private VisualElement _content;
     private string[] _nameTabs;
@@ -108,6 +110,11 @@ public class CreatorVerticalScrollWindows : ICreator
     }
     //not use in TradeWindow
     public void InsertTablesIntoContent(ICreatorTables creatorTable, List<TableColumn> dataColumn, bool useAllTabs)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RefreshDataColumns(List<TableColumn> dataColumns)
     {
         throw new NotImplementedException();
     }

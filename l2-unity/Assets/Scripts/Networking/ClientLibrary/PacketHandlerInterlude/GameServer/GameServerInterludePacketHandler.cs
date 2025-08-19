@@ -204,6 +204,12 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
             case (int)GameInterludeExServerPacketType.ExShowSeedInfo:
                 OnExShowSeedInfo(itemQueue.DecodeExData());
                 break;
+            case (int)GameInterludeExServerPacketType.ExShowCropInfo:
+                OnExShowCropInfo(itemQueue.DecodeExData());
+                break;
+            case (int)GameInterludeExServerPacketType.ExShowManorDefaultInfo:
+                OnExShowManorDefaultInfo(itemQueue.DecodeExData());
+                break;
             default:
                 break;
         }
@@ -833,10 +839,33 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
     public void OnExShowSeedInfo(byte[] data)
     {
-        ExShowSeedInfo showSellCropList = new ExShowSeedInfo(data);
+        ExShowSeedInfo exShowSeedInfo = new ExShowSeedInfo(data);
         EventProcessor.Instance.QueueEvent(() => {
+            SeedInfoWindow.Instance.SetDataSeedInfo(exShowSeedInfo.List);
             SeedInfoWindow.Instance.ShowWindow();
         });
+    }
+
+    public void OnExShowCropInfo(byte[] data)
+    {
+        ExShowCropInfo showSellCropList = new ExShowCropInfo(data);
+         EventProcessor.Instance.QueueEvent(() => {
+             SeedInfoWindow.Instance.SetDataCropInfo(showSellCropList.List);
+             SeedInfoWindow.Instance.ShowWindow();
+          });
+
+
+    }
+
+    public void OnExShowManorDefaultInfo(byte[] data)
+    {
+        ExShowManorDefaultInfo showManorDefaultInfo = new ExShowManorDefaultInfo(data);
+        EventProcessor.Instance.QueueEvent(() => {
+            SeedInfoWindow.Instance.SetDataDefaultManorInfo(showManorDefaultInfo.List);
+            SeedInfoWindow.Instance.ShowWindow();
+        });
+
+
     }
 
     private void OnStatusUpdate(byte[] data)
