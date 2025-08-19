@@ -5,4 +5,6 @@ public enum GameInterludeExServerPacketType : byte
     ExShowQuestInfo = 0x19,
     ExShowSellCropList = 0x21,
     ExShowSeedInfo = 0x1C,
+    ExShowCropInfo = 0x1D,
+    ExShowManorDefaultInfo = 0x1E,
 }

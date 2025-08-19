@@ -135,4 +135,9 @@ public class TradeTab : AbstractTab, ITab
     {
         return null;
     }
+
+    public string GetTabName()
+    {
+        return _tabName;
+    }
 }

@@ -24,6 +24,19 @@ public abstract class AbstractCreator
         _tabsContentTabs = new ContentTab[nameTabs.Length];
     }
 
+    public int FindTabByName(string name)
+    {
+        for(int i=0; i < _tabsContentTabs.Length; i++)
+        {
+            ITab tab = _tabsContentTabs[i];
+            if (tab.GetTabName() == name)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public void CreateTradeTabs(VisualElement inventoryTabView, VisualTreeAsset _tabTemplate, VisualTreeAsset _tabHeaderTemplate)
     {
         VisualElement tabHeaderContainer = inventoryTabView.Q<VisualElement>("tab-header-container");

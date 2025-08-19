@@ -22,6 +22,10 @@ public interface ICreator
 
     public event Action<int , ItemCategory , int> EventLeftClick;
 
+    public event Action<int> EventSwitchTabByIndexOfTab;
+
+    public void RefreshDataColumns(List<TableColumn>dataColumns);
+
     public void SetClickActiveTab(int position);
 
     public ItemInstance GetActiveByPosition(int position);

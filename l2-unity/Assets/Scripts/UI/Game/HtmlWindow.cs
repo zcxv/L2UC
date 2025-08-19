@@ -173,7 +173,11 @@ public class HtmlWindow : L2PopupWindow
             SendSenver(action);
         }
         
-       // Debug.Log($"Вы нажали на Label с именем: {labelName}  , {action}");
+    }
+
+    public void UseActionCommand(string whiteCommand)
+    {
+        SendSenver(whiteCommand);
     }
 
     public string ReplaceVarToStringData(string action)
@@ -198,7 +202,6 @@ public class HtmlWindow : L2PopupWindow
         }
 
         return newAction;
-  
     }
 
     public async Task SendSenver(string command )

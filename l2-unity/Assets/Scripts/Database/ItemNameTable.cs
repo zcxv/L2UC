@@ -102,77 +102,77 @@ public class ItemNameTable {
         //_actionsInterlude = new Dictionary<int, ActionData>();
         string dataPath = Path.Combine(Application.streamingAssetsPath, "Data/Meta/Itemname-e_interlude.txt");
 
-
-        
-        using (StreamReader reader = new StreamReader(dataPath))
+        try
         {
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            using (StreamReader reader = new StreamReader(dataPath))
             {
-                if (line.IndexOf(".\\0") > -1)
+                string line;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    ItemName itemData = new ItemName();
-
-                    string[] ids = line.Split('\t');
-                    //int s1 = line.IndexOf("a,") + 2;
-                    //int s2 = line.IndexOf(".\\0");
-
-  
-
-                    string parts1 = DatUtils.CleanupStringOldData(ids[5]);
-                    string desctiptionSet1 = DatUtils.CleanupStringOldData(ids[6]);
-
-                    string parts2 = DatUtils.CleanupStringOldData(ids[7]);
-                    string desctiptionSet2 = DatUtils.CleanupStringOldData(ids[8]);
-
-
-                    itemData.Id = Int32.Parse(ids[0]);
-                    itemData.Name = ids[1];
-
-                    if (itemData.Id == 356)
+                    if (line.IndexOf(".\\0") > -1 | line.IndexOf("a,") > -1)
                     {
-                        Debug.Log("");
-                    }
+                        ItemName itemData = new ItemName();
 
-                    int[] sets1 = GetSetsIds(parts1);
-                    ItemSets itemSets1 = CreateItems(sets1, desctiptionSet1);
+                        string[] ids = line.Split('\t');
+                        //int s1 = line.IndexOf("a,") + 2;
+                        //int s2 = line.IndexOf(".\\0");
 
-                    int[] sets2 = GetSetsIds(parts2);
-                    ItemSets itemSet2 = CreateItems(sets2, desctiptionSet2);
 
-                    if (itemData.Id == 23)
-                    {
-                        Debug.Log("");
-                    }
-                    if (_itemNames.ContainsKey(itemData.Id))
-                    {
-                        //if (string.IsNullOrEmpty(_itemNames[itemData.Id].Description))
-                        //{
-                         //   _itemNames[itemData.Id].Description = itemData.Description;
+
+                        string parts1 = DatUtils.CleanupStringOldData(ids[5]);
+                        string desctiptionSet1 = DatUtils.CleanupStringOldData(ids[6]);
+
+                        string parts2 = DatUtils.CleanupStringOldData(ids[7]);
+                        string desctiptionSet2 = DatUtils.CleanupStringOldData(ids[8]);
+
+
+                        itemData.Id = Int32.Parse(ids[0]);
+                        itemData.Name = ids[1];
+
+
+                        int[] sets1 = GetSetsIds(parts1);
+                        ItemSets itemSets1 = CreateItems(sets1, desctiptionSet1);
+
+                        int[] sets2 = GetSetsIds(parts2);
+                        ItemSets itemSet2 = CreateItems(sets2, desctiptionSet2);
+
+
+                        if (_itemNames.ContainsKey(itemData.Id))
+                        {
+                            //if (string.IsNullOrEmpty(_itemNames[itemData.Id].Description))
+                            //{
+                            //   _itemNames[itemData.Id].Description = itemData.Description;
                             AddSets(itemData, itemSets1, itemSet2);
 
 
-                        //}
-                       // else
-                        //{
-                        //    AddSets(itemData, itemSets1, itemSet2);
+                            //}
+                            // else
+                            //{
+                            //    AddSets(itemData, itemSets1, itemSet2);
                             //_itemNames[itemData.Id].SetSets(new ItemSets[1] { itemSets1 });
-                        //}
+                            //}
 
+                        }
+                        else
+                        {
+                            ItemName itemName = new ItemName();
+                            itemName.Id = itemData.Id;
+                            itemName.Name = itemData.Name;
+                            itemName.Description = itemData.Description;
+                            _itemNames.Add(itemData.Id, itemName);
+                        }
                     }
-                    else
-                    {
-                        ItemName itemName = new ItemName();
-                        itemName.Id = itemData.Id;
-                        itemName.Name = itemData.Name;
-                        itemName.Description = itemData.Description;
-                        _itemNames.Add(itemData.Id, itemName);
-                    }
+
                 }
 
             }
-
         }
+        catch (Exception ex)
+        {
+            Debug.LogError("ItemNametable error parce itemName " + ex.Message);
+        }
+        
+
     }
 
 
