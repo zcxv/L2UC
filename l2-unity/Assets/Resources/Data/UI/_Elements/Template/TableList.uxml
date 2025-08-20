@@ -5,9 +5,9 @@
             <engine:VisualElement name="table_header" style="flex-grow: 0; flex-direction: row; width: auto; align-items: stretch; height: auto;" />
         </engine:VisualElement>
         <engine:VisualElement name="body" style="flex-grow: 1; margin-top: -10px; display: flex; visibility: visible; overflow: visible; max-height: 90%;">
-            <engine:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" class="l2-scroll-windows" style="align-self: stretch; align-items: stretch; position: relative; width: 100%; height: 99%; max-width: none; max-height: none; top: auto; justify-content: flex-start; align-content: stretch; flex-grow: 1; flex-direction: row;">
-                <engine:VisualElement name="table_body" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; max-height: 90%;" />
-            </engine:ScrollView>
+            <engine:VisualElement name="table_body" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; max-height: 90%;">
+                <engine:ListView name="table_listView" class="l2-scroll-windows" style="flex-grow: 1; max-height: none; min-height: auto; width: auto; height: auto; max-width: none;" />
+            </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="footer" style="flex-grow: 1; display: none; visibility: hidden; overflow: hidden;" />
     </engine:GroupBox>

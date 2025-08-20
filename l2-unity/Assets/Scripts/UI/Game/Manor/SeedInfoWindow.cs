@@ -55,16 +55,16 @@ public class SeedInfoWindow : L2PopupWindow
         var content = (VisualElement)GetElementById("content");
 
 
-        _creatorTable.LoadAsset(LoadAsset);
+        //_creatorTable.LoadAsset(LoadAsset);
 
-        _defaultColumns0 = GetColumnWindowTab0();
-        _defaultColumns1 = GetColumnWindowTab1();
-        _defaultColumns2 = GetColumnWindowTab2();
+        //_defaultColumns0 = GetColumnWindowTab0();
+        //_defaultColumns1 = GetColumnWindowTab1();
+       // _defaultColumns2 = GetColumnWindowTab2();
 
-        _creatorWindow.InitContentTabs(_tabsName);
-        _creatorWindow.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
-        _creatorWindow.InsertTablesIntoContent(_creatorTable, _defaultColumns0, true);
-        _creatorWindow.EventSwitchTabByIndexOfTab += OnSwitchTab;
+        //_creatorWindow.InitContentTabs(_tabsName);
+        //_creatorWindow.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
+        //_creatorWindow.InsertTablesIntoContent(_creatorTable, _defaultColumns0, true);
+        //_creatorWindow.EventSwitchTabByIndexOfTab += OnSwitchTab;
 
         RegisterCloseWindowEvent("btn-close-frame");
         RegisterClickWindowEvent(_windowEle, dragArea);

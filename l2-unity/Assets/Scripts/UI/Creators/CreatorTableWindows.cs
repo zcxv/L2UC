@@ -1,11 +1,13 @@
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Rendering.FilterWindow;
-using static UnityEngine.Rendering.DebugUI.Table;
+using static UnityEngine.InputSystem.UI.VirtualMouseInput;
+
 
 
 public class CreatorTableWindows : ICreatorTables
@@ -18,6 +20,8 @@ public class CreatorTableWindows : ICreatorTables
     private const string _templateRowBlackName = "Data/UI/_Elements/Template/TableRowBlack";
     private const string _templateRowWhiteName = "Data/UI/_Elements/Template/TableRowWhite";
 
+
+    private const string _tableListViewName = "table_listView";
     private const string _tableBodyListName = "table_body";
     private const string _tableHeaderListName = "table_header";
     private const string _tableHeaderLabelName = "columnLabel";
@@ -38,9 +42,14 @@ public class CreatorTableWindows : ICreatorTables
     private List<VisualElement> _tableHeHeaderItem;
     private VisualElement containerHeader;
     private List<VisualElement> childrenList;
+    private ListView _listView;
+    private ScrollView _innerScrollView;
+    private List<TableColumn> _columnsList;
+    private Texture2D _defaultCursor;
     public void InitTable(VisualElement content)
     {
         _content = content;
+        _defaultCursor = IconManager.Instance.LoadCursorByName("Default");
     }
 
 
@@ -56,7 +65,7 @@ public class CreatorTableWindows : ICreatorTables
 
 
 
-    public void CreateTable(List<TableColumn> headersName)
+    public void CreateTable(List<TableColumn> columnsList)
     {
         if(_templateTable == null || _templateHeader == null)
         {
@@ -65,8 +74,23 @@ public class CreatorTableWindows : ICreatorTables
         }
 
          _table = ToolTipsUtils.CloneOne(_templateTable);
-        VisualElement containerBodyList = _table.Q<VisualElement>(_tableBodyListName);
-        _tableHeHeaderItem = CreateHeaderItems(headersName , containerBodyList);
+
+        _listView = _table.Q<ListView>(_tableListViewName);
+        _listView.virtualizationMethod = CollectionVirtualizationMethod.FixedHeight;
+        _listView.fixedItemHeight = 18;
+        _columnsList = columnsList;
+
+        _innerScrollView = _listView.Q<ScrollView>();
+
+
+        _listView.itemsSource = _columnsList[0].ListData.Select((_, index) =>
+        _columnsList.Select(col => col.ListData[index]).ToArray()).ToList();
+
+        _listView.makeItem = MakeItem;
+        _listView.bindItem = BindListViewItems;
+
+
+        _tableHeHeaderItem = CreateHeaderItems(columnsList);
          VisualElement containerHeaderList = _table.Q<VisualElement>(_tableHeaderListName);
         InjectHeaderList(_tableHeHeaderItem, containerHeaderList);
         _content.Add(_table);
@@ -74,8 +98,8 @@ public class CreatorTableWindows : ICreatorTables
 
     public void ReCreateTable(List<TableColumn> headersName)
     {
-        DestroyTable();
-        CreateTable(headersName);
+        //DestroyTable();
+        //CreateTable(headersName);
     }
    
     private void InjectHeaderList(List<VisualElement> _tableHeHeaderItem , VisualElement containerHeaderList)
@@ -86,9 +110,55 @@ public class CreatorTableWindows : ICreatorTables
         }
     }
 
+    public VisualElement MakeItem()
+    {
+
+            VisualElement tablesContainer = new VisualElement();
+
+            tablesContainer.style.flexDirection = FlexDirection.Row;
+            tablesContainer.style.flexGrow = 1;
+            tablesContainer.style.flexShrink = 1;
+
+            for (int i=0; i < _columnsList.Count; i++)
+            {
+                var listRows = ToolTipsUtils.CloneOne(_templateRows);
+                VisualElement element = CreateRow("");
+                listRows.Add(element);
+                tablesContainer.Add(listRows);
 
 
-    public List<VisualElement> CreateHeaderItems(List<TableColumn> headersName , VisualElement containerBodyList)
+                listRows.RegisterCallback<MouseDownEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
+                listRows.RegisterCallback<MouseUpEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
+                listRows.RegisterCallback<PointerMoveEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
+                listRows.RegisterCallback<PointerDownEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
+            }
+
+
+
+        return tablesContainer;
+
+   }
+
+  private void BindListViewItems(VisualElement ve , int i)
+    {
+
+            var row = (VisualElement)ve;
+
+            for (int n =0; n < _columnsList.Count; n++)
+            {
+                var column = _columnsList[n];
+                VisualElement row_list1 = row[n];
+                VisualElement in_1 = row_list1[0];
+                //TableRowBlack - inside 0 > content_highlight & 1 > label_text
+                Label label = (Label)in_1[1];
+                label.text = column.ListData[i];
+            }
+
+    }
+
+   
+
+    public List<VisualElement> CreateHeaderItems(List<TableColumn> tablesColumns)
     {
         if (_templateHeader == null)
         {
@@ -99,21 +169,17 @@ public class CreatorTableWindows : ICreatorTables
         containerHeader = ToolTipsUtils.CloneOne(_templateHeader);
         var headerBorder = containerHeader.Q<VisualElement>(_tableHeaderBorder);
 
-        headerBorder.RegisterCallback<GeometryChangedEvent>(evt => OnHeaderGeometryChanged(evt , headerBorder , containerBodyList));
-        int index = 0;
-        return headersName.Select(headerName =>
+        headerBorder.RegisterCallback<GeometryChangedEvent>(evt => OnHeaderGeometryChanged(evt , headerBorder , _innerScrollView));
+
+        return tablesColumns.Select(headerName =>
         {
             //Create Items Inside Header
             var rootContainerHeader = ToolTipsUtils.CloneOne(_templateInside);
             Label tableHeaderLabel = rootContainerHeader.Q<Label>(_tableHeaderLabelName);
             VisualElement containerBgElement = rootContainerHeader.Q<VisualElement>("bgElement");
-            //VisualElement containerListRows = rootContainerHeader.Q<VisualElement>("columnInsideListRows");
-
 
             SetManualWidth(containerBgElement, headerName.ManualWidth);
             CreateHeader(tableHeaderLabel, containerBgElement, headerName);
-            CreateListRows(containerBodyList, headerName , ref index);
-
             headerBorder.Add(rootContainerHeader);
 
             return containerHeader;
@@ -132,27 +198,57 @@ public class CreatorTableWindows : ICreatorTables
 
 
 
-    void OnHeaderGeometryChanged(GeometryChangedEvent evt, VisualElement containerHeader, VisualElement containerBodyList)
+    void OnHeaderGeometryChanged(GeometryChangedEvent evt, VisualElement containerHeader , ScrollView innerScrollView)
     {
         EditorApplication.delayCall += () =>
         {
             bool isFirst = true;
+            float[] allWith = new float[containerHeader.childCount];
 
             for (int i = 0; i < containerHeader.childCount; i++)
             {
                 var headerItem = containerHeader[i];
-                var bodyItem = containerBodyList[i];
+
+
                 float headerWidth = headerItem.resolvedStyle.width;
 
                 float newWidth = isFirst ? headerWidth + 2 : headerWidth;
                 isFirst = false;
-                bodyItem.style.flexBasis = newWidth;
-                bodyItem.style.flexShrink = 0;
-                bodyItem.MarkDirtyRepaint();
+                allWith[i] = newWidth;
 
-               // Debug.Log("OnHeaderGeometryChanged > " + headerWidth + " Name header " + headerItem.name);
+                 Debug.Log("OnHeaderGeometryChanged > " + headerWidth + " Name header " + headerItem.name);
+            }
+
+
+            if (innerScrollView != null)
+            {
+                var innerContainer = innerScrollView.contentContainer;
+                Debug.Log("Inner children: " + innerContainer.childCount);
+                ChangeWidthListView(innerContainer.Children(), allWith);
             }
         };
+    }
+
+    private void ChangeWidthListView(IEnumerable<VisualElement> elementsListView ,  float[] allWith)
+    {
+        int index = 0;
+
+        foreach (var item in elementsListView)
+        {
+  
+            var row = item;
+            var columns = row.Children().ToList(); 
+
+            for(int i = 0; i < allWith.Length; i++)
+            {
+                var column = columns[i];
+                var new_width = allWith[i];
+
+                column.style.flexBasis = new_width;
+                column.style.flexShrink = 0;
+                column.MarkDirtyRepaint();
+            }
+        }
     }
 
 
@@ -311,14 +407,29 @@ public class CreatorTableWindows : ICreatorTables
         label.style.maxWidth = maxSize;
     }
 
-    public List<VisualElement> CreateRows(TableColumn headerName)
+    public VisualElement CreateRow(string text)
+    {
+        VisualElement row;
+        row = GetNewRow(1);
+        Label labelText = row.Q<Label>("labelText");
+        CleapText(labelText);
+
+        if (labelText != null)
+        {
+            labelText.text = text;
+        }
+
+        return row;
+    }
+
+    public List<VisualElement> CreateRows(TableColumn column)
     {
         List < VisualElement > rows = new List<VisualElement>();
 
-        for (int i = 0; i < headerName.ListData.Count; i++)
+        for (int i = 0; i < column.ListData.Count; i++)
         {
             VisualElement row;
-            string text = headerName.ListData[i];
+            string text = column.ListData[i];
             row = GetNewRow( i);
             Label labelText = row.Q<Label>("labelText");
             CleapText(labelText);

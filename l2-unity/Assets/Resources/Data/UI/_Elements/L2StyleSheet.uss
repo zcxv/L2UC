@@ -554,6 +554,50 @@
     background-image: resource('Data/UI/Assets/Scrollbar/scrollbarupbtn_over');
 }
 
+
+.l2-scroll-windows .unity-scroller,
+.l2-scroll-windows .scroll-view * {
+    cursor: resource('Data/UI/Assets/Cursor/Default');
+}
+
+
+.l2-scroll-windows .unity-list-view__item:hover {
+    background-color: transparent;
+}
+
+.l2-scroll-windows .unity-list-view__item:selected {
+    background-image: resource('Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight');
+    background-color: transparent;
+    color:transparent;
+
+}
+
+.l2-scroll-windows .unity-list-view__item:selected:hover {
+    background-image: resource('Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight');
+    background-color: transparent;
+    color:transparent;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .chat-window .unity-base-text-field__input {
     margin: 0;
     padding: 0;
