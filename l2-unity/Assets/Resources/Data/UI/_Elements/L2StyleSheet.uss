@@ -566,14 +566,14 @@
 }
 
 .l2-scroll-windows .unity-list-view__item:selected {
-    background-image: resource('Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight');
+     /*background-image: resource('Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight');*/
     background-color: transparent;
     color:transparent;
 
 }
 
 .l2-scroll-windows .unity-list-view__item:selected:hover {
-    background-image: resource('Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight');
+   /* background-image: resource('Data/UI/Assets/Tab/Table/ListCtrl_DF_Highlight'); */
     background-color: transparent;
     color:transparent;
 

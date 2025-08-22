@@ -1,12 +1,12 @@
 
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.InputSystem.UI.VirtualMouseInput;
+using static UnityEngine.Rendering.DebugUI.Table;
+
 
 
 
@@ -34,18 +34,22 @@ public class CreatorTableWindows : ICreatorTables
     private VisualTreeAsset _templateRows;
 
     private VisualTreeAsset _templateRowBlack;
-    private VisualTreeAsset _templateRowWhite;
 
-    private int _lastElementIndex = -1;
+
+    private int _lastSelectIndex = -1;
+    private int _currentSelectIndex = -1;
+    private VisualElement _lastSelectElement;
 
     private VisualElement _table;
     private List<VisualElement> _tableHeHeaderItem;
     private VisualElement containerHeader;
-    private List<VisualElement> childrenList;
+
     private ListView _listView;
     private ScrollView _innerScrollView;
     private List<TableColumn> _columnsList;
     private Texture2D _defaultCursor;
+    public int _index_row = 0;
+
     public void InitTable(VisualElement content)
     {
         _content = content;
@@ -60,35 +64,39 @@ public class CreatorTableWindows : ICreatorTables
         _templateInside = loaderFunc(_templateColumnInside);
         _templateRows = loaderFunc(_templateRowsName);
         _templateRowBlack = loaderFunc(_templateRowBlackName);
-        _templateRowWhite = loaderFunc(_templateRowWhiteName);
+
     }
 
 
 
     public void CreateTable(List<TableColumn> columnsList)
     {
-        if(_templateTable == null || _templateHeader == null)
+        
+        if (_templateTable == null || _templateHeader == null)
         {
             Debug.LogError("CreatorTableWindows not found TemplateTable or TemplateHeader");
             return;
         }
 
-         _table = ToolTipsUtils.CloneOne(_templateTable);
+
+        _index_row = 0;
+        _table = ToolTipsUtils.CloneOne(_templateTable);
 
         _listView = _table.Q<ListView>(_tableListViewName);
-        _listView.virtualizationMethod = CollectionVirtualizationMethod.FixedHeight;
+       // _listView.virtualizationMethod = CollectionVirtualizationMethod.FixedHeight;
         _listView.fixedItemHeight = 18;
         _columnsList = columnsList;
 
         _innerScrollView = _listView.Q<ScrollView>();
 
+        var arr_column0 = _columnsList[0].ListData;
+        //CopyArrayToDictionary(_tableIndexes, arr_column0);
+        _listView.itemsSource = arr_column0;
 
-        _listView.itemsSource = _columnsList[0].ListData.Select((_, index) =>
-        _columnsList.Select(col => col.ListData[index]).ToArray()).ToList();
 
         _listView.makeItem = MakeItem;
         _listView.bindItem = BindListViewItems;
-
+        _listView.selectedIndicesChanged += SelectRow;
 
         _tableHeHeaderItem = CreateHeaderItems(columnsList);
          VisualElement containerHeaderList = _table.Q<VisualElement>(_tableHeaderListName);
@@ -96,6 +104,7 @@ public class CreatorTableWindows : ICreatorTables
         _content.Add(_table);
     }
 
+   
     public void ReCreateTable(List<TableColumn> headersName)
     {
         //DestroyTable();
@@ -121,10 +130,14 @@ public class CreatorTableWindows : ICreatorTables
 
             for (int i=0; i < _columnsList.Count; i++)
             {
+                var column = _columnsList[i];
                 var listRows = ToolTipsUtils.CloneOne(_templateRows);
-                VisualElement element = CreateRow("");
+                VisualElement element = CreateRow("" , 1);
                 listRows.Add(element);
                 tablesContainer.Add(listRows);
+
+                AlignItem(listRows, column);
+                listRows.name = "body_column_" + i;
 
 
                 listRows.RegisterCallback<MouseDownEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
@@ -133,7 +146,7 @@ public class CreatorTableWindows : ICreatorTables
                 listRows.RegisterCallback<PointerDownEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
             }
 
-
+        _index_row++;
 
         return tablesContainer;
 
@@ -142,21 +155,71 @@ public class CreatorTableWindows : ICreatorTables
   private void BindListViewItems(VisualElement ve , int i)
     {
 
-            var row = (VisualElement)ve;
+        var row = (VisualElement)ve;
 
-            for (int n =0; n < _columnsList.Count; n++)
-            {
-                var column = _columnsList[n];
-                VisualElement row_list1 = row[n];
-                VisualElement in_1 = row_list1[0];
-                //TableRowBlack - inside 0 > content_highlight & 1 > label_text
-                Label label = (Label)in_1[1];
-                label.text = column.ListData[i];
-            }
+        for (int n = 0; n < _columnsList.Count; n++)
+        {
+            var column = _columnsList[n];
+            VisualElement row_list1 = row[n];
+            VisualElement in_1 = row_list1[0];
+            //structur template TableRowBlack - inside 0 > content_highlight & 1 > label_text
+            VisualElement content_highlight = in_1[0];
+            VisualElement highlightLast = content_highlight[0];
+            VisualElement highlightTile = content_highlight[1];
+
+            Label label = (Label)in_1[1];
+            label.text = column.ListData[i];
+
+            SetColorRowsWhiteOrBlack(row_list1, i);
+            ReturnSetSelectIfChangePosition(highlightLast, highlightTile, n, i);
+            ResetLastSelectElementIfChangePosition(highlightLast, highlightTile, n, i);
+        }
+
+        if (_lastSelectIndex == _currentSelectIndex & i == _currentSelectIndex)
+        {
+            _lastSelectElement = row;
+            Debug.Log("LastIdex select update link" + _currentSelectIndex + " last index " + _lastSelectIndex);
+        }
+
+        Debug.Log("LastIdex select " + _lastSelectIndex);
+        Debug.Log("Current Index Select " + _currentSelectIndex);
+    }
+
+    private void SetColorRowsWhiteOrBlack(VisualElement listRow, int index)
+    {
+        if (index % 2 == 0)
+        {
+            // Color #393835 with 79% opacity
+            listRow.style.backgroundColor = new Color(0.22f, 0.22f, 0.21f, 0.79f);
+        }
+        else
+        {
+            // Fully transparent
+            listRow.style.backgroundColor = new Color(0f, 0f, 0f, 0f);
+        }
+    }
+
+    private void ReturnSetSelectIfChangePosition(VisualElement highlightLast , VisualElement highlightTile , int n , int i)
+    {
+        if (_currentSelectIndex == i)
+        {
+            ShowSelectHighLightInner(highlightLast, highlightTile, _columnsList.Count - 1, n);
+        }
+        else
+        {
+            ResetSelectInner(highlightLast, highlightTile);
+        }
+    }
+
+    private void ResetLastSelectElementIfChangePosition(VisualElement highlightLast, VisualElement highlightTile, int n, int i)
+    {
+        if (_lastSelectIndex == i && _lastSelectIndex != _currentSelectIndex)
+        {
+            ResetSelectInner(highlightLast, highlightTile);
+        }
 
     }
 
-   
 
     public List<VisualElement> CreateHeaderItems(List<TableColumn> tablesColumns)
     {
@@ -208,22 +271,17 @@ public class CreatorTableWindows : ICreatorTables
             for (int i = 0; i < containerHeader.childCount; i++)
             {
                 var headerItem = containerHeader[i];
-
-
                 float headerWidth = headerItem.resolvedStyle.width;
 
                 float newWidth = isFirst ? headerWidth + 2 : headerWidth;
                 isFirst = false;
                 allWith[i] = newWidth;
-
-                 Debug.Log("OnHeaderGeometryChanged > " + headerWidth + " Name header " + headerItem.name);
             }
 
 
             if (innerScrollView != null)
             {
                 var innerContainer = innerScrollView.contentContainer;
-                Debug.Log("Inner children: " + innerContainer.childCount);
                 ChangeWidthListView(innerContainer.Children(), allWith);
             }
         };
@@ -231,8 +289,6 @@ public class CreatorTableWindows : ICreatorTables
 
     private void ChangeWidthListView(IEnumerable<VisualElement> elementsListView ,  float[] allWith)
     {
-        int index = 0;
-
         foreach (var item in elementsListView)
         {
   
@@ -287,7 +343,7 @@ public class CreatorTableWindows : ICreatorTables
 
 
                 List<VisualElement> rows = CreateRows(headerName);
-                AddRowInListRows(column, rows);
+                //AddRowInListRows(column, rows);
                 AlignItem(column, headerName);
             }
             index++;
@@ -305,7 +361,7 @@ public class CreatorTableWindows : ICreatorTables
             _table = null;
             _tableHeHeaderItem = null;
             containerHeader = null;
-            _lastElementIndex = -1;
+            _lastSelectIndex = -1;
         }
     }
 
@@ -355,49 +411,30 @@ public class CreatorTableWindows : ICreatorTables
         tableHeaderLabel.text = headerName.NameColumn;
     }
 
-    private void CreateListRows(VisualElement insideListRows , TableColumn headerName , ref int index)
-    {
-        var listRows = ToolTipsUtils.CloneOne(_templateRows);
-        List<VisualElement> rows =  CreateRows(headerName);
-        listRows.name = "body_column_" + index++;
-        AddRowInListRows(listRows, rows);
-        AlignItem(listRows, headerName);
-        insideListRows.Add(listRows);
-    }
 
-    private void AddRowInListRows(VisualElement listRows , List<VisualElement> rows)
-    {
-        for (int i =0; i < rows.Count; i++)
-        {
-            var row = rows[i];
-            int index = i;
-            row.RegisterCallback<MouseDownEvent>(evt => ClickRow(evt , index));
-            listRows.Add(row);
-        }
 
-    }
 
-    private void AlignItem(VisualElement listRows, TableColumn headerName)
+    private void AlignItem(VisualElement listRows, TableColumn column)
     {
         var rows = listRows.Children().ToList();
         for (int i = 0; i < rows.Count; i++)
         {
             var row = rows[i];
 
-            if (headerName.AlignTextCenter)
+            if (column.AlignTextCenter)
             {
                 row.style.alignItems = new StyleEnum<Align>(Align.Center);
             }
             else
             {
                 var label = row.Q<Label>("labelText");
-                label.style.paddingLeft = headerName.LeftIndent;
+                label.style.paddingLeft = column.LeftIndent;
             }
 
-            if(headerName.MaxTextSize != 0)
+            if(column.MaxTextSize != 0)
             {
                 var label = row.Q<Label>("labelText");
-                MaxLabelSize(label, headerName.MaxTextSize);
+                MaxLabelSize(label, column.MaxTextSize);
             }
         }
     }
@@ -407,10 +444,10 @@ public class CreatorTableWindows : ICreatorTables
         label.style.maxWidth = maxSize;
     }
 
-    public VisualElement CreateRow(string text)
+    public VisualElement CreateRow(string text , int index)
     {
         VisualElement row;
-        row = GetNewRow(1);
+        row = GetNewRow();
         Label labelText = row.Q<Label>("labelText");
         CleapText(labelText);
 
@@ -430,7 +467,7 @@ public class CreatorTableWindows : ICreatorTables
         {
             VisualElement row;
             string text = column.ListData[i];
-            row = GetNewRow( i);
+            row = GetNewRow();
             Label labelText = row.Q<Label>("labelText");
             CleapText(labelText);
 
@@ -452,17 +489,9 @@ public class CreatorTableWindows : ICreatorTables
         rowLabel.style.textOverflow = TextOverflow.Clip; // обрезать
     }
 
-    private VisualElement GetNewRow(int i)
+    private VisualElement GetNewRow()
     {
-        if (i % 2 == 0)
-        {
-            return  ToolTipsUtils.CloneOne(_templateRowWhite);
-        }
-        else
-        {
             return  ToolTipsUtils.CloneOne(_templateRowBlack);
-        }
-
     }
     public void ClickMouse(MouseDownEvent evt , VisualElement element)
     {
@@ -470,77 +499,80 @@ public class CreatorTableWindows : ICreatorTables
         element.AddToClassList("l2-table-header-name-bg-click");
     }
 
-    public void ClickRow(MouseDownEvent evt , int index)
+    public void SelectRow(IEnumerable<int> selectedItems)
     {
-        if(evt.target != null)
+        var indexRow = selectedItems.FirstOrDefault();
+        _currentSelectIndex = indexRow;
+
+        var selectedVisualElement = _listView.Q<VisualElement>(className: "unity-collection-view__item--selected");
+        ClickRow(selectedVisualElement , _currentSelectIndex);
+    }
+
+ 
+
+    public void ClickRow(VisualElement _selectListColumn , int currentSelectIndex)
+    {
+        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
+        if (_selectListColumn != null)
         {
-            VisualElement row = evt.target as VisualElement;
-            VisualElement hihtlite = row.parent;
-            VisualElement rowContainer = hihtlite.parent;
-            var _selectListColumn = rowContainer.parent;
-           
-            SetSelectElement(_selectListColumn, index);
-            _lastElementIndex = index;
+            SetSelectElement(_selectListColumn ,  currentSelectIndex);
         }
     }
 
-    private void SetSelectElement(VisualElement listColumn, int index)
+    private void SetSelectElement(VisualElement _selectListColumn , int  currentSelectIndex)
     {
-        for (int i = 0; i < listColumn.childCount; i++)
+        for (int i = 0; i < _selectListColumn.childCount; i++)
         {
-            VisualElement column = listColumn[i];
+            VisualElement row1 = _selectListColumn[i];
 
-    
-
-            if (column.childCount > 0)
+            if (row1.childCount > 0)
             {
-                IEnumerable<VisualElement> childrenRows = column.Children();
-                List<VisualElement> childrenList = childrenRows.ToList();
 
-                if (_lastElementIndex != -1)
+                if (_lastSelectElement != null && currentSelectIndex != _lastSelectIndex)
                 {
-                    VisualElement rowLast = childrenList[_lastElementIndex];
-                    ResetSelect(rowLast , index);
+                    VisualElement last_row1 = _lastSelectElement[i];
+                    VisualElement highlightLast = last_row1.Q<VisualElement>("highlight");
+                    VisualElement highlightLastTile = last_row1.Q<VisualElement>("highlightTile");
+                    ResetSelectInner(highlightLast, highlightLastTile);
+                    Debug.Log("Очищаю элемент " + _lastSelectIndex);
                 }
 
-
-                VisualElement row1 = childrenList[index];
-
-                ShowSelectHighLight(row1, listColumn.childCount - 1, i);
+                ShowSelectHighLight(row1, _selectListColumn.childCount - 1, i);
             }
         }
-    }
 
-    public void ResetSelectList(VisualElement listColumn, int index)
-    {
+        Debug.Log("LastIdex select " + _lastSelectIndex);
+        Debug.Log("Current Index Select " + _currentSelectIndex);
 
-        for (int i = 0; i < listColumn.childCount; i++)
+        if (_lastSelectElement != _selectListColumn)
         {
-            VisualElement column = listColumn[i];
-
-            if (column.childCount > 0)
-            {
-                IEnumerable<VisualElement> childrenRows = column.Children();
-                List<VisualElement> childrenList = childrenRows.ToList();
-
-                if (_lastElementIndex != -1)
-                {
-                    VisualElement rowLast = childrenList[_lastElementIndex];
-                    ResetSelect(rowLast, index);
-                }
-
-            }
+            _lastSelectElement = _selectListColumn;
+            _lastSelectIndex = currentSelectIndex;
         }
-    }
-    private void ResetSelect(VisualElement rowLast , int index)
-    {
-        VisualElement highlightLast = rowLast.Q<VisualElement>("highlight");
-        VisualElement highlightLastTile = rowLast.Q<VisualElement>("highlightTile");
 
+    }
+
+   
+
+    public void ResetSelectInner(VisualElement highlightLast, VisualElement highlightLastTile)
+    {
         if (highlightLast != null) highlightLast.style.display = DisplayStyle.None;
         if (highlightLastTile != null) highlightLastTile.style.display = DisplayStyle.None;
+    }
+
+    private void ShowSelectHighLightInner(VisualElement highlight, VisualElement highlightTile, int lastChild, int i)
+    {
+        if(i == lastChild)
+        {
+            highlightTile.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            highlight.style.display = DisplayStyle.Flex;
+        }
 
     }
+
     private void ShowSelectHighLight(VisualElement row1 , int childCount , int i)
     {
        // row1.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0));
