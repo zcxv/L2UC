@@ -31,15 +31,7 @@ public class CreatorTabsWindows : AbstractCreator, ICreator
         throw new System.NotImplementedException();
     }
 
-    public void UpdateDataInColumn(List<TableColumn> dataColumn)
-    {
-        VisualElement element = GetActiveContent();
 
-        if(dataColumn != null)
-        {
-            _creatorTable.UpdateTableData(dataColumn);
-        }
-    }
 
     public void InsertTablesIntoContent(ICreatorTables creatorTable, List<TableColumn> dataColumn , bool useAllTabs)
     {
@@ -81,7 +73,6 @@ public class CreatorTabsWindows : AbstractCreator, ICreator
             }
             else if(element != null && _creatorTable.HasTable(element))
             {
-                //_creatorTable.UpdateTableData(_dataColumn);
                 _creatorTable.ReCreateTable(_dataColumn);
             }
             else
@@ -106,5 +97,14 @@ public class CreatorTabsWindows : AbstractCreator, ICreator
     public void RefreshDataColumns(List<TableColumn> dataColumns)
     {
         _dataColumn = dataColumns;
+    }
+    //Tabs do not own it, this is a separate element at the very bottom if you need to fill something with buttons or something else depending on the tab
+    public void InsertFooterIntoContent(VisualElement footerElement , VisualElement root)
+    {
+        if(root != null && footerElement != null)
+        {
+            root.Clear();
+            root.Add(footerElement);
+        }
     }
 }

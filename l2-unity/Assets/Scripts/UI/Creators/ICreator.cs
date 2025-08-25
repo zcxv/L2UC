@@ -32,5 +32,9 @@ public interface ICreator
 
     public void InsertTablesIntoContent(ICreatorTables creatorTable , List<TableColumn> dataColumn, bool useAllTabs);
 
+    public void InsertFooterIntoContent(VisualElement footerElement, VisualElement root);
+
+    public void SwitchTab(int idTab, bool isTrade , bool useEvent);
+
 
 }

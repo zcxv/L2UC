@@ -841,8 +841,9 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     {
         ExShowSeedInfo exShowSeedInfo = new ExShowSeedInfo(data);
         EventProcessor.Instance.QueueEvent(() => {
+
+            SeedInfoWindow.Instance.ShowWindowActiveTabSeed();
             SeedInfoWindow.Instance.SetDataSeedInfo(exShowSeedInfo.List);
-            SeedInfoWindow.Instance.ShowWindow();
         });
     }
 
@@ -862,10 +863,8 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         ExShowManorDefaultInfo showManorDefaultInfo = new ExShowManorDefaultInfo(data);
         EventProcessor.Instance.QueueEvent(() => {
             SeedInfoWindow.Instance.SetDataDefaultManorInfo(showManorDefaultInfo.List);
-            SeedInfoWindow.Instance.ShowWindow();
+            SeedInfoWindow.Instance.ShowWindowAllDefault();
         });
-
-
     }
 
     private void OnStatusUpdate(byte[] data)

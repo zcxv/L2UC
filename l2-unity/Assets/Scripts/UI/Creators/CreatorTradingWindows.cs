@@ -70,4 +70,9 @@ public class CreatorTradingWindows : AbstractCreator , ICreator
     {
         throw new NotImplementedException();
     }
+
+    public void InsertFooterIntoContent(VisualElement footerElement, VisualElement rootFooterElement)
+    {
+        throw new NotImplementedException();
+    }
 }

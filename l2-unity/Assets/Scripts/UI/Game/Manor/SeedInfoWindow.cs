@@ -13,19 +13,32 @@ public class SeedInfoWindow : L2PopupWindow
     public static SeedInfoWindow Instance { get { return _instance; } }
     private VisualTreeAsset _tabTemplate;
     private VisualTreeAsset _tabHeaderTemplate;
+    private VisualTreeAsset _buttonTemplate;
+
+
     private List<TableColumn> _defaultColumns0;
     private List<TableColumn> _defaultColumns1;
     private List<TableColumn> _defaultColumns2;
     private readonly string[] _tabsName = new string[] { "Seeds", "Fruit", "Bas.Info" };
+    private VisualElement _footerContainer;
+
+
+    private const string commandButton0 = "manor_menu_select?ask=2&state=-1&time=0";
+    private const string commandButton1 = "manor_menu_select?ask=1&state=-1&time=0";
 
     private const string commandTab0 = "manor_menu_select?ask=3&state=1&time=0";
     private const string commandTab1 = "manor_menu_select?ask=4&state=1&time=0";
     private const string commandTab2 = "manor_menu_select?ask=5&state=1&time=0";
+    private Button _buttonSeeds;
+    private Button _buttonHarvst;
+    private Button _buttonAll1;
+    private Button _buttonAll2;
 
     protected override void LoadAssets()
     {
         _windowTemplate = LoadAsset("Data/UI/_Elements/Game/Manor/SeedInfoWindow");
         _tabTemplate = LoadAsset("Data/UI/_Elements/Game/Inventory/InventoryTab");
+        _buttonTemplate = LoadAsset("Data/UI/_Elements/Template/Elements/Buttons/DefaultButton");
         _tabHeaderTemplate = LoadAsset("Data/UI/_Elements/Game/Inventory/InventoryTabHeader");
     }
 
@@ -54,23 +67,105 @@ public class SeedInfoWindow : L2PopupWindow
         dragArea.AddManipulator(drag);
         var content = (VisualElement)GetElementById("content");
 
+        _footerContainer = content.Q<VisualElement>("footerContent");
+        _creatorTable.LoadAsset(LoadAsset);
 
-        //_creatorTable.LoadAsset(LoadAsset);
+        _defaultColumns0 = GetColumnWindowTab0();
+        _defaultColumns1 = GetColumnWindowTab1();
+        _defaultColumns2 = GetColumnWindowTab2();
 
-        //_defaultColumns0 = GetColumnWindowTab0();
-        //_defaultColumns1 = GetColumnWindowTab1();
-       // _defaultColumns2 = GetColumnWindowTab2();
+        _creatorWindow.InitContentTabs(_tabsName);
+        _creatorWindow.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
+        _creatorWindow.InsertTablesIntoContent(_creatorTable, _defaultColumns0, true);
+        _creatorWindow.EventSwitchTabByIndexOfTab += OnSwitchTab;
+        AddContent0Footer(_creatorWindow , _footerContainer);
 
-        //_creatorWindow.InitContentTabs(_tabsName);
-        //_creatorWindow.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
-        //_creatorWindow.InsertTablesIntoContent(_creatorTable, _defaultColumns0, true);
-        //_creatorWindow.EventSwitchTabByIndexOfTab += OnSwitchTab;
+
 
         RegisterCloseWindowEvent("btn-close-frame");
         RegisterClickWindowEvent(_windowEle, dragArea);
         OnCenterScreen(_root);
 
     }
+
+    private void UnRegisterAllButtons()
+    {
+        if(_buttonSeeds != null) _buttonSeeds.UnregisterCallback<ClickEvent>(OnClickButtonSeed);
+        if (_buttonHarvst != null) _buttonSeeds.UnregisterCallback<ClickEvent>(OnClickButtonSeed);
+        if (_buttonAll1 != null) _buttonSeeds.UnregisterCallback<ClickEvent>(OnClickButtonSeed);
+        if (_buttonAll2 != null) _buttonSeeds.UnregisterCallback<ClickEvent>(OnClickButtonSeed);
+    }
+    private void AddContent0Footer(ICreator creatorWindow , VisualElement footerContainer)
+    {
+        if (footerContainer != null)
+        {
+            if(_buttonSeeds == null)
+            {
+                _buttonSeeds = (Button)ToolTipsUtils.CloneOne(_buttonTemplate);
+                _buttonSeeds.Q<Label>("ButtonLabel").text = "Buy seeds";
+            }
+
+
+            UnRegisterAllButtons();
+
+            _buttonSeeds.RegisterCallback<ClickEvent>(OnClickButtonSeed);
+
+            creatorWindow.InsertFooterIntoContent(_buttonSeeds, footerContainer);
+        }
+    }
+
+    private void AddContent1Footer(ICreator creatorWindow, VisualElement footerContainer)
+    {
+        if (footerContainer != null)
+        {
+            if(_buttonHarvst == null)
+            {
+                _buttonHarvst = (Button)ToolTipsUtils.CloneOne(_buttonTemplate);
+                _buttonHarvst.Q<Label>("ButtonLabel").text = "Sale of harvest";
+            }
+            UnRegisterAllButtons();
+
+            _buttonHarvst.RegisterCallback<ClickEvent>(OnClickButtonHarvest);
+
+            creatorWindow.InsertFooterIntoContent(_buttonHarvst, footerContainer);
+        }
+    }
+
+    private void AddContent2Footer(ICreator creatorWindow, VisualElement footerContainer)
+    {
+        if (footerContainer != null)
+        {
+            if(_buttonAll1 == null)
+            {
+                _buttonAll1 = (Button)ToolTipsUtils.CloneOne(_buttonTemplate);
+                _buttonAll1.Q<Label>("ButtonLabel").text = "Buy seeds";
+            }
+
+
+
+            if (_buttonAll2 == null)
+            {
+                _buttonAll2 = (Button)ToolTipsUtils.CloneOne(_buttonTemplate);
+                _buttonAll2.Q<Label>("ButtonLabel").text = "Sale of harvest";
+            }
+
+            UnRegisterAllButtons();
+
+            // Create a container for the buttons
+            var buttonContainer = new VisualElement();
+            buttonContainer.style.flexDirection = FlexDirection.Row;
+
+            buttonContainer.Add(_buttonAll1);
+            buttonContainer.Add(_buttonAll2);
+
+
+            _buttonAll1.RegisterCallback<ClickEvent>(OnClickAllButton1);
+            _buttonAll2.RegisterCallback<ClickEvent>(OnClickAllButton2);
+
+            creatorWindow.InsertFooterIntoContent(buttonContainer, footerContainer);
+        }
+    }
+
 
     private List<TableColumn> GetColumnWindowTab0()
     {
@@ -130,7 +225,7 @@ public class SeedInfoWindow : L2PopupWindow
         _defaultColumns0[3].SetData(price);
 
         _creatorTable.UpdateTableData(_defaultColumns0);
-        Debug.Log("SetDataCropInfo 0");
+
     }
 
     public void SetDataCropInfo(List<CropProcure> listCropInfo)
@@ -157,7 +252,7 @@ public class SeedInfoWindow : L2PopupWindow
         _defaultColumns1[4].SetData(reward);
 
         _creatorTable.UpdateTableData(_defaultColumns1);
-        Debug.Log("SetDataCropInfo 1");
+
     }
 
     public void SetDataDefaultManorInfo(List<Seed> listSeed)
@@ -211,22 +306,59 @@ public class SeedInfoWindow : L2PopupWindow
                 HtmlWindow.Instance.UseActionCommand(commandTab0);
                 _creatorTable.SetSelectRow(-1);
                 _creatorWindow.RefreshDataColumns(_defaultColumns0);
+                AddContent0Footer(_creatorWindow, _footerContainer);
                 break;
             case 1:
                 Debug.Log("Event index 1 ");
                 HtmlWindow.Instance.UseActionCommand(commandTab1);
                 _creatorTable.SetSelectRow(-1);
                 _creatorWindow.RefreshDataColumns(_defaultColumns1);
+                AddContent1Footer(_creatorWindow, _footerContainer);
                 break;
             case 2:
                 Debug.Log("Event index 2 ");
                 HtmlWindow.Instance.UseActionCommand(commandTab2);
                 _creatorTable.SetSelectRow(-1);
                 _creatorWindow.RefreshDataColumns(_defaultColumns2);
+                AddContent2Footer(_creatorWindow, _footerContainer);
                 break;
         }
     }
 
 
+    public void OnClickButtonSeed(ClickEvent evt)
+    {
+        Debug.Log("OnClickButtonSeed 1");
+    }
+
+    public void OnClickButtonHarvest(ClickEvent evt)
+    {
+        Debug.Log("OnClickButtonHarvest 1");
+    }
+
+    public void OnClickAllButton1(ClickEvent evt)
+    {
+
+        HtmlWindow.Instance.UseActionCommand(commandButton1);
+    }
+
+    public void OnClickAllButton2(ClickEvent evt)
+    {
+        HtmlWindow.Instance.UseActionCommand(commandButton0);
+    }
+
+    public void ShowWindowActiveTabSeed()
+    {
+        _creatorWindow.SwitchTab(0 , false , false);
+        AddContent0Footer(_creatorWindow, _footerContainer);
+        base.ShowWindow();
+    }
+
+    public void ShowWindowAllDefault()
+    {
+        _creatorWindow.SwitchTab(3, false, false);
+        AddContent2Footer(_creatorWindow, _footerContainer);
+        base.ShowWindow();
+    }
 
 }

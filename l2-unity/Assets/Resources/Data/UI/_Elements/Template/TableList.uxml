@@ -4,11 +4,10 @@
         <engine:VisualElement name="header" style="flex-grow: 0; width: auto; align-self: stretch; align-content: stretch;">
             <engine:VisualElement name="table_header" style="flex-grow: 0; flex-direction: row; width: auto; align-items: stretch; height: auto;" />
         </engine:VisualElement>
-        <engine:VisualElement name="body" style="flex-grow: 1; margin-top: -10px; display: flex; visibility: visible; overflow: visible; max-height: 90%;">
-            <engine:VisualElement name="table_body" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; max-height: 90%;">
+        <engine:VisualElement name="body" style="flex-grow: 1; margin-top: -10px; display: flex; visibility: visible; overflow: visible; max-height: none;">
+            <engine:VisualElement name="table_body" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; max-height: none;">
                 <engine:ListView name="table_listView" class="l2-scroll-windows" style="flex-grow: 1; max-height: none; min-height: auto; width: auto; height: auto; max-width: none;" />
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement name="footer" style="flex-grow: 1; display: none; visibility: hidden; overflow: hidden;" />
     </engine:GroupBox>
 </engine:UXML>

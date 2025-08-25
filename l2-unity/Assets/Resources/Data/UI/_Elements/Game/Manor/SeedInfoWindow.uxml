@@ -1,7 +1,7 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <engine:Template name="WindowTemplate" src="project://database/Assets/Resources/Data/UI/_Elements/Template/WindowTemplate.uxml?fileID=9197481963319205126&amp;guid=57919e48a99c2de4787ca2b8810527ea&amp;type=3#WindowTemplate" />
     <Style src="project://database/Assets/Resources/Data/UI/_Elements/L2StyleSheet.uss?fileID=7433441132597879392&amp;guid=72e99cc94b130bf4ba100dceaa830b13&amp;type=3#L2StyleSheet" />
-    <engine:Instance name="WindowTemplate" class="quantity-window" template="WindowTemplate" style="overflow: hidden; width: 650px; height: 400px; bottom: 0; position: absolute; max-width: none; max-height: none; flex-grow: 1;">
+    <engine:Instance name="WindowTemplate" template="WindowTemplate" class="quantity-window" style="overflow: hidden; width: 650px; height: 400px; bottom: 0; position: absolute; max-width: none; max-height: none; flex-grow: 1;">
         <AttributeOverrides element-name="windows-name-label" text="Possession" />
         <engine:VisualElement name="content" class="merchant-window" style="flex-grow: 1; position: absolute; top: 14%; left: 4%; width: 92%; height: 80%;">
             <engine:VisualElement name="seedContent" class="quest-content" style="flex-grow: 1; position: relative; align-self: stretch; align-content: stretch; top: auto; left: auto; height: auto; width: auto; margin-bottom: 5px; flex-wrap: nowrap; justify-content: flex-start;">
@@ -9,15 +9,10 @@
                     <engine:VisualElement name="tab-header-container" style="flex-direction: row-reverse; margin-left: 8px; margin-bottom: -4px;">
                         <engine:VisualElement name="TabLine" style="flex-grow: 1; margin-right: 5px; background-image: resource(&apos;Data/UI/Tab/Tab_DF_Bg_line&apos;); margin-bottom: -7px;" />
                     </engine:VisualElement>
-                    <engine:VisualElement focusable="true" name="tab-content-container" style="flex-grow: 1; flex-shrink: 0; flex-direction: column-reverse; background-image: resource(&apos;Data/UI/Tab/Tab_DF_bg 1&apos;); -unity-slice-left: 10; -unity-slice-top: 10; -unity-slice-right: 10; -unity-slice-bottom: 10; padding-top: 7px; padding-right: 4px; padding-bottom: 8px; padding-left: 6px; margin-bottom: 0;" />
+                    <engine:VisualElement focusable="true" name="tab-content-container" style="flex-grow: 1; flex-shrink: 0; flex-direction: column-reverse; background-image: resource(&apos;Data/UI/Tab/Tab_DF_bg 1&apos;); -unity-slice-left: 10; -unity-slice-top: 10; -unity-slice-right: 10; -unity-slice-bottom: 10; padding-top: 7px; padding-right: 7px; padding-bottom: 7px; padding-left: 6px; margin-bottom: 0;" />
                 </engine:VisualElement>
             </engine:VisualElement>
-            <engine:VisualElement name="buttons" style="flex-grow: 0; flex-basis: auto; flex-direction: row; align-content: flex-end; align-items: flex-end; align-self: flex-end; width: auto; flex-shrink: 0; height: 10%;">
-                <engine:Button text="SuccessButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BuyButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
-                    <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
-                    <engine:Label text="Buy" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
-                </engine:Button>
-            </engine:VisualElement>
+            <engine:VisualElement name="footerContent" style="flex-grow: 0; flex-basis: auto; flex-direction: row; align-content: flex-end; align-items: flex-end; align-self: flex-end; width: auto; flex-shrink: 0; height: auto; display: flex; visibility: visible; overflow: visible;" />
         </engine:VisualElement>
     </engine:Instance>
 </engine:UXML>

@@ -1,11 +1,14 @@
 
+
 using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI.Table;
+using static UnityEngine.Rendering.DebugUI;
+
 
 
 
@@ -83,16 +86,15 @@ public class CreatorTableWindows : ICreatorTables
         _table = ToolTipsUtils.CloneOne(_templateTable);
 
         _listView = _table.Q<ListView>(_tableListViewName);
-       // _listView.virtualizationMethod = CollectionVirtualizationMethod.FixedHeight;
         _listView.fixedItemHeight = 18;
         _columnsList = columnsList;
 
         _innerScrollView = _listView.Q<ScrollView>();
 
         var arr_column0 = _columnsList[0].ListData;
-        //CopyArrayToDictionary(_tableIndexes, arr_column0);
         _listView.itemsSource = arr_column0;
-
+  
+        Debug.Log("Insert Data Size " + _columnsList[0].ListData.Count);
 
         _listView.makeItem = MakeItem;
         _listView.bindItem = BindListViewItems;
@@ -101,14 +103,26 @@ public class CreatorTableWindows : ICreatorTables
         _tableHeHeaderItem = CreateHeaderItems(columnsList);
          VisualElement containerHeaderList = _table.Q<VisualElement>(_tableHeaderListName);
         InjectHeaderList(_tableHeHeaderItem, containerHeaderList);
+        IfSize0HideListView(columnsList[0].ListData.Count, _listView);
         _content.Add(_table);
     }
 
-   
+    private void IfSize0HideListView(int size , VisualElement table)
+    {
+        if(size == 0)
+        {
+            table.style.display = DisplayStyle.None;
+
+        }
+        else
+        {
+            table.style.display = DisplayStyle.Flex;
+        }
+    }
     public void ReCreateTable(List<TableColumn> headersName)
     {
-        //DestroyTable();
-        //CreateTable(headersName);
+        DestroyTable();
+        CreateTable(headersName);
     }
    
     private void InjectHeaderList(List<VisualElement> _tableHeHeaderItem , VisualElement containerHeaderList)
@@ -178,11 +192,9 @@ public class CreatorTableWindows : ICreatorTables
         if (_lastSelectIndex == _currentSelectIndex & i == _currentSelectIndex)
         {
             _lastSelectElement = row;
-            Debug.Log("LastIdex select update link" + _currentSelectIndex + " last index " + _lastSelectIndex);
+           // Debug.Log("LastIdex select update link" + _currentSelectIndex + " last index " + _lastSelectIndex);
         }
 
-        Debug.Log("LastIdex select " + _lastSelectIndex);
-        Debug.Log("Current Index Select " + _currentSelectIndex);
     }
 
     private void SetColorRowsWhiteOrBlack(VisualElement listRow, int index)
@@ -232,7 +244,7 @@ public class CreatorTableWindows : ICreatorTables
         containerHeader = ToolTipsUtils.CloneOne(_templateHeader);
         var headerBorder = containerHeader.Q<VisualElement>(_tableHeaderBorder);
 
-        headerBorder.RegisterCallback<GeometryChangedEvent>(evt => OnHeaderGeometryChanged(evt , headerBorder , _innerScrollView));
+        headerBorder.RegisterCallback<GeometryChangedEvent>(evt => OnHeaderGeometryChanged( headerBorder , _innerScrollView));
 
         return tablesColumns.Select(headerName =>
         {
@@ -261,7 +273,7 @@ public class CreatorTableWindows : ICreatorTables
 
 
 
-    void OnHeaderGeometryChanged(GeometryChangedEvent evt, VisualElement containerHeader , ScrollView innerScrollView)
+    void OnHeaderGeometryChanged(VisualElement containerHeader , ScrollView innerScrollView)
     {
         EditorApplication.delayCall += () =>
         {
@@ -308,7 +320,7 @@ public class CreatorTableWindows : ICreatorTables
     }
 
 
-    public void UpdateTableData(List<TableColumn> headersName)
+    public void UpdateTableData(List<TableColumn> columnsList)
     {
         if (_table == null)
         {
@@ -316,47 +328,41 @@ public class CreatorTableWindows : ICreatorTables
             return;
         }
 
-
-        VisualElement containerBodyList = _table.Q<VisualElement>(_tableBodyListName);
-
-
-
-
-
-        //RemoveFromHierarchy(containerBodyList);
-
-
-        int index = 0;
-        foreach (var headerName in headersName)
+        if (_templateTable == null || _templateHeader == null)
         {
-            var column = containerBodyList.Q<VisualElement>("body_column_" + index);
-            if (column != null)
-            {
-                IEnumerable<VisualElement> childrenRows = column.Children();
-                List<VisualElement> childrenList = childrenRows.ToList();
-
-
-                foreach (var row in childrenList)
-                {
-                    row.RemoveFromHierarchy();
-                }
-
-
-                List<VisualElement> rows = CreateRows(headerName);
-                //AddRowInListRows(column, rows);
-                AlignItem(column, headerName);
-            }
-            index++;
+            Debug.LogError("CreatorTableWindows not found TemplateTable or TemplateHeader");
+            return;
         }
 
-        _table.MarkDirtyRepaint();
+        _lastSelectIndex = -1;
+        _currentSelectIndex = -1;
+        _lastSelectElement = null;
+        _columnsList = columnsList;
+         var arr_column0 = _columnsList[0].ListData;
+        _listView.itemsSource = arr_column0;
+        _listView.Rebuild();
+
+        _listView.selectedIndex = -1;
+
+        var headerBorder = containerHeader.Q<VisualElement>(_tableHeaderBorder);
+        if(headerBorder != null && _innerScrollView != null) OnHeaderGeometryChanged(headerBorder, _innerScrollView);
+        IfSize0HideListView(columnsList[0].ListData.Count, _listView);
+
     }
 
-    // Add this method to clear the table completely if needed
     public void DestroyTable()
     {
         if (_table != null)
         {
+
+            _listView.makeItem -= MakeItem;
+            _listView.bindItem -= BindListViewItems;
+            _listView.selectedIndicesChanged -= SelectRow;
+
+            _lastSelectIndex = -1;
+            _currentSelectIndex = -1;
+            _lastSelectElement = null;
+
             _content.Remove(_table);
             _table = null;
             _tableHeHeaderItem = null;
