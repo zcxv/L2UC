@@ -863,7 +863,7 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         ExShowManorDefaultInfo showManorDefaultInfo = new ExShowManorDefaultInfo(data);
         EventProcessor.Instance.QueueEvent(() => {
             SeedInfoWindow.Instance.SetDataDefaultManorInfo(showManorDefaultInfo.List);
-            SeedInfoWindow.Instance.ShowWindowAllDefault();
+            SeedInfoWindow.Instance.ShowWindowActiveTabAllDefault();
         });
     }
 

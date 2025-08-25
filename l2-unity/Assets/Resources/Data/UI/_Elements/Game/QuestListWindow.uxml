@@ -3,11 +3,6 @@
     <engine:Instance name="WindowTemplate" template="WindowTemplate" style="overflow: hidden; width: 650px; height: 400px; bottom: 0; position: absolute; max-width: none; max-height: none; flex-grow: 1;">
         <AttributeOverrides element-name="windows-name-label" text="QuestList" />
         <engine:VisualElement name="questContent" class="quest-content" style="flex-grow: 1; position: absolute; align-self: stretch; align-content: stretch; top: 14%; left: 4%; height: 74%; width: 92%;" />
-        <engine:VisualElement name="questButton" style="flex-grow: 1; position: absolute; top: 91%; left: 10%;">
-            <engine:Button text="Log In" parse-escape-sequences="true" display-tooltip-when-elided="true" name="testButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); margin-top: 0; width: 120px; padding-top: 0; top: auto;">
-                <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
-                <engine:Label text="To Village" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
-            </engine:Button>
-        </engine:VisualElement>
+        <engine:VisualElement name="questButton" style="flex-grow: 1; position: absolute; top: 91%; left: 10%;" />
     </engine:Instance>
 </engine:UXML>
