@@ -118,4 +118,14 @@ public class CreatorVerticalScrollWindows : ICreator
     {
         throw new NotImplementedException();
     }
+
+    public void SwitchTab(int idTab, bool isTrade , bool useEvent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void InsertFooterIntoContent(VisualElement footerElement, VisualElement rootFooterElement)
+    {
+        throw new NotImplementedException();
+    }
 }

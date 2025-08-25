@@ -54,6 +54,8 @@ public class QuestListWindow : L2PopupWindow
         RegisterClickWindowEvent(_windowEle, dragArea);
         OnCenterScreen(root);
 
+        var button = GetElementById("testButton");
+
     }
 
     public void ForEachQuest(List<QuestName> listQuest , ICreatorTables _creatorTableWindows)
