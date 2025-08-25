@@ -15,8 +15,5 @@ public interface ICreatorTables
     void DestroyTable();
 
     bool HasTable(VisualElement element);
-
-    void ReCreateTable(List<TableColumn> headersName);
-
     public void SetSelectRow(int rowId);
 }

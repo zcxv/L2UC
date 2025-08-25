@@ -1,5 +1,4 @@
 
-
 using System;
 using System.Collections.Generic;
 
@@ -53,6 +52,7 @@ public class CreatorTableWindows : ICreatorTables
     private Texture2D _defaultCursor;
     public int _index_row = 0;
 
+
     public void InitTable(VisualElement content)
     {
         _content = content;
@@ -82,6 +82,10 @@ public class CreatorTableWindows : ICreatorTables
         }
 
 
+        _lastSelectIndex = -1;
+        _currentSelectIndex = -1;
+        _lastSelectElement = null;
+
         _index_row = 0;
         _table = ToolTipsUtils.CloneOne(_templateTable);
 
@@ -93,8 +97,7 @@ public class CreatorTableWindows : ICreatorTables
 
         var arr_column0 = _columnsList[0].ListData;
         _listView.itemsSource = arr_column0;
-  
-        Debug.Log("Insert Data Size " + _columnsList[0].ListData.Count);
+
 
         _listView.makeItem = MakeItem;
         _listView.bindItem = BindListViewItems;
@@ -119,11 +122,7 @@ public class CreatorTableWindows : ICreatorTables
             table.style.display = DisplayStyle.Flex;
         }
     }
-    public void ReCreateTable(List<TableColumn> headersName)
-    {
-        DestroyTable();
-        CreateTable(headersName);
-    }
+
    
     private void InjectHeaderList(List<VisualElement> _tableHeHeaderItem , VisualElement containerHeaderList)
     {
@@ -154,10 +153,15 @@ public class CreatorTableWindows : ICreatorTables
                 listRows.name = "body_column_" + i;
 
 
-                listRows.RegisterCallback<MouseDownEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
-                listRows.RegisterCallback<MouseUpEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
-                listRows.RegisterCallback<PointerMoveEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
-                listRows.RegisterCallback<PointerDownEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
+                //listRows.RegisterCallback<MouseDownEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
+                //listRows.RegisterCallback<MouseUpEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
+                //listRows.RegisterCallback<PointerMoveEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
+                //listRows.RegisterCallback<PointerDownEvent>(evt => UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto));
+
+                listRows.RegisterCallback<MouseDownEvent>(ResetCursorOnMouseDown);
+                listRows.RegisterCallback<MouseUpEvent>(ResetCursorOnMouseUp);
+                listRows.RegisterCallback<PointerMoveEvent>(ResetCursorOnPointerMove);
+                listRows.RegisterCallback<PointerDownEvent>(ResetCursorOnPointerDown);
             }
 
         _index_row++;
@@ -166,7 +170,24 @@ public class CreatorTableWindows : ICreatorTables
 
    }
 
-  private void BindListViewItems(VisualElement ve , int i)
+    private void ResetCursorOnMouseDown(MouseDownEvent evt) =>
+    UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
+    private void ResetCursorOnMouseUp(MouseUpEvent evt) =>
+        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
+    private void ResetCursorOnPointerMove(PointerMoveEvent evt) =>
+        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
+    private void ResetCursorOnPointerDown(PointerDownEvent evt) =>
+        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
+
+    private void UnregisterRowCallbacks(VisualElement listRows)
+{
+    listRows.UnregisterCallback<MouseDownEvent>(ResetCursorOnMouseDown);
+    listRows.UnregisterCallback<MouseUpEvent>(ResetCursorOnMouseUp);
+    listRows.UnregisterCallback<PointerMoveEvent>(ResetCursorOnPointerMove);
+    listRows.UnregisterCallback<PointerDownEvent>(ResetCursorOnPointerDown);
+}
+
+    private void BindListViewItems(VisualElement ve , int i)
     {
 
         var row = (VisualElement)ve;
@@ -182,11 +203,16 @@ public class CreatorTableWindows : ICreatorTables
             VisualElement highlightTile = content_highlight[1];
 
             Label label = (Label)in_1[1];
-            label.text = column.ListData[i];
 
-            SetColorRowsWhiteOrBlack(row_list1, i);
-            ReturnSetSelectIfChangePosition(highlightLast, highlightTile, n, i);
-            ResetLastSelectElementIfChangePosition(highlightLast, highlightTile, n, i);
+            if(column.ListData.Count > 0)
+            {
+                label.text = column.ListData[i];
+
+                SetColorRowsWhiteOrBlack(row_list1, i);
+                ReturnSetSelectIfChangePosition(highlightLast, highlightTile, n, i);
+                ResetLastSelectElementIfChangePosition(highlightLast, highlightTile, n, i);
+            }
+
         }
 
         if (_lastSelectIndex == _currentSelectIndex & i == _currentSelectIndex)
@@ -337,6 +363,7 @@ public class CreatorTableWindows : ICreatorTables
         _lastSelectIndex = -1;
         _currentSelectIndex = -1;
         _lastSelectElement = null;
+
         _columnsList = columnsList;
          var arr_column0 = _columnsList[0].ListData;
         _listView.itemsSource = arr_column0;
@@ -358,12 +385,11 @@ public class CreatorTableWindows : ICreatorTables
             _listView.makeItem -= MakeItem;
             _listView.bindItem -= BindListViewItems;
             _listView.selectedIndicesChanged -= SelectRow;
-
+            //_listView.itemsSource.Clear();
             _lastSelectIndex = -1;
             _currentSelectIndex = -1;
             _lastSelectElement = null;
 
-            _content.Remove(_table);
             _table = null;
             _tableHeHeaderItem = null;
             containerHeader = null;

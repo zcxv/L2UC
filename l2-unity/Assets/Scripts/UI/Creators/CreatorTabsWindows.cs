@@ -66,19 +66,23 @@ public class CreatorTabsWindows : AbstractCreator, ICreator
 
             VisualElement element = GetActiveContent();
 
-            if (element != null && !_creatorTable.HasTable(element))
-            {
+            //if (element != null && !_creatorTable.HasTable(element))
+            //{
+            //     _creatorTable.InitTable(element);
+            //     _creatorTable.CreateTable(_dataColumn);
+            // }
+            // else if(element != null && _creatorTable.HasTable(element))
+            // {
+                _creatorTable.DestroyTable();
+                element.Clear();
                 _creatorTable.InitTable(element);
                 _creatorTable.CreateTable(_dataColumn);
-            }
-            else if(element != null && _creatorTable.HasTable(element))
-            {
-                _creatorTable.ReCreateTable(_dataColumn);
-            }
-            else
-            {
-                Debug.LogError("CreatorTabsWindows >>> InsertTablesIntoContent Not Found Content Element!!!");
-            }
+                //_creatorTable.ReCreateTable(_dataColumn);
+            //}
+            //else
+            //{
+            //    Debug.LogError("CreatorTabsWindows >>> InsertTablesIntoContent Not Found Content Element!!!");
+            //}
 
 
         }

@@ -349,14 +349,14 @@ public class SeedInfoWindow : L2PopupWindow
 
     public void ShowWindowActiveTabSeed()
     {
-        _creatorWindow.SwitchTab(0 , false , false);
+        _creatorWindow.SwitchTab(0 , false , true);
         AddContent0Footer(_creatorWindow, _footerContainer);
         base.ShowWindow();
     }
 
-    public void ShowWindowAllDefault()
+    public void ShowWindowActiveTabAllDefault()
     {
-        _creatorWindow.SwitchTab(3, false, false);
+        _creatorWindow.SwitchTab(2, false, true);
         AddContent2Footer(_creatorWindow, _footerContainer);
         base.ShowWindow();
     }
