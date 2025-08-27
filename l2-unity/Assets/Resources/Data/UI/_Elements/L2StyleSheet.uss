@@ -2153,6 +2153,10 @@
     justify-content: center;
 }
 
+.inventory-window .tab-header.skill {
+    width: 88px;
+}
+
 .inventory-window .unity-tab__header:checked {
     background-image: resource('Data/UI/Assets/Tab/Tab_DF_Tab_Selected');
     -unity-slice-top: 24;
@@ -2171,6 +2175,7 @@
     -unity-slice-scale: 1px;
 }
 
+
 .inventory-window .unity-tab__header:checked:hover {
     background-image: resource('Data/UI/Assets/Tab/Tab_DF_Tab_Selected');
     -unity-slice-top: 24;
@@ -2187,19 +2192,27 @@
     -unity-slice-bottom: 0;
     -unity-slice-right: 5;
     -unity-slice-scale: 1px;
+
 }
+
 
 .inventory-window .unity-tab__header:hover {
     background-image: resource('Data/UI/Assets/Tab/Tab_DF_Tab_Unselected_Over');
+    -unity-slice-top: 24;
+    -unity-slice-left: 5;
+    -unity-slice-bottom: 0;
+    -unity-slice-right: 5;
+    -unity-slice-scale: 1px;
 }
 
 .inventory-window .tab-header:hover {
     background-image: resource('Data/UI/Assets/Tab/Tab_DF_Tab_Unselected_Over');
+     -unity-slice-top: 24;
+    -unity-slice-left: 5;
+    -unity-slice-bottom: 0;
+    -unity-slice-right: 5;
+    -unity-slice-scale: 1px;
 }
-
-
-
-
 
 
 
@@ -2225,6 +2238,9 @@
     -unity-text-align: middle-center;
 }
 
+.inventory-window .tab-header-label.skill {
+    color: rgb(219, 210, 181) !important;
+}
 
 
 .inventory-window .unselected-tab {

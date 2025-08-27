@@ -165,6 +165,12 @@ public class L2GameUI : L2UI
             SkillLearnWindow.Instance.HideWindow();
         }
 
+        if (SkillListWindow.Instance != null)
+        {
+            SkillListWindow.Instance.AddWindow(_rootVisualContainer);
+            SkillListWindow.Instance.HideWindow();
+        }
+
         if (DescriptionSkillWindow.Instance != null)
         {
             DescriptionSkillWindow.Instance.AddWindow(_rootVisualContainer);

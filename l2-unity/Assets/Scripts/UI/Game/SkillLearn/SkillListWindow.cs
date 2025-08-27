@@ -1,22 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
+
 using UnityEngine;
-using UnityEngine.Rendering;
+
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-using static UnityEngine.Rendering.DebugUI;
+
 
 public class SkillListWindow : L2PopupWindow
 {
 
+
+    //new fields
+    private BuilderTabs _builderTabs;
+    private VisualTreeAsset _tabTemplate;
+    private VisualTreeAsset _tabHeaderTemplate;
+
+    //end fields
+
+
+
+
     public VisualElement minimal_panel;
     private VisualElement _boxContent;
-    private VisualElement _background;
+
     private VisualElement _boxHeader;
     private VisualElement _rootWindow;
     private ButtonSkillLearn _button;
@@ -67,6 +73,8 @@ public class SkillListWindow : L2PopupWindow
         if (_instance == null)
         {
             _instance = this;
+            _builderTabs = new BuilderTabs();
+
             _button = new ButtonSkillLearn(this);
             _menuItems = new VisualElement[3];
             _rootTabs = new VisualElement[3];
@@ -106,6 +114,8 @@ public class SkillListWindow : L2PopupWindow
     protected override void LoadAssets()
     {
         _windowTemplate = LoadAsset("Data/UI/_Elements/Game/SkillLearn/SkillListWindow");
+        _tabTemplate = LoadAsset("Data/UI/_Elements/Game/Inventory/InventoryTab");
+        _tabHeaderTemplate = LoadAsset("Data/UI/_Elements/Game/SkillLearn/SkillTabHeader");
     }
 
     protected override IEnumerator BuildWindow(VisualElement root)
@@ -115,43 +125,57 @@ public class SkillListWindow : L2PopupWindow
 
         yield return new WaitForEndOfFrame();
 
-        _rootWindow = GetElementByClass("root-windows");
+        var dragArea = GetElementByClass("drag-area");
+        DragManipulator drag = new DragManipulator(dragArea, _windowEle);
+        dragArea.AddManipulator(drag);
 
-        _rootTabs[0] = GetElementByClass("tab_active");
-        _rootTabs[1] = GetElementByClass("tab_passive");
-        _rootTabs[2] = GetElementByClass("tab_learn");
+        var content = (VisualElement)GetElementById("content");
 
-        _activeTab_physicalContent = GetElementByClass("row-physical-content");
-        _activeTab_magicContent = GetElementByClass("row-magic-content");
-        _activeTab_enhancingContent = GetElementByClass("row-enhancing-content");
-        _activeTab_debilitatingContent = GetElementByClass("row-debilitating-content");
-        _activeTab_clanContent = GetElementByClass("row-clan-content");
+        _builderTabs.InitContentTabs(new string[3] { "Active" , "Passive" , "Learn Skill" });
+        _builderTabs.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
 
-        _passiveTab_abilityContent = GetElementByClass("row-ability-content");
-        _passiveTab_subjectContent = GetElementByClass("row-subject-content");
 
+        RegisterCloseWindowEvent("btn-close-frame");
+        RegisterClickWindowEvent(_windowEle, dragArea);
+        OnCenterScreen(_root);
+
+        //_rootWindow = GetElementByClass("root-windows");
+
+        //_rootTabs[0] = GetElementByClass("tab_active");
+        //_rootTabs[1] = GetElementByClass("tab_passive");
+        //_rootTabs[2] = GetElementByClass("tab_learn");
+
+        //_activeTab_physicalContent = GetElementByClass("row-physical-content");
+        //_activeTab_magicContent = GetElementByClass("row-magic-content");
+        //_activeTab_enhancingContent = GetElementByClass("row-enhancing-content");
+        //_activeTab_debilitatingContent = GetElementByClass("row-debilitating-content");
+        //_activeTab_clanContent = GetElementByClass("row-clan-content");
+        //
+        //_passiveTab_abilityContent = GetElementByClass("row-ability-content");
+        // _passiveTab_subjectContent = GetElementByClass("row-subject-content");
+        //
         //ActiveSkills 
-        InitializedCells(_physicalSkillsRow , 0 , 6);
-        InitializedCells(_magicSkillsRow , 7 , 13);
-        InitializedCells(_enchancingSkillsRow , 14 , 20);
-        InitializedCells(_debilitatingSkillsRow , 21 , 27);
-        InitializedCells(_clanSkillsRow, 28 , 41);
+        //InitializedCells(_physicalSkillsRow , 0 , 6);
+        //InitializedCells(_magicSkillsRow , 7 , 13);
+        //InitializedCells(_enchancingSkillsRow , 14 , 20);
+        //InitializedCells(_debilitatingSkillsRow , 21 , 27);
+        //InitializedCells(_clanSkillsRow, 28 , 41);
 
         //Passive Skills
-        InitializedCellsPassive(_abillitySkillsRow, 0 , 6);
-        InitializedCellsPassive(_subjectSkillsRow, 7 , 13);
+        //InitializedCellsPassive(_abillitySkillsRow, 0 , 6);
+        // InitializedCellsPassive(_subjectSkillsRow, 7 , 13);
 
         //physic  test data
-        AddSkillToCell(3,  3, 0);
-        AddSkillToCell(190, 1, 1);
-        AddSkillToCell(410, 1, 2);
+        //AddSkillToCell(3,  3, 0);
+        //AddSkillToCell(190, 1, 1);
+        //AddSkillToCell(410, 1, 2);
 
         //magic  test data
-        AddSkillToCell(1177, 1, 8);
-        AddSkillToCell(1147, 1, 7);
+        //AddSkillToCell(1177, 1, 8);
+        //AddSkillToCell(1147, 1, 7);
 
         //passive ability
-        AddSkillToCell(172, 3, 0);
+        // AddSkillToCell(172, 3, 0);
 
         // var testToolTipRow0  = GetElementByClass("imgbox7");
         //var testToolTipRow1 = GetElementByClass("imgbox1");
@@ -166,57 +190,57 @@ public class SkillListWindow : L2PopupWindow
 
 
 
-        ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_physicalSkillsRow , this);
-        ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_magicSkillsRow, this);
-        ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_enchancingSkillsRow, this);
-        ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_debilitatingSkillsRow,  this);
-        ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_clanSkillsRow,  this);
+        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_physicalSkillsRow , this);
+        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_magicSkillsRow, this);
+        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_enchancingSkillsRow, this);
+        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_debilitatingSkillsRow,  this);
+        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_clanSkillsRow,  this);
 
-        ToolTipManager.GetInstance().RegisterCallbackPassiveSkills(_abillitySkillsRow, this);
-        ToolTipManager.GetInstance().RegisterCallbackPassiveSkills(_subjectSkillsRow, this);
+        //ToolTipManager.GetInstance().RegisterCallbackPassiveSkills(_abillitySkillsRow, this);
+        //ToolTipManager.GetInstance().RegisterCallbackPassiveSkills(_subjectSkillsRow, this);
 
         //ToolTipManager.Instance.RegisterCallbackSkills(_abillitySkillsRow, 1 , this);
         //ToolTipManager.Instance.RegisterCallbackSkills(_subjectSkillsRow , 1 ,  this);
 
-        UnityEngine.UIElements.Button closeButton = (UnityEngine.UIElements.Button)GetElementById("CloseButton");
+        //UnityEngine.UIElements.Button closeButton = (UnityEngine.UIElements.Button)GetElementById("CloseButton");
 
-        _boxHeader = GetElementByClass("drag-area");
-        _boxContent = GetElementByClass("skill_content");
-        CreateTab(_boxContent, _menuItems);
-         _background = GetElementByClass("background_over");
-
-       
-        _button.RegisterButtonCloseWindow(_rootWindow, "btn-close-frame");
-        _button.RegisterClickCloseButton(closeButton);
-        _button.RegisterClickWindow(_boxContent, _boxHeader);
+        //_boxHeader = GetElementByClass("drag-area");
+        //_boxContent = GetElementByClass("skill_content");
+        //CreateTab(_boxContent, _menuItems);
+        //_background = GetElementByClass("background_over");
 
 
-        _button.RegisterClickAction(_menuItems[0]);
-        _button.RegisterClickPassive(_menuItems[1]);
-        _button.RegisterClickLearn(_menuItems[2]);
-        _button.RegisterClickButtonPhysical(_rootTabs[0]);
-        _button.RegisterClickButtonMagic(_rootTabs[0]);
-        _button.RegisterClickButtonEnhancing(_rootTabs[0]);
-        _button.RegisterClickButtonDebilitating(_rootTabs[0]);
-        _button.RegisterClickButtonClan(_rootTabs[0]);
+        //_button.RegisterButtonCloseWindow(_rootWindow, "btn-close-frame");
+        //_button.RegisterClickCloseButton(closeButton);
+        //_button.RegisterClickWindow(_boxContent, _boxHeader);
 
-        _button.RegisterClickButtonAbility(_rootTabs[1]);
-        _button.RegisterClickButtonSubject(_rootTabs[1]);
 
-       // List<VisualElement> list_Drop = new List<VisualElement>
+        //_button.RegisterClickAction(_menuItems[0]);
+        //_button.RegisterClickPassive(_menuItems[1]);
+        //_button.RegisterClickLearn(_menuItems[2]);
+        //_button.RegisterClickButtonPhysical(_rootTabs[0]);
+        //_button.RegisterClickButtonMagic(_rootTabs[0]);
+        //_button.RegisterClickButtonEnhancing(_rootTabs[0]);
+        //_button.RegisterClickButtonDebilitating(_rootTabs[0]);
+        //_button.RegisterClickButtonClan(_rootTabs[0]);
+
+        //_button.RegisterClickButtonAbility(_rootTabs[1]);
+        //_button.RegisterClickButtonSubject(_rootTabs[1]);
+
+        // List<VisualElement> list_Drop = new List<VisualElement>
         //{
         //    dropTest99 , dropTest100 , testToolTipRow0
         //};
 
         //DragAndDropManager.getInstance().RegisterList(list_Drop);
 
-        DragManipulator drag = new DragManipulator(_boxHeader, _windowEle);
-        _boxHeader.AddManipulator(drag);
-        ChangeMenuSelect(0);
+        //DragManipulator drag = new DragManipulator(_boxHeader, _windowEle);
+        //_boxHeader.AddManipulator(drag);
+        //ChangeMenuSelect(0);
 
-        _mouseOverDetection = new MouseOverDetectionManipulator(_rootWindow);
-        _rootWindow.AddManipulator(_mouseOverDetection);
-        HideWindow();
+        //_mouseOverDetection = new MouseOverDetectionManipulator(_rootWindow);
+        //_rootWindow.AddManipulator(_mouseOverDetection);
+        //HideWindow();
 
     }
 
