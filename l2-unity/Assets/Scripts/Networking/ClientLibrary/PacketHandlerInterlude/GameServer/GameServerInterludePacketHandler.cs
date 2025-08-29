@@ -331,6 +331,7 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     {
         SkillList skillListPacket = new SkillList(data);
         PlayerInfoInterlude info1 = GameClient.Instance.PlayerInfo;
+        //SkillListWindow.Instance.Set
         //if (info1.Skills == null) info1.Skills = new CharacterSkills();
         //info1.Skills.AddSkillsList(skillListPacket.Skills);
     }

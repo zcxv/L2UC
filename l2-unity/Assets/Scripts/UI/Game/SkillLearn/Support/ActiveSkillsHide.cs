@@ -6,13 +6,66 @@ using UnityEngine.UIElements;
 
 public class ActiveSkillsHide : AbstractSkills
 {
-
-    
     private SkillListWindow _skillLearn;
+    private VisualElement _activeSkillPanel;
+    private VisualElement _templateBoxPanel;
+    private VisualElement _templatePanel8x1;
+
     public ActiveSkillsHide(SkillListWindow _skillLearn)
     {
         this._skillLearn = _skillLearn;
     }
+
+    public void SetActiveSkillTemplate(VisualTreeAsset templateActiveSkill , VisualTreeAsset templateBoxPanel ,  VisualTreeAsset templatePanel8x1)
+    {
+        _activeSkillPanel = ToolTipsUtils.CloneOne(templateActiveSkill);
+        _templateBoxPanel = ToolTipsUtils.CloneOne(templateBoxPanel);
+        var _templatePanel8x1_1 = ToolTipsUtils.CloneOne(templatePanel8x1);
+        var _templatePanel8x1_2 = ToolTipsUtils.CloneOne(templatePanel8x1);
+        var _templatePanel8x1_3 = ToolTipsUtils.CloneOne(templatePanel8x1);
+
+        var rowPhysical = _activeSkillPanel.Q("RowPhysical");
+
+        if(rowPhysical != null)
+        {
+            _templateBoxPanel.Add(_templatePanel8x1_1);
+            _templateBoxPanel.Add(_templatePanel8x1_2);
+            _templateBoxPanel.Add(_templatePanel8x1_3);
+
+            rowPhysical.Add(_templateBoxPanel);
+            _activeSkillPanel.Add(rowPhysical);
+        }
+
+    }
+
+    public VisualElement GetOrCreateTab(VisualElement content)
+    {
+        if(_activeSkillPanel != null)
+        {
+            content.Clear();
+            content.Add(_activeSkillPanel);
+        }
+
+        return _activeSkillPanel;
+    }
+
+
+    public void UpdateSlots(List<SkillServer> list)
+    {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void clickDfPhysical(UnityEngine.UIElements.Button btn , VisualElement _activeTab_physicalContent , int[] _arrDfSelect)
     {

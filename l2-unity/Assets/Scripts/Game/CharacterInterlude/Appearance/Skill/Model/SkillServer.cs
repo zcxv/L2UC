@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillServer 
+public class SkillServer : AbstractSkill
 {
     private int _id;
     private int _level;
@@ -19,7 +19,7 @@ public class SkillServer
     }
 
     public int Id { get { return _id; } }
-    public int Level { get { return _id; } }
-    public int Passive { get { return _id; } }
-    public int Disable { get { return _id; } }
+    public int Level { get { return _level; } }
+    public bool Passive { get { return _passive; } }
+    public bool Disable { get { return _disabled; } }
 }
