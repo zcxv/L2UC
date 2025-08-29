@@ -62,29 +62,14 @@ public class CreatorTabsWindows : AbstractCreator, ICreator
     {
         if (_useAllTabs)
         {
-            OnEventSwitchTab(FindTabByName(tab.GetTabName()));
+           OnEventSwitchTab(FindTabByName(tab.GetTabName()));
 
-            VisualElement element = GetActiveContent();
+           VisualElement element = GetActiveContent();
 
-            //if (element != null && !_creatorTable.HasTable(element))
-            //{
-            //     _creatorTable.InitTable(element);
-            //     _creatorTable.CreateTable(_dataColumn);
-            // }
-            // else if(element != null && _creatorTable.HasTable(element))
-            // {
-                _creatorTable.DestroyTable();
-                element.Clear();
-                _creatorTable.InitTable(element);
-                _creatorTable.CreateTable(_dataColumn);
-                //_creatorTable.ReCreateTable(_dataColumn);
-            //}
-            //else
-            //{
-            //    Debug.LogError("CreatorTabsWindows >>> InsertTablesIntoContent Not Found Content Element!!!");
-            //}
-
-
+          _creatorTable.DestroyTable();
+          element.Clear();
+          _creatorTable.InitTable(element);
+          _creatorTable.CreateTable(_dataColumn);
         }
 
     }

@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 
 using UnityEngine.UIElements;
+using static UnityEngine.Analytics.IAnalytic;
 
 
 public class SkillListWindow : L2PopupWindow
@@ -14,6 +15,19 @@ public class SkillListWindow : L2PopupWindow
     private BuilderTabs _builderTabs;
     private VisualTreeAsset _tabTemplate;
     private VisualTreeAsset _tabHeaderTemplate;
+    private VisualTreeAsset _templateActiveSkill;
+    private VisualTreeAsset _templatePassiveSkill;
+    private VisualTreeAsset _templateLearnSkill;
+
+    //templte items
+    private VisualTreeAsset _templateBoxPanel;
+    private VisualTreeAsset _skillsRow8x1;
+
+    private const string _activeName = "Active";
+    private const string _passiveName = "Passive";
+    private const string _learnName = "Learn Skill";
+    private List<SkillServer> _skillList;
+
 
     //end fields
 
@@ -74,13 +88,15 @@ public class SkillListWindow : L2PopupWindow
         {
             _instance = this;
             _builderTabs = new BuilderTabs();
+            _supportActiveSkills = new ActiveSkillsHide(this);
+
 
             _button = new ButtonSkillLearn(this);
             _menuItems = new VisualElement[3];
             _rootTabs = new VisualElement[3];
             _arrDfActiveSelect = new int[5] { 0,0,0,0,0};
             _arrDfPassiveSelect = new int[2] { 0, 0 };
-            _supportActiveSkills = new ActiveSkillsHide(this);
+
             _supportPassiveSkills = new PassiveSkillsHide(this);
             //42 cells active panels
             _physicalSkillsRow = new Dictionary<int, VisualElement>(7);
@@ -116,6 +132,14 @@ public class SkillListWindow : L2PopupWindow
         _windowTemplate = LoadAsset("Data/UI/_Elements/Game/SkillLearn/SkillListWindow");
         _tabTemplate = LoadAsset("Data/UI/_Elements/Game/Inventory/InventoryTab");
         _tabHeaderTemplate = LoadAsset("Data/UI/_Elements/Game/SkillLearn/SkillTabHeader");
+
+        _templateActiveSkill = LoadAsset("Data/UI/_Elements/Game/SkillLearn/TabActive");
+        _templatePassiveSkill = LoadAsset("Data/UI/_Elements/Game/SkillLearn/TabPassive");
+        _templateLearnSkill = LoadAsset("Data/UI/_Elements/Game/SkillLearn/TabLearn");
+
+        //template panels 8x1 skills
+        _templateBoxPanel = LoadAsset("Data/UI/_Elements/Template/Skills/SkillBoxRow");
+        _skillsRow8x1 = LoadAsset("Data/UI/_Elements/Template/Skills/SkillPanels/SkillsRow8x1");
     }
 
     protected override IEnumerator BuildWindow(VisualElement root)
@@ -134,6 +158,12 @@ public class SkillListWindow : L2PopupWindow
         _builderTabs.InitContentTabs(new string[3] { "Active" , "Passive" , "Learn Skill" });
         _builderTabs.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
 
+       _supportActiveSkills.SetActiveSkillTemplate(_templateActiveSkill , _templateBoxPanel , _skillsRow8x1);
+
+        _builderTabs.EventSwitchOut += OnSwitchEventOut;
+
+        VisualElement element = _builderTabs.GetActiveContent();
+        _supportActiveSkills.GetOrCreateTab(element);
 
         RegisterCloseWindowEvent("btn-close-frame");
         RegisterClickWindowEvent(_windowEle, dragArea);
@@ -244,6 +274,38 @@ public class SkillListWindow : L2PopupWindow
 
     }
 
+
+    public void UpdateSkillList(List<SkillServer> skillList)
+    {
+        var activeSkills = skillList.Where(s => !s.Passive).ToList();
+        var passiveSkills = skillList.Where(s => s.Passive).ToList();
+    }
+
+    // _activeName = "Active";
+    //_passiveName = "Passive";
+    // _learnName = "Learn Skill";
+    private void OnSwitchEventOut(ITab tab, bool isTrade)
+    {
+        Debug.Log("Event Switch Tab !!!!");
+        var tabName = tab.GetTabName();
+        var element = _builderTabs.GetActiveContent();
+        switch (tabName)
+        {
+            case _activeName:
+                _supportActiveSkills.GetOrCreateTab(element);
+                break;
+
+            case _passiveName:
+     
+                break;
+
+            case _learnName:
+
+                break;
+        }
+
+
+    }
     public Skillgrp GetSkillIdByCellId(int active , int cellId)
     {
         if(active == 1)
