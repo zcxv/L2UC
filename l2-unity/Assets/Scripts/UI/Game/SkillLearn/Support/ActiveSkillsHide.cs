@@ -3,40 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ActiveSkillsHide : AbstractSkills
 {
     private SkillListWindow _skillLearn;
     private VisualElement _activeSkillPanel;
-    private VisualElement _templateBoxPanel;
-    private VisualElement _templatePanel8x1;
+    private VisualElement _boxPanel;
+    private VisualTreeAsset _templatePanel8x1;
+    private const string _rowNamePhysical = "RowPhysical";
 
+    private VisualTreeAsset _templateSlotSkill;
     public ActiveSkillsHide(SkillListWindow _skillLearn)
     {
         this._skillLearn = _skillLearn;
     }
 
-    public void SetActiveSkillTemplate(VisualTreeAsset templateActiveSkill , VisualTreeAsset templateBoxPanel ,  VisualTreeAsset templatePanel8x1)
+    public void SetActiveSkillTemplate(VisualTreeAsset templateActiveSkill , VisualTreeAsset templateBoxPanel ,  VisualTreeAsset templatePanel8x1 , VisualTreeAsset templateSlotSkill)
     {
         _activeSkillPanel = ToolTipsUtils.CloneOne(templateActiveSkill);
-        _templateBoxPanel = ToolTipsUtils.CloneOne(templateBoxPanel);
-        var _templatePanel8x1_1 = ToolTipsUtils.CloneOne(templatePanel8x1);
-        var _templatePanel8x1_2 = ToolTipsUtils.CloneOne(templatePanel8x1);
-        var _templatePanel8x1_3 = ToolTipsUtils.CloneOne(templatePanel8x1);
-
-        var rowPhysical = _activeSkillPanel.Q("RowPhysical");
-
-        if(rowPhysical != null)
-        {
-            _templateBoxPanel.Add(_templatePanel8x1_1);
-            _templateBoxPanel.Add(_templatePanel8x1_2);
-            _templateBoxPanel.Add(_templatePanel8x1_3);
-
-            rowPhysical.Add(_templateBoxPanel);
-            _activeSkillPanel.Add(rowPhysical);
-        }
-
+        _boxPanel = ToolTipsUtils.CloneOne(templateBoxPanel);
+        _templatePanel8x1 = templatePanel8x1;
+        _templateSlotSkill = templateSlotSkill;
     }
+
 
     public VisualElement GetOrCreateTab(VisualElement content)
     {
@@ -50,8 +40,20 @@ public class ActiveSkillsHide : AbstractSkills
     }
 
 
-    public void UpdateSlots(List<SkillServer> list)
+    public void CreateSlots(List<SkillInstance> list)
     {
+        int panelCount = CalculatePanelCount(list);
+        var rowPhysical = _activeSkillPanel.Q(_rowNamePhysical);
+
+        if(rowPhysical != null)
+        {
+            var panels = base.CreateSlots(list, panelCount, _templatePanel8x1, _templateSlotSkill, _boxPanel, _activeSkillPanel);
+            rowPhysical.Add(panels);
+        }
+        else
+        {
+            Debug.LogWarning("ActiveSkillsHide > not found root panels ");
+        }
 
     }
 

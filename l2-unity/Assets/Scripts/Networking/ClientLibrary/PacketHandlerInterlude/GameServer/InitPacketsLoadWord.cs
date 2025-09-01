@@ -123,6 +123,10 @@ public class InitPacketsLoadWord
                     Refreshpenalty(etcStatusUpdate);
                     remove.Add(i);
                     break;
+                case SkillList skillList:
+                    SetSkillList(skillList.Skills);
+                    remove.Add(i);
+                    break;
             }
         }
         //RemoveByListId(remove);
@@ -162,6 +166,11 @@ public class InitPacketsLoadWord
     private void Refreshpenalty(EtcStatusUpdate etcStatusUpdate)
     {
         EventProcessor.Instance.QueueEvent(() => BufferPanel.Instance.RefreshPenalty(etcStatusUpdate));
+    }
+
+    private void SetSkillList(List<SkillInstance> skillList)
+    {
+        EventProcessor.Instance.QueueEvent(() => SkillListWindow.Instance.SetSkillList(skillList));
     }
 
     public async Task MoveTo(CharMoveToLocation moveToLocation)

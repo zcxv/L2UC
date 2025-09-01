@@ -5,12 +5,12 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class SkillList : ServerPacket
 {
-    private List<SkillServer> list;
-    public List<SkillServer> Skills { get; private set; }
+    public List<SkillInstance> Skills { get; set; }
+
 
     public SkillList(byte[] d) : base(d)
     {
-        list = new List<SkillServer>();
+        Skills = new List<SkillInstance>();
         Parse();
     }
 
@@ -25,8 +25,8 @@ public class SkillList : ServerPacket
             int pId = ReadI();
             int disabled = (int) ReadB();
 
-            SkillServer skill = new SkillServer(pId, pLevel, passive, disabled == 1);
-            list.Add(skill);
+            //SkillInstance skill = new SkillInstance(pId, pLevel, passive, disabled == 1);
+            Skills.Add(new SkillInstance(pId, pLevel, passive, disabled == 1));
         }
     }
 

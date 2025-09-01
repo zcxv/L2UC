@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -331,16 +332,29 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     {
         SkillList skillListPacket = new SkillList(data);
         PlayerInfoInterlude info1 = GameClient.Instance.PlayerInfo;
+        //_eventProcessor.QueueEvent(() => {
+        //    SkillListWindow.Instance.SetSkillList(skillListPacket.Skills);
+        //});
         //SkillListWindow.Instance.Set
-        //if (info1.Skills == null) info1.Skills = new CharacterSkills();
-        //info1.Skills.AddSkillsList(skillListPacket.Skills);
+
+        if (InitPacketsLoadWord.getInstance().IsInit)
+        {
+            InitPacketsLoadWord.getInstance().AddPacketsInit(skillListPacket);
+        }
+        else
+        {
+            _eventProcessor.QueueEvent(() => {
+                SkillListWindow.Instance.SetSkillList(skillListPacket.Skills);
+            });
+        }
+
     }
 
 
 
     private void OnCharSelected(byte[] data)
     {
-        Debug.Log("Char Selected event!!");
+
         CharSelected charOk = new CharSelected(data);
         GameClient.Instance.PlayerInfo = charOk.PlayeInfo;
         GameClient.Instance.SetDataPreparationCompleted(false);
