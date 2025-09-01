@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,8 @@ public class SkillListWindow : L2PopupWindow
 
     //templte items
     private VisualTreeAsset _templateBoxPanel;
-    private VisualTreeAsset _skillsRow8x1;
+    private VisualTreeAsset _templateSlotSkill;
+    private VisualTreeAsset _templateSkillsRow8x1;
 
     private const string _activeName = "Active";
     private const string _passiveName = "Passive";
@@ -139,7 +141,8 @@ public class SkillListWindow : L2PopupWindow
 
         //template panels 8x1 skills
         _templateBoxPanel = LoadAsset("Data/UI/_Elements/Template/Skills/SkillBoxRow");
-        _skillsRow8x1 = LoadAsset("Data/UI/_Elements/Template/Skills/SkillPanels/SkillsRow8x1");
+        _templateSkillsRow8x1 = LoadAsset("Data/UI/_Elements/Template/Skills/SkillPanels/SkillsRow8x1");
+        _templateSlotSkill = LoadAsset("Data/UI/_Elements/Template/Skills/SkillPanels/SlotSkill");
     }
 
     protected override IEnumerator BuildWindow(VisualElement root)
@@ -155,10 +158,10 @@ public class SkillListWindow : L2PopupWindow
 
         var content = (VisualElement)GetElementById("content");
 
-        _builderTabs.InitContentTabs(new string[3] { "Active" , "Passive" , "Learn Skill" });
+        _builderTabs.InitContentTabs(new string[3] { _activeName, _passiveName , _learnName });
         _builderTabs.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
 
-       _supportActiveSkills.SetActiveSkillTemplate(_templateActiveSkill , _templateBoxPanel , _skillsRow8x1);
+       _supportActiveSkills.SetActiveSkillTemplate(_templateActiveSkill , _templateBoxPanel , _templateSkillsRow8x1 , _templateSlotSkill);
 
         _builderTabs.EventSwitchOut += OnSwitchEventOut;
 
@@ -168,6 +171,10 @@ public class SkillListWindow : L2PopupWindow
         RegisterCloseWindowEvent("btn-close-frame");
         RegisterClickWindowEvent(_windowEle, dragArea);
         OnCenterScreen(_root);
+
+
+  
+
 
         //_rootWindow = GetElementByClass("root-windows");
 
@@ -274,12 +281,19 @@ public class SkillListWindow : L2PopupWindow
 
     }
 
-
-    public void UpdateSkillList(List<SkillServer> skillList)
+    public void SetSkillList(List<SkillInstance> list)
     {
-        var activeSkills = skillList.Where(s => !s.Passive).ToList();
-        var passiveSkills = skillList.Where(s => s.Passive).ToList();
+        if (list == null) return; 
+
+        var activeSkills = list.Where(s => !s.IsPassive).ToList();
+        _supportActiveSkills.CreateSlots(activeSkills);
     }
+
+    //public void UpdateSkillList(List<SkillInstance> skillList)
+    //{
+    //    var activeSkills = skillList.Where(s => !s.Passive).ToList();
+     //   var passiveSkills = skillList.Where(s => s.Passive).ToList();
+   // }
 
     // _activeName = "Active";
     //_passiveName = "Passive";

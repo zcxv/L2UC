@@ -3,8 +3,8 @@ using UnityEngine.UIElements;
 
 public class SkillSlot : L2DraggableSlot
 {
-    public int SkillId { get; private set; }
-
+    private SkillInstance _skillInstance { get;  set; }
+    private bool _empty = false;
     public SkillSlot(VisualElement slotElement, int position, SlotType slotType) : base(position, slotElement, slotType, true, false)
     {
         _slotElement = slotElement;
@@ -25,20 +25,91 @@ public class SkillSlot : L2DraggableSlot
     {
     }
 
-    public void AssignSkill(int skillId , int level)
-    {
-        //ButtonClickSoundManipulator _buttonClickSoundManipulator = new ButtonClickSoundManipulator(_slotElement);
-        Skillgrp skill = SkillgrpTable.Instance.GetSkill(skillId , level);
-        _slotDragManipulator.enabled = true;
-        _slotElement.RemoveFromClassList("empty");
-        var icon = IconManager.Instance.LoadTextureByName(skill.Icon);
-        _slotBg.style.backgroundImage = icon;
+    
 
-        if (_tooltipManipulator != null)
+    public void AssignSkill(int skillId, int level)
+    {
+        _id = skillId;
+        _level = level;
+
+        var skill = SkillgrpTable.Instance.GetSkill(skillId, level);
+        Assign(skill);
+    }
+
+    public void AssignSkill(SkillInstance skillInstance)
+    {
+        _id = skillInstance.SkillID;
+        _level = skillInstance.Level;
+        _skillInstance = skillInstance;
+
+        var skill = SkillgrpTable.Instance.GetSkill(_id, _level);
+        Assign(skill);
+    }
+
+    private void Assign(Skillgrp skill)
+    {
+        if (skill == null)
         {
-            _tooltipManipulator.SetText("Demo Text ToolTips");
+            //Debug.LogWarning($"AssignSkill: skill not found (id={skillId}, level={level})");
+            return;
+        }
+
+        _empty = false;
+
+        if (_slotDragManipulator != null)
+            _slotDragManipulator.enabled = true;
+
+
+        _slotElement?.RemoveFromClassList("empty");
+
+        AddIcon(skill);
+
+        // Обновляем подсказку (если манипулятор есть)
+        //_tooltipManipulator?.SetText("Demo Text ToolTips");
+    }
+
+    public void AssignEmpty()
+    {
+        _empty = true;
+        _id = 0;
+        _name = "Unkown";
+        _description = "Unkown item.";
+        _skillInstance = null;
+
+        if (_slotElement != null)
+        {
+            ResetIcon();
         }
     }
 
-    
+    private void AddIcon(Skillgrp skill)
+    {
+        var icon = IconManager.Instance.LoadTextureByName(skill.Icon);
+        if (icon != null)
+        {
+            _slotBg.style.backgroundImage = icon;
+        }
+        else
+        {
+            Debug.LogWarning($"AssignSkill: icon '{skill.Icon}' not found for skill id={skill.Id}");
+        }
+    }
+
+    public void ResetIcon()
+    {
+        StyleBackground background = new StyleBackground(IconManager.Instance.GetInvetoryDefaultBackground());
+        if (SlotBg != null)
+        {
+            _slotBg.style.backgroundImage = background;
+            _slotDragManipulator.enabled = false;
+
+        }
+        else
+        {
+
+            _slotElement.style.backgroundImage = null;
+        }
+    }
+
+
 }

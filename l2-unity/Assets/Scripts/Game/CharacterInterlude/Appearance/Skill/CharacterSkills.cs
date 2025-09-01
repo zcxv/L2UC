@@ -1,23 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public class CharacterSkills
 {
-    private Dictionary<int, SkillServer> _skills;
-    private object _sync = new object();
+    private Dictionary<int, SkillInstance> _skills;
+    private List<SkillInstance>_skillsList;
+
     public CharacterSkills()
     {
-        _skills = new Dictionary<int, SkillServer>();
+        _skills = new Dictionary<int, SkillInstance>();
     }
 
-    public void AddSkillsList(List<SkillServer> skills)
+    public void AddSkillsList(List<SkillInstance> skills)
     {
         ClearDict();
-
-        foreach (SkillServer skill in skills)
+        _skillsList = skills;
+        foreach (SkillInstance skill in skills)
         {
-            _skills.Add(skill.Id, skill);  
+            _skills.Add(skill.SkillID, skill);  
         }
     }
 
@@ -30,25 +32,29 @@ public class CharacterSkills
     }
     public void AddSkill(int id  , int pLevel , bool pPassive , bool pDisabled)
     {
-        lock (_sync)
-        {
+
             if (_skills.ContainsKey(id))
             {
                 _skills.Remove(id);
-                _skills.Add(id, new SkillServer(id, pLevel, pPassive, pDisabled));
+                _skills.Add(id, new SkillInstance(id, pLevel, pPassive, pDisabled));
             }
             else
             {
-                _skills.Add(id, new SkillServer(id, pLevel, pPassive, pDisabled));
+                _skills.Add(id, new SkillInstance(id, pLevel, pPassive, pDisabled));
             }
-        }
+
     }
 
-    public SkillServer GetSkill(int id)
+    public SkillInstance GetSkill(int id)
     {
-        lock (_sync)
-        {
+       // lock (_sync)
+        ////{
             return (_skills.ContainsKey(id)) ? _skills[id] : null;
-        }
+        //}
+    }
+
+    public List<SkillInstance> GetSkills()
+    {
+        return _skillsList;
     }
 }

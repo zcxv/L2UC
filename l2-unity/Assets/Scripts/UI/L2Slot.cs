@@ -15,6 +15,7 @@ public class L2Slot
         Gear,
         Skill,
         SkillBar,
+        SkillWindow,
         Action,
         Trash,
         PriceBuy,
@@ -22,6 +23,7 @@ public class L2Slot
     }
 
     [SerializeField] protected int _id;
+    protected int _level;
     [SerializeField] protected int _position;
     [SerializeField] protected SlotType _slotType;
     protected string _name;
