@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.tvOS;
 using UnityEngine.UIElements;
 using static L2Slot;
 
 public class AbstractSkills
 {
     protected string[] fillBackgroundDf = { "Data/UI/Window/Skills/QuestWndPlusBtn_v2", "Data/UI/Window/Skills/Button_DF_Skills_Down_v3" };
-    private const string _rowNameInnerPanel = "RowsVirtual";
+    protected const string _rowNameInnerPanel = "RowsVirtual";
+    private Dictionary<int , SkillSlot> _allSlots;
     protected void ChangeDfBox(Button btn, string texture)
     {
         IEnumerable<VisualElement> children = btn.Children();
@@ -50,48 +52,263 @@ public class AbstractSkills
         return null;
     }
 
-    public void UpdateIconSkill(List<SkillInstance> list , List<VisualElement> rows)
+    protected void UpdateSkills(List<SkillInstance> added, List<SkillInstance> removed, List<SkillInstance> allList , List<VisualElement> rowPanels, VisualTreeAsset templateSlotSkill , VisualTreeAsset templatePanel8x1, VisualElement boxPanel)
     {
+        UpdateSkillInfo(allList);
+        RemoveSkill(removed);
 
+        AddSkill(added, rowPanels, templateSlotSkill, templatePanel8x1 , boxPanel);
+        //RemoveEmptyPanels(boxPanel);
+        RearrangeSkillSlots(rowPanels,  boxPanel);
+        RemoveEmptyPanels(boxPanel);
     }
 
-    protected VisualElement CreateSlots(List<SkillInstance> skillList  , int panelCount , VisualTreeAsset templatePanel8x1 , VisualTreeAsset templateSlotsSkill, VisualElement boxPanel , VisualElement skillPanel)
+    private void UpdateSkillInfo(List<SkillInstance> allList)
     {
-            for (int i = 0; i < panelCount; i++)
-            {
-                var templatePanel8x1_i = ToolTipsUtils.CloneOne(templatePanel8x1);
-                boxPanel.Add(templatePanel8x1_i);
-                AddSlots(skillList, templatePanel8x1_i, templateSlotsSkill);
-            }
-
-         return boxPanel;
-
-    }
-
-
-    private void AddSlots(List<SkillInstance> skillList , VisualElement templatePanel8x1_i , VisualTreeAsset templateSlotsSkill)
-    {
-        for(int i =0; i < skillList.Count; i++)
+        foreach (SkillInstance skill in allList)
         {
-            var rowNameVirtual = templatePanel8x1_i.Q(_rowNameInnerPanel);
-            var skillInstance = skillList[i];
+            SkillSlot slot;
 
-            if (rowNameVirtual != null)
+            if(_allSlots == null) _allSlots = new Dictionary<int, SkillSlot>();
+
+            _allSlots.TryGetValue(skill.SkillID, out slot);
+            if (slot != null)
             {
-                var slotElement = ToolTipsUtils.CloneOne(templateSlotsSkill);
-                var _skillSlot =  new SkillSlot(slotElement, i, SlotType.SkillWindow);
-                _skillSlot.AssignSkill(skillInstance);
-
-                rowNameVirtual.Add(slotElement);
+                slot.UpdateData(skill);
             }
         }
     }
 
+    private void RemoveSkill(List<SkillInstance> removed)
+    {
+        if (removed != null && removed.Count > 0)
+        {
+            for (int i = 0; i < removed.Count; i++)
+            {
+                int skillId = removed[i].SkillID;
+                SkillSlot slot;
+               _allSlots.TryGetValue(skillId , out slot);
+
+                if (slot != null)
+                {
+                    slot.AssignDestroy();
+                }
+
+                _allSlots.Remove(skillId);
+
+            }
+        }
+    }
+
+    private void RemoveEmptyPanels(VisualElement boxPanel)
+    {
+        List<VisualElement> delete = new List<VisualElement>();
+        for (int i = boxPanel.childCount - 1; i >= 0; i--)
+        {
+            var panel = boxPanel[i];
+            var rowNameVirtual = panel.Q(_rowNameInnerPanel);
+
+            if (rowNameVirtual == null || rowNameVirtual.childCount == 0)
+            {
+                //ignore Background and Border Panel design elements
+                if (panel.name != "Background" && panel.name != "Border")
+                {
+                    delete.Add(panel);
+                }
+
+            }
+
+        }
+
+        foreach (VisualElement item in delete)
+        {
+            Debug.Log("Delete box panel " + item.name);
+            boxPanel.Remove(item);
+        }
+    }
+
+    private void RearrangeSkillSlots(List<VisualElement> rowPanels, VisualElement boxPanel)
+    {
+        const int skillsPerPanel = 7;
+        List<VisualElement> toDelete = new List<VisualElement>();
+
+        // Собираем все SkillSlot из всех панелей
+        List<VisualElement> allSlots = new List<VisualElement>();
+        foreach (var panel in rowPanels)
+        {
+            var rowNameVirtual = panel.Q(_rowNameInnerPanel);
+            if (rowNameVirtual != null)
+            {
+                for (int i = 0; i < rowNameVirtual.childCount; i++)
+                {
+                    allSlots.Add(rowNameVirtual[i]);
+                }
+                rowNameVirtual.Clear();
+            }
+        }
+
+        // Распределяем слоты по панелям
+        int slotIndex = 0;
+        foreach (var panel in rowPanels)
+        {
+            var rowNameVirtual = panel.Q(_rowNameInnerPanel);
+            if (rowNameVirtual != null)
+            {
+                for (int j = 0; j < skillsPerPanel && slotIndex < allSlots.Count; j++, slotIndex++)
+                {
+                    rowNameVirtual.Add(allSlots[slotIndex]);
+                }
+            }
+        }
+
+        // Удаляем пустые панели
+        //for (int i = rowPanels.Count - 1; i >= 0; i--)
+        //{
+           // var panel = rowPanels[i];
+           // var rowNameVirtual = panel.Q(_rowNameInnerPanel);
+           // if (rowNameVirtual == null || rowNameVirtual.childCount == 0)
+           // {
+            //    boxPanel.Remove(panel);
+            //    rowPanels.RemoveAt(i);
+           // }
+       // }
+    }
+
+
+    protected void AddSkill(List<SkillInstance> added, List<VisualElement> rowPanels, VisualTreeAsset templateSlotSkill, VisualTreeAsset templatePanel8x1 , VisualElement boxPanel)
+    {
+        const int skillsPerPanel = 7;
+
+        foreach (var skill in added)
+        {
+            VisualElement targetPanel = null;
+
+            // Если панелей нет, создаём первую
+            if (rowPanels.Count == 0)
+            {
+                targetPanel = ToolTipsUtils.CloneOne(templatePanel8x1);
+                var rowNameVirtual1 = targetPanel.Q(_rowNameInnerPanel);
+                rowPanels.Add(rowNameVirtual1);
+                boxPanel.Add(targetPanel);
+            }
+            else
+            {
+                // Берём последнюю панель
+                targetPanel = rowPanels[rowPanels.Count - 1];
+                // Считаем количество ячеек в RowsVirtual
+                var rowNameVirtual = targetPanel.Q(_rowNameInnerPanel);
+                int currentCount = rowNameVirtual != null ? rowNameVirtual.childCount : 0;
+
+                // Если панель заполнена, создаём новую
+                if (currentCount >= skillsPerPanel)
+                {
+                    targetPanel = ToolTipsUtils.CloneOne(templatePanel8x1);
+                    var rowNameVirtual1 = targetPanel.Q(_rowNameInnerPanel);
+                    rowPanels.Add(rowNameVirtual1);
+                    boxPanel.Add(targetPanel);
+                }
+            }
+
+            // Добавляем слот в панель
+            var rowNameVirtualAdd = targetPanel.Q(_rowNameInnerPanel);
+            var slotElement = ToolTipsUtils.CloneOne(templateSlotSkill);
+            var skillSlot = new SkillSlot(slotElement, skill.SkillID, SlotType.SkillWindow);
+            skillSlot.AssignSkill(skill);
+            rowNameVirtualAdd.Add(slotElement);
+
+            if (!_allSlots.ContainsKey(skill.SkillID))
+                _allSlots.Add(skill.SkillID, skillSlot);
+        }
+    }
+
+
+
+
+    protected VisualElement CreateSlots(List<SkillInstance> skillList, VisualTreeAsset templatePanel8x1, VisualTreeAsset templateSlotsSkill, VisualElement boxPanel)
+    {
+        int skillsPerPanel = 7;
+        int totalSkills = skillList.Count;
+        int panelCount = GetCountPanel(totalSkills, skillsPerPanel);
+
+        int skillIndex = 0;
+
+        if(_allSlots != null) _allSlots.Clear();
+
+        for (int i = 0; i < panelCount; i++)
+        {
+            var panel = ToolTipsUtils.CloneOne(templatePanel8x1);
+            var rowNameVirtual = panel.Q(_rowNameInnerPanel);
+
+            for (int j = 0; j < skillsPerPanel && skillIndex < totalSkills; j++, skillIndex++)
+            {
+                var slotElement = ToolTipsUtils.CloneOne(templateSlotsSkill);
+                var skillSlot = new SkillSlot(slotElement, skillIndex, SlotType.SkillWindow);
+                skillSlot.AssignSkill(skillList[skillIndex]);
+                rowNameVirtual.Add(slotElement);
+                AddSlot(skillSlot);
+            }
+
+            boxPanel.Add(panel);
+ 
+        }
+
+        return boxPanel;
+    }
+
+    private int GetCountPanel(int totalSkills , int skillsPerPanel)
+    {
+        if (totalSkills == 0)
+        {
+            return  1;
+        }
+        else
+        {
+            return  (int)Math.Ceiling((double)totalSkills / skillsPerPanel);
+        }
+    }
+
+    private void AddSlot(SkillSlot skillSlot)
+    {
+        if (_allSlots == null) _allSlots = new Dictionary<int, SkillSlot>();
+
+        _allSlots.TryAdd(skillSlot.Id , skillSlot);
+    }
+
     protected int CalculatePanelCount(List<SkillInstance> list)
     {
-        int skillsPerPanel = 8;
+        int skillsPerPanel = 7;
         int totalSkills = list.Count;
         int panelCount = (int)Math.Ceiling((double)totalSkills / skillsPerPanel);
         return panelCount;
     }
+
+    protected void CompareSkillLists(List<SkillInstance> newList, List<SkillInstance> oldList, out List<SkillInstance> added, out List<SkillInstance> removed)
+    {
+
+        var oldIds = oldList?.Select(s => s.SkillID).ToHashSet() ?? new HashSet<int>();
+        var newIds = newList?.Select(s => s.SkillID).ToHashSet() ?? new HashSet<int>();
+
+        added = newList?.Where(s => !oldIds.Contains(s.SkillID)).ToList() ?? new List<SkillInstance>();
+        removed = oldList?.Where(s => !newIds.Contains(s.SkillID)).ToList() ?? new List<SkillInstance>();
+    }
+
+
+    protected void ShowPanelIfCount1(List<SkillInstance> list, VisualElement panel, VisualElement allContent)
+    {
+        if (list != null | list.Count > 0)
+        {
+            panel.Clear();
+            allContent.style.display = DisplayStyle.Flex;
+        }
+    }
+
+    protected void HidePanelIfCount0(List<SkillInstance> list, VisualElement panel, VisualElement allContent)
+    {
+        if (list == null | list.Count == 0)
+        {
+            //panel.Clear();
+            allContent.style.display = DisplayStyle.None;
+        }
+    }
+
 }

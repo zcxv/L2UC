@@ -25,7 +25,7 @@ public class SkillList : ServerPacket
             int pId = ReadI();
             int disabled = (int) ReadB();
 
-            //SkillInstance skill = new SkillInstance(pId, pLevel, passive, disabled == 1);
+
             Skills.Add(new SkillInstance(pId, pLevel, passive, disabled == 1));
         }
     }

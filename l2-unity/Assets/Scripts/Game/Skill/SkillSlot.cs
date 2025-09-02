@@ -46,6 +46,13 @@ public class SkillSlot : L2DraggableSlot
         Assign(skill);
     }
 
+    public void UpdateData(SkillInstance skillInstance)
+    {
+        _id = skillInstance.SkillID;
+        _level = skillInstance.Level;
+        _skillInstance = skillInstance;
+    }
+
     private void Assign(Skillgrp skill)
     {
         if (skill == null)
@@ -68,18 +75,38 @@ public class SkillSlot : L2DraggableSlot
         //_tooltipManipulator?.SetText("Demo Text ToolTips");
     }
 
+
+    public void AssignDestroy()
+    {
+        _empty = true;
+        _id = 0;
+        _name = "Unknown";
+        _description = "Unknown item.";
+        _skillInstance = null;
+
+        _slotElement.parent?.Remove(_slotElement);
+
+    }
     public void AssignEmpty()
     {
         _empty = true;
         _id = 0;
-        _name = "Unkown";
-        _description = "Unkown item.";
+        _name = "Unknown";
+        _description = "Unknown item.";
         _skillInstance = null;
 
+        // Сброс иконки
         if (_slotElement != null)
         {
+            _slotElement.style.display = DisplayStyle.None;
             ResetIcon();
+            // Можно также сбросить текст подсказки, если требуется
+            //_tooltipManipulator?.SetText("");
         }
+
+        // Отключаем drag
+        if (_slotDragManipulator != null)
+            _slotDragManipulator.enabled = false;
     }
 
     private void AddIcon(Skillgrp skill)
@@ -97,10 +124,10 @@ public class SkillSlot : L2DraggableSlot
 
     public void ResetIcon()
     {
-        StyleBackground background = new StyleBackground(IconManager.Instance.GetInvetoryDefaultBackground());
+
         if (SlotBg != null)
         {
-            _slotBg.style.backgroundImage = background;
+            _slotBg.style.backgroundImage = null;
             _slotDragManipulator.enabled = false;
 
         }
