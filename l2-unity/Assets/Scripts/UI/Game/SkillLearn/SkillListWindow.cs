@@ -161,7 +161,8 @@ public class SkillListWindow : L2PopupWindow
         _builderTabs.InitContentTabs(new string[3] { _activeName, _passiveName , _learnName });
         _builderTabs.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
 
-       _supportActiveSkills.SetActiveSkillTemplate(_templateActiveSkill , _templateBoxPanel , _templateSkillsRow8x1 , _templateSlotSkill);
+        _supportActiveSkills.SetActiveSkillTemplate(_templateActiveSkill , _templateBoxPanel , _templateSkillsRow8x1 , _templateSlotSkill);
+        _supportPassiveSkills.SetPassiveSkillTemplate(_templatePassiveSkill, _templateBoxPanel, _templateSkillsRow8x1, _templateSlotSkill);
 
         _builderTabs.EventSwitchOut += OnSwitchEventOut;
 
@@ -286,14 +287,26 @@ public class SkillListWindow : L2PopupWindow
         if (list == null) return; 
 
         var activeSkills = list.Where(s => !s.IsPassive).ToList();
+        var passiveSkills = list.Where(s => s.IsPassive).ToList();
         _supportActiveSkills.CreateSlots(activeSkills);
+        _supportPassiveSkills.CreateSlots(passiveSkills);
+    }
+
+    public void UpdateSkillList(List<SkillInstance> list)
+    {
+        if (list == null) return;
+
+        var activeSkills = list.Where(s => !s.IsPassive).ToList();
+        var passiveSkills = list.Where(s => s.IsPassive).ToList();
+        _supportActiveSkills.UpdateSlots(activeSkills);
+        _supportPassiveSkills.CreateSlots(passiveSkills);
     }
 
     //public void UpdateSkillList(List<SkillInstance> skillList)
     //{
     //    var activeSkills = skillList.Where(s => !s.Passive).ToList();
-     //   var passiveSkills = skillList.Where(s => s.Passive).ToList();
-   // }
+    //   var passiveSkills = skillList.Where(s => s.Passive).ToList();
+    // }
 
     // _activeName = "Active";
     //_passiveName = "Passive";
@@ -310,7 +323,7 @@ public class SkillListWindow : L2PopupWindow
                 break;
 
             case _passiveName:
-     
+                _supportPassiveSkills.GetOrCreateTab(element);
                 break;
 
             case _learnName:

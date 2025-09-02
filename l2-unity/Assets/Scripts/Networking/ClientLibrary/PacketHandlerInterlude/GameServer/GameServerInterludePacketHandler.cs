@@ -344,7 +344,7 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         else
         {
             _eventProcessor.QueueEvent(() => {
-                SkillListWindow.Instance.SetSkillList(skillListPacket.Skills);
+                SkillListWindow.Instance.UpdateSkillList(skillListPacket.Skills);
             });
         }
 
