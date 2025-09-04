@@ -1,13 +1,13 @@
+
 using NUnit.Framework;
-using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.tvOS;
+
 using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
-using static UnityEngine.Rendering.DebugUI.Table;
+using static UnityEditor.Rendering.FilterWindow;
+
 
 public class ActiveSkillsHide : AbstractSkills
 {
@@ -25,9 +25,14 @@ public class ActiveSkillsHide : AbstractSkills
     private const string _allContentMagical = "MagicContent";
     private List<SkillInstance> _tempList;
     private VisualTreeAsset _templateSlotSkill;
+    private int[] _arrDfActiveSelect;
+
+    private VisualElement _rowPhysical;
+    private VisualElement _rowMagical;
     public ActiveSkillsHide(SkillListWindow _skillLearn)
     {
         this._skillLearn = _skillLearn;
+        _arrDfActiveSelect = new int[5] { 0, 0, 0, 0, 0 };
     }
 
     public void SetActiveSkillTemplate(VisualTreeAsset templateActiveSkill , VisualTreeAsset templateBoxPanel ,  VisualTreeAsset templatePanel8x1 , VisualTreeAsset templateSlotSkill)
@@ -38,6 +43,8 @@ public class ActiveSkillsHide : AbstractSkills
         _templateSlotSkill = templateSlotSkill;
         _boxPanelsPhysical = new List<VisualElement>();
         _boxPanelsMagic = new List<VisualElement>();
+        RegisterClickButtonPhysical(_activeSkillPanel);
+        RegisterClickButtonMagic(_activeSkillPanel);
     }
 
 
@@ -53,30 +60,36 @@ public class ActiveSkillsHide : AbstractSkills
     }
 
 
+
+
     public void CreateSlots(List<SkillInstance> list)
     {
         int panelCount = CalculatePanelCount(list);
 
+    
         var activeSkills = list.Where(s => !s.IsMagic()).ToList();
         var magicSkills = list.Where(s => s.IsMagic()).ToList();
 
+        SetAllSlots(new Dictionary<int, SkillSlot>());
 
-
-        var rowPhysical = _activeSkillPanel.Q(_rowNamePhysical);
-        var rowMagical = _activeSkillPanel.Q(_rowNameMagical);
+        _rowPhysical = _activeSkillPanel.Q(_rowNamePhysical);
+        _rowMagical = _activeSkillPanel.Q(_rowNameMagical);
 
         var allContentPhysical = _activeSkillPanel.Q(_allContentPhysical);
         var allContentMagical = _activeSkillPanel.Q(_allContentMagical);
 
-        ShowPanelIfCount1(activeSkills, rowPhysical, allContentPhysical);
-        ShowPanelIfCount1(magicSkills, rowMagical , allContentMagical);
+        ShowPanelIfCount1(activeSkills, _rowPhysical, allContentPhysical);
+        ShowPanelIfCount1(magicSkills, _rowMagical, allContentMagical);
 
-        CreatePhysicalSlots(activeSkills, rowPhysical);
-        CreateMagicalSlots(magicSkills, rowMagical);
+         if(_allSlots != null) _allSlots.Clear();
+        CreatePhysicalSlots(activeSkills, _rowPhysical);
+        CreateMagicalSlots(magicSkills, _rowMagical);
 
-        HidePanelIfCount0(activeSkills, rowPhysical, allContentPhysical);
-        HidePanelIfCount0(magicSkills, rowMagical, allContentMagical);
+        HidePanelIfCount0(activeSkills, _rowPhysical, allContentPhysical);
+        HidePanelIfCount0(magicSkills, _rowMagical, allContentMagical);
+
         _tempList = list;
+        Debug.Log("Temp Size list filter create" + _tempList.Count);
     }
 
     public void UpdateSlots(List<SkillInstance> list)
@@ -95,7 +108,7 @@ public class ActiveSkillsHide : AbstractSkills
         }
 
 
-
+     
         List<SkillInstance> added;
         List<SkillInstance> removed;
 
@@ -104,7 +117,9 @@ public class ActiveSkillsHide : AbstractSkills
         var rowPhysical = _activeSkillPanel.Q(_rowNamePhysical);
         var rowMagical = _activeSkillPanel.Q(_rowNameMagical);
 
-
+        Debug.Log("Temp Size list filter" + _tempList.Count);
+        Debug.Log("Temp Size list add " + added.Count);
+        Debug.Log("Temp Size list remove " + removed.Count);
 
         var addActiveSkills = added.Where(s => !s.IsMagic()).ToList();
         var addMagicSkills = added.Where(s => s.IsMagic()).ToList();
@@ -213,128 +228,33 @@ public class ActiveSkillsHide : AbstractSkills
 
 
 
-
-
-
-  
-
-
-
-
-
-    public void clickDfPhysical(UnityEngine.UIElements.Button btn , VisualElement _activeTab_physicalContent , int[] _arrDfSelect)
+    private void RegisterClickButtonPhysical(VisualElement rootElement)
     {
-        if (_arrDfSelect[0] == 0)
-        {
-            ChangeDfBox(btn, fillBackgroundDf[0]);
-            _arrDfSelect[0] = 1;
-            HideSkillbar(true, _activeTab_physicalContent , _skillLearn);
-        }
-        else
-        {
-            ChangeDfBox(btn, fillBackgroundDf[1]);
-            _arrDfSelect[0] = 0;
-            HideSkillbar(false, _activeTab_physicalContent, _skillLearn);
-        }
+        rootElement.Q<Button>("DF_Button")?.RegisterCallback<ClickEvent>(evt => ClickDfPhysical((Button)evt.target, _arrDfActiveSelect));
+    }
+
+    private void RegisterClickButtonMagic(VisualElement rootElement)
+    {
+        rootElement.Q<Button>("DF_Button_Magic")?.RegisterCallback<ClickEvent>(evt => ClickDfMagic((Button)evt.target, _arrDfActiveSelect));
+    }
+
+    public void ClickDfPhysical(Button btn, int[] arrDfSelect)
+    {
+        bool show = arrDfSelect[0] == 0;
+        ChangeDfBox(btn, fillBackgroundDf[show ? 0 : 1]);
+        arrDfSelect[0] = show ? 1 : 0;
+        _rowPhysical ??= _activeSkillPanel.Q(_rowNamePhysical);
+        ToogleHideElement(_rowPhysical, show);
     }
 
 
-    public void clickDfMagic(UnityEngine.UIElements.Button btn , VisualElement _activeTab_magicContent, int[] _arrDfSelect)
+    public void ClickDfMagic(Button btn, int[] arrDfSelect)
     {
-        if (_arrDfSelect[1] == 0)
-        {
-            ChangeDfBox(btn, fillBackgroundDf[0]);
-            _arrDfSelect[1] = 1;
-            HideSkillbar(true, _activeTab_magicContent, _skillLearn);
-        }
-        else
-        {
-            ChangeDfBox(btn, fillBackgroundDf[1]);
-            _arrDfSelect[1] = 0;
-            HideSkillbar(false, _activeTab_magicContent, _skillLearn);
-        }
+        bool show = arrDfSelect[1] == 0;
+        ChangeDfBox(btn, fillBackgroundDf[show ? 0 : 1]);
+        arrDfSelect[1] = show ? 1 : 0;
+        _rowMagical ??= _activeSkillPanel.Q(_rowNameMagical);
+        ToogleHideElement(_rowMagical, show);
     }
 
-    public void clickDfEnhancing(UnityEngine.UIElements.Button btn, VisualElement _activeTab_magicContent, int[] _arrDfSelect)
-    {
-        if (_arrDfSelect[2] == 0)
-        {
-            ChangeDfBox(btn, fillBackgroundDf[0]);
-            _arrDfSelect[2] = 1;
-            HideSkillbar(true, _activeTab_magicContent, _skillLearn);
-        }
-        else
-        {
-            ChangeDfBox(btn, fillBackgroundDf[1]);
-            _arrDfSelect[2] = 0;
-            HideSkillbar(false, _activeTab_magicContent, _skillLearn);
-        }
-    }
-
-    public void clickDfDebilitating(UnityEngine.UIElements.Button btn, VisualElement _activeTab_debilitatingContent, int[] _arrDfSelect)
-    {
-        if (_arrDfSelect[3] == 0)
-        {
-            ChangeDfBox(btn, fillBackgroundDf[0]);
-            _arrDfSelect[3] = 1;
-            HideSkillbar(true, _activeTab_debilitatingContent, _skillLearn);
-        }
-        else
-        {
-            ChangeDfBox(btn, fillBackgroundDf[1]);
-            _arrDfSelect[3] = 0;
-            HideSkillbar(false, _activeTab_debilitatingContent, _skillLearn);
-        }
-    }
-
-   
-    public void clickDfClan(UnityEngine.UIElements.Button btn, VisualElement _activeTab_ClanContent, int[] _arrDfSelect)
-    {
-        if (_arrDfSelect[4] == 0)
-        {
-            ChangeDfBox(btn, fillBackgroundDf[0]);
-            _arrDfSelect[4] = 1;
-            HideSkillBarClan(true, _activeTab_ClanContent , "SkillBar0");
-            HideSkillBarClan(true, _activeTab_ClanContent, "SkillBar1");
-        }
-        else
-        {
-            ChangeDfBox(btn, fillBackgroundDf[1]);
-            _arrDfSelect[4] = 0;
-            HideSkillBarClan(false, _activeTab_ClanContent, "SkillBar0");
-            HideSkillBarClan(false, _activeTab_ClanContent, "SkillBar1");
-
-        }
-    }
-
-
-
-   
-
-    private void HideSkillBarClan(bool hide, VisualElement content , string skillBarName)
-    {
-        var skillBar = GetSkillBarByName(content, skillBarName);
-        if(skillBar != null) _skillLearn.HideElement(hide, skillBar);
-    }
-
-   
-
-    private VisualElement GetSkillBarByName(VisualElement content , string skillBarName)
-    {
-        var childreb = content.Children();
-
-        foreach (VisualElement item in childreb)
-        {
-            if (item.name.Equals(skillBarName))
-            {
-                return item;
-            }
-        }
-
-        return null;
-    }
-
-
-
-   
 }

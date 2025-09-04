@@ -11,7 +11,13 @@ public class AbstractSkills
 {
     protected string[] fillBackgroundDf = { "Data/UI/Window/Skills/QuestWndPlusBtn_v2", "Data/UI/Window/Skills/Button_DF_Skills_Down_v3" };
     protected const string _rowNameInnerPanel = "RowsVirtual";
-    private Dictionary<int , SkillSlot> _allSlots;
+    protected Dictionary<int, SkillSlot> _allSlots;
+
+    public void SetAllSlots(Dictionary<int, SkillSlot> allSlots)
+    {
+        if (allSlots != null) _allSlots = null;
+        _allSlots = allSlots;
+    }
     protected void ChangeDfBox(Button btn, string texture)
     {
         IEnumerable<VisualElement> children = btn.Children();
@@ -20,11 +26,16 @@ public class AbstractSkills
         Texture2D iconDfNoraml = LoadTextureDF(texture);
         SetBackgroundDf(btn, iconDfNoraml);
     }
-    protected void HideSkillbar(bool hide, VisualElement content , SkillListWindow _skillLearn)
+
+    protected void ToogleHideElement(VisualElement element , bool isHide)
     {
-        var skillBar = GetSkillBar(content);
-        _skillLearn.HideElement(hide, skillBar);
+        if(!isHide)
+            element.style.display = DisplayStyle.Flex;
+        else
+            element.style.display = DisplayStyle.None;
     }
+
+
 
     protected void SetBackgroundDf(UnityEngine.UIElements.Button btn, Texture2D iconDfNoraml)
     {
@@ -69,8 +80,6 @@ public class AbstractSkills
         {
             SkillSlot slot;
 
-            if(_allSlots == null) _allSlots = new Dictionary<int, SkillSlot>();
-
             _allSlots.TryGetValue(skill.SkillID, out slot);
             if (slot != null)
             {
@@ -81,17 +90,22 @@ public class AbstractSkills
 
     private void RemoveSkill(List<SkillInstance> removed)
     {
+        Debug.Log("RemoveSkill: " + _allSlots.Count);
         if (removed != null && removed.Count > 0)
         {
             for (int i = 0; i < removed.Count; i++)
             {
                 int skillId = removed[i].SkillID;
                 SkillSlot slot;
-               _allSlots.TryGetValue(skillId , out slot);
-
+                _allSlots.TryGetValue(skillId, out slot);
+                
                 if (slot != null)
                 {
                     slot.AssignDestroy();
+                }
+                else
+                {
+                    Debug.Log("Not found slot for remove skill id " + skillId);
                 }
 
                 _allSlots.Remove(skillId);
@@ -217,7 +231,14 @@ public class AbstractSkills
             rowNameVirtualAdd.Add(slotElement);
 
             if (!_allSlots.ContainsKey(skill.SkillID))
+            {
                 _allSlots.Add(skill.SkillID, skillSlot);
+            }
+            else
+            {
+                Debug.Log("AddSkill dublication found " + skill.SkillID);
+            }
+
         }
     }
 
@@ -232,7 +253,7 @@ public class AbstractSkills
 
         int skillIndex = 0;
 
-        if(_allSlots != null) _allSlots.Clear();
+       // if(_allSlots != null) _allSlots.Clear();
 
         for (int i = 0; i < panelCount; i++)
         {
@@ -251,7 +272,7 @@ public class AbstractSkills
             boxPanel.Add(panel);
  
         }
-
+        Debug.Log("Я записал элементов в список " + _allSlots.Count);
         return boxPanel;
     }
 
@@ -269,9 +290,15 @@ public class AbstractSkills
 
     private void AddSlot(SkillSlot skillSlot)
     {
-        if (_allSlots == null) _allSlots = new Dictionary<int, SkillSlot>();
+        if (!_allSlots.ContainsKey(skillSlot.Id))
+        {
+            _allSlots.Add(skillSlot.Id, skillSlot);
+        }
+        else
+        {
+            Debug.Log("AbstractSkills->AddSlot: Dublication id slot");
+        }
 
-        _allSlots.TryAdd(skillSlot.Id , skillSlot);
     }
 
     protected int CalculatePanelCount(List<SkillInstance> list)

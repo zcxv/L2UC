@@ -174,58 +174,7 @@ public class SkillListWindow : L2PopupWindow
         OnCenterScreen(_root);
 
 
-  
-
-
-        //_rootWindow = GetElementByClass("root-windows");
-
-        //_rootTabs[0] = GetElementByClass("tab_active");
-        //_rootTabs[1] = GetElementByClass("tab_passive");
-        //_rootTabs[2] = GetElementByClass("tab_learn");
-
-        //_activeTab_physicalContent = GetElementByClass("row-physical-content");
-        //_activeTab_magicContent = GetElementByClass("row-magic-content");
-        //_activeTab_enhancingContent = GetElementByClass("row-enhancing-content");
-        //_activeTab_debilitatingContent = GetElementByClass("row-debilitating-content");
-        //_activeTab_clanContent = GetElementByClass("row-clan-content");
-        //
-        //_passiveTab_abilityContent = GetElementByClass("row-ability-content");
-        // _passiveTab_subjectContent = GetElementByClass("row-subject-content");
-        //
-        //ActiveSkills 
-        //InitializedCells(_physicalSkillsRow , 0 , 6);
-        //InitializedCells(_magicSkillsRow , 7 , 13);
-        //InitializedCells(_enchancingSkillsRow , 14 , 20);
-        //InitializedCells(_debilitatingSkillsRow , 21 , 27);
-        //InitializedCells(_clanSkillsRow, 28 , 41);
-
-        //Passive Skills
-        //InitializedCellsPassive(_abillitySkillsRow, 0 , 6);
-        // InitializedCellsPassive(_subjectSkillsRow, 7 , 13);
-
-        //physic  test data
-        //AddSkillToCell(3,  3, 0);
-        //AddSkillToCell(190, 1, 1);
-        //AddSkillToCell(410, 1, 2);
-
-        //magic  test data
-        //AddSkillToCell(1177, 1, 8);
-        //AddSkillToCell(1147, 1, 7);
-
-        //passive ability
-        // AddSkillToCell(172, 3, 0);
-
-        // var testToolTipRow0  = GetElementByClass("imgbox7");
-        //var testToolTipRow1 = GetElementByClass("imgbox1");
-        // var testToolTipRow2 = GetElementByClass("imgbox2");
-        // var testToolTipRow3 = GetElementByClass("imgbox3");
-        // var testToolTipRow16 = GetElementByClass("imgbox20");
-        // var testToolTipRow15 = GetElementByClass("imgbox19");
-        // var dropTest99 = GetElementByClass("imgbox99");
-        // var dropTest100 = GetElementByClass("imgbox100");
-        // var testToolTipRow91_passive = GetElementByClass("imgbox91");
-
-
+ 
 
 
         //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_physicalSkillsRow , this);
@@ -240,52 +189,13 @@ public class SkillListWindow : L2PopupWindow
         //ToolTipManager.Instance.RegisterCallbackSkills(_abillitySkillsRow, 1 , this);
         //ToolTipManager.Instance.RegisterCallbackSkills(_subjectSkillsRow , 1 ,  this);
 
-        //UnityEngine.UIElements.Button closeButton = (UnityEngine.UIElements.Button)GetElementById("CloseButton");
-
-        //_boxHeader = GetElementByClass("drag-area");
-        //_boxContent = GetElementByClass("skill_content");
-        //CreateTab(_boxContent, _menuItems);
-        //_background = GetElementByClass("background_over");
-
-
-        //_button.RegisterButtonCloseWindow(_rootWindow, "btn-close-frame");
-        //_button.RegisterClickCloseButton(closeButton);
-        //_button.RegisterClickWindow(_boxContent, _boxHeader);
-
-
-        //_button.RegisterClickAction(_menuItems[0]);
-        //_button.RegisterClickPassive(_menuItems[1]);
-        //_button.RegisterClickLearn(_menuItems[2]);
-        //_button.RegisterClickButtonPhysical(_rootTabs[0]);
-        //_button.RegisterClickButtonMagic(_rootTabs[0]);
-        //_button.RegisterClickButtonEnhancing(_rootTabs[0]);
-        //_button.RegisterClickButtonDebilitating(_rootTabs[0]);
-        //_button.RegisterClickButtonClan(_rootTabs[0]);
-
-        //_button.RegisterClickButtonAbility(_rootTabs[1]);
-        //_button.RegisterClickButtonSubject(_rootTabs[1]);
-
-        // List<VisualElement> list_Drop = new List<VisualElement>
-        //{
-        //    dropTest99 , dropTest100 , testToolTipRow0
-        //};
-
-        //DragAndDropManager.getInstance().RegisterList(list_Drop);
-
-        //DragManipulator drag = new DragManipulator(_boxHeader, _windowEle);
-        //_boxHeader.AddManipulator(drag);
-        //ChangeMenuSelect(0);
-
-        //_mouseOverDetection = new MouseOverDetectionManipulator(_rootWindow);
-        //_rootWindow.AddManipulator(_mouseOverDetection);
-        //HideWindow();
-
+       
     }
 
     public void SetSkillList(List<SkillInstance> list)
     {
-        if (list == null) return; 
-
+        if (list == null) return;
+        PrintList(list);
         var activeSkills = list.Where(s => !s.IsPassive).ToList();
         var passiveSkills = list.Where(s => s.IsPassive).ToList();
         _supportActiveSkills.CreateSlots(activeSkills);
@@ -295,17 +205,23 @@ public class SkillListWindow : L2PopupWindow
     public void UpdateSkillList(List<SkillInstance> list)
     {
         if (list == null) return;
-
+        PrintList(list);
         var activeSkills = list.Where(s => !s.IsPassive).ToList();
         var passiveSkills = list.Where(s => s.IsPassive).ToList();
         _supportActiveSkills.UpdateSlots(activeSkills);
         _supportPassiveSkills.CreateSlots(passiveSkills);
     }
 
-    //public void UpdateSkillList(List<SkillInstance> skillList)
-    //{
-    //    var activeSkills = skillList.Where(s => !s.Passive).ToList();
-    //   var passiveSkills = skillList.Where(s => s.Passive).ToList();
+    public void PrintList(List<SkillInstance> list)
+    {
+        foreach (var skill in list)
+        {
+            Debug.Log(skill.SkillID);
+        }
+
+        Debug.Log("Size list " + list.Count);
+    }
+
     // }
 
     // _activeName = "Active";
@@ -346,142 +262,9 @@ public class SkillListWindow : L2PopupWindow
         return null;
     }
 
-    private void AddSkillToCell(int skillId , int skillLevel , int cell)
-    {
-        Skillgrp skillgrp = SkillgrpTable.Instance.GetSkill(skillId, skillLevel);
-        if(skillgrp != null)
-        {
-            if (skillgrp.IsMagic == 0)
-            {
-                //1 - active
-                //2 - passive
-                if(skillgrp.OperateType == 1 | skillgrp.OperateType == 0)
-                {
-                    AddSkillToVisualElement(skillgrp, _physicalSkillsRow, cell);
-                    AddSkillToCellDataActivePanel(cell, skillgrp);
-                }else if(skillgrp.OperateType == 2)
-                {
-                    AddSkillToVisualElement(skillgrp, _abillitySkillsRow, cell);
-                    AddSkillToCellDataPassivePanel(cell, skillgrp);
-                }
-               
-            }
-            else
-            {
-                if (skillgrp.OperateType == 1 | skillgrp.OperateType == 0)
-                {
-                    AddSkillToVisualElement(skillgrp, _magicSkillsRow, cell);
-                    AddSkillToCellDataActivePanel(cell, skillgrp);
-                }
-                else if (skillgrp.OperateType == 2)
-                {
-                    AddSkillToVisualElement(skillgrp, _abillitySkillsRow, cell);
-                    AddSkillToCellDataPassivePanel(cell, skillgrp);
-                }
-                  
-            }
-        }
-      
-    }
-
-    private void AddSkillToVisualElement(Skillgrp skillgrp , Dictionary<int, VisualElement> dict , int cell )
-    {
-        if (dict.ContainsKey(cell)){
-            VisualElement element = dict[cell];
-            VisualElement parent = element.parent;
-            parent.style.backgroundImage = IconManager.Instance.LoadTextureByName(_border_gold);
-            element.style.backgroundImage = IconManager.Instance.LoadTextureByName(skillgrp.Icon);
-        }
-      
-    }
-    //cell - layout
-    //_activeSkills - all cell and all SkillGrp
-    private void AddSkillToCellDataActivePanel(int cell , Skillgrp skillgrp)
-    {
-        if (!_activeSkills.ContainsKey(cell))
-        {
-            _activeSkills.Add(cell, skillgrp);
-        }
-        else
-        {
-            _activeSkills[cell] = skillgrp;
-        }
-    }
-
-    //cell - layout
-    //_activeSkills - all cell and all SkillGrp
-    private void AddSkillToCellDataPassivePanel(int cell, Skillgrp skillgrp)
-    {
-        if (!_passiveSkills.ContainsKey(cell))
-        {
-            _passiveSkills.Add(cell, skillgrp);
-        }
-        else
-        {
-            _passiveSkills[cell] = skillgrp;
-        }
-    }
-
-    private VisualElement[] CreateTab(VisualElement boxContent, VisualElement[] _menuItems)
-    {
-        _menuItems[0] = boxContent.Q<VisualElement>(className: "activeTab");
-        _menuItems[1] = boxContent.Q<VisualElement>(className: "passiveTab");
-        _menuItems[2] = boxContent.Q<VisualElement>(className: "learnSkillTab");
-        return _menuItems;
-    }
-
-    private void InitializedCells(Dictionary<int, VisualElement> dict ,int begin ,int end)
-    {
-        for(int i= begin; i <= end; i++)
-        {
-            var element = GetElementByClass("imgbox"+i);
-            if(element != null) dict.Add(i, element);
-        }
-    }
-
-    private void InitializedCellsPassive(Dictionary<int, VisualElement> dict, int begin, int end)
-    {
-        for (int i = begin; i <= end; i++)
-        {
-            var element = GetElementByClass("pasbox" + i);
-            if (element != null) dict.Add(i, element);
-        }
-    }
 
 
-
-
-
-    public void ChangeMenuSelect(int indexMenu)
-    {
-        for (int i = 0; i < _menuItems.Length; i++)
-        {
-            var item = _menuItems[i];
-
-            if (i == indexMenu)
-            {
-                string id = "line" + i;
-                var line = item.Q<VisualElement>(className: "line" + i);
-                var btn = item.Q<UnityEngine.UIElements.Button>(className: "btn" + i);
-                var label1 = item.Q<UnityEngine.UIElements.Label>(className: "label" + i);
-                VisualElement content = _rootTabs[i];
-                if(content != null) HideElement(false, _rootTabs[i]);
-                HideElement(true, line);
-                bigBtn(btn, label1);
-            }
-            else
-            {
-                string id = "line" + i;
-                var line = item.Q<VisualElement>(className: "line" + i);
-                var btn = item.Q<UnityEngine.UIElements.Button>(className: "btn" + i);
-                var label1 = item.Q<UnityEngine.UIElements.Label>(className: "label" + i);
-                VisualElement content = _rootTabs[i];
-                if (content != null) HideElement(true, _rootTabs[i]);
-                HideElement(false, line);
-                normBtn(btn, label1);
-            }
-        }
-    }
+  
     public void HideElement(bool is_hide, VisualElement line)
     {
         if (is_hide)
@@ -494,59 +277,5 @@ public class SkillListWindow : L2PopupWindow
         }
 
     }
-
-    private void bigBtn(UnityEngine.UIElements.Button btn, UnityEngine.UIElements.Label label1)
-    {
-        btn.style.height = 21;
-        btn.style.top = -2;
-        label1.style.top = 0;
-
-    }
-
-    private void normBtn(UnityEngine.UIElements.Button btn, UnityEngine.UIElements.Label label1)
-    {
-        btn.style.height = 18;
-        btn.style.top = 0;
-        label1.style.top = 0;
-    }
-
-    public void clickDfPhysical(UnityEngine.UIElements.Button btn)
-    {
-        _supportActiveSkills.clickDfPhysical( btn,  _activeTab_physicalContent, _arrDfActiveSelect);
-    }
-
-    public void clickDfMagic(UnityEngine.UIElements.Button btn)
-    {
-        _supportActiveSkills.clickDfMagic(btn, _activeTab_magicContent, _arrDfActiveSelect);
-    }
-
-    public void clickDfEnhancing(UnityEngine.UIElements.Button btn)
-    {
-        _supportActiveSkills.clickDfEnhancing(btn, _activeTab_enhancingContent, _arrDfActiveSelect);
-    }
-
-    public void clickDfDebilitating(UnityEngine.UIElements.Button btn)
-    {
-        _supportActiveSkills.clickDfDebilitating(btn, _activeTab_debilitatingContent, _arrDfActiveSelect);
-    }
-
-    public void clickDfClan(UnityEngine.UIElements.Button btn)
-    {
-        _supportActiveSkills.clickDfClan(btn, _activeTab_clanContent, _arrDfActiveSelect);
-    }
-
-    public void clickDfAbility(UnityEngine.UIElements.Button btn)
-    {
-        _supportPassiveSkills.clickDfAbiliti(btn, _passiveTab_abilityContent, _arrDfPassiveSelect);
-    }
-
-    public void clickDfSubject(UnityEngine.UIElements.Button btn)
-    {
-        _supportPassiveSkills.clickDfSubject(btn, _passiveTab_subjectContent, _arrDfPassiveSelect);
-    }
-
-
-
-
 
 }
