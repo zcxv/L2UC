@@ -21,11 +21,17 @@ public class PassiveSkillsHide : AbstractSkills
     private const string _allContentMagical = "SubjectContent";
     private List<SkillInstance> _tempList;
     private VisualTreeAsset _templateSlotSkill;
+    private VisualElement _rowAbility;
+    private VisualElement _rowSubject;
+    private int[] _arrDfPassiveSelect;
 
 
+    private const string _abilityButtonName = "DF_Button_Ability";
+    private const string _subjectButtonName = "DF_Button_Subject";
     public PassiveSkillsHide(SkillListWindow _skillLearn)
     {
         this._skillLearn = _skillLearn;
+        _arrDfPassiveSelect = new int[2] { 0, 0 };
     }
 
     public void SetPassiveSkillTemplate(VisualTreeAsset templatePassiveSkill, VisualTreeAsset templateBoxPanel, VisualTreeAsset templatePanel8x1, VisualTreeAsset templateSlotSkill)
@@ -36,6 +42,9 @@ public class PassiveSkillsHide : AbstractSkills
         _templateSlotSkill = templateSlotSkill;
         _boxPanelsAbility = new List<VisualElement>();
         _boxPanelsSubject = new List<VisualElement>();
+        RegisterClickButtonAbility(_passiveSkillPanel);
+        RegisterClickButtonSubject(_passiveSkillPanel);
+
     }
 
 
@@ -57,20 +66,22 @@ public class PassiveSkillsHide : AbstractSkills
         var abilitySkills = list.Where(s => s.IsPassive).ToList();
         var subjectSkills = new List<SkillInstance>();
 
-        var rowPhysical = _passiveSkillPanel.Q(_rowNameAbility);
-        var rowMagical = _passiveSkillPanel.Q(_rowNameSubject);
+        SetAllSlots(new Dictionary<int, SkillSlot>());
+
+        _rowAbility = _passiveSkillPanel.Q(_rowNameAbility);
+        _rowSubject = _passiveSkillPanel.Q(_rowNameSubject);
 
         var allContentPhysical = _passiveSkillPanel.Q(_allContentPhysical);
         var allContentMagical = _passiveSkillPanel.Q(_allContentMagical);
 
-        ShowPanelIfCount1(abilitySkills, rowPhysical, allContentPhysical);
-        ShowPanelIfCount1(subjectSkills, rowMagical, allContentMagical);
+        ShowPanelIfCount1(abilitySkills, _rowAbility, allContentPhysical);
+        ShowPanelIfCount1(subjectSkills, _rowSubject, allContentMagical);
 
-        CreateAbilitySlots(abilitySkills, rowPhysical);
-        CreateSubjectSlots(subjectSkills, rowMagical);
+        CreateAbilitySlots(abilitySkills, _rowAbility);
+        CreateSubjectSlots(subjectSkills, _rowSubject);
 
-        HidePanelIfCount0(abilitySkills, rowPhysical, allContentPhysical);
-        HidePanelIfCount0(subjectSkills, rowMagical, allContentMagical);
+        HidePanelIfCount0(abilitySkills, _rowAbility, allContentPhysical);
+        HidePanelIfCount0(subjectSkills, _rowSubject, allContentMagical);
         _tempList = list;
     }
 
@@ -111,39 +122,31 @@ public class PassiveSkillsHide : AbstractSkills
 
 
 
-
-
-
-    public void clickDfAbiliti(UnityEngine.UIElements.Button btn, VisualElement _activeTab_debilitatingContent, int[] _arrDfPassiveSelect)
+    private void RegisterClickButtonAbility(VisualElement rootElement)
     {
-        if (_arrDfPassiveSelect[0] == 0)
-        {
-            ChangeDfBox(btn, fillBackgroundDf[0]);
-            _arrDfPassiveSelect[0] = 1;
-            HideSkillbar(true, _activeTab_debilitatingContent , _skillLearn);
-        }
-        else
-        {
-            ChangeDfBox(btn, fillBackgroundDf[1]);
-            _arrDfPassiveSelect[0] = 0;
-            HideSkillbar(false, _activeTab_debilitatingContent ,  _skillLearn);
-        }
+        rootElement.Q<Button>(_abilityButtonName)?.RegisterCallback<ClickEvent>(evt => ClickDfAbility((Button)evt.target, _arrDfPassiveSelect));
     }
 
-    public void clickDfSubject(UnityEngine.UIElements.Button btn, VisualElement _activeTab_debilitatingContent, int[] _arrDfPassiveSelect)
+    private void RegisterClickButtonSubject(VisualElement rootElement)
     {
-        if (_arrDfPassiveSelect[1] == 0)
-        {
-            ChangeDfBox(btn, fillBackgroundDf[0]);
-            _arrDfPassiveSelect[1] = 1;
-            HideSkillbar(true, _activeTab_debilitatingContent, _skillLearn);
-        }
-        else
-        {
-            ChangeDfBox(btn, fillBackgroundDf[1]);
-            _arrDfPassiveSelect[1] = 0;
-            HideSkillbar(false, _activeTab_debilitatingContent, _skillLearn);
-        }
+        rootElement.Q<Button>(_subjectButtonName)?.RegisterCallback<ClickEvent>(evt => ClickDfSubject((Button)evt.target, _arrDfPassiveSelect));
+    }
+
+
+    public void ClickDfAbility(Button btn,  int[] arrDfPassiveSelect)
+    {
+        bool show = arrDfPassiveSelect[0] == 0;
+        ChangeDfBox(btn, fillBackgroundDf[show ? 0 : 1]);
+        arrDfPassiveSelect[0] = show ? 1 : 0;
+        ToogleHideElement(_rowAbility, show);
+    }
+
+    public void ClickDfSubject(Button btn,  int[] arrDfPassiveSelect)
+    {
+        bool show = arrDfPassiveSelect[1] == 0;
+        ChangeDfBox(btn, fillBackgroundDf[show ? 0 : 1]);
+        arrDfPassiveSelect[1] = show ? 1 : 0;
+        ToogleHideElement(_rowSubject, show);
     }
 
 
