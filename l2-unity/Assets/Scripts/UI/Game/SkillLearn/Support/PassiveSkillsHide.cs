@@ -28,9 +28,9 @@ public class PassiveSkillsHide : AbstractSkills
 
     private const string _abilityButtonName = "DF_Button_Ability";
     private const string _subjectButtonName = "DF_Button_Subject";
-    public PassiveSkillsHide(SkillListWindow _skillLearn)
+    public PassiveSkillsHide()
     {
-        this._skillLearn = _skillLearn;
+
         _arrDfPassiveSelect = new int[2] { 0, 0 };
     }
 

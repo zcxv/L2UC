@@ -20,6 +20,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
     private static ToolTipSimple _instance;
     private VisualElement _content;
     private VisualTreeAsset _windowTemplateWeapon;
+    private VisualTreeAsset _windowTemplateSkill;
     private VisualTreeAsset _windowTemplateSimple;
     private VisualTreeAsset _windowTemplateString;
     private VisualTreeAsset _windowTemplateAcccesories;
@@ -60,6 +61,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         _windowTemplateWeapon = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipWeapon");
         _windowTemplateAcccesories = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipAccessories");
         _windowTemplateArmor = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipArmor");
+        _windowTemplateSkill = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipSkill");
         _setsElements = LoadAsset("Data/UI/_Elements/Game/ToolTips/Elements/SetsElements");
         _setsEffects = LoadAsset("Data/UI/_Elements/Game/ToolTips/Elements/SetsEffectNameElements");
     }
@@ -78,11 +80,13 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
 
     }
 
+   
+
 
     public void EventLeftClickSlot(VisualElement ve)
     {
         string[] ids = GetUniquePosition(ve);
-        TemplateContainer template = SwitchToolTip(ids, true);
+        var template = SwitchToolTip(ids, true);
 
         if(template != null)
         {
@@ -109,6 +113,10 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         {
             ItemInstance item = (ItemInstance)data;
             UseItem(item, template);
+        }else if (data.GetType() == typeof(SkillInstance))
+        {
+            SkillInstance item = (SkillInstance)data;
+            UseSkill( item, template);
         }
   
     }
@@ -149,6 +157,11 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                 _dataProvider.AddDataArmor(template, item, _setsElements, _setsEffects);
                 break;
         }
+    }
+
+    private void UseSkill(SkillInstance item, TemplateContainer template)
+    {
+        _dataProvider.AddDataSkill(template, item);
     }
 
     public void ManualHide()
@@ -296,7 +309,11 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                 case (int)SlotType.Gear:
                     GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
                     return GetGearContainer(gearItem);
-                    //break;
+                case (int)SlotType.SkillWindow:
+                    //It is not the position that is used, but the skill ID. We have many panels on this form, so we pass its ID to tooltips, and there is no need for it anymore.
+                    int skillId  = position;
+                    SkillInstance skillItem = SkillListWindow.Instance.GetSkillInstanceBySkillId(skillId);
+                    return GetSkillContainer(skillItem);
             }
         }
         else
@@ -316,6 +333,11 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                 case (int)SlotType.Gear:
                     GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
                     return GetGearStringContainer(gearItem);
+                case (int)SlotType.SkillWindow:
+                                       //It is not the position that is used, but the skill ID. We have many panels on this form, so we pass its ID to tooltips, and there is no need for it anymore.
+                    int skillId  = position;
+                    SkillInstance skillItem = SkillListWindow.Instance.GetSkillInstanceBySkillId(skillId);
+                    return GetSkillContainer(skillItem);
             }
         }
 
@@ -350,6 +372,11 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                 return SwitchToArmor();
         }
         return null;
+    }
+
+    private TemplateContainer GetSkillContainer(SkillInstance item)
+    {
+        return SwitchToSkill();
     }
 
     public TemplateContainer GetContainer(ItemInstance item)
@@ -536,6 +563,11 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
             {
                 return MultiSellWindow.Instance.GetItemByPosition(position);
             }
+            else if (type == (int)SlotType.SkillWindow)
+            {
+                int skillId = position;
+                return SkillListWindow.Instance.GetSkillInstanceBySkillId(position);
+            }
         else if (type == (int)SlotType.Gear)
             {
                 GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
@@ -582,6 +614,16 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
     {
         _content.Clear();
         var weapon = _windowTemplateWeapon.CloneTree();
+        _content.Add(weapon);
+        _contentInside = weapon.Q<VisualElement>(className: "content");
+        _contentInside.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+        return weapon;
+    }
+
+    private TemplateContainer SwitchToSkill()
+    {
+        _content.Clear();
+        var weapon = _windowTemplateSkill.CloneTree();
         _content.Add(weapon);
         _contentInside = weapon.Q<VisualElement>(className: "content");
         _contentInside.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
@@ -729,29 +771,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         }
     }
 
-    //private void AddData(string[]ids , TemplateContainer template)
-    //{
-    //int position = Int32.Parse(ids[0]);
-    //int type = Int32.Parse(ids[1]);
-
-    //if(type == (int)SlotType.PriceSell)
-    // {
-    //Product product =  ToolTipManager.GetInstance().FindProductInSellList(position);
-    //SetSimpleSingleToolTip(product , template);
-
-    //}
-    //else if (type == (int)SlotType.PriceBuy)
-    //{
-    //Product product = ToolTipManager.GetInstance().FindProductInBuyList(position);
-    //  SetSimpleSingleToolTip(product , template);
-    //}
-    //else if (type == (int)SlotType.Inventory)
-    //{
-    // ItemInstance itemInstance = InventoryWindow.Instance.GetItemByPosition(position);
-    // SetSimpleItemSingleToolTip(itemInstance, template);
-    //}
-
-    //}
+   
 
 
 

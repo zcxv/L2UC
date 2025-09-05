@@ -11,7 +11,7 @@ using static UnityEditor.Rendering.FilterWindow;
 
 public class ActiveSkillsHide : AbstractSkills
 {
-    private SkillListWindow _skillLearn;
+
     private VisualElement _activeSkillPanel;
     private VisualTreeAsset _templateBoxPanel;
     private VisualTreeAsset _templatePanel8x1;
@@ -29,9 +29,9 @@ public class ActiveSkillsHide : AbstractSkills
 
     private VisualElement _rowPhysical;
     private VisualElement _rowMagical;
-    public ActiveSkillsHide(SkillListWindow _skillLearn)
+    public ActiveSkillsHide()
     {
-        this._skillLearn = _skillLearn;
+
         _arrDfActiveSelect = new int[5] { 0, 0, 0, 0, 0 };
     }
 
@@ -89,7 +89,7 @@ public class ActiveSkillsHide : AbstractSkills
         HidePanelIfCount0(magicSkills, _rowMagical, allContentMagical);
 
         _tempList = list;
-        Debug.Log("Temp Size list filter create" + _tempList.Count);
+
     }
 
     public void UpdateSlots(List<SkillInstance> list)
@@ -117,9 +117,7 @@ public class ActiveSkillsHide : AbstractSkills
         var rowPhysical = _activeSkillPanel.Q(_rowNamePhysical);
         var rowMagical = _activeSkillPanel.Q(_rowNameMagical);
 
-        Debug.Log("Temp Size list filter" + _tempList.Count);
-        Debug.Log("Temp Size list add " + added.Count);
-        Debug.Log("Temp Size list remove " + removed.Count);
+
 
         var addActiveSkills = added.Where(s => !s.IsMagic()).ToList();
         var addMagicSkills = added.Where(s => s.IsMagic()).ToList();

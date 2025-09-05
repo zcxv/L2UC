@@ -28,58 +28,14 @@ public class SkillListWindow : L2PopupWindow
     private const string _activeName = "Active";
     private const string _passiveName = "Passive";
     private const string _learnName = "Learn Skill";
-    private List<SkillServer> _skillList;
+    private Dictionary<int, SkillInstance> _allSkills;
 
 
     //end fields
-
-
-
-
-    public VisualElement minimal_panel;
-    private VisualElement _boxContent;
-
-    private VisualElement _boxHeader;
-    private VisualElement _rootWindow;
-    private ButtonSkillLearn _button;
-    private bool isHide;
-    private VisualElement[] _menuItems;
-    private VisualElement[] _rootTabs;
-    private int[] _arrDfActiveSelect;
-    private int[] _arrDfPassiveSelect;
-
-    private VisualElement _activeTab_physicalContent;
-    private VisualElement _activeTab_magicContent;
-    private VisualElement _activeTab_enhancingContent;
-    private VisualElement _activeTab_debilitatingContent;
-    private VisualElement _activeTab_clanContent;
-    private string _border_gold = "itemwindow_df_frame_Clear";
-
-    private VisualElement _passiveTab_abilityContent;
-    private VisualElement _passiveTab_subjectContent;
-
-    //Debilitating
     private ActiveSkillsHide _supportActiveSkills;
     private PassiveSkillsHide _supportPassiveSkills;
-
-
-    //All Active Skills
-    private Dictionary<int, Skillgrp> _activeSkills;
-    //All Passive Skills
-    private Dictionary<int, Skillgrp> _passiveSkills;
-
-    private Dictionary<int, VisualElement> _physicalSkillsRow;
-    private Dictionary<int, VisualElement> _magicSkillsRow;
-    private Dictionary<int, VisualElement> _enchancingSkillsRow;
-    private Dictionary<int, VisualElement> _debilitatingSkillsRow;
-    private Dictionary<int, VisualElement> _clanSkillsRow;
-
-    private Dictionary<int, VisualElement> _abillitySkillsRow;
-    private Dictionary<int, VisualElement> _subjectSkillsRow;
-    private int _sizeActiveCells = 42;
-    private int _sizePassiveCells = 14;
-
     private static SkillListWindow _instance;
+
     public static SkillListWindow Instance
     {
         get { return _instance; }
@@ -90,28 +46,10 @@ public class SkillListWindow : L2PopupWindow
         {
             _instance = this;
             _builderTabs = new BuilderTabs();
-            _supportActiveSkills = new ActiveSkillsHide(this);
+            _supportActiveSkills = new ActiveSkillsHide();
+            _supportPassiveSkills = new PassiveSkillsHide();
+            _allSkills = new Dictionary<int, SkillInstance>();
 
-
-            _button = new ButtonSkillLearn(this);
-            _menuItems = new VisualElement[3];
-            _rootTabs = new VisualElement[3];
-            _arrDfActiveSelect = new int[5] { 0,0,0,0,0};
-            _arrDfPassiveSelect = new int[2] { 0, 0 };
-
-            _supportPassiveSkills = new PassiveSkillsHide(this);
-            //42 cells active panels
-            _physicalSkillsRow = new Dictionary<int, VisualElement>(7);
-            _magicSkillsRow = new Dictionary<int, VisualElement>(7);
-            _enchancingSkillsRow = new Dictionary<int, VisualElement>(7);
-            _debilitatingSkillsRow = new Dictionary<int, VisualElement>(7);
-            _clanSkillsRow = new Dictionary<int, VisualElement>(14);
-
-            _activeSkills = new Dictionary<int, Skillgrp>(_sizeActiveCells);
-            _passiveSkills = new Dictionary<int, Skillgrp>(_sizeActiveCells);
-            //14 cells passive panels > temporarily
-            _abillitySkillsRow = new Dictionary<int, VisualElement>(_sizePassiveCells);
-            _subjectSkillsRow = new Dictionary<int, VisualElement>(_sizePassiveCells);
         }
         else
         {
@@ -119,6 +57,7 @@ public class SkillListWindow : L2PopupWindow
         }
     }
 
+   
     public bool IsWindowContain(Vector2 vector2)
     {
         return  _windowEle.worldBound.Contains(vector2);
@@ -170,6 +109,7 @@ public class SkillListWindow : L2PopupWindow
         _supportActiveSkills.GetOrCreateTab(element);
 
         RegisterCloseWindowEvent("btn-close-frame");
+        RegisterCloseWindowEventByName("CloseButton");
         RegisterClickWindowEvent(_windowEle, dragArea);
         OnCenterScreen(_root);
 
@@ -188,14 +128,13 @@ public class SkillListWindow : L2PopupWindow
 
         //ToolTipManager.Instance.RegisterCallbackSkills(_abillitySkillsRow, 1 , this);
         //ToolTipManager.Instance.RegisterCallbackSkills(_subjectSkillsRow , 1 ,  this);
-
-       
     }
 
     public void SetSkillList(List<SkillInstance> list)
     {
         if (list == null) return;
-        PrintList(list);
+        CopyInDictionry(list);
+
         var activeSkills = list.Where(s => !s.IsPassive).ToList();
         var passiveSkills = list.Where(s => s.IsPassive).ToList();
         _supportActiveSkills.CreateSlots(activeSkills);
@@ -205,22 +144,30 @@ public class SkillListWindow : L2PopupWindow
     public void UpdateSkillList(List<SkillInstance> list)
     {
         if (list == null) return;
-        PrintList(list);
+        CopyInDictionry(list);
+
         var activeSkills = list.Where(s => !s.IsPassive).ToList();
         var passiveSkills = list.Where(s => s.IsPassive).ToList();
         _supportActiveSkills.UpdateSlots(activeSkills);
         _supportPassiveSkills.CreateSlots(passiveSkills);
     }
 
-    public void PrintList(List<SkillInstance> list)
+    public SkillInstance GetSkillInstanceBySkillId(int skillId)
     {
-        foreach (var skill in list)
-        {
-            Debug.Log(skill.SkillID);
-        }
+        if (_allSkills == null)
+            return null;
 
-        Debug.Log("Size list " + list.Count);
+        _allSkills.TryGetValue(skillId, out var skill);
+        return skill; 
     }
+
+    private void CopyInDictionry(List<SkillInstance> list)
+    {
+        if (_allSkills.Count == 0) _allSkills.Clear();
+
+        _allSkills = list.ToDictionary(si => si.SkillID);
+    }
+
 
     // }
 
@@ -249,33 +196,10 @@ public class SkillListWindow : L2PopupWindow
 
 
     }
-    public Skillgrp GetSkillIdByCellId(int active , int cellId)
-    {
-        if(active == 1)
-        {
-            if(_activeSkills.ContainsKey(cellId)) return _activeSkills[cellId];
-        }
-        else if(active == 2)
-        {
-            if (_passiveSkills.ContainsKey(cellId)) return _passiveSkills[cellId];
-        }
-        return null;
-    }
 
 
 
-  
-    public void HideElement(bool is_hide, VisualElement line)
-    {
-        if (is_hide)
-        {
-            line.style.display = DisplayStyle.None;
-        }
-        else
-        {
-            line.style.display = DisplayStyle.Flex;
-        }
+ 
 
-    }
 
 }

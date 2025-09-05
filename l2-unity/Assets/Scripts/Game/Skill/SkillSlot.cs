@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -5,16 +6,11 @@ public class SkillSlot : L2DraggableSlot
 {
     private SkillInstance _skillInstance { get;  set; }
     private bool _empty = false;
+    public event Action<int> EventLeftClick;
     public SkillSlot(VisualElement slotElement, int position, SlotType slotType) : base(position, slotElement, slotType, true, false)
     {
         _slotElement = slotElement;
         _position = position;
-    }
-
-    protected override void HandleLeftClick()
-    {
-        Debug.Log("CLICK EVENT SKILL SLOT");
-        //PlayerActions.Instance.UseAction((ActionType)ActionId);
     }
 
     protected override void HandleRightClick()
@@ -25,7 +21,12 @@ public class SkillSlot : L2DraggableSlot
     {
     }
 
-    
+    protected override void HandleLeftClick()
+    {
+        Debug.Log("Handle Left Click");
+        EventLeftClick?.Invoke(_position);
+        //SetSelected();
+    }
 
     public void AssignSkill(int skillId, int level)
     {
@@ -136,6 +137,11 @@ public class SkillSlot : L2DraggableSlot
 
             _slotElement.style.backgroundImage = null;
         }
+    }
+
+    public void OnClickLeftEvent(int position)
+    {
+        Debug.Log("Click Event Skill Slot");
     }
 
 
