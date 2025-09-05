@@ -12,7 +12,10 @@ public class TooltipDataProvider : AbstractDataProvider
         _creator = new CreatorSets();
     }
 
-    
+    public void AddDataSkill(VisualElement container, object item)
+    {
+        Debug.Log("TooltipDataProvider: Use AddDataSkill");
+    }
     public  void AddDataWeapon(VisualElement container, object item)
     {
 

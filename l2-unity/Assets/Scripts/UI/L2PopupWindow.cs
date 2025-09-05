@@ -47,7 +47,9 @@ public abstract class L2PopupWindow : L2Window
         {
             windowEle.RegisterCallback<MouseDownEvent>(evt =>
             {
+
                 BringToFront();
+                ToolTipSimple.Instance.BringToFront();
             }, TrickleDown.TrickleDown);
         }
 

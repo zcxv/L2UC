@@ -98,108 +98,108 @@ public class ToolTipSkill : L2PopupWindow, IToolTips
     public void RegisterCallbackActive(Dictionary<int, VisualElement> dict, SkillListWindow skillWindow)
     {
 
-        foreach (var item in dict)
-        {
-            VisualElement element = item.Value;
-            if (element != null)
-            {
-                element.RegisterCallback<MouseOverEvent>(evt =>
-                {
-                    VisualElement ve = (VisualElement)evt.currentTarget;
-                    if (ve != null)
-                    {
-                        if (DragAndDropManager.getInstance().IsDrag())
-                        {
-                            ResetElement(ve);
-                        }
-                        else
-                        {
-                            int cellId = ParceCellId(ve.name);
-                            Skillgrp skillGrp = skillWindow.GetSkillIdByCellId(1 , cellId);
+        //foreach (var item in dict)
+        //{
+            //VisualElement element = item.Value;
+           // if (element != null)
+           // {
+              //  element.RegisterCallback<MouseOverEvent>(evt =>
+               // {
+                 //   VisualElement ve = (VisualElement)evt.currentTarget;
+                  //  if (ve != null)
+                   // {
+                    //    if (DragAndDropManager.getInstance().IsDrag())
+                     //   {
+                     //       ResetElement(ve);
+                     //   }
+                      //  else
+                      //  {
+                         //////  int cellId = ParceCellId(ve.name);
+                          //  Skillgrp skillGrp = skillWindow.GetSkillIdByCellId(1 , cellId);
 
-                            if (skillGrp != null)
-                            {
-                                SkillNameData nameData = SkillgrpTable.Instance.GetSkillName(skillGrp.Id, skillGrp.Level);
-                                if(nameData != null)
-                                {
-                                    SetData(skillGrp, nameData);
-                                    CalcNewPosition(ve);
-                                }
+                            //if (skillGrp != null)
+                            //{
+                              //  SkillNameData nameData = SkillgrpTable.Instance.GetSkillName(skillGrp.Id, skillGrp.Level);
+                             //   if(nameData != null)
+                               // {
+                               //     SetData(skillGrp, nameData);
+                               //     CalcNewPosition(ve);
+                               // }
                                 
-                            }
+                            //}
                             
                             
-                        }
-                    }
-                }, TrickleDown.TrickleDown);
+                        //}
+                    //}
+                //}, TrickleDown.TrickleDown);
 
-                element.RegisterCallback<MouseOutEvent>(evt =>
-                {
-                    VisualElement ve = (VisualElement)evt.currentTarget;
-                    if (ve != null)
-                    {
-                        ResetElement(ve);
-                    }
-                    evt.StopPropagation();
+                //element.RegisterCallback<MouseOutEvent>(evt =>
+                //{
+                //    VisualElement ve = (VisualElement)evt.currentTarget;
+                 //   if (ve != null)
+                  //  {
+                  //      ResetElement(ve);
+                  //  }
+                  //  evt.StopPropagation();
 
-                }, TrickleDown.TrickleDown);
+               // }, TrickleDown.TrickleDown);
 
-            }
-        }
+            //}
+        //}
     }
 
 
     public void RegisterCallbackPassive(Dictionary<int, VisualElement> dict, SkillListWindow skillWindow)
     {
 
-        foreach (var item in dict)
-        {
-            VisualElement element = item.Value;
-            if (element != null)
-            {
-                element.RegisterCallback<MouseOverEvent>(evt =>
-                {
-                    VisualElement ve = (VisualElement)evt.currentTarget;
-                    if (ve != null)
-                    {
-                        if (DragAndDropManager.getInstance().IsDrag())
-                        {
-                            ResetElement(ve);
-                        }
-                        else
-                        {
-                            int cellId = ParcePassiveCellId(ve.name);
-                            Skillgrp skillGrp = skillWindow.GetSkillIdByCellId(2, cellId);
+       // foreach (var item in dict)
+        //{
+            //VisualElement element = item.Value;
+            //if (element != null)
+            //{
+                //element.RegisterCallback<MouseOverEvent>(evt =>
+                //{
+                   // VisualElement ve = (VisualElement)evt.currentTarget;
+                   // if (ve != null)
+                    //{
+                        //if (DragAndDropManager.getInstance().IsDrag())
+                        //{
+                         //   ResetElement(ve);
+                        //}
+                        //else
+                       // {
+                            //int cellId = ParcePassiveCellId(ve.name);
+                            //Skillgrp skillGrp = skillWindow.GetSkillIdByCellId(2, cellId);
 
-                            if (skillGrp != null)
-                            {
-                                SkillNameData nameData = SkillgrpTable.Instance.GetSkillName(skillGrp.Id, skillGrp.Level);
-                                if (nameData != null)
-                                {
-                                    SetData(skillGrp, nameData);
-                                    CalcNewPosition(ve);
-                                }
+                           // if (skillGrp != null)
+                           // {
+                                //SkillNameData nameData = SkillgrpTable.Instance.GetSkillName(skillGrp.Id, skillGrp.Level);
+                                //if (nameData != null)
+                                //{
+                                 //   SetData(skillGrp, nameData);
+                                 //   CalcNewPosition(ve);
+                              //  }
 
-                            }
+                          //  }
 
 
-                        }
-                    }
-                }, TrickleDown.TrickleDown);
+                       // }
+                  //  }
+               // }, TrickleDown.TrickleDown);
+//
+               /// element.RegisterCallback<MouseOutEvent>(evt =>
+               // {
+                   // VisualElement ve = (VisualElement)evt.currentTarget;
+                   // if (ve != null)
+                   // {
+                   //     ResetElement(ve);
+                  //  }
+                //    evt.StopPropagation();
 
-                element.RegisterCallback<MouseOutEvent>(evt =>
-                {
-                    VisualElement ve = (VisualElement)evt.currentTarget;
-                    if (ve != null)
-                    {
-                        ResetElement(ve);
-                    }
-                    evt.StopPropagation();
+             //   }, TrickleDown.TrickleDown);
 
-                }, TrickleDown.TrickleDown);
-
-            }
-        }
+           // }
+        //}
     }
 
     private int ParceCellId(string name)

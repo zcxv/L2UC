@@ -228,6 +228,7 @@ public class AbstractSkills
             var slotElement = ToolTipsUtils.CloneOne(templateSlotSkill);
             var skillSlot = new SkillSlot(slotElement, skill.SkillID, SlotType.SkillWindow);
             skillSlot.AssignSkill(skill);
+            //skillSlot.EventLeftClick += OnClickLeftEvent;
             rowNameVirtualAdd.Add(slotElement);
 
             if (!_allSlots.ContainsKey(skill.SkillID))
@@ -262,9 +263,10 @@ public class AbstractSkills
 
             for (int j = 0; j < skillsPerPanel && skillIndex < totalSkills; j++, skillIndex++)
             {
+                SkillInstance instance = skillList[skillIndex];
                 var slotElement = ToolTipsUtils.CloneOne(templateSlotsSkill);
-                var skillSlot = new SkillSlot(slotElement, skillIndex, SlotType.SkillWindow);
-                skillSlot.AssignSkill(skillList[skillIndex]);
+                var skillSlot = new SkillSlot(slotElement, instance.SkillID, SlotType.SkillWindow);
+                skillSlot.AssignSkill(instance);
                 rowNameVirtual.Add(slotElement);
                 AddSlot(skillSlot);
             }
