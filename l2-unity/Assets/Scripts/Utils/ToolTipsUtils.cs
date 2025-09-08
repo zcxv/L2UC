@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class ToolTipsUtils 
 {
-    private const char NewChar = '0';
+    
 
     public static Color GetColorPrice(string price)
     {
@@ -36,6 +36,11 @@ public class ToolTipsUtils
     public static string ConvertPriceToNormal(string wholeNumber)
     {
         return wholeNumber.Replace(",", "");
+    }
+
+    public static string ConvertNumberToNormal(string wholeNumber)
+    {
+        return wholeNumber.Replace(",", ".");
     }
 
     public static VisualElement CloneOne(VisualTreeAsset vta)

@@ -8,6 +8,7 @@ public class SimpleToolTipData : IDataTips
     private string _item_description;
     private Product _product;
     private ItemInstance _itemInstance;
+    private SkillInstance _skillInstance;
     private int _enchant;
     public SimpleToolTipData(object data)
     {
@@ -26,6 +27,14 @@ public class SimpleToolTipData : IDataTips
             _description = _itemInstance.GetDescription();
             _item_description = _itemInstance.GetItemDescription();
             _enchant = _itemInstance.EnchantLevel;
+        }
+        else if (data.GetType() == typeof(SkillInstance))
+        {
+            _skillInstance = (SkillInstance)data;
+            _name = _skillInstance.GetName();
+            _description = _skillInstance.GetDescription();
+            _item_description = _skillInstance.GetDescription();
+            _enchant = _skillInstance.Level;
         }
     }
     public string GetName()

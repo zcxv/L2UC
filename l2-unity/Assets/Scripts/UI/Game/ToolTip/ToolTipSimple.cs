@@ -756,6 +756,11 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                 ItemInstance itemMultisell = MultiSellWindow.Instance.GetItemByPosition(position);
                 SetSimpleItemSingleToolTip(itemMultisell, template);
                 break;
+            case (int)SlotType.SkillWindow:
+                int skillId = position;
+                SkillInstance skillInstance = SkillListWindow.Instance.GetSkillInstanceBySkillId(skillId);
+                SetSkillToolTip(skillInstance, template);
+                break;
             case (int)SlotType.Gear:
                 GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
 
@@ -812,7 +817,11 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         }
     }
 
-
+    private void SetSkillToolTip(SkillInstance skillInstance, TemplateContainer template)
+    {
+        IDataTips data = ToolTipManager.GetInstance().GetProductText(skillInstance);
+        _dataProvider.SetDataSkillInTemplate(template, skillInstance, data);
+    }
     private void SetSimpleItemSingleToolTip(ItemInstance item, TemplateContainer template)
     {
         if (item != null)

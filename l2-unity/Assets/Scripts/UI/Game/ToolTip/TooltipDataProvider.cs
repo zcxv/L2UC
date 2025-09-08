@@ -14,7 +14,12 @@ public class TooltipDataProvider : AbstractDataProvider
 
     public void AddDataSkill(VisualElement container, object item)
     {
-        Debug.Log("TooltipDataProvider: Use AddDataSkill");
+        if (item.GetType() == typeof(SkillInstance))
+        {
+            SkillInstance skill = (SkillInstance)item;
+            IDataTips text = ToolTipManager.GetInstance().GetProductText(skill);
+            SetDataSkillInTemplate(container, skill, text);
+        }
     }
     public  void AddDataWeapon(VisualElement container, object item)
     {

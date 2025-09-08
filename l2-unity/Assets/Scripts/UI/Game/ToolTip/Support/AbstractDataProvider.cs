@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -5,6 +6,70 @@ using static UnityEditor.Rendering.FilterWindow;
 
 public abstract class AbstractDataProvider
 {
+
+    public void SetDataSkillInTemplate(VisualElement container, SkillInstance skill, IDataTips text)
+    {
+        container.Q<Label>("nameSkill").text = text.GetName();
+
+        VisualElement centerBox = container.Q<VisualElement>("CenterBox");
+        VisualElement footerBox = container.Q<VisualElement>("FooterBox");
+
+        VisualElement groupTypeLvl = container.Q<VisualElement>("lvlSkill");
+        Label lvlSkill = container.Q<Label>("lvlSkill");
+
+        VisualElement groupTypeLabelLvl = container.Q<VisualElement>("LvlLabel");
+        Label lvlLabel = container.Q<Label>("LvlLabel");
+
+        if(groupTypeLvl != null) AddElementIfNotEmpty(groupTypeLabelLvl, lvlLabel, "Lv.");
+        AddElementIfNotEmpty(groupTypeLvl, lvlSkill, skill.Level.ToString());
+
+        VisualElement groupTypeActiveSkill= container.Q<VisualElement>("SettingType");
+        Label typeLabel = container.Q<Label>("typeSkill");
+        AddElementIfNotEmpty(groupTypeActiveSkill, typeLabel, skill.GetTypeName());
+
+        VisualElement groupTypeHp = container.Q<VisualElement>("HpText");
+        Label hpLabel = container.Q<Label>("hpLabel");
+        AddElementIfNot0(groupTypeHp, hpLabel, skill.GetHp());
+
+        VisualElement groupTypeMp = container.Q<VisualElement>("MPText");
+        Label mpLabel = container.Q<Label>("mpLabel");
+        AddElementIfNot0(groupTypeMp, mpLabel, skill.GetMp());
+
+        VisualElement groupTypeRadius = container.Q<VisualElement>("RadiusText");
+        Label radiusLabel = container.Q<Label>("rangeLabel");
+        AddElementIfNot0(groupTypeRadius, radiusLabel, skill.GetRange());
+
+
+        if (skill.GetHp() == 0 && skill.GetMp() == 0 && skill.GetRange() == -1){
+            AddBoxIfNotEmpty(centerBox, "");
+        }
+
+        if (string.IsNullOrEmpty(text.GetDiscription()))
+        {
+            AddBoxIfNotEmpty(footerBox, text.GetDiscription());
+        }
+
+        VisualElement groupTypeCasting = container.Q<VisualElement>("CastingTimeText");
+        Label castingLabel = container.Q<Label>("castlabel");
+
+
+        VisualElement groupTypeReuse = container.Q<VisualElement>("ReuseTimeText");
+        Label reuseLabel = container.Q<Label>("reuselabel");
+
+        AddElementIfNot0(groupTypeReuse, reuseLabel, skill.GetReuseTime());
+
+        AddElementIfNot0(groupTypeCasting, castingLabel, skill.GetHitTime());
+
+
+        VisualElement groupTypeDesc = container.Q<VisualElement>("DescriptedText");
+        Label descLabel = container.Q<Label>("descriptedLabel");
+
+        AddElementIfNotEmpty(groupTypeDesc, descLabel, text.GetDiscription());
+
+        VisualElement groupIcon = container.Q<VisualElement>("GrowIcon");
+        var icon = container.Q<VisualElement>("icon");
+        AddElementIfNotNull(groupIcon, icon, IconManager.Instance.LoadTextureByName(skill.Icon()));
+    }
 
     protected void SetDataWeaponInTemplate(VisualElement container, Weapongrp weapon, int price , IDataTips text)
     {
@@ -333,6 +398,22 @@ public abstract class AbstractDataProvider
         AddElementIfNotEmpty(groupName, labelName, name);
     }
 
+    protected void AddBoxIfNotEmpty(VisualElement boxElement, string text)
+    {
+        if(boxElement != null)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+
+                boxElement.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                boxElement.style.display = DisplayStyle.Flex;
+            }
+        }
+
+    }
     protected void AddElementIfNotNull(VisualElement groupElement, VisualElement icon, Texture2D texture)
     {
         if (texture != null)
@@ -414,6 +495,22 @@ public abstract class AbstractDataProvider
         {
             labelData.text = addParam.ToString();
             groupElement.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            if (groupElement == null) { Debug.LogWarning(" ToolTipDataProvider: Не критическая ошибка мы не нашли элемент tooltips "); return; }
+            groupElement.style.display = DisplayStyle.None;
+            labelData.text = "";
+        }
+    }
+
+    protected void AddElementIfNot0(VisualElement groupElement, Label labelData, double addParam)
+    {
+        if (addParam != 0 && addParam != -1)
+        {
+            labelData.text = ToolTipsUtils.ConvertNumberToNormal(addParam.ToString());
+            groupElement.style.display = DisplayStyle.Flex;
+
         }
         else
         {
