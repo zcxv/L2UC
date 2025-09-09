@@ -5,13 +5,19 @@ using UnityEngine.UIElements;
 
 public class QuestWindow : L2PopupWindow
 {
-    public VisualElement minimal_panel;
-    private VisualElement boxContent;
-    private VisualElement background;
-    private VisualElement boxHeader;
-    private VisualElement rootWindow;
-    private ButtonQuest _button;
+
     private static QuestWindow _instance;
+    private BuilderTabs _builderTabs;
+    private VisualTreeAsset _tabTemplate;
+    private VisualTreeAsset _tabHeaderTemplate;
+    private VisualTreeAsset _tabContenTemplate;
+    private VisualTreeAsset _singleInsideContentTemplate;
+    private SingleContentTab _singlContent;
+    private const string _singleTabName = "Single";
+    private const string _repeatTabName = "Repeat";
+    private const string _epicTabName = "Epic";
+    private const string _transferTabName = "Transfer";
+    private const string _specialTabName = "Special";
     public static QuestWindow Instance
     {
         get { return _instance; }
@@ -21,7 +27,8 @@ public class QuestWindow : L2PopupWindow
         if (_instance == null)
         {
             _instance = this;
-            _button = new ButtonQuest(this);
+            _builderTabs = new BuilderTabs();
+            _singlContent = new SingleContentTab();
         }
         else
         {
@@ -37,24 +44,63 @@ public class QuestWindow : L2PopupWindow
     protected override void LoadAssets()
     {
         _windowTemplate = LoadAsset("Data/UI/_Elements/Game/Quest/QuestWindow");
+
+
+        _tabTemplate = LoadAsset("Data/UI/_Elements/Game/Inventory/InventoryTab");
+        _tabHeaderTemplate = LoadAsset("Data/UI/_Elements/Game/SkillLearn/SkillTabHeader");
+        _singleInsideContentTemplate = LoadAsset("Data/UI/_Elements/Game/Quest/AllContent/SingleInsideContent");
+        _tabContenTemplate = LoadAsset("Data/UI/_Elements/Game/Quest/QuestTabContent");
     }
 
     protected override IEnumerator BuildWindow(VisualElement root)
     {
         InitWindow(root);
-
-
         yield return new WaitForEndOfFrame();
 
-        rootWindow = GetElementByClass("root-windows");
-        boxHeader = GetElementByClass("drag-area");
-       // boxContent = GetElementByClass("action_content");
-        background = GetElementByClass("background_over");
-        _button.RegisterButtonCloseWindow(rootWindow, "btn-close-frame");
-       // _button.RegisterClickWindow(boxContent, boxHeader);
+        var dragArea = GetElementByClass("drag-area");
+        DragManipulator drag = new DragManipulator(dragArea, _windowEle);
+        dragArea.AddManipulator(drag);
+        var content = (VisualElement)GetElementById("content");
 
-        DragManipulator drag = new DragManipulator(boxHeader, _windowEle);
-        boxHeader.AddManipulator(drag);
+        var bg = (VisualElement)GetElementById("Darkener");
+
+        if (bg != null)
+        {
+             bg.style.opacity = new StyleFloat(0.9f);
+        }
+
+
+        _builderTabs.InitContentTabs(new string[5] { _singleTabName, _repeatTabName, _epicTabName , _transferTabName , _specialTabName });
+        _builderTabs.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
+
+        _singlContent.SetTemplateContent(_tabContenTemplate);
+        _singlContent.SetTemplateInsideContent(_singleInsideContentTemplate);
+
+        _builderTabs.EventSwitchOut += OnSwitchEventOut;
+
+        VisualElement element = _builderTabs.GetActiveContent();
+        _singlContent.GetOrCreateTab(element);
+
+        RegisterCloseWindowEvent("btn-close-frame");
+        //RegisterCloseWindowEventByName("CloseButton");
+        RegisterClickWindowEvent(_windowEle, dragArea);
+        OnCenterScreen(_root);
+
         HideWindow();
+    }
+
+    private void OnSwitchEventOut(ITab tab, bool isTrade)
+    {
+        var tabName = tab.GetTabName();
+        var element = _builderTabs.GetActiveContent();
+
+        switch (tabName)
+        {
+            case _singleTabName:
+                _singlContent.GetOrCreateTab(element);
+                break;
+        }
+
+
     }
 }

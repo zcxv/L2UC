@@ -28,17 +28,6 @@ public class L2DraggableSlot : L2ClickableSlot
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     private void CreateDragManipulator(ref SlotDragManipulator slotDragManipulator , ref VisualElement slotElement)
     {
         if (slotDragManipulator == null)

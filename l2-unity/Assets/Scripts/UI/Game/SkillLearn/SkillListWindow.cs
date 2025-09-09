@@ -176,7 +176,6 @@ public class SkillListWindow : L2PopupWindow
     // _learnName = "Learn Skill";
     private void OnSwitchEventOut(ITab tab, bool isTrade)
     {
-        Debug.Log("Event Switch Tab !!!!");
         var tabName = tab.GetTabName();
         var element = _builderTabs.GetActiveContent();
         switch (tabName)

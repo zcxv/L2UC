@@ -37,6 +37,8 @@ public class L2Slot
 
     public int EnchantLevel { get { return _enchantLevel; } set { _enchantLevel = value; } }
     public int Id { get { return _id; } set { _id = value; } }
+
+    public int Level { get { return _level; } set { _level = value; } }
     public int Position { get { return _position; } set { _position = value; } }
     public SlotType Type { get { return _slotType; } set { _slotType = value; } }
     public string Name { get { return _name; } set { _name = value; } }

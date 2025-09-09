@@ -117,6 +117,9 @@ public class L2SlotManager : L2PopupWindow
             case L2Slot.SlotType.Action:
                 HandleActionDrag();
                 break;
+            case L2Slot.SlotType.SkillWindow:
+                HandleSkillWindowDrag();
+                break;
             default:
                 break;
         }
@@ -187,6 +190,19 @@ public class L2SlotManager : L2PopupWindow
                 }
                 break;
         }
+    }
+
+    private void HandleSkillWindowDrag()
+    {
+        if (_hoverSlot == null | SkillbarWindow.Instance.Locked)
+        {
+            return;
+        }
+
+
+        int position = _hoverSlot.Position;
+        SkillSlot sourceSlot = (SkillSlot)_draggedSlot;
+        PlayerShortcuts.Instance.AddShortcut(position, sourceSlot.Id, Shortcut.TYPE_SKILL, sourceSlot.Level);
     }
 
     private void HandleSkillbarDrag()

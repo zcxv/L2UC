@@ -59,7 +59,7 @@ public class SkillbarSlot : L2ClickableSlot
     {
        
         _innerSlot = new SkillSlot(_slotElement, _position, SlotType.SkillBar);
-        ((SkillSlot)_innerSlot).AssignSkill(objectId , level);
+        ((SkillSlot)_innerSlot).AssignSkill(objectId , level , false);
         ((L2ClickableSlot)_innerSlot).UnregisterClickableCallback();
 
         UpdateInputInfo();
