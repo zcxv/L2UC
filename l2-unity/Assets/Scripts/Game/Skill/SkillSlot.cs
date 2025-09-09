@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Bson;
 using System;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,6 +8,7 @@ public class SkillSlot : L2DraggableSlot
     private SkillInstance _skillInstance { get;  set; }
     private bool _empty = false;
     public event Action<int> EventLeftClick;
+    private bool _isPassive = false;
     public SkillSlot(VisualElement slotElement, int position, SlotType slotType) : base(position, slotElement, slotType, true, false)
     {
         _slotElement = slotElement;
@@ -25,16 +27,16 @@ public class SkillSlot : L2DraggableSlot
     {
         Debug.Log("Handle Left Click");
         EventLeftClick?.Invoke(_position);
-        //SetSelected();
+
     }
 
-    public void AssignSkill(int skillId, int level)
+    public void AssignSkill(int skillId, int level , bool isPassive)
     {
         _id = skillId;
         _level = level;
-
+        _isPassive = isPassive;
         var skill = SkillgrpTable.Instance.GetSkill(skillId, level);
-        Assign(skill);
+        Assign(skill , _isPassive);
     }
 
     public void AssignSkill(SkillInstance skillInstance)
@@ -42,9 +44,10 @@ public class SkillSlot : L2DraggableSlot
         _id = skillInstance.SkillID;
         _level = skillInstance.Level;
         _skillInstance = skillInstance;
+        _isPassive = skillInstance.IsPassive;
 
         var skill = SkillgrpTable.Instance.GetSkill(_id, _level);
-        Assign(skill);
+        Assign(skill , _isPassive);
     }
 
     public void UpdateData(SkillInstance skillInstance)
@@ -54,7 +57,7 @@ public class SkillSlot : L2DraggableSlot
         _skillInstance = skillInstance;
     }
 
-    private void Assign(Skillgrp skill)
+    private void Assign(Skillgrp skill , bool isPassive)
     {
         if (skill == null)
         {
@@ -71,11 +74,24 @@ public class SkillSlot : L2DraggableSlot
         _slotElement?.RemoveFromClassList("empty");
 
         AddIcon(skill);
+        ToggleDrag(_isPassive);
 
-        // Обновляем подсказку (если манипулятор есть)
-        //_tooltipManipulator?.SetText("Demo Text ToolTips");
+
     }
 
+    private void ToggleDrag(bool isPassive)
+    {
+        if (_isPassive)
+        {
+            if (_slotDragManipulator != null)
+                _slotDragManipulator.enabled = false;
+        }
+        else
+        {
+            if (_slotDragManipulator != null)
+                _slotDragManipulator.enabled = true;
+        }
+    }
 
     public void AssignDestroy()
     {
@@ -86,7 +102,7 @@ public class SkillSlot : L2DraggableSlot
         _skillInstance = null;
 
         _slotElement.parent?.Remove(_slotElement);
-
+        ClearManipulators();
     }
     public void AssignEmpty()
     {
@@ -96,13 +112,10 @@ public class SkillSlot : L2DraggableSlot
         _description = "Unknown item.";
         _skillInstance = null;
 
-        // Сброс иконки
         if (_slotElement != null)
         {
             _slotElement.style.display = DisplayStyle.None;
             ResetIcon();
-            // Можно также сбросить текст подсказки, если требуется
-            //_tooltipManipulator?.SetText("");
         }
 
         // Отключаем drag

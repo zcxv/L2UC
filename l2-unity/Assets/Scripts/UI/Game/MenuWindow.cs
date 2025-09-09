@@ -54,9 +54,9 @@ public class MenuWindow : L2Window
         skillBtn.AddManipulator(new ButtonClickSoundManipulator(skillBtn));
         skillBtn.RegisterCallback<ClickEvent>((evt) => SkillListWindow.Instance.ToggleHideWindow());
 
-        //var questBtn = _windowEle.Q<Button>("QuestButton");
-        //questBtn.AddManipulator(new ButtonClickSoundManipulator(questBtn));
-        // questBtn.RegisterCallback<ClickEvent>((evt) => QuestWindow.Instance.ToggleHideWindow());
+        var questBtn = _windowEle.Q<Button>("QuestButton");
+        questBtn.AddManipulator(new ButtonClickSoundManipulator(questBtn));
+         questBtn.RegisterCallback<ClickEvent>((evt) => QuestWindow.Instance.ToggleHideWindow());
 
         //var clanBtn = _windowEle.Q<Button>("ClanButton");
         //clanBtn.AddManipulator(new ButtonClickSoundManipulator(clanBtn));

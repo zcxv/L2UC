@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +25,11 @@ public class ShortCutRegister : ServerPacket
         }
         else if (type == Shortcut.TYPE_SKILL)
         {
+            int skillId = ReadI();
+            int skilLevel = ReadI();
+            int unk1 = ReadB();
+            int characterType = ReadI();
+            shortcut = new Shortcut(slot, page, Shortcut.TYPE_SKILL, skillId, skilLevel);
             Debug.Log("ShortCutRegister : не реализовано принятия shortcutskill");
         }
         else if (type == Shortcut.TYPE_ACTION)
