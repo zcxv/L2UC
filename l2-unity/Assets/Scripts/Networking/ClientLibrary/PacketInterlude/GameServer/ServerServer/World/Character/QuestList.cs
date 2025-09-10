@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class QuestList : ServerPacket
 {
+
+    private List<QuestInstance> _allQuest;
+
+
+    public List<QuestInstance> Quest { get => _allQuest; }
+
     public QuestList(byte[] d) : base(d)
     {
+        _allQuest = new List<QuestInstance>();
         Parse();
     }
 
@@ -16,8 +23,8 @@ public class QuestList : ServerPacket
         for(int i = 0; i < size; i++)
         {
             int questId = ReadI();
-            int read = ReadI();
-            Debug.Log("");
+            int flags = ReadI();
+            _allQuest.Add(new QuestInstance(questId, flags));
         }
     }
 }

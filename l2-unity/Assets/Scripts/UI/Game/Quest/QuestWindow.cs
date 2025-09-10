@@ -8,11 +8,14 @@ public class QuestWindow : L2PopupWindow
 
     private static QuestWindow _instance;
     private BuilderTabs _builderTabs;
+
     private VisualTreeAsset _tabTemplate;
     private VisualTreeAsset _tabHeaderTemplate;
     private VisualTreeAsset _tabContenTemplate;
     private VisualTreeAsset _singleInsideContentTemplate;
-    private SingleContentTab _singlContent;
+    private VisualTreeAsset _toggleButtonTemplate;
+
+    private IContent _singlContent;
     private const string _singleTabName = "Single";
     private const string _repeatTabName = "Repeat";
     private const string _epicTabName = "Epic";
@@ -50,6 +53,7 @@ public class QuestWindow : L2PopupWindow
         _tabHeaderTemplate = LoadAsset("Data/UI/_Elements/Game/SkillLearn/SkillTabHeader");
         _singleInsideContentTemplate = LoadAsset("Data/UI/_Elements/Game/Quest/AllContent/SingleInsideContent");
         _tabContenTemplate = LoadAsset("Data/UI/_Elements/Game/Quest/QuestTabContent");
+        _toggleButtonTemplate = LoadAsset("Data/UI/_Elements/Template/Elements/ToggleButtons/ToggleButton");
     }
 
     protected override IEnumerator BuildWindow(VisualElement root)
@@ -73,8 +77,9 @@ public class QuestWindow : L2PopupWindow
         _builderTabs.InitContentTabs(new string[5] { _singleTabName, _repeatTabName, _epicTabName , _transferTabName , _specialTabName });
         _builderTabs.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
 
-        _singlContent.SetTemplateContent(_tabContenTemplate);
-        _singlContent.SetTemplateInsideContent(_singleInsideContentTemplate);
+        
+        _singlContent.SetTemplateContent(_tabContenTemplate , new List<VisualTreeAsset>() { _singleInsideContentTemplate , _toggleButtonTemplate });
+ 
 
         _builderTabs.EventSwitchOut += OnSwitchEventOut;
 
@@ -87,6 +92,11 @@ public class QuestWindow : L2PopupWindow
         OnCenterScreen(_root);
 
         HideWindow();
+    }
+
+    public void AddData(List<QuestInstance> quests)
+    {
+        _singlContent.AddElementsToContent(quests);
     }
 
     private void OnSwitchEventOut(ITab tab, bool isTrade)

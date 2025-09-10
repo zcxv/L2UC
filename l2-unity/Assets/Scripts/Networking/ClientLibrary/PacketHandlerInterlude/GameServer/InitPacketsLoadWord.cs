@@ -127,6 +127,10 @@ public class InitPacketsLoadWord
                     SetSkillList(skillList.Skills);
                     remove.Add(i);
                     break;
+                case QuestList questList:
+                    SetQuestList(questList.Quest);
+                    remove.Add(i);
+                    break;
             }
         }
         //RemoveByListId(remove);
@@ -173,16 +177,20 @@ public class InitPacketsLoadWord
         EventProcessor.Instance.QueueEvent(() => SkillListWindow.Instance.SetSkillList(skillList));
     }
 
+    private void SetQuestList(List<QuestInstance> questList)
+    {
+        EventProcessor.Instance.QueueEvent(() => QuestWindow.Instance.AddData(questList));
+    }
+
     public async Task MoveTo(CharMoveToLocation moveToLocation)
     {
         Entity entity = await World.Instance.GetEntityNoLock(moveToLocation.ObjId);
-        Debug.Log("Добавлен пакет перемещаемся MoveTo Init ");
+
         if(entity != null)
         {
             if (entity.GetType() == typeof(NpcEntity))
             {
                 var npc = (NpcEntity)entity;
-                Debug.Log("Добавлен пакет перемещаемся есть entity 1 Entity MoveTo Init ");
                 NpcMove(npc, moveToLocation);
                 
             }

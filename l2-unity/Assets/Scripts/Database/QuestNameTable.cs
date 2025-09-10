@@ -39,6 +39,24 @@ public class QuestNameTable
         }
     }
 
+
+    public QuestName GetQuestName(int questId, int questProg)
+    {
+        if (_questNames.ContainsKey(questId))
+        {
+            foreach (var quest in _questNames[questId])
+            {
+                if (quest.QuestProg == questProg)
+                {
+                    return quest;
+                }
+            }
+        }
+        return null;
+    }
+
+  
+
     public List<QuestName> GetQuestsWithLastSubtask()
     {
         List<QuestName> quests = new List<QuestName>();
@@ -59,7 +77,7 @@ public class QuestNameTable
         {
             string dataPathE = Path.Combine(Application.streamingAssetsPath, "Data/Meta/Questname-e_interlude.txt");
             //string dataPathR = Path.Combine(Application.streamingAssetsPath, "Data/Meta/Questname-r_interlude.txt");
-            ReadArmorInterlude(dataPathE);
+            ReadQuestNameInterlude(dataPathE);
             //ReadArmorInterlude(dataPathR);
             //DebugPrint();
         }
@@ -69,7 +87,7 @@ public class QuestNameTable
         }
     }
 
-    public void ReadArmorInterlude(string dataPath)
+    public void ReadQuestNameInterlude(string dataPath)
     {
 
         using (StreamReader reader = new StreamReader(dataPath))

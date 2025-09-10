@@ -671,9 +671,20 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
     private void OnCharQuestList(byte[] data)
     {
-        //Debug.Log("GameServerPacket QuestList : Обработали но не сохранили т.к не реализован механизм ");
-        QuestList hennaInfo = new QuestList(data);
-        //Debug.Log("GameServerPacket QuestList : Завершено ");
+  
+        QuestList questPacket = new QuestList(data);
+
+        if (InitPacketsLoadWord.getInstance().IsInit)
+        {
+            InitPacketsLoadWord.getInstance().AddPacketsInit(questPacket);
+        }
+        else
+        {
+            _eventProcessor.QueueEvent(() => {
+                QuestWindow.Instance.AddData(questPacket.Quest);
+            });
+        }
+
     }
 
     private void OnCharNpcInfo(byte[] data)
