@@ -73,8 +73,12 @@ public class QuestName
     public int ContactNpcY { get => _contact_npc_y; set => _contact_npc_y = value; }
     public int ContactNpcZ { get => _contact_npc_z; set => _contact_npc_z = value; }
 
+    private string source = "";
+
     public string GetSource()
     {
+        if(!string.IsNullOrEmpty(source)) return source;
+
         if (string.IsNullOrEmpty(_entity_name))
             return string.Empty;
 
@@ -85,10 +89,9 @@ public class QuestName
             result = result.Replace(title, "").Trim();
         }
 
-        // Убираем лишние пробелы, которые могли остаться после удаления
-        result = System.Text.RegularExpressions.Regex.Replace(result, @"\s+", " ").Trim();
+        source = System.Text.RegularExpressions.Regex.Replace(result, @"\s+", " ").Trim();
 
-        return result;
+        return source;
     }
 
     public string GetLevelRange()

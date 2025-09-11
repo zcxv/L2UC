@@ -11,7 +11,7 @@ using static UnityEditor.Rendering.FilterWindow;
 
 public class ActiveSkillsHide : AbstractSkills
 {
-
+    private string[] fillBackgroundDf = { "Data/UI/Window/Skills/QuestWndPlusBtn_v2", "Data/UI/Window/Skills/Button_DF_Skills_Down_v3" };
     private VisualElement _activeSkillPanel;
     private VisualTreeAsset _templateBoxPanel;
     private VisualTreeAsset _templatePanel8x1;

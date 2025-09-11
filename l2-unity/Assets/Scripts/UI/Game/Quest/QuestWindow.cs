@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 public class QuestWindow : L2PopupWindow
 {
@@ -15,7 +17,8 @@ public class QuestWindow : L2PopupWindow
     private VisualTreeAsset _singleInsideContentTemplate;
     private VisualTreeAsset _toggleButtonTemplate;
 
-    private IContent _singlContent;
+    private IContent _questTabPanelSingle;
+    private IContent _questTabPanelRepeat;
     private const string _singleTabName = "Single";
     private const string _repeatTabName = "Repeat";
     private const string _epicTabName = "Epic";
@@ -31,7 +34,8 @@ public class QuestWindow : L2PopupWindow
         {
             _instance = this;
             _builderTabs = new BuilderTabs();
-            _singlContent = new SingleContentTab();
+            _questTabPanelSingle = new QuestTabPanel();
+            _questTabPanelRepeat = new QuestTabPanel();
         }
         else
         {
@@ -42,6 +46,9 @@ public class QuestWindow : L2PopupWindow
     private void OnDestroy()
     {
         _instance = null;
+        _builderTabs = null;
+        _questTabPanelSingle = null;
+        _questTabPanelRepeat = null;
     }
 
     protected override void LoadAssets()
@@ -64,27 +71,28 @@ public class QuestWindow : L2PopupWindow
         var dragArea = GetElementByClass("drag-area");
         DragManipulator drag = new DragManipulator(dragArea, _windowEle);
         dragArea.AddManipulator(drag);
-        var content = (VisualElement)GetElementById("content");
+        var content = (VisualElement)GetElementById("contentQuest");
 
-        var bg = (VisualElement)GetElementById("Darkener");
+        var darkenerElements = _windowEle.Query<VisualElement>("Darkener").ToList();
 
-        if (bg != null)
-        {
-             bg.style.opacity = new StyleFloat(0.9f);
-        }
-
+        darkenerElements[0].style.opacity = new StyleFloat(0.3f);
+        darkenerElements[1].style.opacity = new StyleFloat(0.9f);
+        //foreach (var bg in darkenerElements)
+       // {
+        //    bg.style.opacity = new StyleFloat(0.9f);
+        //}
 
         _builderTabs.InitContentTabs(new string[5] { _singleTabName, _repeatTabName, _epicTabName , _transferTabName , _specialTabName });
         _builderTabs.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
 
-        
-        _singlContent.SetTemplateContent(_tabContenTemplate , new List<VisualTreeAsset>() { _singleInsideContentTemplate , _toggleButtonTemplate });
- 
+
+        _questTabPanelSingle.SetTemplateContent(_tabContenTemplate , new List<VisualTreeAsset>() { _singleInsideContentTemplate , _toggleButtonTemplate });
+        _questTabPanelRepeat.SetTemplateContent(_tabContenTemplate, new List<VisualTreeAsset>() { _singleInsideContentTemplate, _toggleButtonTemplate });
 
         _builderTabs.EventSwitchOut += OnSwitchEventOut;
 
         VisualElement element = _builderTabs.GetActiveContent();
-        _singlContent.GetOrCreateTab(element);
+        _questTabPanelSingle.GetOrCreateTab(element);
 
         RegisterCloseWindowEvent("btn-close-frame");
         //RegisterCloseWindowEventByName("CloseButton");
@@ -94,9 +102,14 @@ public class QuestWindow : L2PopupWindow
         HideWindow();
     }
 
+
     public void AddData(List<QuestInstance> quests)
     {
-        _singlContent.AddElementsToContent(quests);
+        var repeatQuests = quests.Where(q => q.IsRepeat()).ToList();
+        var nonRepeatQuests = quests.Where(q => !q.IsRepeat()).ToList();
+
+        _questTabPanelRepeat.AddElementsToContent(repeatQuests);
+        _questTabPanelSingle.AddElementsToContent(nonRepeatQuests);
     }
 
     private void OnSwitchEventOut(ITab tab, bool isTrade)
@@ -107,10 +120,19 @@ public class QuestWindow : L2PopupWindow
         switch (tabName)
         {
             case _singleTabName:
-                _singlContent.GetOrCreateTab(element);
+                _questTabPanelSingle.GetOrCreateTab(element);
+                break;
+        }
+        switch (tabName)
+        {
+            case _repeatTabName:
+                _questTabPanelRepeat.GetOrCreateTab(element);
                 break;
         }
 
 
     }
+
+
+
 }

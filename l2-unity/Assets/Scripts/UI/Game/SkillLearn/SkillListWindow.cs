@@ -113,21 +113,6 @@ public class SkillListWindow : L2PopupWindow
         RegisterClickWindowEvent(_windowEle, dragArea);
         OnCenterScreen(_root);
 
-
- 
-
-
-        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_physicalSkillsRow , this);
-        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_magicSkillsRow, this);
-        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_enchancingSkillsRow, this);
-        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_debilitatingSkillsRow,  this);
-        //ToolTipManager.GetInstance().RegisterCallbackActiveSkills(_clanSkillsRow,  this);
-
-        //ToolTipManager.GetInstance().RegisterCallbackPassiveSkills(_abillitySkillsRow, this);
-        //ToolTipManager.GetInstance().RegisterCallbackPassiveSkills(_subjectSkillsRow, this);
-
-        //ToolTipManager.Instance.RegisterCallbackSkills(_abillitySkillsRow, 1 , this);
-        //ToolTipManager.Instance.RegisterCallbackSkills(_subjectSkillsRow , 1 ,  this);
     }
 
     public void SetSkillList(List<SkillInstance> list)

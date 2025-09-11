@@ -9,7 +9,7 @@ using static L2Slot;
 
 public class AbstractSkills
 {
-    protected string[] fillBackgroundDf = { "Data/UI/Window/Skills/QuestWndPlusBtn_v2", "Data/UI/Window/Skills/Button_DF_Skills_Down_v3" };
+
     protected const string _rowNameInnerPanel = "RowsVirtual";
     protected Dictionary<int, SkillSlot> _allSlots;
 
@@ -90,7 +90,7 @@ public class AbstractSkills
 
     private void RemoveSkill(List<SkillInstance> removed)
     {
-        Debug.Log("RemoveSkill: " + _allSlots.Count);
+       
         if (removed != null && removed.Count > 0)
         {
             for (int i = 0; i < removed.Count; i++)
@@ -175,17 +175,6 @@ public class AbstractSkills
             }
         }
 
-        // Удаляем пустые панели
-        //for (int i = rowPanels.Count - 1; i >= 0; i--)
-        //{
-           // var panel = rowPanels[i];
-           // var rowNameVirtual = panel.Q(_rowNameInnerPanel);
-           // if (rowNameVirtual == null || rowNameVirtual.childCount == 0)
-           // {
-            //    boxPanel.Remove(panel);
-            //    rowPanels.RemoveAt(i);
-           // }
-       // }
     }
 
 
@@ -274,7 +263,7 @@ public class AbstractSkills
             boxPanel.Add(panel);
  
         }
-        Debug.Log("Я записал элементов в список " + _allSlots.Count);
+
         return boxPanel;
     }
 
