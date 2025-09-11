@@ -4,6 +4,7 @@ public class QuestInstance
 {
     private int _questID;
     private int _flags;
+    private int _repeat;
 
     public int QuestID => _questID;
     public int Status => _flags;
@@ -12,37 +13,30 @@ public class QuestInstance
     {
         _questID = qId;
         _flags = flags;
+        _repeat = -1;
     }
 
-    public string QuestName()
+    public QuestInstance(int qId, int flags , int repeat)
     {
-        QuestName questNames = QuestNameTable.Instance.GetQuestName(_questID, _flags);
-        if (questNames != null)
-            return questNames.Main_name;
-        return "Unknown";
+        _questID = qId;
+        _flags = flags;
+        _repeat = repeat;
     }
 
-    public string QuestProgName()
+    private QuestName GetQuestName() => QuestNameTable.Instance.GetQuestName(_questID, _flags);
+
+    //public bool IsRepeat() => GetQuestName()?.Repeat == 1;
+    public bool IsRepeat()
     {
-        QuestName questNames = QuestNameTable.Instance.GetQuestName(_questID, _flags);
-        if (questNames != null)
-            return questNames.ProgName;
-        return "Unknown";
+        if (_repeat != -1) return _repeat == 1;
+        return GetQuestName()?.Repeat == 1;
     }
 
-    public string GetQuestSource()
-    {
-        QuestName questNames = QuestNameTable.Instance.GetQuestName(_questID, _flags);
-        if (questNames != null)
-            return questNames.GetSource();
-        return "Unknown";
-    }
+    public string QuestName() => GetQuestName()?.Main_name ?? "";
 
-    public string GetQuestEntity()
-    {
-        QuestName questNames = QuestNameTable.Instance.GetQuestName(_questID, _flags);
-        if (questNames != null)
-            return questNames.EntityName;
-        return "Unknown";
-    }
+    public string QuestProgName() => GetQuestName()?.ProgName ?? "";
+
+    public string GetQuestSource() => GetQuestName()?.GetSource() ?? "";
+
+    public string GetQuestEntity() => GetQuestName()?.EntityName ?? "";
 }
