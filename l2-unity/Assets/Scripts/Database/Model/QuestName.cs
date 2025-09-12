@@ -100,7 +100,7 @@ public class QuestName
         {
             return $"{_lvl_min}";
         }
-        return $"{_lvl_min} - {_lvl_max}";
+        return $"{_lvl_min} ~ {_lvl_max}";
     }
 
     public string GetRepetable()

@@ -1,9 +1,27 @@
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class DataProviderWindows :AbstractDataProvider
 {
+
+    public void AddRewardItem(string demoIconName, string demoDescName, string demoNameTexture, VisualElement container)
+    {
+        //set icon
+        VisualElement groupBoxIcon = container.Q<VisualElement>("GrowIcon");
+        VisualElement icon = container.Q<VisualElement>("icon");
+        Texture2D texture = IconManager.Instance.LoadTextureByName(demoNameTexture);
+        AddElementIfNotNull(groupBoxIcon, icon, texture);
+
+        VisualElement groupDesc = container.Q<VisualElement>("GrowDesc");
+        Label descLabel = container.Q<Label>("descLabel");
+        AddElementIfNotEmpty(groupDesc, descLabel, demoIconName);
+
+        VisualElement groupName = container.Q<VisualElement>("GrowName");
+        Label nameLabel = container.Q<Label>("nameLabel");
+        AddElementIfNotEmpty(groupName, nameLabel, demoDescName);
+    }
    public void AddLearnSkill(int skillId , int correctCost , int level , VisualElement container)
    {
         Skillgrp skill = SkillgrpTable.Instance.GetSkill(skillId , level);

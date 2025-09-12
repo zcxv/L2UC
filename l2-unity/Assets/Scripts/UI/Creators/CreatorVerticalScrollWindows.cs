@@ -1,3 +1,4 @@
+using NUnit.Framework.Interfaces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,20 +70,50 @@ public class CreatorVerticalScrollWindows : ICreator
     {
         throw new NotImplementedException();
     }
+    //Backup
+    //public void AddOtherData(List<OtherModel> allItems)
+    //{
+    // if (_content != null & allItems != null)
+    // {
+    ////_content.Clear();
+    //for (int i = 0; i < allItems.Count; i++)
+    //{
+    // AcquireData item = (AcquireData)allItems[i].GetOtherModel();
+
+    //VisualElement _slotElement = CloneTemplate(_templateItems);
+    //_dataProvider.AddLearnSkill(item.GetId(), item.GetCost(), item.GetValue1(), _slotElement);
+    //_slotElement.RegisterCallback<MouseDownEvent>(evt => HandleClickDown(evt, item), TrickleDown.TrickleDown);
+    //_content.Add(_slotElement);
+    // }
+    //}
+    //}
 
     public void AddOtherData(List<OtherModel> allItems)
     {
-        if (_content != null & allItems != null)
+        if (_content != null && allItems != null)
         {
             _content.Clear();
             for (int i = 0; i < allItems.Count; i++)
             {
-                AcquireData item = (AcquireData)allItems[i].GetOtherModel();
+                object model = allItems[i].GetOtherModel();
+                VisualElement slotElement = CloneTemplate(_templateItems);
 
-                VisualElement _slotElement = CloneTemplate(_templateItems);
-                _dataProvider.AddLearnSkill(item.GetId(), item.GetCost(), item.GetValue1(), _slotElement);
-                _slotElement.RegisterCallback<MouseDownEvent>(evt => HandleClickDown(evt, item), TrickleDown.TrickleDown);
-                _content.Add(_slotElement);
+                switch (model)
+                {
+                    case AcquireData acquireData:
+                        _dataProvider.AddLearnSkill(acquireData.GetId(), acquireData.GetCost(), acquireData.GetValue1(), slotElement);
+                        slotElement.RegisterCallback<MouseDownEvent>(evt => HandleClickDown(evt, acquireData), TrickleDown.TrickleDown);
+                        break;
+
+                    case ModelQuestDemoReward questData:
+                        _dataProvider.AddRewardItem(questData.NameReward, questData.DecReward, questData.Icon, slotElement);
+                        break;
+                    default:
+                        Debug.LogWarning($"Unknown model type: {model?.GetType().Name}");
+                        break;
+                }
+
+                _content.Add(slotElement);
             }
         }
     }
@@ -93,8 +124,6 @@ public class CreatorVerticalScrollWindows : ICreator
         {
             OnLeftClick(item.GetId(), ItemCategory.None , -1);
         }
-
-
     }
 
     private void OnLeftClick(int itemId, ItemCategory category, int position)

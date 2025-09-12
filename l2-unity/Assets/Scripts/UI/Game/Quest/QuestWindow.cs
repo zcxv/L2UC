@@ -1,6 +1,9 @@
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.Rendering.DebugUI.MessageBox;
@@ -16,14 +19,21 @@ public class QuestWindow : L2PopupWindow
     private VisualTreeAsset _tabContenTemplate;
     private VisualTreeAsset _singleInsideContentTemplate;
     private VisualTreeAsset _toggleButtonTemplate;
+    protected VisualTreeAsset _rowsTemplate;
 
     private IContent _questTabPanelSingle;
     private IContent _questTabPanelRepeat;
+    private DataProviderDetailedInfo _dataProvider;
+    private ICreator _creatorRewardTables;
+    private List<OtherModel> _questsList = new List<OtherModel>();
+
     private const string _singleTabName = "Single";
     private const string _repeatTabName = "Repeat";
     private const string _epicTabName = "Epic";
     private const string _transferTabName = "Transfer";
     private const string _specialTabName = "Special";
+
+    private VisualElement _detailedInfoElement;
     public static QuestWindow Instance
     {
         get { return _instance; }
@@ -36,6 +46,9 @@ public class QuestWindow : L2PopupWindow
             _builderTabs = new BuilderTabs();
             _questTabPanelSingle = new QuestTabPanel();
             _questTabPanelRepeat = new QuestTabPanel();
+            _dataProvider = new DataProviderDetailedInfo();
+            _creatorRewardTables = new CreatorVerticalScrollWindows();
+
         }
         else
         {
@@ -61,6 +74,7 @@ public class QuestWindow : L2PopupWindow
         _singleInsideContentTemplate = LoadAsset("Data/UI/_Elements/Game/Quest/AllContent/SingleInsideContent");
         _tabContenTemplate = LoadAsset("Data/UI/_Elements/Game/Quest/QuestTabContent");
         _toggleButtonTemplate = LoadAsset("Data/UI/_Elements/Template/Elements/ToggleButtons/ToggleButton");
+        _rowsTemplate = LoadAsset("Data/UI/_Elements/Template/Quest/TableReward/RewardItem");
     }
 
     protected override IEnumerator BuildWindow(VisualElement root)
@@ -72,23 +86,31 @@ public class QuestWindow : L2PopupWindow
         DragManipulator drag = new DragManipulator(dragArea, _windowEle);
         dragArea.AddManipulator(drag);
         var content = (VisualElement)GetElementById("contentQuest");
-
+        var detailedButton = (Button)GetElementById("DetailedButton");
+        detailedButton?.RegisterCallback<ClickEvent>(evt => OnClickButtonDetailedInfo(evt));
         var darkenerElements = _windowEle.Query<VisualElement>("Darkener").ToList();
 
+        //DetailedInfo
         darkenerElements[0].style.opacity = new StyleFloat(0.3f);
+        //Quest
         darkenerElements[1].style.opacity = new StyleFloat(0.9f);
-        //foreach (var bg in darkenerElements)
-       // {
-        //    bg.style.opacity = new StyleFloat(0.9f);
-        //}
+
+        _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
+
 
         _builderTabs.InitContentTabs(new string[5] { _singleTabName, _repeatTabName, _epicTabName , _transferTabName , _specialTabName });
         _builderTabs.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
+
+        _creatorRewardTables.InitTradeTabs(new string[] { "ALL", "Other" });
+        _creatorRewardTables.CreateTabs(_detailedInfoElement, null, _rowsTemplate);
+
 
 
         _questTabPanelSingle.SetTemplateContent(_tabContenTemplate , new List<VisualTreeAsset>() { _singleInsideContentTemplate , _toggleButtonTemplate });
         _questTabPanelRepeat.SetTemplateContent(_tabContenTemplate, new List<VisualTreeAsset>() { _singleInsideContentTemplate, _toggleButtonTemplate });
 
+        _questTabPanelRepeat.OnButtonClick += OnClickButton;
+        _questTabPanelSingle.OnButtonClick += OnClickButton;
         _builderTabs.EventSwitchOut += OnSwitchEventOut;
 
         VisualElement element = _builderTabs.GetActiveContent();
@@ -100,39 +122,134 @@ public class QuestWindow : L2PopupWindow
         OnCenterScreen(_root);
 
         HideWindow();
+        AddTestRewardData();
     }
 
-
+    private List<QuestInstance> repeatQuests;
+    private List<QuestInstance> nonRepeatQuests;
     public void AddData(List<QuestInstance> quests)
     {
-        var repeatQuests = quests.Where(q => q.IsRepeat()).ToList();
-        var nonRepeatQuests = quests.Where(q => !q.IsRepeat()).ToList();
+        //if (_questsList != null) _questsList.Clear();
+
+        repeatQuests = quests.Where(q => q.IsRepeat()).ToList();
+        nonRepeatQuests = quests.Where(q => !q.IsRepeat()).ToList();
 
         _questTabPanelRepeat.AddElementsToContent(repeatQuests);
         _questTabPanelSingle.AddElementsToContent(nonRepeatQuests);
+
+        if (!IsSuccess())
+        {
+            HideDetailedInfo();
+        } 
     }
 
+  
     private void OnSwitchEventOut(ITab tab, bool isTrade)
     {
         var tabName = tab.GetTabName();
         var element = _builderTabs.GetActiveContent();
-
+        
         switch (tabName)
         {
             case _singleTabName:
                 _questTabPanelSingle.GetOrCreateTab(element);
+                ToggleDetailedInfo(nonRepeatQuests);
                 break;
         }
         switch (tabName)
         {
             case _repeatTabName:
                 _questTabPanelRepeat.GetOrCreateTab(element);
+                ToggleDetailedInfo(repeatQuests);
                 break;
         }
 
-
     }
 
+    private void OnClickButton(int open , QuestInstance quest)
+    {
+        if(open == 0)
+        {
 
+            _dataProvider.SetDataInfo(_detailedInfoElement, quest);
+            _detailedInfoElement.style.display = DisplayStyle.Flex;
+            _creatorRewardTables.AddOtherData(_questsList);
+        }
+        else
+        {
+            _detailedInfoElement.style.display = DisplayStyle.None;
+        }
+    }
 
+    private void ToggleDetailedInfo(List<QuestInstance> list)
+    {
+        if (list == null || list.Count == 0)
+        {
+            _detailedInfoElement.style.display = DisplayStyle.None;
+        }
+    }
+
+    private void HideDetailedInfo()
+    {
+        _detailedInfoElement.style.display = DisplayStyle.None;
+    }
+
+    private void AddTestRewardData()
+    {
+        _questsList.Add(new OtherModel(new ModelQuestDemoReward("XP", "10,000", "etc_exp_point_i00")));
+        _questsList.Add(new OtherModel(new ModelQuestDemoReward("Unknown Reward", "Undecided", "etc_pi_gift_box_i04")));
+    }
+
+    private void OnClickButtonDetailedInfo(ClickEvent evt)
+    {
+        if (_detailedInfoElement.style.display == DisplayStyle.Flex)
+        {
+            _detailedInfoElement.style.display = DisplayStyle.None;
+        }
+        else
+        {
+            if (IsSuccess())
+            {
+                _detailedInfoElement.style.display = DisplayStyle.Flex;
+            }
+        }
+    }
+    
+
+    private bool IsSuccess()
+    {
+        if (_builderTabs.GetNameActiveTab() == _singleTabName)
+        {
+            if (nonRepeatQuests != null && nonRepeatQuests.Any(q => q.IsComplete() != true))
+            {
+                return true;
+            }
+        }
+        else if (_builderTabs.GetNameActiveTab() == _repeatTabName)
+        {
+            if (repeatQuests != null && repeatQuests.Any(q => q.IsComplete() != true))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+public class ModelQuestDemoReward
+{
+    private string _nameReward;
+    private string _decReward;
+    private string _icon;
+
+    public ModelQuestDemoReward(string nameReward, string decReward, string icon)
+    {
+        _nameReward = nameReward;
+        _decReward = decReward;
+        _icon = icon;
+    }
+
+    public string NameReward => _nameReward;
+    public string DecReward => _decReward;
+    public string Icon => _icon;
 }
