@@ -225,6 +225,11 @@ public abstract class AbstractCreator
        return  _activeTab.GetContentElement();
     }
 
+    public string GetNameActiveTab()
+    {
+        return _activeTab.GetTabName();
+    }
+
 }
 
 

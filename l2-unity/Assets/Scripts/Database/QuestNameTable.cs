@@ -140,7 +140,7 @@ public class QuestNameTable
         quest.QuestProg = questProg;
         quest.Main_name = mainName;
         quest.ProgName = progName;
-        quest.Description = description;
+        quest.Description = DatUtils.CleanupStringNewN(description);
         quest.DescriptionToolTip = descriptionToolTips;
         quest.QuestType = questType;
         quest.LvlMin = lvlMin;

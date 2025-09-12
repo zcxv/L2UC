@@ -23,6 +23,12 @@ public class QuestInstance
         _repeat = repeat;
     }
 
+    public bool IsComplete()
+    {
+        return _flags == 0;
+
+    }
+
     private QuestName GetQuestName() => QuestNameTable.Instance.GetQuestName(_questID, _flags);
 
     //public bool IsRepeat() => GetQuestName()?.Repeat == 1;
@@ -34,9 +40,13 @@ public class QuestInstance
 
     public string QuestName() => GetQuestName()?.Main_name ?? "";
 
+    public string LevelRange() => GetQuestName()?.GetLevelRange() ?? "";
+
     public string QuestProgName() => GetQuestName()?.ProgName ?? "";
 
     public string GetQuestSource() => GetQuestName()?.GetSource() ?? "";
 
     public string GetQuestEntity() => GetQuestName()?.EntityName ?? "";
+
+    public string GetDescription() => GetQuestName()?.Description ?? "";
 }
