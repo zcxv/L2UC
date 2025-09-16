@@ -1,7 +1,10 @@
+using FMOD.Studio;
 using L2_login;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ItemSendLogin : IData
 {
@@ -21,11 +24,35 @@ public class ItemSendLogin : IData
 
     private void Encrypt(ClientPacket packet , bool encrypt)
     {
-        if (encrypt)
+        try
         {
-            byte[] data = packet.GetData();
-            NewCrypt.appendChecksum(data);
+            if (encrypt)
+            {
+                byte[] data = packet.GetData();
+
+                if (packet.GetPacketType() == (byte)LoginInterludeClientPacketTYpe.AuthGameGuard)
+                {
+
+                }else if (packet.GetPacketType() ==(byte)LoginInterludeClientPacketTYpe.RequestAuthLogin)
+                {
+
+                }
+                else if (packet.GetPacketType() == (byte)LoginInterludeClientPacketTYpe.RequestServerList)
+                {
+
+                }
+                else
+                {
+                    NewCrypt.appendChecksum(data);
+                }
+ 
+            }
         }
+        catch (Exception ex)
+        {
+            Debug.LogError("ItemSendLogin->Encrypt: " + ex.Message);
+        }
+
     }
 
     private void Blowfish(byte[] data, bool blowfish)

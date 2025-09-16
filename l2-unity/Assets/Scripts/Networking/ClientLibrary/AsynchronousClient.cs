@@ -1,9 +1,10 @@
-using UnityEngine;
+using FMOD.Studio;
 using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using FMOD.Studio;
+using UnityEngine;
+using static UnityEditor.U2D.ScriptablePacker;
 
 public class AsynchronousClient {
     private Socket _socket;
@@ -110,8 +111,8 @@ public class AsynchronousClient {
         }
 
 
-        Debug.Log("Connecting...");
-
+        Debug.Log("Connecting..." + " IP " + ipAddress.ToString() + " port " + _port);
+          
         IAsyncResult result = _socket.BeginConnect(ipAddress, _port, null, null);
 
         bool success = result.AsyncWaitHandle.WaitOne(5000, true);
@@ -186,32 +187,34 @@ public class AsynchronousClient {
         }
 
     }
-    public void SendPacket(ClientPacket packet) {
-        try {
+    public void SendPacket(ClientPacket packet)
+    {
+        try
+        {
+            byte[] data = packet.GetData();
+            int totalSize = data.Length + 2;
+            if (totalSize > ushort.MaxValue) throw new InvalidOperationException("Packet too large");
 
-            using (NetworkStream stream = new NetworkStream(_socket)) {
 
-                byte[] tt = packet.GetData();
-                int size = tt.Length + 2;
-                short number = (short)size;
-                byte[] numberBytes = BitConverter.GetBytes(number);
-                short converted = BitConverter.ToInt16(numberBytes);
+            ushort sizeHeader = (ushort)totalSize;
+            byte[] header = BitConverter.GetBytes(sizeHeader);
 
-               // Debug.Log(StringUtils.ByteArrayToString(packet.GetData()));
-               // Debug.Log("Size byte " + packet.GetData().Length);
-                //2 bits Header size
-                stream.Write(numberBytes, 0 , 2);
-                stream.Flush();
-                stream.Write(tt, 0, packet.GetData().Length);
-                stream.Flush();
-
+            // Предполагаем, что stream хранится и переиспользуется в поле класса, чтобы не создавать каждый раз
+            using (NetworkStream stream = new NetworkStream(_socket, ownsSocket: false))
+            {
+                stream.Write(header, 0, 2);
+                stream.Write(data, 0, data.Length);
             }
-        } catch (IOException e) {
+
+            Debug.Log("Sent final: [" + string.Join(",", data) + "]");
+        }
+        catch (Exception e)
+        {
             Debug.Log(e.ToString());
         }
     }
 
 
 
-    
+
 }

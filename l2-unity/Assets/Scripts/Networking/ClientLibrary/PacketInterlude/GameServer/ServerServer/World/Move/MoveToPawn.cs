@@ -35,7 +35,7 @@ public class MoveToPawn : ServerPacket
         _objectId = ReadI();
         //example npcId merchant
         _targetId = ReadI();
-
+        
         _distance = VectorUtils.ConvertL2jDistance(ReadI());
 
         _x = ReadI();

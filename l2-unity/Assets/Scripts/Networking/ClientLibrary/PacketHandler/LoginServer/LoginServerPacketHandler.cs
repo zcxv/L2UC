@@ -66,7 +66,7 @@ public class LoginServerPacketHandler : ServerPacketHandler
         GGAuth packet = new GGAuth(data);
         //Debug.Log("GGAuth session id server " + packet.SessionId + " | use session id client " + LoginClient.Instance.GetGessionId());
        // Debug.Log("Send AuthPacket account " + LoginClient.Instance.Account + "passwd  " + LoginClient.Instance.Password);
-        SendLoginDataQueue.Instance().AddItem(CreatorPackets.CreateAuthPacket(LoginClient.Instance.Account , LoginClient.Instance.Password), true, true);
+        SendLoginDataQueue.Instance().AddItem(CreatorPackets.CreateAuthPacket(LoginClient.Instance.Account , LoginClient.Instance.Password , packet.Response), true, true);
     }
 
 

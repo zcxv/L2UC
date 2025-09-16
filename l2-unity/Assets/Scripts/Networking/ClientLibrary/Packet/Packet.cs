@@ -22,7 +22,7 @@ public abstract class Packet {
         _packetType = data[0];
         _packetData = data;
 
-       // Debug.Log("Sent: [" + string.Join(",", _packetData) + "]");
+        Debug.Log("Sent: [" + string.Join(",", _packetData) + "]");
     }
 
     public byte[] GetData() {

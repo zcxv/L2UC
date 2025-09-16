@@ -8,6 +8,6 @@ public class RequestServerListPacket : ClientPacket {
         WriteI(sessionKey1);
         WriteI(sessionKey2);
 
-        BuildPacket();
+        BuildPacketExperimental(0);
     }
 }

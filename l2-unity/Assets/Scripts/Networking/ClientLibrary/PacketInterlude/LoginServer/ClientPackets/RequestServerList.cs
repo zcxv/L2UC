@@ -9,7 +9,8 @@ public class RequestServerList : ClientPacket
 
         WriteI(_sessionKey1);
         WriteI(_sessionKey2);
-
-        BuildPacket();
+        WriteI(0);
+        WriteI(0);
+        BuildPacketExperimental(0);
     }
 }
