@@ -1,6 +1,15 @@
+using Org.BouncyCastle.Asn1;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Security;
 using System;
-using System.Security.Cryptography;
+using System.Collections.Generic;
+using System.IO;
 using System.Numerics;
+using System.Security.Cryptography;
+using System.Text;
 using UnityEngine;
 
 public class RSACrypt
@@ -10,13 +19,13 @@ public class RSACrypt
     private RSAParameters _rsaParams;
     // hardcoded modulus
     private byte[] _exponent = new byte[] { 1, 0, 1 };
-
+    private byte[] rsaKey;
 
     public RSACrypt(byte[] exponent, bool needUnscramble) {
         if(needUnscramble) {
             UnscrambledRSAKey(exponent);
         }
-
+        rsaKey = exponent;
         InitRSACrypt(exponent);
     }
 
@@ -43,7 +52,35 @@ public class RSACrypt
         }
     }
 
-    public byte[] EncryptRSANoPadding(byte[] block) {
+    public byte[] EncryptRSABlockNoPaddingBoundleCastle( byte[] plain)
+    {
+
+        RsaKeyParameters publicKey  = LoadPublicKey(rsaKey);
+        var engine = new RsaEngine();
+        engine.Init(true, publicKey);
+
+        int modulusBytes = (publicKey.Modulus.BitLength + 7) / 8;
+        int chunkSize = modulusBytes - 1; // гарантируем, что значение < modulus
+
+        var outBlocks = new List<byte>();
+
+        for (int offset = 0; offset < plain.Length; offset += chunkSize)
+        {
+            int len = Math.Min(chunkSize, plain.Length - offset);
+            byte[] chunk = new byte[modulusBytes]; // left-padded block
+            // копируем chunk в конец блока
+            Array.Copy(plain, offset, chunk, modulusBytes - len, len);
+
+            byte[] encrypted = engine.ProcessBlock(chunk, 0, chunk.Length); // длина обычно = modulusBytes
+            outBlocks.AddRange(encrypted);
+        }
+
+        return outBlocks.ToArray();
+    
+
+    }
+
+public byte[] EncryptRSANoPadding(byte[] block) {
         try {
             // Encrypt without padding
             return _rsaProvider.Encrypt(block, false);
@@ -92,5 +129,14 @@ public class RSACrypt
         }
 
         Debug.Log($"Unscrambled RSA {rsaKey.Length} : {StringUtils.ByteArrayToString(rsaKey)}");
+    }
+
+    public static RsaKeyParameters LoadPublicKey(byte[] modBytes)
+    {
+        // Используем BouncyCastle BigInteger(1, bytes) чтобы трактовать как положительное число
+        var modulus = new Org.BouncyCastle.Math.BigInteger(1, modBytes);
+        var exponent = new Org.BouncyCastle.Math.BigInteger(1, new byte[] { 0x01, 0x00, 0x01 }); // 65537
+
+       return  new Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters(false, modulus, exponent);
     }
 }

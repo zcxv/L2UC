@@ -1,3 +1,4 @@
+using L2_login;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,8 +15,10 @@ public class AuthGameGuard : ClientPacket
         WriteI(gg[2]);
         WriteI(gg[3]);
 
-        //WriteB(0);
+        WriteB(0);
+        WriteB(0);
+        WriteB(0);
 
-        BuildPacket();
+        BuildPacketExperimental(1);
     }
 }

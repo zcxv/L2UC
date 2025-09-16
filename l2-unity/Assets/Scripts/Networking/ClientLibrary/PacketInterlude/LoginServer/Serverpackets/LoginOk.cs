@@ -31,5 +31,8 @@ public class LoginOk : ServerPacket
     {
         _sessionKey1 = ReadI();
         _sessionKey2 = ReadI();
+
+        Debug.Log("session key 1 " + _sessionKey1);
+        Debug.Log("session key 2 " + _sessionKey2);
     }
 }

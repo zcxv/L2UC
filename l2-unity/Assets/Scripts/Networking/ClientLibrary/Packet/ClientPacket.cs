@@ -1,8 +1,11 @@
+using FMOD.Studio;
+using L2_login;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -63,6 +66,12 @@ public abstract class ClientPacket : Packet {
         _buffer.AddRange(data);
     }
 
+    public void WriteCheckSum()
+    {
+        NewCrypt.AppendChecksumWord(_buffer, 0, 4, true);
+    }
+
+
     public void WriteF(float i) {
         byte[] data = BitConverter.GetBytes(i);
         Array.Reverse(data);
@@ -85,6 +94,36 @@ public abstract class ClientPacket : Packet {
         byte[] array = _buffer.ToArray();
         SetData(array);
     }
+
+    protected void BuildPacketExperimental(int addZeroBytes)
+    {
+        try
+        {
+            _buffer.Insert(0, _packetType);
+
+            //Padding for balance checksum equls 0
+            WriteCheckSum();
+
+            // Padding for checksum
+            WriteI(0);
+
+            for(int i=0; i < addZeroBytes; i++)
+            {
+                WriteB((byte)0);
+            }
+
+            PadBuffer();
+
+            byte[] array = _buffer.ToArray();
+            SetData(array);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("ClientPacket->BuildPacketExperimental: " + ex.Message);
+        }
+
+    }
+
     //Acis Ignores packet alignment to 8 or 4
     //Necessary for correct sending of packets since there is no alignment, and Acis checks that each item is equal to 8 bytes without extra zeros
     protected void BuildPacketNoPad()

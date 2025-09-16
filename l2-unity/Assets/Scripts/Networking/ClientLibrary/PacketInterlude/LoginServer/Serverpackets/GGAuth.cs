@@ -13,8 +13,8 @@ using UnityEngine;
 //buffer.writeInt(0);
 public class GGAuth : ServerPacket
 {
-    private int sessionId;
-    public int SessionId { get { return sessionId; } }
+    private int responce;
+    public int Response { get { return responce; } }
     public GGAuth(byte[] d) : base(d)
     {
         Parse();
@@ -23,12 +23,11 @@ public class GGAuth : ServerPacket
 
     public override void Parse()
     {
-        var sessionId1 = ReadB();
-        var response = ReadI();
+        responce  = ReadI();
         var sessionId3 = ReadI();
         var sessionId4 = ReadI();
         var sessionId5 = ReadI();
         var sessionId6 = ReadI();
-        Debug.Log("GGAuth response " + response);
+        Debug.Log("GGAuth response " + responce);
     }
 }
