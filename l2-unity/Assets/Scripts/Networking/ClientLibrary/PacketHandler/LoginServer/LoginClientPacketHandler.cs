@@ -83,11 +83,7 @@ public class LoginClientPacketHandler : ClientPacketHandler {
         SendPacket(packet);
     }
 
-    public void SendRequestServerList() {
-        RequestServerListPacket packet = new RequestServerListPacket(LoginClient.Instance.SessionKey1, LoginClient.Instance.SessionKey2);
 
-        SendPacket(packet);
-    }
 
     public void SendRequestServerLogin(int serverId) {
         RequestServerLoginPacket packet = new RequestServerLoginPacket(serverId, LoginClient.Instance.SessionKey1, LoginClient.Instance.SessionKey2);

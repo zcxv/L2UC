@@ -52,7 +52,7 @@ public class SystemMessageWindow : L2PopupWindow
 
     private void ClickEventOk(ClickEvent evt)
     {
-        OnButtonOk?.Invoke(); // Âûחûגאול סמבûעטו
+        OnButtonOk?.Invoke(); 
         base.HideWindow();
     }
 

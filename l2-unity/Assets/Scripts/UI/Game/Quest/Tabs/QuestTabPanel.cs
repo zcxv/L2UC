@@ -29,6 +29,8 @@ public class QuestTabPanel : AbstractToggle, IContent
         _questListButtons.Clear();
     }
 
+
+
     public void AddElementsToContent<T>(params T[] elements)
     {
         UnregisterCallbacks();
@@ -38,11 +40,11 @@ public class QuestTabPanel : AbstractToggle, IContent
         _selectedData = new int[_questList.Count];
         _insideContent.Clear();
 
-        if (_questList.Count == 0) return;
-
         var countQuestLabel = _container.Q<Label>("LabelCountQuest");
         if (countQuestLabel != null)
             countQuestLabel.text = $"({_questList.Count}/40)";
+
+        if (_questList.Count == 0) return;
 
         for (int i = 0; i < _questList.Count; i++)
         {

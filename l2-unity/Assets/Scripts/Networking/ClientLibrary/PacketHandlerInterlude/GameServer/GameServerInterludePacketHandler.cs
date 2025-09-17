@@ -123,6 +123,10 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
                 OnCharShortCutRegister(itemQueue.DecodeData());
                 break;
+            case GameInterludeServerPacketType.ShortCutDel:
+
+                OnCharShortCutDel(itemQueue.DecodeData());
+                break;
             case GameInterludeServerPacketType.SocialAction:
 
                 OnSocialAction(itemQueue.DecodeData());
@@ -635,6 +639,12 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     {
         ShortCutRegister shortCutPacket = new ShortCutRegister(data);
         EventProcessor.Instance.QueueEvent(() => PlayerShortcuts.Instance.RegisterShortcut(shortCutPacket.Shortcut));
+    }
+
+    private void OnCharShortCutDel(byte[] data)
+    {
+        ShortCutDel shortCutDel = new ShortCutDel(data);
+        EventProcessor.Instance.QueueEvent(() => PlayerShortcuts.Instance.RemoveShotcutLocally(shortCutDel.Slot));
     }
 
     private void OnSocialAction(byte[] data)

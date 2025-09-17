@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -20,6 +21,7 @@ public class QuestWindow : L2PopupWindow
     private VisualTreeAsset _singleInsideContentTemplate;
     private VisualTreeAsset _toggleButtonTemplate;
     protected VisualTreeAsset _rowsTemplate;
+    private QuestInstance _selectQuest;
 
     private IContent _questTabPanelSingle;
     private IContent _questTabPanelRepeat;
@@ -87,7 +89,10 @@ public class QuestWindow : L2PopupWindow
         dragArea.AddManipulator(drag);
         var content = (VisualElement)GetElementById("contentQuest");
         var detailedButton = (Button)GetElementById("DetailedButton");
+        var abortButton = (Button)GetElementById("AbortButton");
+
         detailedButton?.RegisterCallback<ClickEvent>(evt => OnClickButtonDetailedInfo(evt));
+        abortButton?.RegisterCallback<ClickEvent>(evt => OnClickAbortButton(evt));
         var darkenerElements = _windowEle.Query<VisualElement>("Darkener").ToList();
 
         //DetailedInfo
@@ -96,6 +101,9 @@ public class QuestWindow : L2PopupWindow
         darkenerElements[1].style.opacity = new StyleFloat(0.9f);
 
         _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
+        var windowTemplate = (VisualElement)GetElementById("windowTemplate");
+        SetMouseOverDetectionSubElement(_detailedInfoElement);
+        SetMouseOverDetectionRefreshTargetElement(windowTemplate);
 
 
         _builderTabs.InitContentTabs(new string[5] { _singleTabName, _repeatTabName, _epicTabName , _transferTabName , _specialTabName });
@@ -170,13 +178,14 @@ public class QuestWindow : L2PopupWindow
     {
         if(open == 0)
         {
-
+            _selectQuest = quest;
             _dataProvider.SetDataInfo(_detailedInfoElement, quest);
             _detailedInfoElement.style.display = DisplayStyle.Flex;
             _creatorRewardTables.AddOtherData(_questsList);
         }
         else
         {
+            _selectQuest = null;
             _detailedInfoElement.style.display = DisplayStyle.None;
         }
     }
@@ -214,7 +223,36 @@ public class QuestWindow : L2PopupWindow
             }
         }
     }
-    
+
+    private void OnClickAbortButton(ClickEvent evt)
+    {
+        SystemMessageWindow.Instance.OnButtonOk += OkAbort;
+        SystemMessageWindow.Instance.OnButtonClosed += OnCancel;
+        SystemMessageWindow.Instance.ShowWindowDialogYesOrNot("Do you really want to abort the quest?");
+    }
+
+
+    private void OkAbort()
+    {
+        if(_selectQuest != null)
+        {
+            var sendPaket = CreatorPacketsUser.CreateRequestQuestAbort(_selectQuest.QuestID);
+            bool enable = GameClient.Instance.IsCryptEnabled();
+            SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
+            CancelEvent();
+        }
+
+    }
+
+    public void OnCancel()
+    {
+        CancelEvent();
+    }
+    private void CancelEvent()
+    {
+        SystemMessageWindow.Instance.OnButtonOk -= OkAbort;
+        SystemMessageWindow.Instance.OnButtonClosed -= OnCancel;
+    }
 
     private bool IsSuccess()
     {

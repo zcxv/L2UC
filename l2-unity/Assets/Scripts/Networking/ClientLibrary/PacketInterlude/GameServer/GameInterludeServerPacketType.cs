@@ -28,6 +28,7 @@ public enum GameInterludeServerPacketType : byte
     TutorialShowHtml = 0xa0,
     ShortCutInit = 0x45,
     ShortCutRegister = 0x44,
+    ShortCutDel = 0x46,
     HennaInfo = 0xE4,
     QuestList = 0x80,
     NpcInfo = 0x16,

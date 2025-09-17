@@ -40,6 +40,7 @@ public class RequestAuthLogin : ClientPacket
             WriteI(8);
             WriteI(0);
 
+            //BuildPacket();
             BuildPacketExperimental(4);
 
         }
