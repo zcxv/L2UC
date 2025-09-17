@@ -30,14 +30,7 @@ public class ItemSendLogin : IData
             {
                 byte[] data = packet.GetData();
 
-                if (packet.GetPacketType() == (byte)LoginInterludeClientPacketTYpe.AuthGameGuard)
-                {
-
-                }else if (packet.GetPacketType() ==(byte)LoginInterludeClientPacketTYpe.RequestAuthLogin)
-                {
-
-                }
-                else if (packet.GetPacketType() == (byte)LoginInterludeClientPacketTYpe.RequestServerList)
+                if (packet.GetPacketType() == (byte)LoginInterludeClientPacketTYpe.AuthGameGuard | packet.GetPacketType() == (byte)LoginInterludeClientPacketTYpe.RequestAuthLogin | packet.GetPacketType() == (byte)LoginInterludeClientPacketTYpe.RequestServerList)
                 {
 
                 }

@@ -11,6 +11,7 @@ public class RequestServerList : ClientPacket
         WriteI(_sessionKey2);
         WriteI(0);
         WriteI(0);
+        //BuildPacket();
         BuildPacketExperimental(0);
     }
 }

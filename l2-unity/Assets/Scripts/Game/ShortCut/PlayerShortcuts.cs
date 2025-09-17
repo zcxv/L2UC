@@ -145,7 +145,7 @@ public class PlayerShortcuts : MonoBehaviour
         return null;
     }
 
-    private void RemoveShotcutLocally(int slot)
+    public void RemoveShotcutLocally(int slot)
     {
         SkillbarWindow.Instance.RemoveShortcut(slot);
         _shortcuts.Remove(slot);
@@ -192,7 +192,7 @@ public class PlayerShortcuts : MonoBehaviour
             return;
         }
 
-        //GameClient.Instance.ClientPacketHandler.RequestAddShortcut(oldShortcut.Type, oldShortcut.Id, newSlot);
+
         Debug.Log("Event Reuqets Add ShrtCut 2 ");
         var sendPaket = CreatorPacketsUser.CreateRegShortCut(oldShortcut.Type, newSlot , oldShortcut.Id, 0);
         bool enable = GameClient.Instance.IsCryptEnabled();
@@ -201,14 +201,13 @@ public class PlayerShortcuts : MonoBehaviour
         // Swap slots
         if (newShortcut != null)
         {
-            // GameClient.Instance.ClientPacketHandler.RequestAddShortcut(newShortcut.Type, newShortcut.Id, oldSlot);
-
             var sendPaket1 = CreatorPacketsUser.CreateRegShortCut(newShortcut.Type, oldSlot, newShortcut.Id, 0);
             bool enable1 = GameClient.Instance.IsCryptEnabled();
             SendGameDataQueue.Instance().AddItem(sendPaket1, enable1, enable1);
-
-
-            Debug.Log("Event Reuqets Add ShrtCut 4");
+        }
+        else
+        {
+            DeleteShortcut(oldSlot, true);
         }
 
         

@@ -32,6 +32,7 @@ public class FilterAccessType
         { GameInterludeServerPacketType.BuyListSeed, true },
         { GameInterludeServerPacketType.ShortCutInit, true },
         { GameInterludeServerPacketType.ShortCutRegister, true },
+        { GameInterludeServerPacketType.ShortCutDel, true },
         { GameInterludeServerPacketType.HennaInfo, true },
         { GameInterludeServerPacketType.QuestList, true },
         { GameInterludeServerPacketType.NpcInfo, true },

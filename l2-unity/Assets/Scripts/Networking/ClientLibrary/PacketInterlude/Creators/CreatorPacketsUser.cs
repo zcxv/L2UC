@@ -61,6 +61,11 @@ public class CreatorPacketsUser
         return new RequestSellItem(listId, buyList);
     }
 
+    public static RequestQuestAbort CreateRequestQuestAbort(int questId)
+    {
+        return new RequestQuestAbort(questId);
+    }
+
     public static SendWarehouseDepositList CreateWHDepositList(List<Product> depositList)
     {
         return new SendWarehouseDepositList(depositList);

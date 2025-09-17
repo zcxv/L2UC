@@ -206,7 +206,7 @@ public class AsynchronousClient {
                 stream.Write(data, 0, data.Length);
             }
 
-            Debug.Log("Sent final: [" + string.Join(",", data) + "]");
+            //Debug.Log("Sent final: [" + string.Join(",", data) + "]");
         }
         catch (Exception e)
         {

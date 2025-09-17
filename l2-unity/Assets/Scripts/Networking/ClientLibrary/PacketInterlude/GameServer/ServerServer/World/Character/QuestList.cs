@@ -25,7 +25,7 @@ public class QuestList : ServerPacket
             int questId = ReadI();
             int flags = ReadI();
             _allQuest.Add(new QuestInstance(questId, flags));
-            //_allQuest.Add(new QuestInstance(2, flags));
+            //_allQuest.Add(new QuestInstance(2, 1));
             //_allQuest.Add(new QuestInstance(3, flags));
             //_allQuest.Add(new QuestInstance(6, flags, 1));
         }

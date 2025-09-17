@@ -103,6 +103,23 @@ public abstract class L2Window : MonoBehaviour
  
     }
 
+    public void SetMouseOverDetectionSubElement(VisualElement subElement)
+    {
+        if(_mouseOverDetection != null && subElement != null)
+        {
+            _mouseOverDetection.SetSubElement(subElement);
+        }
+    }
+
+    public void SetMouseOverDetectionRefreshTargetElement(VisualElement root)
+    {
+        if (_mouseOverDetection != null && root != null)
+        {
+            _mouseOverDetection.RefreshTargetElement(root);
+        }
+    }
+
+
 
     protected void DisableEventOnOver(VisualElement _windowEle)
     {
