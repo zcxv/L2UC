@@ -36,6 +36,15 @@ public class QuestWindow : L2PopupWindow
     private const string _specialTabName = "Special";
 
     private VisualElement _detailedInfoElement;
+
+    private Label _labelAutoNotify;
+    private VisualElement _imageBoxAutoNotify;
+    private bool _isAutoNotifyCheckeNotify = false;
+
+
+    private Label _labelTracking;
+    private VisualElement _imageBoxTracking;
+    private bool _isAutoNotifyCheckedTracking = true;
     public static QuestWindow Instance
     {
         get { return _instance; }
@@ -91,8 +100,21 @@ public class QuestWindow : L2PopupWindow
         var detailedButton = (Button)GetElementById("DetailedButton");
         var abortButton = (Button)GetElementById("AbortButton");
 
+        _labelAutoNotify = (Label)GetElementById("labelCancelAutoNotify");
+        _imageBoxAutoNotify = (VisualElement)GetElementById("CheckBox1");
+
+        _labelTracking = (Label)GetElementById("labelTracking");
+        _imageBoxTracking = (VisualElement)GetElementById("CheckBox2");
+
+
         detailedButton?.RegisterCallback<ClickEvent>(evt => OnClickButtonDetailedInfo(evt));
         abortButton?.RegisterCallback<ClickEvent>(evt => OnClickAbortButton(evt));
+
+        _imageBoxAutoNotify?.RegisterCallback<ClickEvent>(evt => OnClickCheckBoxAutoNotify(evt));
+        _imageBoxTracking?.RegisterCallback<ClickEvent>(evt => OnClickCheckBoxAutoTracking(evt));
+        _labelAutoNotify?.RegisterCallback<ClickEvent>(evt => OnClickCheckBoxAutoNotify(evt));
+        _labelTracking?.RegisterCallback<ClickEvent>(evt => OnClickCheckBoxAutoTracking(evt));
+
         var darkenerElements = _windowEle.Query<VisualElement>("Darkener").ToList();
 
         //DetailedInfo
@@ -223,6 +245,27 @@ public class QuestWindow : L2PopupWindow
             }
         }
     }
+
+    private void OnClickCheckBoxAutoNotify(ClickEvent evt)
+    {
+        if (_labelAutoNotify != null && _imageBoxAutoNotify != null)
+        {
+            _isAutoNotifyCheckeNotify = !_isAutoNotifyCheckeNotify;
+            var texture = _isAutoNotifyCheckeNotify ? IconManager.Instance.GetCheckedCheckBoxTexture() : IconManager.Instance.GetUncheckedCheckBoxTexture();
+            _imageBoxAutoNotify.style.backgroundImage = new StyleBackground(texture);
+        }
+    }
+
+    private void OnClickCheckBoxAutoTracking(ClickEvent evt)
+    {
+        if (_labelTracking != null && _imageBoxTracking != null)
+        {
+            _isAutoNotifyCheckedTracking = !_isAutoNotifyCheckedTracking;
+            var texture = _isAutoNotifyCheckedTracking ? IconManager.Instance.GetCheckedCheckBoxTexture() : IconManager.Instance.GetUncheckedCheckBoxTexture();
+            _imageBoxTracking.style.backgroundImage = new StyleBackground(texture);
+        }
+    }
+
 
     private void OnClickAbortButton(ClickEvent evt)
     {

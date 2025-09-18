@@ -6,9 +6,12 @@ using UnityEngine;
 
 public class IconManager
 {
-    private string _iconFolder = "Data\\SysTextures\\Icon";
-    private string _cursorFolder = "Data\\UI\\Assets\\Cursor";
-    private string _defaultNameIconBackground = "ItemWindow_DF_SlotBox_Default";
+    private const string _iconFolder = "Data\\SysTextures\\Icon";
+    private const string _cursorFolder = "Data\\UI\\Assets\\Cursor";
+    private const string _defaultNameIconBackground = "ItemWindow_DF_SlotBox_Default";
+    private const string _checkedCheckBoxTexture = "Data/UI/Quest/CheckBox_checked";
+    private const string _uncheckedCheckBoxTexture =  "Data/UI/Quest/CheckBoxQuest";
+    
 
 
     private Texture2D _noImageIcon;
@@ -153,6 +156,16 @@ public class IconManager
         return LoadTextureByName(_defaultNameIconBackground);
     }
 
+    public Texture2D GetCheckedCheckBoxTexture()
+    {
+        return Resources.Load<Texture2D>(_checkedCheckBoxTexture);
+
+    }
+
+    public Texture2D GetUncheckedCheckBoxTexture()
+    {
+        return Resources.Load<Texture2D>(_uncheckedCheckBoxTexture);
+    }
 
 
     public Texture2D LoadCursorByName(string name)
