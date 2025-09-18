@@ -80,32 +80,40 @@ public class NpcCursorManager : MonoBehaviour
 
     }
 
-   private  void OnMouseEnterTest(ObjectData obj)
+    private void OnMouseEnterTest(ObjectData obj)
     {
-        if(obj.Entity != null)
+        if (obj?.Entity == null) return;
+
+        var entity = obj.Entity;
+
+        switch (entity)
         {
-            Entity entity  = obj.Entity;
-            if (entity.GetType() == typeof(MonsterEntity))
-            {
-                if(_currentCursor == -1 | _currentCursor != 1)
+            case MonsterEntity _:
+                if (_currentCursor != 1)
                 {
                     _currentCursor = 1;
                     Cursor.SetCursor(_hoverCursorAtk, Vector2.zero, CursorMode.Auto);
-                    //Debug.Log("Cursor Moster Set ");
                 }
-                
-            }
-            else if(entity.GetType() == typeof(NpcEntity))
-            {
-                if (_currentCursor == -1 | _currentCursor != 2)
+                break;
+
+            case NpcEntity _:
+
+                if (L2GameUI.Instance.MouseOverUI)
+                {
+                    return;
+                }
+
+                if (_currentCursor != 2)
                 {
                     _currentCursor = 2;
                     Cursor.SetCursor(_hoverCursorTalk, Vector2.zero, CursorMode.Auto);
                 }
-                    
-            }
+                break;
+
+            default:
+
+                break;
         }
-  
     }
 
     private void OnMouseEnter()
