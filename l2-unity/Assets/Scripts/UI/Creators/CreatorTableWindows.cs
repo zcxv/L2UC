@@ -534,25 +534,32 @@ public class CreatorTableWindows : ICreatorTables
     public void SelectRow(IEnumerable<int> selectedItems)
     {
         var indexRow = selectedItems.FirstOrDefault();
-        _currentSelectIndex = indexRow;
+
 
         var selectedVisualElement = _listView.Q<VisualElement>(className: "unity-collection-view__item--selected");
-        ClickRow(selectedVisualElement , _currentSelectIndex);
+
+        if(ClickRow(selectedVisualElement , indexRow))
+        {
+            _currentSelectIndex = indexRow;
+        }
     }
 
  
 
-    public void ClickRow(VisualElement _selectListColumn , int currentSelectIndex)
+    public bool ClickRow(VisualElement _selectListColumn , int currentSelectIndex)
     {
         UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
         if (_selectListColumn != null)
         {
-            SetSelectElement(_selectListColumn ,  currentSelectIndex);
+            return SetSelectElement(_selectListColumn ,  currentSelectIndex);
         }
+        return false;
     }
 
-    private void SetSelectElement(VisualElement _selectListColumn , int  currentSelectIndex)
+    private bool  SetSelectElement(VisualElement _selectListColumn , int  currentSelectIndex)
     {
+        bool isSelect = false;
+
         for (int i = 0; i < _selectListColumn.childCount; i++)
         {
             VisualElement row1 = _selectListColumn[i];
@@ -560,28 +567,32 @@ public class CreatorTableWindows : ICreatorTables
             if (row1.childCount > 0)
             {
 
+                Label labeltext = row1.Q<Label>("labelText");
+                if (labeltext == null | string.IsNullOrEmpty(labeltext.text)) break;
+
                 if (_lastSelectElement != null && currentSelectIndex != _lastSelectIndex)
                 {
                     VisualElement last_row1 = _lastSelectElement[i];
                     VisualElement highlightLast = last_row1.Q<VisualElement>("highlight");
                     VisualElement highlightLastTile = last_row1.Q<VisualElement>("highlightTile");
                     ResetSelectInner(highlightLast, highlightLastTile);
-                    Debug.Log("Очищаю элемент " + _lastSelectIndex);
+
                 }
 
+
+
                 ShowSelectHighLight(row1, _selectListColumn.childCount - 1, i);
+                isSelect = true;
             }
         }
 
-        Debug.Log("LastIdex select " + _lastSelectIndex);
-        Debug.Log("Current Index Select " + _currentSelectIndex);
 
-        if (_lastSelectElement != _selectListColumn)
+        if (_lastSelectElement != _selectListColumn & isSelect == true)
         {
             _lastSelectElement = _selectListColumn;
             _lastSelectIndex = currentSelectIndex;
         }
-
+        return isSelect;
     }
 
    

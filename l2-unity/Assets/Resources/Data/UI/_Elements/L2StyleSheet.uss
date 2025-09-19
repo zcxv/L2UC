@@ -4003,14 +4003,25 @@
 }
 
 
+/* применить к конкретному полю: <DropdownField class="small-dropdown" /> */
+/* или заменить .small-dropdown на тип DropdownField для глобального эффекта */
+
+.small-dropdown .unity-base-field__input {
+  height: 16px;
+  min-height: 16px;
+  max-height: 16px;
+}
+
+
 .dropdown-field .unity-base-field__input{
     background-color: transparent; 
      padding: 0px;
-    border-left: 92px solid black;
-    border-right: 12px solid black;
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
+    border-left: 92px;
+    border-right: 12px;
+    border-top: 2px;
+    border-bottom: 2px;
     border-width: 1px;
+    border-color: rgba(59,59,59,1); /* color border */
     overflow: visibility;
 }
 .dropdown-field .unity-base-popup-field__input{

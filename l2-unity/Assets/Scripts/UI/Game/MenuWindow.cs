@@ -45,7 +45,6 @@ public class MenuWindow : L2Window
         inventoryBtn.AddManipulator(new ButtonClickSoundManipulator(inventoryBtn));
         inventoryBtn.RegisterCallback<ClickEvent>((evt) => InventoryWindow.Instance.ToggleHideWindowManual());
 
-        //Debug.Log("«¿¿¿¿√–”«»À—ﬂ » œŒÿ≈À ƒ¿À‹ÿ≈≈≈!!!!!!!!!!");
         var actionBtn = _windowEle.Q<Button>("ActionButton");
         actionBtn.AddManipulator(new ButtonClickSoundManipulator(actionBtn));
         actionBtn.RegisterCallback<ClickEvent>((evt) => ActionWindow.Instance.ToggleHideWindow());
@@ -58,8 +57,9 @@ public class MenuWindow : L2Window
         questBtn.AddManipulator(new ButtonClickSoundManipulator(questBtn));
         questBtn.RegisterCallback<ClickEvent>((evt) => QuestWindow.Instance.ToggleHideWindow());
 
-        //var clanBtn = _windowEle.Q<Button>("ClanButton");
-        //clanBtn.AddManipulator(new ButtonClickSoundManipulator(clanBtn));
+        var clanBtn = _windowEle.Q<Button>("ClanButton");
+        clanBtn.AddManipulator(new ButtonClickSoundManipulator(clanBtn));
+        clanBtn.RegisterCallback<ClickEvent>((evt) => ClanWindow.Instance.ToggleHideWindow());
 
         //var mapBtn = _windowEle.Q<Button>("MapButton");
         //mapBtn.AddManipulator(new ButtonClickSoundManipulator(mapBtn));

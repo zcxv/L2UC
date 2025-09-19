@@ -78,8 +78,6 @@ public class ShowListWindow : L2PopupWindow
     {
         string playeName = evt.newValue;
         _select = playeName;
-
-
     }
 
     private async void OnClick(ClickEvent evt)

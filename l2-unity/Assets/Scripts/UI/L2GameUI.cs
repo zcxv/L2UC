@@ -188,14 +188,13 @@ public class L2GameUI : L2UI
         }
         if (QuestWindow.Instance != null)
         {
-            //if (DetailedInfoWindow.Instance != null)
-            //{
-            //    DetailedInfoWindow.Instance.AddWindow(_rootVisualContainer);
-            //    DetailedInfoWindow.Instance.HideWindow();
-           // }
-
             QuestWindow.Instance.AddWindow(_rootVisualContainer);
             QuestWindow.Instance.HideWindow();
+        }
+        if (ClanWindow.Instance != null)
+        {
+            ClanWindow.Instance.AddWindow(_rootVisualContainer);
+            ClanWindow.Instance.HideWindow();
         }
 
         if (SellCropListWindow.Instance != null)
