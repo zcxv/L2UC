@@ -70,6 +70,11 @@ public class ClanWindow : L2PopupWindow
         OnCenterScreen(root);
     }
 
+    public void AddClanData()
+    {
+
+    }
+
     private void OnDropdownPointer(PointerDownEvent evt)
     {
         if (_listDropDown == null || _listDropDown.Count == 0)

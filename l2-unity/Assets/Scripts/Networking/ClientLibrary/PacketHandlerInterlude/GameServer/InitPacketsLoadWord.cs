@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Org.BouncyCastle.Bcpg;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,7 @@ public class InitPacketsLoadWord
             UpdateShortCuts();
             UpdateInventoryBar();
             ForEachPackets();
+            InitSettingUserInfo();
             //ForEachDie();
             //EtcStatusUpdate();
         });
@@ -93,6 +95,17 @@ public class InitPacketsLoadWord
             EventProcessor.Instance.QueueEvent(() => { InventoryWindow.Instance.UpdateStats(info.PlayerInfoInterlude.Stats); });
         }
        
+    }
+
+    private void InitSettingUserInfo()
+    {
+        UserInfo userInfo = StorageNpc.getInstance().GetFirstUser();
+
+        if(userInfo.PlayerInfoInterlude.Identity.ClanId != 0)
+        {
+            var packet = CreatorPacketsUser.CreateRequestPledgeInfo(userInfo.PlayerInfoInterlude.Identity.ClanId);
+            SendGameDataQueue.Instance().AddItem(packet, GameClient.Instance.IsCryptEnabled(), GameClient.Instance.IsCryptEnabled());
+        }
     }
     private void ForEachPackets()
     {

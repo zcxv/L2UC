@@ -56,6 +56,11 @@ public class CreatorPacketsUser
         return new RequestPreviewItem(listId, buyList);
     }
 
+    public static RequestPledgeInfo CreateRequestPledgeInfo(int clanId)
+    {
+        return new RequestPledgeInfo(clanId);
+    }
+
     public static RequestSellItem CreateRequestSellItem(int listId, List<Product> buyList)
     {
         return new RequestSellItem(listId, buyList);

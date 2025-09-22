@@ -1,15 +1,11 @@
 
 using System;
 using System.Collections.Generic;
-
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
-
-
-
 
 
 public class CreatorTableWindows : ICreatorTables
@@ -20,7 +16,7 @@ public class CreatorTableWindows : ICreatorTables
     private const string _templateColumnInside = "Data/UI/_Elements/Template/TableHeaderName";
     private const string _templateRowsName = "Data/UI/_Elements/Template/TableRows";
     private const string _templateRowBlackName = "Data/UI/_Elements/Template/TableRowBlack";
-    private const string _templateRowWhiteName = "Data/UI/_Elements/Template/TableRowWhite";
+
 
 
     private const string _tableListViewName = "table_listView";
@@ -180,12 +176,12 @@ public class CreatorTableWindows : ICreatorTables
         UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
 
     private void UnregisterRowCallbacks(VisualElement listRows)
-{
-    listRows.UnregisterCallback<MouseDownEvent>(ResetCursorOnMouseDown);
-    listRows.UnregisterCallback<MouseUpEvent>(ResetCursorOnMouseUp);
-    listRows.UnregisterCallback<PointerMoveEvent>(ResetCursorOnPointerMove);
-    listRows.UnregisterCallback<PointerDownEvent>(ResetCursorOnPointerDown);
-}
+    {
+        listRows.UnregisterCallback<MouseDownEvent>(ResetCursorOnMouseDown);
+        listRows.UnregisterCallback<MouseUpEvent>(ResetCursorOnMouseUp);
+        listRows.UnregisterCallback<PointerMoveEvent>(ResetCursorOnPointerMove);
+        listRows.UnregisterCallback<PointerDownEvent>(ResetCursorOnPointerDown);
+    }
 
     private void BindListViewItems(VisualElement ve , int i)
     {
@@ -203,11 +199,12 @@ public class CreatorTableWindows : ICreatorTables
             VisualElement highlightTile = content_highlight[1];
 
             Label label = (Label)in_1[1];
+            VisualElement image = in_1[2];
 
-            if(column.ListData.Count > 0)
+            if (column.ListData.Count > 0)
             {
-                label.text = column.ListData[i];
-
+                SetTextOrImage(label, image, column, i);
+                ToggleHideTextOrImage(label, image, column);
                 SetColorRowsWhiteOrBlack(row_list1, i);
                 ReturnSetSelectIfChangePosition(highlightLast, highlightTile, n, i);
                 ResetLastSelectElementIfChangePosition(highlightLast, highlightTile, n, i);
@@ -221,6 +218,51 @@ public class CreatorTableWindows : ICreatorTables
            // Debug.Log("LastIdex select update link" + _currentSelectIndex + " last index " + _lastSelectIndex);
         }
 
+    }
+
+    private void ToggleHideTextOrImage(Label textLabel , VisualElement image, TableColumn column)
+    {
+
+        if (column.IsImage)
+        {
+            textLabel.style.display = DisplayStyle.None;
+            image.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            textLabel.style.display = DisplayStyle.Flex;
+            image.style.display = DisplayStyle.None;
+        }
+    }
+
+    private void SetTextOrImage(Label textLabel, VisualElement image, TableColumn column , int i)
+    {
+        if (column.IsImage)
+        {
+            string img_source = column.ListData[i];
+
+            if (string.IsNullOrEmpty(img_source))
+            {
+                textLabel.text = "";
+                image.style.backgroundImage = null;
+            }
+            else
+            {
+                textLabel.text = "";
+                Texture2D texture = IconManager.Instance.LoadTextureOtherSources(column.ListData[i]);
+                image.style.backgroundImage = texture;
+                image.style.width = texture.width;
+                image.style.height = texture.height;
+            }
+
+        }
+        else
+        {
+            textLabel.text = column.ListData[i];
+            image.style.backgroundImage = null;
+            image.style.width = 0;
+            image.style.height = 0;
+        }
     }
 
     private void SetColorRowsWhiteOrBlack(VisualElement listRow, int index)
@@ -456,6 +498,8 @@ public class CreatorTableWindows : ICreatorTables
             if (column.AlignTextCenter)
             {
                 row.style.alignItems = new StyleEnum<Align>(Align.Center);
+                // row.style.justifyContent = new StyleEnum<Justify>(Justify.Center);
+                if (column.IsImage) row.style.justifyContent = new StyleEnum<Justify>(Justify.Center);
             }
             else
             {
@@ -568,7 +612,15 @@ public class CreatorTableWindows : ICreatorTables
             {
 
                 Label labeltext = row1.Q<Label>("labelText");
-                if (labeltext == null | string.IsNullOrEmpty(labeltext.text)) break;
+                VisualElement image = row1.Q<VisualElement>("image");
+
+                var bg = image.style.backgroundImage.value;
+
+                if (bg.IsEmpty())
+                {
+                    if (labeltext == null | string.IsNullOrEmpty(labeltext.text)) break;
+                }
+
 
                 if (_lastSelectElement != null && currentSelectIndex != _lastSelectIndex)
                 {
@@ -653,6 +705,7 @@ public class TableColumn
     public List<string> _listData;
     public float _leftIndent;
     public int _maxTextSize;
+    public bool _isImage;
 
     public TableColumn(bool alignTextCenter, string nameColumn, float width , List<string> listData , float leftIndent)
     {
@@ -662,6 +715,7 @@ public class TableColumn
         _listData = listData;
         _leftIndent = leftIndent;
         _maxTextSize = 0;
+        _isImage = false;
     }
 
     public TableColumn(bool alignTextCenter, string nameColumn, float width, List<string> listData, float leftIndent , int maxTextSize)
@@ -672,6 +726,18 @@ public class TableColumn
         _listData = listData;
         _leftIndent = leftIndent;
         _maxTextSize = maxTextSize;
+        _isImage = false;
+    }
+
+    public TableColumn(bool alignTextCenter, string nameColumn, float width, List<string> listData, float leftIndent , bool isImage)
+    {
+        _alignTextCenter = alignTextCenter;
+        _nameColumn = nameColumn;
+        _manualWidth = width;
+        _listData = listData;
+        _leftIndent = leftIndent;
+        _maxTextSize = 0;
+        _isImage = isImage;
     }
 
 
@@ -694,6 +760,12 @@ public class TableColumn
     {
         get { return _nameColumn; }
         set { _nameColumn = value; }
+    }
+
+    public bool IsImage
+    {
+        get { return _isImage; }
+        set { _isImage = value; }
     }
 
     public float ManualWidth
