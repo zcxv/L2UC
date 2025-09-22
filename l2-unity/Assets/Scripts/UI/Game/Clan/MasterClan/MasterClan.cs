@@ -7,7 +7,6 @@ using UnityEngine.UIElements;
 
 public class MasterClan : MonoBehaviour
 {
-    private DropdownField _dropDown;
 
     public void ForEachClan( ICreatorTables _creatorTableWindows)
     {
@@ -16,7 +15,7 @@ public class MasterClan : MonoBehaviour
         var namesList = new List<string>();
         var conditionsList = new List<string>();
         var levelList = new List<string>();
-        var repeatableList = new List<string>();
+        var activity = new List<string>();
 
 
         for(int i=0; i < 7; i++)
@@ -24,40 +23,38 @@ public class MasterClan : MonoBehaviour
             namesList.Add("");
             conditionsList.Add("");
             levelList.Add("");
-            repeatableList.Add("");
+            activity.Add("");
         }
 
 
-        namesList[0] = "hector2";
-        conditionsList[0] = "11";
-        levelList[0] = "2";
-        repeatableList[0] = "0";
+        //namesList[0] = "hector2";
+        //conditionsList[0] = "11";
+        //levelList[0] = "Data/UI/Clan/Role_create";
+       // activity[0] = "Data/UI/Clan/Clan_sword_online";
 
-        var name = new TableColumn(false, "Name", 0, namesList, 13);
-        var lvl = new TableColumn(true, "Lv.", 0, conditionsList, 0);
-        var role = new TableColumn(true, "Role", 0, levelList, 0);
-        var act = new TableColumn(true, "Activity.", 0, repeatableList, 0);
+        //namesList[1] = "gawric";
+        //conditionsList[1] = "3";
+        //levelList[1] = "Data/UI/Clan/Role_create";
+        //activity[1] = "Data/UI/Clan/Clan_sword_offline";
+
+
+        //namesList[2] = "party";
+        //conditionsList[2] = "6";
+        //levelList[2] = "Data/UI/Clan/Role_create";
+        //activity[2] = "Data/UI/Clan/Clan_sword_offline";
+
+        var name = new TableColumn(false, "Name", 100, namesList, 13);
+        var lvl = new TableColumn(true, "Lv.", 0, conditionsList, 0 );
+        var role = new TableColumn(true, "Role", 15, levelList, 0 , true);
+        var act = new TableColumn(true, "Activity.", 20, activity, 0 , true);
 
         List<TableColumn> listTableColumn = new List<TableColumn> { name, lvl, role, act };
         _creatorTableWindows.CreateTable(listTableColumn);
 
-
-        //_creatorTableWindows.CreateTable(new List<TableColumn> { new TableColumn(false, "Mission Name", 13 ,  new List<string> { "Letters of Love" , "What Women Want", "Will the Seal Be Broken" } , 13) ,
-        //  new TableColumn(false, "Conditions", 0, new List<string> { "No Requirements" , "Elf,Human", "Dark Elf" } ,13),
-        //  new TableColumn(true, "Level", 0, new List<string> { "2-5" , "2-5" , "16-26" } , 0),
-        //  new TableColumn(true, "Repeatable", 0 , new List<string> { "1"  , "1"  , "1" } , 0),
-        //  new TableColumn(false, "Source", 0 , new List<string> { "Darin" , "Arujien", "Talloth" }, 18)});
     }
 
 
 
 
-   // public void AddList(Dictionary<string, int> players)
-    //{
-    //    _dropdown.value = "";
-    //    var list = players.Keys.ToList();
-     //   _dropdown.choices = list;
-     //   _players = players;
-    //}
 
 }

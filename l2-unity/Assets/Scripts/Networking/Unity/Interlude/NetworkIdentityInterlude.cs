@@ -24,11 +24,15 @@ public class NetworkIdentityInterlude
     [SerializeField] private Vector3 _position = new Vector3(4724, -68, -1731);
     [SerializeField] private Quaternion _heading;
 
+    private int _clanId;
+
     [SerializeField] private bool _owned = false;
     private bool _isHideHpBar = false;
     public bool IsRunning { get; set; }
     public EntityType EntityType { get => _entityType; set => _entityType = value; }
     public int Id { get => _id; set => _id = value; }
+
+    public int ClanId { get => _clanId; set => _clanId = value; }
     public int NpcId { get => _npcId; set => _npcId = value; }
     public string NpcClass { get => _npcClass; set => _npcClass = value; }
     public string Name { get => _name; set => _name = value; }

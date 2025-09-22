@@ -147,6 +147,22 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
                 OnCharQuestList(itemQueue.DecodeData());
                 break;
+            case GameInterludeServerPacketType.PledgeShowMemberListUpdate:
+
+                OnPledgeShowMemberListUpdate(itemQueue.DecodeData());
+                break;
+            case GameInterludeServerPacketType.PledgeShowMemberListAll:
+
+                OnPledgeShowMemberListAll(itemQueue.DecodeData());
+                break;
+            case GameInterludeServerPacketType.PledgeInfo:
+
+                OnPledgeInfo(itemQueue.DecodeData());
+                break;
+            case GameInterludeServerPacketType.PledgeStatusChanged:
+
+                OnPledgeStatusChanged(itemQueue.DecodeData());
+                break;
             case GameInterludeServerPacketType.NpcInfo:
 
                 OnCharNpcInfo(itemQueue.DecodeData());
@@ -694,6 +710,27 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
                 QuestWindow.Instance.AddData(questPacket.Quest);
             });
         }
+
+    }
+
+    private void OnPledgeInfo(byte[] data)
+    {
+        PledgeInfo pledgeInfo = new PledgeInfo(data);
+
+    }
+
+    private void OnPledgeShowMemberListUpdate(byte[] data)
+    {
+        PledgeShowMemberListUpdate memberUpdate = new PledgeShowMemberListUpdate(data);
+    }
+
+    private void OnPledgeShowMemberListAll(byte[] data)
+    {
+        PledgeShowMemberListAll allMembers = new PledgeShowMemberListAll(data);
+    }
+    private void OnPledgeStatusChanged(byte[] data)
+    {
+        PledgeStatusChanged pledgeStatusChanged = new PledgeStatusChanged(data);
 
     }
 

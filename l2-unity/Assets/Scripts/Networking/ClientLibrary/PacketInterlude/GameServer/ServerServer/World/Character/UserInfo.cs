@@ -224,7 +224,7 @@ public class UserInfo : ServerPacket
         int isGm = ReadI();
         _info.Identity.Title = ReadOtherS();
         //_info.Identity.Title = "My title";
-        int clanId = ReadI();
+        _info.Identity.ClanId = ReadI();
         int clanCrestId = ReadI();
         int allyId = ReadI();
         int allyCrestId = ReadI();
