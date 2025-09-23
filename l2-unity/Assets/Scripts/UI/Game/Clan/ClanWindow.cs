@@ -15,6 +15,7 @@ public class ClanWindow : L2PopupWindow
     private DropdownField _dropdown;
     private string _selectDropDown = "";
     private List<string> _listDropDown;
+    private DataProviderClanInfo _dataProviderClanInfo;
     public static ClanWindow Instance { get { return _instance; } }
 
     private void Awake()
@@ -24,6 +25,7 @@ public class ClanWindow : L2PopupWindow
             _instance = this;
             _creatorTableWindows = new CreatorTableWindows();
             _masterClan = new MasterClan();
+            _dataProviderClanInfo = new DataProviderClanInfo();
         }
         else
         {
@@ -54,9 +56,7 @@ public class ClanWindow : L2PopupWindow
         DisableEventOnOver(_dropdown);
         _dropdown.RegisterValueChangedCallback(OnDropdownValueChanged);
         _dropdown.RegisterCallback<PointerDownEvent>(OnDropdownPointer, TrickleDown.TrickleDown);
-        //_dropdown.value = "";
-        //_dropdown.choices = new List<string> { "123","321","e43" };
-        //_listDropDown = new List<string> { "123", "321", "e43" };
+
 
         var master_table_content = GetElementByClass("master-table-list");
         _creatorTableWindows.InitTable(master_table_content);
@@ -66,14 +66,20 @@ public class ClanWindow : L2PopupWindow
         RegisterCloseWindowEvent("btn-close-frame");
         RegisterClickWindowEvent(_windowEle, dragArea);
         OnCenterScreen(_root);
-
-        OnCenterScreen(root);
     }
 
-    public void AddClanData()
+    public void AddClanData(PledgeShowMemberListAll packet )
     {
+        _dataProviderClanInfo.SetClanInfo(_windowEle , packet);
+        _listDropDown = _masterClan.SetDropdownList(_dropdown , packet.PledgeName);
+        _masterClan.CreateMembersTable(packet.Members, _creatorTableWindows);
 
     }
+
+
+
+
+
 
     private void OnDropdownPointer(PointerDownEvent evt)
     {
