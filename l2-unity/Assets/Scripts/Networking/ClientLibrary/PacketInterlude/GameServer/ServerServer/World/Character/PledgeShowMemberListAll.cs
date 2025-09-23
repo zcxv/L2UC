@@ -23,6 +23,24 @@ public class PledgeShowMemberListAll : ServerPacket
     private string _allyName;
     private int _allyCrestId;
     private bool _isWar;
+    public List<ClanMember> Members => _members;
+    public int PledgeTypeEnabled => _pledgeTypeEnabled;
+    public int PledgeType => _pledgeType;
+    public int ClanId => _clanId;
+    public string PledgeName => _pledgeName;
+    public string SubPledgeLeaderName => _subPledgeLeaderName;
+    public int CrestId => _crestId;
+    public int Level => _level;
+    public int CastleId => _castleId;
+    public int ClanHallId => _clanHallId;
+    public int Rank => _rank;
+    public int ReputationScore => _reputationScore;
+    public int DissolvingExpiryTime => _dissolvingExpiryTime;
+    public int AllyId => _allyId;
+    public string AllyName => _allyName;
+    public int AllyCrestId => _allyCrestId;
+    public bool IsWar => _isWar;
+
     public PledgeShowMemberListAll(byte[] d) : base(d)
     {
    
@@ -63,21 +81,11 @@ public class PledgeShowMemberListAll : ServerPacket
 
             _members.Add(new ClanMember(memberName, level, classId, sex, race, online, sponsor));
         }
-        PrintClanInfo();
+    
     }
 
-    public void PrintClanInfo()
-    {
-        Debug.Log($"Пришел пакет : PledgeShowMemberListAll {_level}");
-        Debug.Log($"PledgeShowMemberListAll > Clan ID: {_clanId}");
-        Debug.Log($"PledgeShowMemberListAll > Clan Name: {_pledgeName}");
-        Debug.Log("Members:");
+    
 
-        foreach (var member in _members)
-        {
-            Debug.Log($"PledgeShowMemberListAll Member >Name: {member.MemberName}, Level: {member.Level}, Class ID: {member.ClassId}");
-        }
-    }
 
 }
 
@@ -91,7 +99,7 @@ public class ClanMember
     private int _online;
     private int _sponsor;
 
-    // Конструктор класса
+ 
     public ClanMember(string memberName, int level, int classId, int sex, int race, int online, int sponsor)
     {
         _memeberName = memberName;
@@ -103,7 +111,7 @@ public class ClanMember
         _sponsor = sponsor;
     }
 
-    // Геттеры и сеттеры для каждого поля
+
     public string MemberName
     {
         get { return _memeberName; }

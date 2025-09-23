@@ -144,6 +144,10 @@ public class InitPacketsLoadWord
                     SetQuestList(questList.Quest);
                     remove.Add(i);
                     break;
+                case PledgeShowMemberListAll pledgeShowMemberListAll:
+                    SetPledgeAllList(pledgeShowMemberListAll);
+                    remove.Add(i);
+                    break;
             }
         }
         //RemoveByListId(remove);
@@ -193,6 +197,11 @@ public class InitPacketsLoadWord
     private void SetQuestList(List<QuestInstance> questList)
     {
         EventProcessor.Instance.QueueEvent(() => QuestWindow.Instance.AddData(questList));
+    }
+
+    private void SetPledgeAllList(PledgeShowMemberListAll pledgeAllList)
+    {
+        EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.AddClanData(pledgeAllList));
     }
 
     public async Task MoveTo(CharMoveToLocation moveToLocation)

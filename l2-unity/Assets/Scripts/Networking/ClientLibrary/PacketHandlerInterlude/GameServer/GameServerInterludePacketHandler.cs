@@ -727,6 +727,15 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     private void OnPledgeShowMemberListAll(byte[] data)
     {
         PledgeShowMemberListAll allMembers = new PledgeShowMemberListAll(data);
+        if (InitPacketsLoadWord.getInstance().IsInit)
+        {
+            InitPacketsLoadWord.getInstance().AddPacketsInit(allMembers);
+        }
+        else
+        {
+            EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.AddClanData(allMembers));
+        }
+
     }
     private void OnPledgeStatusChanged(byte[] data)
     {

@@ -1,10 +1,11 @@
 
 using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
+
 using UnityEngine.UIElements;
 
 
@@ -208,6 +209,7 @@ public class CreatorTableWindows : ICreatorTables
                 SetColorRowsWhiteOrBlack(row_list1, i);
                 ReturnSetSelectIfChangePosition(highlightLast, highlightTile, n, i);
                 ResetLastSelectElementIfChangePosition(highlightLast, highlightTile, n, i);
+                SetOtherColorLabel(column, label, column.ListData[i]);
             }
 
         }
@@ -267,6 +269,8 @@ public class CreatorTableWindows : ICreatorTables
 
     private void SetColorRowsWhiteOrBlack(VisualElement listRow, int index)
     {
+       
+
         if (index % 2 == 0)
         {
             // Color #393835 with 79% opacity
@@ -278,6 +282,29 @@ public class CreatorTableWindows : ICreatorTables
             listRow.style.backgroundColor = new Color(0f, 0f, 0f, 0f);
         }
     }
+
+    private void SetOtherColorLabel(TableColumn column, VisualElement row, string text)
+    {
+        if (column.IsImage)
+        {
+            return;
+        }
+
+        if (column.IsSetColor())
+        {
+            Color color = column.GetColor(text);
+            row.style.color = color != Color.white ? color : Color.white;
+        }
+        else
+        {
+            if(row.style.color != Color.white)
+            {
+                row.style.color = Color.white;
+            }
+
+        }
+    }
+
 
     private void ReturnSetSelectIfChangePosition(VisualElement highlightLast , VisualElement highlightTile , int n , int i)
     {
@@ -512,6 +539,8 @@ public class CreatorTableWindows : ICreatorTables
                 var label = row.Q<Label>("labelText");
                 MaxLabelSize(label, column.MaxTextSize);
             }
+
+
         }
     }
 
@@ -706,6 +735,9 @@ public class TableColumn
     public float _leftIndent;
     public int _maxTextSize;
     public bool _isImage;
+    private Dictionary<string, UnityEngine.Color> _allColors;
+
+
 
     public TableColumn(bool alignTextCenter, string nameColumn, float width , List<string> listData , float leftIndent)
     {
@@ -790,6 +822,28 @@ public class TableColumn
     {
         get { return _leftIndent; }
         set { _leftIndent = value; }
+    }
+
+    public void SetColor(string rowName , string hex_color)
+    {
+        if (_allColors == null) _allColors = new Dictionary<string, UnityEngine.Color>();
+        UnityEngine.Color color;
+        ColorUtility.TryParseHtmlString(hex_color, out color);
+        _allColors.Add(rowName , color);
+    }
+
+    public UnityEngine.Color GetColor(string rowName)
+    {
+        if (_allColors != null && _allColors.ContainsKey(rowName))
+        {
+            return _allColors[rowName];
+        }
+        return UnityEngine.Color.white; 
+    }
+
+    public bool IsSetColor()
+    {
+        return _allColors != null && _allColors.Count > 0;
     }
 
 
