@@ -47,4 +47,10 @@ public class DataProviderClanInfo : AbstractDataFunction
 
         }
     }
+
+    public void UpdateClanInfo(VisualElement container, PledgeInfo packet)
+    {
+        Label titleLabel = container.Q<Label>("labelClanName");
+        AddElementIfNotEmpty(titleLabel, titleLabel, packet.ClanName);
+    }
 }

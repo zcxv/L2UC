@@ -10,6 +10,16 @@ public class PledgeShowMemberListUpdate : ServerPacket
     private int _isOnline;
     private int _pledgeType;
     private int _hasSponsor;
+
+    public string MemberName => _name;
+    public int Level => _level;
+    public int ClassId => _classId;
+    public int Sex => _sex;
+    public int Race => _race;
+    public int IsOnline => _isOnline;
+    public int PledgeType => _pledgeType;
+    public int HasSponsor => _hasSponsor;
+
     public PledgeShowMemberListUpdate(byte[] d) : base(d)
     {
         Parse();
@@ -26,4 +36,6 @@ public class PledgeShowMemberListUpdate : ServerPacket
         _hasSponsor = ReadI();
 
     }
+
+
 }

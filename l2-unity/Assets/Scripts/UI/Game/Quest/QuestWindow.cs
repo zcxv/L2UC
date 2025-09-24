@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.Rendering.DebugUI.MessageBox;
 
-public class QuestWindow : L2PopupWindow
+public class QuestWindow : L2TwoPanels
 {
 
     private static QuestWindow _instance;
@@ -35,7 +35,7 @@ public class QuestWindow : L2PopupWindow
     private const string _transferTabName = "Transfer";
     private const string _specialTabName = "Special";
 
-    private VisualElement _detailedInfoElement;
+   // private VisualElement _detailedInfoElement;
 
     private Label _labelAutoNotify;
     private VisualElement _imageBoxAutoNotify;
@@ -124,6 +124,7 @@ public class QuestWindow : L2PopupWindow
 
         _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
         var windowTemplate = (VisualElement)GetElementById("windowTemplate");
+
         SetMouseOverDetectionSubElement(_detailedInfoElement);
         SetMouseOverDetectionRefreshTargetElement(windowTemplate);
 
@@ -220,10 +221,7 @@ public class QuestWindow : L2PopupWindow
         }
     }
 
-    private void HideDetailedInfo()
-    {
-        _detailedInfoElement.style.display = DisplayStyle.None;
-    }
+
 
     private void AddTestRewardData()
     {

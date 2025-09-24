@@ -6,6 +6,10 @@ public class PledgeInfo : ServerPacket
     private int _clanId;
     private string _clanName;
     private string _allyName;
+
+    public int ClanId => _clanId;
+    public string ClanName => _clanName;
+    public string AllyName => _allyName;
     public PledgeInfo(byte[] d) : base(d)
     {
         Parse();

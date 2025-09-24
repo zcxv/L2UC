@@ -16,4 +16,7 @@ public interface ICreatorTables
 
     bool HasTable(VisualElement element);
     public void SetSelectRow(int rowId);
+    public event Action<int, string> OnRowClicked;
+
+
 }
