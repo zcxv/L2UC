@@ -58,6 +58,30 @@ public abstract class ClientPacket : Packet {
         _buffer.AddRange(data);
     }
 
+    public void WriteOtherShort(short value)
+    {
+        byte[] data = ByteUtils.toByteArray(value);
+        _buffer.AddRange(data);
+    }
+
+    //use acis server
+    protected void WriteOtherS(string text)
+    {
+        if (!string.IsNullOrEmpty(text))
+        {
+            foreach (char c in text)
+            {
+                // little-endian
+                _buffer.Add((byte)(c & 0xFF));
+                _buffer.Add((byte)(c >> 8));
+            }
+        }
+
+        // end string.  use write(000)l2j 
+        _buffer.Add(0);
+        _buffer.Add(0);
+    }
+
     public void WriteI(int i) {
         // byte[] data = BitConverter.GetBytes(i);
 

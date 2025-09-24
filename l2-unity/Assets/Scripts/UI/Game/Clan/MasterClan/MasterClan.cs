@@ -10,6 +10,12 @@ public class MasterClan : MonoBehaviour
     private const string ROLE_CREATE = "Data/UI/Clan/Role_create";
     private const string MEMBER_ONLINE = "Data/UI/Clan/Clan_sword_online";
     private const string MEMBER_OFFLINE = "Data/UI/Clan/Clan_sword_offline";
+    private string _table_select_name_member = string.Empty;
+
+    public string GetSelectMemberName()
+    {
+        return _table_select_name_member;
+    }
     public void ForEachClan( ICreatorTables _creatorTableWindows)
     {
 
@@ -101,12 +107,14 @@ public class MasterClan : MonoBehaviour
 
     private void SetOfflineMemberColors(List<ClanMember> members, List<TableColumn> columns)
     {
-        foreach (var member in members)
+        for (int i=0; i < members.Count; i++)
         {
+            ClanMember member = members[i];
+
             if (member.Online == 0)
             {
-                columns[0].SetColor(member.MemberName, "#B3B2B2");
-                columns[1].SetColor(member.Level.ToString(), "#B3B2B2");
+                columns[0].SetColor(i + member.MemberName, "#B3B2B2");
+                columns[1].SetColor(i + member.Level.ToString(), "#B3B2B2");
             }
         }
     }
@@ -135,5 +143,60 @@ public class MasterClan : MonoBehaviour
         var act = new TableColumn(true, "Activity.", 20, activity, 0, true);
 
         return new List<TableColumn> { name, lvl, role, act };
+    }
+
+
+    public void UpdateMemberData(PledgeShowMemberListUpdate packetUpdate , PledgeShowMemberListAll packet , ICreatorTables creatorTableWindows)
+    {
+        if (packet != null && packetUpdate != null)
+        {
+
+            var memberToUpdate = packet.Members.FirstOrDefault(m => m.MemberName == packetUpdate.MemberName);
+
+            if (memberToUpdate != null)
+            {
+
+                memberToUpdate.MemberName = packetUpdate.MemberName;
+                memberToUpdate.Level = packetUpdate.Level;
+                memberToUpdate.ClassId = packetUpdate.ClassId;
+                memberToUpdate.Sex = packetUpdate.Sex;
+                memberToUpdate.Race = packetUpdate.Race;
+                memberToUpdate.Online = packetUpdate.IsOnline;
+                //memberToUpdate. = packetUpdate.PledgeType;
+                //memberToUpdate.HasSponsor = packetUpdate.HasSponsor;
+
+
+                CreateMembersTable(packet.Members, creatorTableWindows);
+            }
+        }
+    }
+
+    public void SelectMember(int selectIndex, string select_text)
+    {
+
+        if (string.IsNullOrEmpty(select_text))
+        {
+            Debug.LogWarning("Input string is null or empty");
+            return;
+        }
+
+        string[] row_text = select_text.Split("___");
+
+
+        if (row_text.Length < 2)
+        {
+            Debug.LogWarning($"Invalid input format. Expected at least 2 parts separated by '___', but got {row_text.Length} parts");
+            return;
+        }
+
+
+        if (string.IsNullOrEmpty(row_text[1]))
+        {
+            Debug.LogWarning("Second part of the split string is empty");
+            return;
+        }
+
+
+        _table_select_name_member = row_text[1];
     }
 }

@@ -1,21 +1,30 @@
+using Org.BouncyCastle.Bcpg;
+using Org.BouncyCastle.Utilities.Encoders;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using UnityEditor.Sprites;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class ClanWindow : L2PopupWindow
+public class ClanWindow : L2TwoPanels
 {
    
     private static ClanWindow _instance;
     private MasterClan _masterClan;
+    private ClanDetailedInfo _detailedClan;
     private ICreatorTables _creatorTableWindows;
 
     private DropdownField _dropdown;
     private string _selectDropDown = "";
     private List<string> _listDropDown;
     private DataProviderClanInfo _dataProviderClanInfo;
+    //data
+    private PledgeShowMemberListAll _packet;
+
     public static ClanWindow Instance { get { return _instance; } }
 
     private void Awake()
@@ -25,6 +34,7 @@ public class ClanWindow : L2PopupWindow
             _instance = this;
             _creatorTableWindows = new CreatorTableWindows();
             _masterClan = new MasterClan();
+            _detailedClan = new ClanDetailedInfo();
             _dataProviderClanInfo = new DataProviderClanInfo();
         }
         else
@@ -59,25 +69,81 @@ public class ClanWindow : L2PopupWindow
 
 
         var master_table_content = GetElementByClass("master-table-list");
+
         _creatorTableWindows.InitTable(master_table_content);
         _creatorTableWindows.LoadAsset(LoadAsset);
         _masterClan.ForEachClan(_creatorTableWindows);
+        _creatorTableWindows.OnRowClicked += _masterClan.SelectMember;
+
+        var memberButton = (UnityEngine.UIElements.Button)GetElementById("MemberButton");
+        memberButton?.RegisterCallback<ClickEvent>(evt => OnClickShowMember(evt));
+
+        _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
+        var masterClan = (VisualElement)GetElementById("masterClan");
+        SetMouseOverDetectionSubElement(_detailedInfoElement);
+        SetMouseOverDetectionRefreshTargetElement(masterClan);
+
 
         RegisterCloseWindowEvent("btn-close-frame");
         RegisterClickWindowEvent(_windowEle, dragArea);
+        HideDetailedInfo();
         OnCenterScreen(_root);
     }
 
+    //Detailed Clan
+    public void UpdateDetailedInfo(ServerPacket packet)
+    {
+        _detailedClan.UpdateDetailedInfo(packet , _detailedInfoElement);
+        ShowDetailedInfo();
+    }
+
+
+
+
+    //Master Clan 
     public void AddClanData(PledgeShowMemberListAll packet )
     {
         _dataProviderClanInfo.SetClanInfo(_windowEle , packet);
         _listDropDown = _masterClan.SetDropdownList(_dropdown , packet.PledgeName);
         _masterClan.CreateMembersTable(packet.Members, _creatorTableWindows);
+        _packet = packet;
+    }
 
+    public void UpdateMemberData(PledgeShowMemberListUpdate packetUpdate)
+    {
+        _masterClan.UpdateMemberData(packetUpdate, _packet, _creatorTableWindows);
+    }
+
+    public void UpdatePledge(PledgeInfo pledge)
+    {
+        _dataProviderClanInfo.UpdateClanInfo(_windowEle, pledge);
+    }
+
+    public void UpdateClanIdInfo(PledgeStatusChanged changed)
+    {
+        if(_packet != null & changed != null)
+        {
+            _packet.ClanId = changed.ClanId;
+            _packet.CrestId = changed.CrestId;
+            _packet.LeaderId = changed.LeaderId;
+            _packet.AllyId = changed.AllyId;
+            _packet.AllyCrestId = changed.AllyCrestId;
+
+        }
     }
 
 
+    private void OnClickShowMember(ClickEvent evt)
+    {
+        if (!string.IsNullOrEmpty(_masterClan.GetSelectMemberName()))
+        {
+            SendGameDataQueue.Instance().AddItem(
+                CreatorPacketsUser.CreateRequestPladgeMemberInfo(_masterClan.GetSelectMemberName()), 
+                GameClient.Instance.IsCryptEnabled(), 
+                GameClient.Instance.IsCryptEnabled());
+        }
 
+    }
 
 
 
@@ -98,6 +164,10 @@ public class ClanWindow : L2PopupWindow
 
     private void OnDestroy()
     {
-        _instance = null;
+        _instance = null; 
+        _creatorTableWindows = null;
+        _masterClan = null;
+        _detailedClan = null;
+        _dataProviderClanInfo = null;
     }
 }

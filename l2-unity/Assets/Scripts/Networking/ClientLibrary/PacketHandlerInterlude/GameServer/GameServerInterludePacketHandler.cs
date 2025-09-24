@@ -1,4 +1,5 @@
 
+using Org.BouncyCastle.Bcpg;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -230,6 +231,9 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
                 break;
             case (int)GameInterludeExServerPacketType.ExShowManorDefaultInfo:
                 OnExShowManorDefaultInfo(itemQueue.DecodeExData());
+                break;
+            case (int)GameInterludeExServerPacketType.ExPledgeReceiveMemberInfo:
+                OnExPledgeReceiveMemberInfo(itemQueue.DecodeExData());
                 break;
             default:
                 break;
@@ -717,11 +721,19 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     {
         PledgeInfo pledgeInfo = new PledgeInfo(data);
 
+        if (!InitPacketsLoadWord.getInstance().IsInit)
+        {
+            EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.UpdatePledge(pledgeInfo));
+        }
     }
 
     private void OnPledgeShowMemberListUpdate(byte[] data)
     {
         PledgeShowMemberListUpdate memberUpdate = new PledgeShowMemberListUpdate(data);
+        if (!InitPacketsLoadWord.getInstance().IsInit)
+        {
+            EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.UpdateMemberData(memberUpdate));
+        }
     }
 
     private void OnPledgeShowMemberListAll(byte[] data)
@@ -740,7 +752,10 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
     private void OnPledgeStatusChanged(byte[] data)
     {
         PledgeStatusChanged pledgeStatusChanged = new PledgeStatusChanged(data);
-
+        if (!InitPacketsLoadWord.getInstance().IsInit)
+        {
+            EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.UpdateClanIdInfo(pledgeStatusChanged));
+        }
     }
 
     private void OnCharNpcInfo(byte[] data)
@@ -946,6 +961,14 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         EventProcessor.Instance.QueueEvent(() => {
             SeedInfoWindow.Instance.SetDataDefaultManorInfo(showManorDefaultInfo.List);
             SeedInfoWindow.Instance.ShowWindowActiveTabAllDefault();
+        });
+    }
+
+    public void OnExPledgeReceiveMemberInfo(byte[] data)
+    {
+        PledgeReceiveMemberInfo showManorDefaultInfo = new PledgeReceiveMemberInfo(data);
+        EventProcessor.Instance.QueueEvent(() => {
+            ClanWindow.Instance.UpdateDetailedInfo(showManorDefaultInfo);
         });
     }
 

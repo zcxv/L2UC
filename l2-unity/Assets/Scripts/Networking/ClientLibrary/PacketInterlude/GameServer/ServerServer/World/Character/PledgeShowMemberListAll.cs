@@ -11,6 +11,7 @@ public class PledgeShowMemberListAll : ServerPacket
     private int _clanId;
     private string _pledgeName;
     private string _subPledgeLeaderName;
+    private int _leadernId;
 
     private int _crestId;
     private int _level;
@@ -26,19 +27,42 @@ public class PledgeShowMemberListAll : ServerPacket
     public List<ClanMember> Members => _members;
     public int PledgeTypeEnabled => _pledgeTypeEnabled;
     public int PledgeType => _pledgeType;
-    public int ClanId => _clanId;
+    public int ClanId
+    {
+        get => _clanId;
+        set => _clanId = value;
+    }
+
+    public int LeaderId
+    {
+        get => _leadernId;
+        set => _leadernId = value;
+    }
+
     public string PledgeName => _pledgeName;
     public string SubPledgeLeaderName => _subPledgeLeaderName;
-    public int CrestId => _crestId;
+    public int CrestId
+    {
+        get => _crestId;
+        set => _crestId = value;
+    }
     public int Level => _level;
     public int CastleId => _castleId;
     public int ClanHallId => _clanHallId;
     public int Rank => _rank;
     public int ReputationScore => _reputationScore;
     public int DissolvingExpiryTime => _dissolvingExpiryTime;
-    public int AllyId => _allyId;
+    public int AllyId
+    {
+        get => _allyId;
+        set => _allyId = value;
+    }
     public string AllyName => _allyName;
-    public int AllyCrestId => _allyCrestId;
+    public int AllyCrestId
+    {
+        get => _allyCrestId;
+        set => _allyCrestId = value;
+    }
     public bool IsWar => _isWar;
 
     public PledgeShowMemberListAll(byte[] d) : base(d)

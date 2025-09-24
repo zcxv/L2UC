@@ -48,7 +48,7 @@ public class CreatorTableWindows : ICreatorTables
     private List<TableColumn> _columnsList;
     private Texture2D _defaultCursor;
     public int _index_row = 0;
-
+    public event Action<int , string> OnRowClicked;
 
     public void InitTable(VisualElement content)
     {
@@ -209,7 +209,9 @@ public class CreatorTableWindows : ICreatorTables
                 SetColorRowsWhiteOrBlack(row_list1, i);
                 ReturnSetSelectIfChangePosition(highlightLast, highlightTile, n, i);
                 ResetLastSelectElementIfChangePosition(highlightLast, highlightTile, n, i);
-                SetOtherColorLabel(column, label, column.ListData[i]);
+                //i - unique index row
+                //column.ListData[i] - text in cell
+                SetOtherColorLabel(column, label, i+column.ListData[i]);
             }
 
         }
@@ -432,7 +434,7 @@ public class CreatorTableWindows : ICreatorTables
         _lastSelectIndex = -1;
         _currentSelectIndex = -1;
         _lastSelectElement = null;
-
+        _columnsList.Clear();
         _columnsList = columnsList;
          var arr_column0 = _columnsList[0].ListData;
         _listView.itemsSource = arr_column0;
@@ -632,7 +634,7 @@ public class CreatorTableWindows : ICreatorTables
     private bool  SetSelectElement(VisualElement _selectListColumn , int  currentSelectIndex)
     {
         bool isSelect = false;
-
+        string select_text = "";
         for (int i = 0; i < _selectListColumn.childCount; i++)
         {
             VisualElement row1 = _selectListColumn[i];
@@ -650,6 +652,7 @@ public class CreatorTableWindows : ICreatorTables
                     if (labeltext == null | string.IsNullOrEmpty(labeltext.text)) break;
                 }
 
+                select_text += "___"+labeltext.text;
 
                 if (_lastSelectElement != null && currentSelectIndex != _lastSelectIndex)
                 {
@@ -673,11 +676,17 @@ public class CreatorTableWindows : ICreatorTables
             _lastSelectElement = _selectListColumn;
             _lastSelectIndex = currentSelectIndex;
         }
+
+        EventClickOut(select_text, currentSelectIndex);
+
         return isSelect;
     }
 
    
-
+    private void EventClickOut(string select_text , int currentSelectIndex)
+    {
+        OnRowClicked?.Invoke(currentSelectIndex, select_text);
+    }
     public void ResetSelectInner(VisualElement highlightLast, VisualElement highlightLastTile)
     {
         if (highlightLast != null) highlightLast.style.display = DisplayStyle.None;

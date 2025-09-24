@@ -9,6 +9,14 @@ public class PledgeStatusChanged : ServerPacket
 
     private int _allyId;
     private int _allyCrestId;
+
+   
+    public int LeaderId => _leaderId;
+    public int ClanId => _clanId;
+    public int CrestId => _crestId;
+    public int AllyId => _allyId;
+    public int AllyCrestId => _allyCrestId;
+
     public PledgeStatusChanged(byte[] d) : base(d)
     {
         Parse();
