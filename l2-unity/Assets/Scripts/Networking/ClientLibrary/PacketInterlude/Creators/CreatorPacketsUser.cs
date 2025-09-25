@@ -66,6 +66,11 @@ public class CreatorPacketsUser
         return new RequestPledgeMemberInfo(memberName);
     }
 
+    public static RequestPledgeMemberPowerInfo CreateRequestPledgeMemberPowerInfo(string memberName)
+    {
+        return new RequestPledgeMemberPowerInfo(memberName);
+    }
+
     public static RequestSellItem CreateRequestSellItem(int listId, List<Product> buyList)
     {
         return new RequestSellItem(listId, buyList);

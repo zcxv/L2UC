@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class MasterClan : MonoBehaviour
+public class MasterClan 
 {
     private const string ROLE_CREATE = "Data/UI/Clan/Role_create";
     private const string MEMBER_ONLINE = "Data/UI/Clan/Clan_sword_online";
