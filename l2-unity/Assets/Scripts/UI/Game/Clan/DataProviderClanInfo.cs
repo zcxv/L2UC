@@ -53,4 +53,23 @@ public class DataProviderClanInfo : AbstractDataFunction
         Label titleLabel = container.Q<Label>("labelClanName");
         AddElementIfNotEmpty(titleLabel, titleLabel, packet.ClanName);
     }
+
+    public void SetMemberInfo(VisualElement container, PledgeReceiveMemberInfo packet ,  PledgeShowMemberListAll packetAll)
+    {
+        Label titleName = container.Q<Label>("titleLabel");
+        AddElementIfNotEmpty(titleName, titleName, packet.Name);
+
+        Label titlePlayerName = container.Q<Label>("titlePlayerLabel");
+        AddElementIfNotEmpty(titlePlayerName, titlePlayerName, packet.Title);
+
+        string memberRank = packetAll.SubPledgeLeaderName == packet.Name? "Leader" : "Member";
+ 
+
+        Label rankLabel = container.Q<Label>("rankLabel");
+        AddElementIfNotEmpty(rankLabel, rankLabel, memberRank);
+
+
+        Label statuslabel = container.Q<Label>("statusLabel");
+        AddElementIfNotEmpty(statuslabel, statuslabel, "Main Clan - " + packet.SubPledgeName);
+    }
 }

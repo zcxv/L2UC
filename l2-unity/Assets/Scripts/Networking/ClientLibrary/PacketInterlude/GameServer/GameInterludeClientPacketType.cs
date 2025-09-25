@@ -27,6 +27,7 @@ public enum GameInterludeClientPacketType : byte
     RequestPledgeInfo = 0x66,
     Extender = 0xd0,
     ExtenderRequestPledgeMemberInfo = 0x1d,
+    ExtenderRequestPledgeMemberPowerInfo = 0x1b,
     RequestSellItem = 0x1e,
     ValidatePosition = 0x48,
     RequestAcquireSkillInfo = 0x6b,

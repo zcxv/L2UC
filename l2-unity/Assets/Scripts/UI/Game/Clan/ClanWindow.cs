@@ -34,8 +34,9 @@ public class ClanWindow : L2TwoPanels
             _instance = this;
             _creatorTableWindows = new CreatorTableWindows();
             _masterClan = new MasterClan();
-            _detailedClan = new ClanDetailedInfo();
+
             _dataProviderClanInfo = new DataProviderClanInfo();
+            _detailedClan = new ClanDetailedInfo(_dataProviderClanInfo);
         }
         else
         {
@@ -74,12 +75,19 @@ public class ClanWindow : L2TwoPanels
         _creatorTableWindows.LoadAsset(LoadAsset);
         _masterClan.ForEachClan(_creatorTableWindows);
         _creatorTableWindows.OnRowClicked += _masterClan.SelectMember;
+        _creatorTableWindows.OnRowClicked += SelectMember;
+
+        _detailedClan.LoadAssets(LoadAsset);
 
         var memberButton = (UnityEngine.UIElements.Button)GetElementById("MemberButton");
         memberButton?.RegisterCallback<ClickEvent>(evt => OnClickShowMember(evt));
 
+        var privilegesButton = (UnityEngine.UIElements.Button)GetElementById("PrivilegesButton");
+        privilegesButton?.RegisterCallback<ClickEvent>(evt => OnClickPrivileges(evt));
+
         _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
         var masterClan = (VisualElement)GetElementById("masterClan");
+
         SetMouseOverDetectionSubElement(_detailedInfoElement);
         SetMouseOverDetectionRefreshTargetElement(masterClan);
 
@@ -93,7 +101,7 @@ public class ClanWindow : L2TwoPanels
     //Detailed Clan
     public void UpdateDetailedInfo(ServerPacket packet)
     {
-        _detailedClan.UpdateDetailedInfo(packet , _detailedInfoElement);
+        _detailedClan.UpdateDetailedInfo(packet , _detailedInfoElement , _packet);
         ShowDetailedInfo();
     }
 
@@ -145,7 +153,39 @@ public class ClanWindow : L2TwoPanels
 
     }
 
+    private void OnClickPrivileges(ClickEvent evt)
+    {
+        if (!string.IsNullOrEmpty(_masterClan.GetSelectMemberName()))
+        {
+            SendGameDataQueue.Instance().AddItem(
+                CreatorPacketsUser.CreateRequestPledgeMemberPowerInfo(_masterClan.GetSelectMemberName()),
+                GameClient.Instance.IsCryptEnabled(),
+                GameClient.Instance.IsCryptEnabled());
+        }
 
+    }
+
+
+    public void SelectMember(int selectIndex, string select_text)
+    {
+        if (_detailedInfoElement.style.display == DisplayStyle.Flex)
+        {
+            Debug.Log("Use Panel " + _detailedClan.GetShowPanel());
+
+            switch (_detailedClan.GetShowPanel())
+            {
+                case 0:
+                    OnClickShowMember(null);
+                    break;
+
+                case 1:
+                    OnClickPrivileges(null);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     private void OnDropdownPointer(PointerDownEvent evt)
     {

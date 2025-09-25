@@ -3,5 +3,6 @@
     <Style src="project://database/Assets/Resources/Data/UI/_Elements/L2StyleSheet.uss?fileID=7433441132597879392&amp;guid=72e99cc94b130bf4ba100dceaa830b13&amp;type=3#L2StyleSheet" />
     <engine:Instance name="AlertTemplate" template="AlertTemplate" style="overflow: visible; width: 257px; height: 384px; bottom: 0; position: absolute; max-width: none; max-height: none;">
         <AttributeOverrides element-name="Darkener" enabled="true" />
+        <engine:GroupBox name="content" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 5px; padding-bottom: 5px; padding-left: 3px; position: absolute; flex-shrink: 1; flex-grow: 1; width: 100%; height: 98%; top: 2px; padding-right: 8px;" />
     </engine:Instance>
 </engine:UXML>

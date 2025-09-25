@@ -1,48 +1,48 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
- <Style src="project://database/Assets/Resources/Data/UI/_Elements/L2StyleSheet.uss?fileID=7433441132597879392&amp;guid=72e99cc94b130bf4ba100dceaa830b13&amp;type=3#L2StyleSheet" />   
-<engine:GroupBox name="content" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 5px; padding-bottom: 5px; padding-left: 3px; position: absolute; flex-shrink: 1; flex-grow: 1; width: 100%; height: 98%; top: 2px; padding-right: 8px;">
+    <Style src="project://database/Assets/Resources/Data/UI/_Elements/L2StyleSheet.uss?fileID=7433441132597879392&amp;guid=72e99cc94b130bf4ba100dceaa830b13&amp;type=3#L2StyleSheet" />
+    <engine:GroupBox name="content" style="flex-shrink: 1; flex-grow: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0;">
         <engine:GroupBox name="Head" style="margin-top: 1px; margin-right: 0; margin-bottom: 0; margin-left: 6px; padding-top: 0; padding-bottom: 0; padding-left: 3px; background-image: resource(&apos;Data/UI/Window/Frame_DF_Large_Bg_Darker_Center_Alpha&apos;); padding-right: 0; border-left-color: rgba(76, 71, 47, 0.15); border-right-color: rgba(76, 71, 47, 0.15); border-top-color: rgba(76, 71, 47, 0.15); border-bottom-color: rgba(76, 71, 47, 0.15); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px;">
             <engine:VisualElement name="headBox" style="flex-grow: 1;">
-                <engine:Label text="Altran" name="titleLabel" style="margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(223, 222, 222); font-size: 11px;" />
-                <engine:GroupBox name="GroupLevelRange" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-direction: row;">
-                    <engine:Label text="Level :" name="lvlName" style="margin-top: 10px; margin-right: 3px; margin-bottom: 3px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(149, 149, 149); font-size: 11px;" />
-                    <engine:Label text="2~20" name="lvlLabel" style="margin-top: 10px; margin-right: 0; margin-bottom: 3px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(165, 143, 113); font-size: 11px;" />
+                <engine:GroupBox name="GroupInvite" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-direction: row; flex-shrink: 1; flex-grow: 1;">
+                    <engine:Label text="hector2" name="titleLabel" style="margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(223, 222, 222); font-size: 11px;" />
+                    <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NotificationButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); align-self: center; align-items: center; flex-shrink: 0; flex-grow: 0; align-content: flex-start; justify-content: flex-start; flex-wrap: nowrap; margin-left: auto; margin-right: 0;">
+                        <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
+                        <engine:Label text="Invite" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0; color: rgba(255, 249, 227, 0.96);" />
+                    </engine:Button>
                 </engine:GroupBox>
-                <engine:GroupBox name="GroupTimeName" style="margin-top: 0; margin-right: 0; margin-bottom: 4px; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-direction: row;">
-                    <engine:Label text="One-time" name="timeName" style="margin-top: 0; margin-right: 3px; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(149, 149, 149); font-size: 11px;" />
-                    <engine:Label name="lvlLabel" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(165, 143, 113); font-size: 11px;" />
+                <engine:GroupBox name="GroupTitle" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-direction: row;">
+                    <engine:Label text="Title" name="titlePlayer" style="margin-top: 3px; margin-right: 3px; margin-bottom: 3px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(149, 149, 149); font-size: 11px;" />
+                    <engine:Label name="titlePlayerLabel" style="margin-top: 3px; margin-right: 3px; margin-bottom: 3px; margin-left: 14px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(165, 143, 113); font-size: 11px;" />
+                </engine:GroupBox>
+                <engine:GroupBox name="GroupRank" style="margin-top: 0; margin-right: 0; margin-bottom: 4px; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-direction: row;">
+                    <engine:Label text="Rank" name="rankName" style="margin-top: 0; margin-right: 14px; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(149, 149, 149); font-size: 11px;" />
+                    <engine:Label name="rankLabel" text="Leader" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(165, 143, 113); font-size: 11px;" />
+                </engine:GroupBox>
+                <engine:GroupBox name="GroupStatus" style="margin-top: 0; margin-right: 0; margin-bottom: 4px; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-direction: row;">
+                    <engine:Label text="Status" name="statusName" style="margin-top: 0; margin-right: 8px; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(149, 149, 149); font-size: 11px;" />
+                    <engine:Label name="statusLabel" text="Main Clan - GawricTestClan" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(165, 143, 113); font-size: 11px;" />
+                </engine:GroupBox>
+                <engine:GroupBox name="GroupBoxButtons" style="flex-direction: row; margin-top: 3px; margin-right: 0; margin-bottom: 0; margin-left: -2px; padding-top: 0; padding-bottom: 0; padding-left: 0;">
+                    <engine:Button text="ButtonBg" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TitleButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); width: 78px; margin-left: 0; margin-right: 2px;">
+                        <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
+                        <engine:Label text="Change Title" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0; color: rgba(149, 149, 149, 0.96);" />
+                    </engine:Button>
+                    <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RanklButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); width: 78px; margin-left: 0; margin-right: 2px;">
+                        <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
+                        <engine:Label text="Change Rank" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0; color: rgba(149, 149, 149, 0.96);" />
+                    </engine:Button>
+                    <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DismissButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); width: 78px; margin-left: 0;">
+                        <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
+                        <engine:Label text="Dismiss" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0; color: rgba(149, 149, 149, 0.96);" />
+                    </engine:Button>
                 </engine:GroupBox>
             </engine:VisualElement>
         </engine:GroupBox>
         <engine:GroupBox name="Center" style="margin-top: 2%; margin-right: 0; margin-bottom: 0; margin-left: 6px; padding-top: 0; padding-bottom: 0; padding-left: 0; height: 37%; width: auto; text-overflow: ellipsis; overflow: hidden; background-image: resource(&apos;Data/UI/Window/Frame_DF_Large_Bg_Darker_Center_Alpha&apos;); border-left-color: rgba(76, 71, 47, 0.15); border-right-color: rgba(76, 71, 47, 0.15); border-top-color: rgba(76, 71, 47, 0.15); border-bottom-color: rgba(76, 71, 47, 0.15); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px;">
-            <engine:Label text="Newbie Guide told you, that Altran is looking for travelers help" name="textlabel" style="white-space: normal; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 11px; color: rgb(223, 222, 222);" />
+            <engine:Label name="textlabel" style="white-space: normal; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 11px; color: rgb(223, 222, 222);" />
         </engine:GroupBox>
-        <engine:GroupBox name="FooterRewards" class="right-scroll-view" style="margin-top: 1%; margin-right: 0; margin-bottom: 0; margin-left: 6px; padding-top: 0; padding-bottom: 0; padding-left: 0; height: 25%; background-image: none; flex-shrink: 1; flex-grow: 1;">
-            <engine:Label text="Rewards" name="titleReward" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 8px; padding-top: 0; padding-right: 0; padding-bottom: 5px; padding-left: 0; color: rgb(223, 222, 222); font-size: 11px;" />
-            <engine:VisualElement name="ListRewards" style="flex-grow: 1; height: auto; width: auto; background-image: resource(&apos;Data/UI/Window/Frame_DF_Large_Bg_Darker_Center_Alpha&apos;); padding-top: 1px; padding-right: 1px; padding-bottom: 1px; padding-left: 1px; border-left-color: rgba(76, 71, 47, 0.15); border-right-color: rgba(76, 71, 47, 0.15); border-top-color: rgba(76, 71, 47, 0.15); border-bottom-color: rgba(76, 71, 47, 0.15); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px;">
-                <engine:GroupBox name="body" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; align-self: stretch; align-items: stretch; width: auto; height: 100%; justify-content: center; flex-shrink: 1; flex-grow: 1;">
-                    <engine:ScrollView vertical-scroller-visibility="AlwaysVisible" horizontal-page-size="1" name="ScrollView" horizontal-scroller-visibility="Hidden" mouse-wheel-scroll-size="4.833333" touch-scroll-type="Clamped" class="l2-scroll-view" style="flex-grow: 1; margin-left: 0; margin-top: 0; padding-right: 0; width: auto; height: auto;">
-                        <engine:VisualElement name="Content" style="flex-grow: 1; padding-right: 0; flex-shrink: 1; flex-direction: column; flex-wrap: wrap; padding-top: 0; padding-bottom: 0; padding-left: 0; height: auto; max-height: none; min-height: auto;" />
-                    </engine:ScrollView>
-                </engine:GroupBox>
-            </engine:VisualElement>
-        </engine:GroupBox>
-        <engine:GroupBox name="FooterButtons" style="margin-top: 15px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-shrink: 1; flex-grow: 1; justify-content: flex-end; align-items: center;">
-            <engine:GroupBox name="Box1" style="flex-direction: row; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0;">
-                <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NotificationButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
-                    <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
-                    <engine:Label text="Notification" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0; color: rgba(149, 149, 149, 0.96);" />
-                </engine:Button>
-                <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CancelButtonBox1" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
-                    <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
-                    <engine:Label text="Cancel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0; color: rgba(149, 149, 149, 0.96);" />
-                </engine:Button>
-            </engine:GroupBox>
+        <engine:GroupBox name="FooterButtons" style="margin-top: 15px; margin-right: 0; margin-bottom: 5px; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-shrink: 1; flex-grow: 1; justify-content: flex-end; align-items: center;">
             <engine:GroupBox name="box2" style="flex-direction: row; margin-top: 3px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0;">
-                <engine:Button text="ButtonBg" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AbortButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
-                    <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
-                    <engine:Label text="Abort Quest" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
-                </engine:Button>
                 <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CancelButtonBox2" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
                     <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
                     <engine:Label text="Cancel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />

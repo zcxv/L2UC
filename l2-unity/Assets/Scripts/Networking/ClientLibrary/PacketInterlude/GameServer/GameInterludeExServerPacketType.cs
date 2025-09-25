@@ -8,4 +8,5 @@ public enum GameInterludeExServerPacketType : byte
     ExShowCropInfo = 0x1D,
     ExShowManorDefaultInfo = 0x1E,
     ExPledgeReceiveMemberInfo = 0x3d,
+    ExPledgeReceivePowerInfo = 0x3c,
 }
