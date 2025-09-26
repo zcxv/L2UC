@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,6 +7,7 @@ public abstract class AbstractClanContent
 {
     protected DataProviderClanInfo _dataProvider;
     public VisualTreeAsset template;
+
     protected VisualElement content;
     public Action<int> OnClickHide;
     protected VisualElement LoadContent(VisualElement content, VisualElement detailedInfoElement)
