@@ -11,9 +11,8 @@ public class ClanDetailedInfo
     private DataProviderClanInfo _dataProvider;
     private MemberInfoContent _memberInfoContent;
     private PrivilegesInfoContent _privilegesInfoContent;
-    private ICreatorPanelCheckBox _createPanelCheckBoxPrivilages;
-    private ICreatorPanelCheckBox _createPanelCheckBoxClanHall;
-    private ICreatorPanelCheckBox _createPanelCheckBoxCastle;
+    private ICreatorPanelCheckBox _createPanelCheckBox;
+
 
     private int _showPanel = -1;
 
@@ -21,14 +20,12 @@ public class ClanDetailedInfo
     {
         _dataProvider = dataProvider;
 
-        _createPanelCheckBoxPrivilages = new CreatePanelCheckBoxWindows();
-        _createPanelCheckBoxClanHall = new CreatePanelCheckBoxWindows();
-        _createPanelCheckBoxCastle = new CreatePanelCheckBoxWindows();
+        _createPanelCheckBox = new CreatePanelCheckBoxWindows();
 
         _memberInfoContent = new MemberInfoContent(_dataProvider);
         _memberInfoContent.OnClickHide += OnClickHide;
 
-        _privilegesInfoContent = new PrivilegesInfoContent(_dataProvider , new List<ICreatorPanelCheckBox> { _createPanelCheckBoxPrivilages , _createPanelCheckBoxClanHall , _createPanelCheckBoxCastle });
+        _privilegesInfoContent = new PrivilegesInfoContent(_dataProvider , _createPanelCheckBox);
         _privilegesInfoContent.OnClickHide += OnClickHide;
     }
 
@@ -37,9 +34,7 @@ public class ClanDetailedInfo
         _memberInfoContent.template = loaderFunc(_templateNameMemberInfo);
         _privilegesInfoContent.template = loaderFunc(_templateNamePrivilegesInfo);
 
-        _createPanelCheckBoxPrivilages.LoadAsset(loaderFunc);
-        _createPanelCheckBoxClanHall.LoadAsset(loaderFunc);
-        _createPanelCheckBoxCastle.LoadAsset(loaderFunc);
+        _createPanelCheckBox.LoadAsset(loaderFunc);
 
     }
 

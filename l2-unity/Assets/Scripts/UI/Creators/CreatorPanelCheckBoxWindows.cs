@@ -7,8 +7,7 @@ using UnityEngine.UIElements;
 
 public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
 {
-    private List<SettingCheckBox> _left;
-    private List<SettingCheckBox> _right;
+
     private const string _checkBoxTemplateName = "Data/UI/_Elements/Template/Elements/Checkbox/DefaultCheckBox";
     private const string _twoPanelsTemplateName = "Data/UI/_Elements/Template/Clan/TwoPanelsCheckBox";
     private List<VisualTreeAsset> _listTemplate  = new List<VisualTreeAsset>();
@@ -33,17 +32,28 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
         return new List<string> { _twoPanelsTemplateName, _checkBoxTemplateName };
     }
 
-    public void CreateTwoPanels(VisualElement rootPanel, List<SettingCheckBox> left, List<SettingCheckBox> right)
+    public void CreateTwoPanels(CheckBoxRootElements elements)
     {
-        _left = left;
-        _right = right;
+        for (int i =0; i <  elements.GetRootPanels().Count; i++)
+        {
+            VisualElement rootPanel = elements.GetRootPanels()[i];
+            VisualElement twoPanel = AddTwoPanels(rootPanel);
+            VisualTreeAsset checkBoxTemplate = _listTemplate[1];
 
-        VisualElement twoPanel = AddTwoPanels(rootPanel);
-        VisualTreeAsset checkBoxTemplate = _listTemplate[1];
-        SetCheckBoxHeaderPanel(twoPanel, _listTemplate[1] , left[0]);
-        left.RemoveAt(0);
-        SetCheckBoxLeftPanel(twoPanel, checkBoxTemplate , left);
-        SetCheckBoxRightPanel(twoPanel, checkBoxTemplate , right);
+            if (twoPanel == null)
+            {
+                Debug.LogError("CreatePanelCheckBoxWindows-> Not Found Template");
+                return;
+            }
+            List<SettingCheckBox> left = elements.GetLeft(i);
+            List<SettingCheckBox> right = elements.GetRight(i);
+
+            SetCheckBoxHeaderPanel(twoPanel, _listTemplate[1], left[0]);
+            left.RemoveAt(0);
+            SetCheckBoxLeftPanel(twoPanel, checkBoxTemplate, left);
+            SetCheckBoxRightPanel(twoPanel, checkBoxTemplate, right);
+        }
+
     }
     private VisualElement AddTwoPanels(VisualElement panel)
     {
@@ -112,10 +122,11 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
         VisualElement uncheked = checkbox.Q<VisualElement>("imageUnchecked");
         VisualElement cheked = checkbox.Q<VisualElement>("imageChecked");
         VisualElement checkedDisabled = checkbox.Q<VisualElement>("imageCheckedDisabled");
+        VisualElement uncheckdDisabled = checkbox.Q<VisualElement>("imageUnCheckedDisabled");
         Label label = checkbox.Q<Label>("labelCheckBox");
 
         SetChecked(checkbox, setting.IsChecked() , uncheked, cheked);
-        SetDisabled(checkbox, setting.IsDisabled(), uncheked, cheked, checkedDisabled);
+        SetDisabled(checkbox, setting.IsDisabled(), setting.IsChecked(), uncheked, cheked, checkedDisabled , uncheckdDisabled);
         SetText(label, setting.GetName());
         SetColorText(label, setting.IsDisabled());
 
@@ -155,15 +166,23 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
         }
     }
 
-    private void SetDisabled(VisualElement checkbox, bool isDisabled, VisualElement uncheked, VisualElement cheked , VisualElement  checkedDisabled)
+    private void SetDisabled(VisualElement checkbox, bool isDisabled, bool isChecked , VisualElement uncheked, VisualElement cheked , VisualElement  checkedDisabled, VisualElement unCheckedDisabled)
     {
 
 
-        if (isDisabled)
+        if (isDisabled & isChecked)
         {
             uncheked.style.display = DisplayStyle.None;
             cheked.style.display = DisplayStyle.None;
             checkedDisabled.style.display = DisplayStyle.Flex;
+            unCheckedDisabled.style.display = DisplayStyle.None;
+        }
+        else if(isDisabled & !isChecked)
+        {
+            uncheked.style.display = DisplayStyle.None;
+            cheked.style.display = DisplayStyle.None;
+            checkedDisabled.style.display = DisplayStyle.None;
+            unCheckedDisabled.style.display = DisplayStyle.Flex;
         }
     }
 }

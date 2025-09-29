@@ -10,7 +10,7 @@ public class IconManager
     private const string _cursorFolder = "Data\\UI\\Assets\\Cursor";
     private const string _defaultNameIconBackground = "ItemWindow_DF_SlotBox_Default";
     private const string _checkedCheckBoxTexture = "Data/UI/Quest/CheckBox_checked";
-    private const string _uncheckedCheckBoxTexture =  "Data/UI/Quest/CheckBoxQuest";
+    private const string _uncheckedCheckBoxTexture = "Data/UI/Quest/CheckBox_uncheked";
     
 
 
