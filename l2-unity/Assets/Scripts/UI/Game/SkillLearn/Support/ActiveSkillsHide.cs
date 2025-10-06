@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 
 using UnityEngine.UIElements;
-using static UnityEditor.Rendering.FilterWindow;
+
 
 
 public class ActiveSkillsHide : AbstractSkills
@@ -62,10 +62,11 @@ public class ActiveSkillsHide : AbstractSkills
 
 
 
-    public void CreateSlots(List<SkillInstance> list)
+    public void CreateSlots(List<SkillInstance> list , int sizeCell)
     {
         int panelCount = CalculatePanelCount(list);
 
+        skillsPerPanel = sizeCell;
     
         var activeSkills = list.Where(s => !s.IsMagic()).ToList();
         var magicSkills = list.Where(s => s.IsMagic()).ToList();
@@ -198,7 +199,9 @@ public class ActiveSkillsHide : AbstractSkills
         if (rowPhysical != null)
         {
             var boxPanel = ToolTipsUtils.CloneOne(_templateBoxPanel);
+            SetWidthBoxPanel(boxPanel, skillsPerPanel);
             var panels = base.CreateSlots(list, _templatePanel8x1, _templateSlotSkill, boxPanel);
+
             _boxPanelsPhysical.Add(panels);
             rowPhysical.Add(panels);
         }
@@ -212,8 +215,9 @@ public class ActiveSkillsHide : AbstractSkills
     {
         if (rowMagical != null)
         {
-            var _boxPanel = ToolTipsUtils.CloneOne(_templateBoxPanel);
-            var panels = base.CreateSlots(list, _templatePanel8x1, _templateSlotSkill, _boxPanel);
+            var boxPanel = ToolTipsUtils.CloneOne(_templateBoxPanel);
+            SetWidthBoxPanel(boxPanel, skillsPerPanel);
+            var panels = base.CreateSlots(list, _templatePanel8x1, _templateSlotSkill, boxPanel);
             _boxPanelsMagic.Add(panels);
             rowMagical.Add(panels);
         }
@@ -256,3 +260,5 @@ public class ActiveSkillsHide : AbstractSkills
     }
 
 }
+
+

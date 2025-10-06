@@ -18,6 +18,7 @@ public class ClanWindow : L2TwoPanels
     private ClanDetailedInfo _detailedClan;
     private ICreatorTables _creatorTableWindows;
 
+    private PledgeClanInfo _pladgeClanInfo = new PledgeClanInfo(new byte[1]);
     private DropdownField _dropdown;
     private string _selectDropDown = "";
     private List<string> _listDropDown;
@@ -85,6 +86,13 @@ public class ClanWindow : L2TwoPanels
         var privilegesButton = (UnityEngine.UIElements.Button)GetElementById("PrivilegesButton");
         privilegesButton?.RegisterCallback<ClickEvent>(evt => OnClickPrivileges(evt));
 
+        var clanInfo = (UnityEngine.UIElements.Button)GetElementById("ClanInoButton");
+        clanInfo?.RegisterCallback<ClickEvent>(evt => OnClickClanInfo(evt));
+
+
+        var penaltyButton = (UnityEngine.UIElements.Button)GetElementById("PenaltyButton");
+        penaltyButton?.RegisterCallback<ClickEvent>(evt => OnClickPenalty(evt));
+
         _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
         var masterClan = (VisualElement)GetElementById("masterClan");
 
@@ -111,7 +119,7 @@ public class ClanWindow : L2TwoPanels
     //Master Clan 
     public void AddClanData(PledgeShowMemberListAll packet )
     {
-        _dataProviderClanInfo.SetClanInfo(_windowEle , packet);
+        _dataProviderClanInfo.SetMasterClanInfo(_windowEle , packet);
         _listDropDown = _masterClan.SetDropdownList(_dropdown , packet.PledgeName);
         _masterClan.CreateMembersTable(packet.Members, _creatorTableWindows);
         _packet = packet;
@@ -165,12 +173,28 @@ public class ClanWindow : L2TwoPanels
 
     }
 
+    private void OnClickPenalty(ClickEvent evt)
+    {
+
+            SendGameDataQueue.Instance().AddItem(
+                CreatorPacketsUser.CreateRequestUserCommand(100),
+                GameClient.Instance.IsCryptEnabled(),
+                GameClient.Instance.IsCryptEnabled());
+        
+    }
+
+    private void OnClickClanInfo(ClickEvent evt)
+    {
+        _detailedClan.UpdateDetailedInfo(_pladgeClanInfo, _detailedInfoElement, _packet);
+        ShowDetailedInfo();
+    }
+
 
     public void SelectMember(int selectIndex, string select_text)
     {
         if (_detailedInfoElement.style.display == DisplayStyle.Flex)
         {
-            Debug.Log("Use Panel " + _detailedClan.GetShowPanel());
+
 
             switch (_detailedClan.GetShowPanel())
             {

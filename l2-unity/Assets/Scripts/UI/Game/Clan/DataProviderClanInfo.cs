@@ -1,3 +1,4 @@
+using Org.BouncyCastle.Bcpg;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,7 +7,7 @@ public class DataProviderClanInfo : AbstractDataFunction
 {
     private const string IMG_ONLINE = "Data/UI/Clan/PConline_up";
     private const string IMG_OFFLINE= "Data/UI/Clan/PConline_down";
-    public void SetClanInfo(VisualElement container, PledgeShowMemberListAll packet)
+    public void SetMasterClanInfo(VisualElement container, PledgeShowMemberListAll packet)
     {
         if (container != null)
         {
@@ -71,5 +72,11 @@ public class DataProviderClanInfo : AbstractDataFunction
 
         Label statuslabel = container.Q<Label>("statusLabel");
         AddElementIfNotEmpty(statuslabel, statuslabel, "Main Clan - " + packet.SubPledgeName);
+    }
+
+    public void SetSubjectClanInfo(VisualElement container , PledgeShowMemberListAll packetAll)
+    {
+        Label titleName = container.Q<Label>("titleLabel");
+        AddElementIfNotEmpty(titleName, titleName, packetAll.PledgeName);
     }
 }
