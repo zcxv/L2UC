@@ -46,8 +46,11 @@ public class SkillSlot : L2DraggableSlot
         _skillInstance = skillInstance;
         _isPassive = skillInstance.IsPassive;
 
-        var skill = SkillgrpTable.Instance.GetSkill(_id, _level);
-        Assign(skill , _isPassive);
+        if(_id != -1)
+        {
+            var skill = SkillgrpTable.Instance.GetSkill(_id, _level);
+            Assign(skill, _isPassive);
+        }
     }
 
     public void UpdateData(SkillInstance skillInstance)

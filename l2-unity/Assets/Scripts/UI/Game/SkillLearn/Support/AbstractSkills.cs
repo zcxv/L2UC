@@ -9,10 +9,12 @@ using static L2Slot;
 
 public class AbstractSkills
 {
+    protected const float _default7CellWidth = 252;
+    protected const float _default6CellWidth = 216;
 
     protected const string _rowNameInnerPanel = "RowsVirtual";
     protected Dictionary<int, SkillSlot> _allSlots;
-
+    protected int skillsPerPanel = 7;
     public void SetAllSlots(Dictionary<int, SkillSlot> allSlots)
     {
         if (allSlots != null) _allSlots = null;
@@ -143,7 +145,7 @@ public class AbstractSkills
 
     private void RearrangeSkillSlots(List<VisualElement> rowPanels, VisualElement boxPanel)
     {
-        const int skillsPerPanel = 7;
+        //const int skillsPerPanel = 7;
         List<VisualElement> toDelete = new List<VisualElement>();
 
         // Собираем все SkillSlot из всех панелей
@@ -161,7 +163,7 @@ public class AbstractSkills
             }
         }
 
-        // Распределяем слоты по панелям
+
         int slotIndex = 0;
         foreach (var panel in rowPanels)
         {
@@ -180,7 +182,7 @@ public class AbstractSkills
 
     protected void AddSkill(List<SkillInstance> added, List<VisualElement> rowPanels, VisualTreeAsset templateSlotSkill, VisualTreeAsset templatePanel8x1 , VisualElement boxPanel)
     {
-        const int skillsPerPanel = 7;
+        //const int skillsPerPanel = 7;
 
         foreach (var skill in added)
         {
@@ -237,7 +239,7 @@ public class AbstractSkills
 
     protected VisualElement CreateSlots(List<SkillInstance> skillList, VisualTreeAsset templatePanel8x1, VisualTreeAsset templateSlotsSkill, VisualElement boxPanel)
     {
-        int skillsPerPanel = 7;
+       
         int totalSkills = skillList.Count;
         int panelCount = GetCountPanel(totalSkills, skillsPerPanel);
 
@@ -253,11 +255,16 @@ public class AbstractSkills
             for (int j = 0; j < skillsPerPanel && skillIndex < totalSkills; j++, skillIndex++)
             {
                 SkillInstance instance = skillList[skillIndex];
-                var slotElement = ToolTipsUtils.CloneOne(templateSlotsSkill);
-                var skillSlot = new SkillSlot(slotElement, instance.SkillID, SlotType.SkillWindow);
-                skillSlot.AssignSkill(instance);
-                rowNameVirtual.Add(slotElement);
-                AddSlot(skillSlot);
+
+                if(instance.SkillID != -1)
+                {
+                    var slotElement = ToolTipsUtils.CloneOne(templateSlotsSkill);
+                    var skillSlot = new SkillSlot(slotElement, instance.SkillID, SlotType.SkillWindow);
+                    skillSlot.AssignSkill(instance);
+                    rowNameVirtual.Add(slotElement);
+                    AddSlot(skillSlot);
+                }
+
             }
 
             boxPanel.Add(panel);
@@ -294,7 +301,7 @@ public class AbstractSkills
 
     protected int CalculatePanelCount(List<SkillInstance> list)
     {
-        int skillsPerPanel = 7;
+        //int skillsPerPanel = 7;
         int totalSkills = list.Count;
         int panelCount = (int)Math.Ceiling((double)totalSkills / skillsPerPanel);
         return panelCount;
@@ -326,6 +333,21 @@ public class AbstractSkills
         {
             //panel.Clear();
             allContent.style.display = DisplayStyle.None;
+        }
+    }
+
+    public void SetWidthBoxPanel(VisualElement _templateBoxPanel , int sizeCell)
+    {
+        float  width = (sizeCell == 6) ? _default6CellWidth : _default7CellWidth;
+
+        if (_templateBoxPanel != null)
+        {
+           
+            _templateBoxPanel.style.width = width;
+        }
+        else
+        {
+            Debug.LogWarning("ActiveSkillsHide > _templateBoxPanel is null, cannot set width");
         }
     }
 

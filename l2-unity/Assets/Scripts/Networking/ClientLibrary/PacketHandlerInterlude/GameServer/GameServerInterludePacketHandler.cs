@@ -450,6 +450,8 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         EventProcessor.Instance.QueueEvent(() => {
             Entity npc = World.Instance.GetEntityNoLockSync(npcHtmlMessage.GetNpcId());
 
+            //npcId> 0 - the current use
+            if(npcHtmlMessage.GetNpcId() == 0) ShowHtmlPage(npcHtmlMessage);
             if (npc == null) return;
 
             var nsm = npc.GetComponent<NpcStateMachine>();
@@ -463,13 +465,17 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
             {
                 Vector3 position = PlayerEntity.Instance.transform.position;
                 ManualRotate(npc.transform, position);
-                HtmlWindow.Instance.InjectToWindow(npcHtmlMessage.Elements());
-                HtmlWindow.Instance.ShowWindowToCenter();
+                ShowHtmlPage(npcHtmlMessage);
             }
            
         });
     }
 
+    private void ShowHtmlPage(NpcHtmlMessage npcHtmlMessage)
+    {
+        HtmlWindow.Instance.InjectToWindow(npcHtmlMessage.Elements());
+        HtmlWindow.Instance.ShowWindowToCenter();
+    }
     private void OnPackageToList(byte[] data)
     {
 

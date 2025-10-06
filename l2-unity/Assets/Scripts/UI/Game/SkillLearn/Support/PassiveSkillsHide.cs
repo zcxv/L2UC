@@ -59,8 +59,10 @@ public class PassiveSkillsHide : AbstractSkills
         return _passiveSkillPanel;
     }
 
-    public void CreateSlots(List<SkillInstance> list)
+    public void CreateSlots(List<SkillInstance> list , int sizeCell)
     {
+        skillsPerPanel = sizeCell;
+
         int panelCount = CalculatePanelCount(list);
 
         var abilitySkills = list.Where(s => s.IsPassive).ToList();

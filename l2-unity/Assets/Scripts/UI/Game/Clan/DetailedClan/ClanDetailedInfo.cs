@@ -5,13 +5,17 @@ using UnityEngine.UIElements;
 
 public class ClanDetailedInfo
 {
+    private const string _templateNameClanInfo = "Data/UI/_Elements/Game/Clan/DetailedContent/ClanInfoContent";
     private const string _templateNamePrivilegesInfo = "Data/UI/_Elements/Game/Clan/DetailedContent/PrivilegesInfoContent";
     private const string _templateNameMemberInfo = "Data/UI/_Elements/Game/Clan/DetailedContent/MemberInfoContent";
 
     private DataProviderClanInfo _dataProvider;
     private MemberInfoContent _memberInfoContent;
+
     private PrivilegesInfoContent _privilegesInfoContent;
+    private ClanInfoContent _clanInfoContent;
     private ICreatorPanelCheckBox _createPanelCheckBox;
+    private ICreatorSkillsPanel _creatorSkillsPanel;
 
 
     private int _showPanel = -1;
@@ -21,20 +25,25 @@ public class ClanDetailedInfo
         _dataProvider = dataProvider;
 
         _createPanelCheckBox = new CreatePanelCheckBoxWindows();
+        _creatorSkillsPanel = new CreatorSkillsPanel();
 
         _memberInfoContent = new MemberInfoContent(_dataProvider);
         _memberInfoContent.OnClickHide += OnClickHide;
 
         _privilegesInfoContent = new PrivilegesInfoContent(_dataProvider , _createPanelCheckBox);
         _privilegesInfoContent.OnClickHide += OnClickHide;
+
+        _clanInfoContent = new ClanInfoContent(_dataProvider , _creatorSkillsPanel);
+        _clanInfoContent.OnClickHide += OnClickHide;
     }
 
    public void LoadAssets(Func<string, VisualTreeAsset> loaderFunc)
    {
         _memberInfoContent.template = loaderFunc(_templateNameMemberInfo);
         _privilegesInfoContent.template = loaderFunc(_templateNamePrivilegesInfo);
-
+        _clanInfoContent.template = loaderFunc(_templateNameClanInfo);
         _createPanelCheckBox.LoadAsset(loaderFunc);
+        _creatorSkillsPanel.LoadAsset(loaderFunc);
 
     }
 
@@ -51,7 +60,10 @@ public class ClanDetailedInfo
                 _privilegesInfoContent.PreShow(powerInfo, detailedInfoElement, packetAll);
                 _showPanel = 1;
                 break;
-
+            case PledgeClanInfo clanInfo:
+                _clanInfoContent.PreShow(clanInfo, detailedInfoElement, packetAll);
+                _showPanel = 2;
+                break;
             default:
                 // Handle unknown packet types if necessary
                 break;

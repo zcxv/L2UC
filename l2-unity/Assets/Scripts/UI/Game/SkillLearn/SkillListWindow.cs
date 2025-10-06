@@ -122,8 +122,8 @@ public class SkillListWindow : L2PopupWindow
 
         var activeSkills = list.Where(s => !s.IsPassive).ToList();
         var passiveSkills = list.Where(s => s.IsPassive).ToList();
-        _supportActiveSkills.CreateSlots(activeSkills);
-        _supportPassiveSkills.CreateSlots(passiveSkills);
+        _supportActiveSkills.CreateSlots(activeSkills , 7);
+        _supportPassiveSkills.CreateSlots(passiveSkills, 7);
     }
 
     public void UpdateSkillList(List<SkillInstance> list)
@@ -134,7 +134,7 @@ public class SkillListWindow : L2PopupWindow
         var activeSkills = list.Where(s => !s.IsPassive).ToList();
         var passiveSkills = list.Where(s => s.IsPassive).ToList();
         _supportActiveSkills.UpdateSlots(activeSkills);
-        _supportPassiveSkills.CreateSlots(passiveSkills);
+        _supportPassiveSkills.CreateSlots(passiveSkills, 7);
     }
 
     public SkillInstance GetSkillInstanceBySkillId(int skillId)

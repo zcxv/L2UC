@@ -35,6 +35,7 @@ public enum GameInterludeClientPacketType : byte
     Appearing = 0x30,
     RequestShortCutDel = 0x35,
     RequestShortCutReg = 0x33,
+    RequestUserCommand = 0xaa,
     Action = 0x04,
     RequestRestartPoint = 0x6D,
     RequestMagicSkillUse = 0x2F

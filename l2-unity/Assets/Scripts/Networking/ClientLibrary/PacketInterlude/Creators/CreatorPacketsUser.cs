@@ -97,6 +97,11 @@ public class CreatorPacketsUser
         return new RequestShortCutDel(slot);
     }
 
+    public static RequestUserCommand CreateRequestUserCommand(int idCommand)
+    {
+        return new RequestUserCommand(idCommand);
+    }
+
     public static RequestShortCutReg CreateRegShortCut(int typeId, int slot, int id, int level)
     {
         return new RequestShortCutReg(typeId, slot, id, level);
