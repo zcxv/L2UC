@@ -95,6 +95,7 @@ public class ClanWindow : L2TwoPanels
 
         _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
         var masterClan = (VisualElement)GetElementById("masterClan");
+        _detailedInfoElement?.RegisterCallback<ClickEvent>(evt => OnClickTest(evt));
 
         SetMouseOverDetectionSubElement(_detailedInfoElement);
         SetMouseOverDetectionRefreshTargetElement(masterClan);
@@ -170,6 +171,12 @@ public class ClanWindow : L2TwoPanels
                 GameClient.Instance.IsCryptEnabled(),
                 GameClient.Instance.IsCryptEnabled());
         }
+
+    }
+
+    private void OnClickTest(ClickEvent evt)
+    {
+        Debug.Log("Click Hide Element");
 
     }
 
