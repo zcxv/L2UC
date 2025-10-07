@@ -8,6 +8,7 @@ public abstract class L2TwoPanels : L2PopupWindow
     protected void HideDetailedInfo()
     {
         _detailedInfoElement.style.display = DisplayStyle.None;
+        _detailedInfoElement.pickingMode = PickingMode.Ignore;
     }
 
     protected void ShowDetailedInfo()

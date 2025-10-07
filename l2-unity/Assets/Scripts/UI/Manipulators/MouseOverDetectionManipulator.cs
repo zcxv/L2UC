@@ -28,7 +28,12 @@ public class MouseOverDetectionManipulator : PointerManipulator
     public void Disable()
     {
         _enabled = false;
-        if (_overThisManipulator) UnBlock();
+        if (_overThisManipulator)
+        {
+            Debug.Log("PointerLeaveHandler> leave1 unblock 2");
+            UnBlock();
+        }
+
     }
     public void SetBlock(bool isBlock) { if (isBlock) Block(); else UnBlock(); }
 
@@ -38,6 +43,7 @@ public class MouseOverDetectionManipulator : PointerManipulator
         target.RegisterCallback<PointerOverEvent>(PointerOverHandler);
         target.RegisterCallback<PointerLeaveEvent>(PointerLeaveHandler);
         target.RegisterCallback<PointerDownEvent>(PointerDownHandler);
+
         if (_subElement != null)
         {
             _subElement.RegisterCallback<PointerDownEvent>(PointerDownHandler);
@@ -59,37 +65,84 @@ public class MouseOverDetectionManipulator : PointerManipulator
             _subElement.UnregisterCallback<PointerOverEvent>(PointerOverHandler);
         }
     }
+    //Deprecated not working Flexbox VisualElement
+    //private bool IsVisibleAndContains(Vector2 pos, VisualElement el) =>
+    //    el != null && el.resolvedStyle.display != DisplayStyle.None && el.worldBound.Contains(pos);
 
-    private bool IsVisibleAndContains(Vector2 pos, VisualElement el) =>
-        el != null && el.resolvedStyle.display != DisplayStyle.None && el.worldBound.Contains(pos);
+
+
+    private bool IsVisibleAndContains(Vector2 posScreen, VisualElement el)
+    {
+
+        if (el == null) return false;
+        var panel = el.panel;
+        if (panel == null) return false;
+
+ 
+        Vector2 panelPos = new Vector2(posScreen.x, Screen.height - posScreen.y);
+
+        var picked = panel.Pick(panelPos); 
+        if (picked == null) return false;
+
+        return picked == el || el.Contains(picked);
+    }
 
     private void PointerEnterHandler(PointerEnterEvent evt)
     {
+        Debug.Log("PointerLeaveHandler> enter enter");
         if (_enabled && (_subElement == null || !IsVisibleAndContains(evt.position, _subElement)))
+        {
+            Debug.Log("PointerLeaveHandler> enter enter block");
             Block();
+        }
+
     }
 
     private void PointerOverHandler(PointerOverEvent evt)
     {
+        Debug.Log("PointerLeaveHandler> over enter");
         if (_enabled && (_subElement == null || !IsVisibleAndContains(evt.position, _subElement)))
+        {
+            Debug.Log("PointerLeaveHandler> over enter block");
             Block();
+        }
+
         else if (_enabled && _subElement != null && IsVisibleAndContains(evt.position, _subElement))
+        {
+            Debug.Log("PointerLeaveHandler> over enter block");
             Block();
+        }
+
     }
 
     private void PointerLeaveHandler(PointerLeaveEvent evt)
     {
+        Debug.Log("PointerLeaveHandler> leave enter");
         if (!_enabled) return;
         if (!IsVisibleAndContains(evt.position, target) && !IsVisibleAndContains(evt.position, _subElement))
+        {
             UnBlock();
+            Debug.Log("PointerLeaveHandler> leave unblock");
+        }
+
     }
 
     private void PointerDownHandler(PointerDownEvent evt)
     {
-        if (_enabled && (IsVisibleAndContains(evt.position, _subElement) || IsVisibleAndContains(evt.position, target)))
+        //Debug.Log("name 1 subelement " + _subElement.name + "Reuslt " + IsVisibleAndContains(evt.position, _subElement));
+        //Debug.Log("name 2 target element " + target.name + " Reuslt " + IsVisibleAndContains(evt.position, target)); 
+
+        //Debug.Log("name 1 subelement new " + _subElement.name + "Reuslt " + IsVisibleAndContains(Input.mousePosition, _subElement));
+        //Debug.Log("name 1 subelement new " + _subElement.name + "Reuslt " + IsVisibleAndContains(Input.mousePosition, target));
+
+        if (_enabled && (IsVisibleAndContains(Input.mousePosition, _subElement) || IsVisibleAndContains(Input.mousePosition, target)))
             Block();
         else
+        {
+            Debug.Log("PointerDownHandler> leave1 unblock");
             UnBlock();
+        }
+
     }
 
     private void Block()
@@ -102,5 +155,6 @@ public class MouseOverDetectionManipulator : PointerManipulator
     {
         _ui.MouseOverUI = false;
         _overThisManipulator = false;
+        Debug.Log("PointerLeaveHandler> leave1 unblock root");
     }
 }
