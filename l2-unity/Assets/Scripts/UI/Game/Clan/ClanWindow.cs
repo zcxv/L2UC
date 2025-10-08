@@ -1,12 +1,9 @@
-using Org.BouncyCastle.Bcpg;
-using Org.BouncyCastle.Utilities.Encoders;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
-using UnityEditor.Sprites;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -23,6 +20,15 @@ public class ClanWindow : L2TwoPanels
     private string _selectDropDown = "";
     private List<string> _listDropDown;
     private DataProviderClanInfo _dataProviderClanInfo;
+
+    private Label _labelEditAuth;
+    private Label _labelMemberInfo;
+    private Label _labelPrivileges;
+    private Label _labelClanInfo;
+    private Label _labelPenalty;
+    private Label _labelLeave;
+    private Label _labelClanEntry;
+
     //data
     private PledgeShowMemberListAll _packet;
 
@@ -59,6 +65,9 @@ public class ClanWindow : L2TwoPanels
 
         yield return new WaitForEndOfFrame();
 
+        defaultHeight = 447;
+        defaultWidth = 538;
+
         var dragArea = GetElementByClass("drag-area");
         DragManipulator drag = new DragManipulator(dragArea, _windowEle);
         dragArea.AddManipulator(drag);
@@ -85,6 +94,9 @@ public class ClanWindow : L2TwoPanels
 
         var privilegesButton = (UnityEngine.UIElements.Button)GetElementById("PrivilegesButton");
         privilegesButton?.RegisterCallback<ClickEvent>(evt => OnClickPrivileges(evt));
+        //disabled
+        //var editAuthButton = (UnityEngine.UIElements.Button)GetElementById("EditAuthButton");
+        //editAuthButton?.RegisterCallback<ClickEvent>(evt => OnClickEditAuthButton(evt));
 
         var clanInfo = (UnityEngine.UIElements.Button)GetElementById("ClanInoButton");
         clanInfo?.RegisterCallback<ClickEvent>(evt => OnClickClanInfo(evt));
@@ -93,9 +105,20 @@ public class ClanWindow : L2TwoPanels
         var penaltyButton = (UnityEngine.UIElements.Button)GetElementById("PenaltyButton");
         penaltyButton?.RegisterCallback<ClickEvent>(evt => OnClickPenalty(evt));
 
+        var leaveButton = (UnityEngine.UIElements.Button)GetElementById("LeaveButton");
+        leaveButton?.RegisterCallback<ClickEvent>(evt => OnClickLeave(evt));
+
         _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
         var masterClan = (VisualElement)GetElementById("masterClan");
-        _detailedInfoElement?.RegisterCallback<ClickEvent>(evt => OnClickTest(evt));
+
+        _labelEditAuth = (UnityEngine.UIElements.Label)GetElementById("EditAuthLabel");
+        _labelMemberInfo = (UnityEngine.UIElements.Label)GetElementById("MemberInfoLabel");
+        _labelPrivileges = (UnityEngine.UIElements.Label)GetElementById("PrivilegesLabel");
+        _labelClanInfo = (UnityEngine.UIElements.Label)GetElementById("ClanInfoLabel");
+        _labelPenalty = (UnityEngine.UIElements.Label)GetElementById("PenaltyLabel");
+        _labelLeave = (UnityEngine.UIElements.Label)GetElementById("LeaveLabel");
+        _labelClanEntry = (UnityEngine.UIElements.Label)GetElementById("ClanEntryLabel");
+
 
         SetMouseOverDetectionSubElement(_detailedInfoElement);
         SetMouseOverDetectionRefreshTargetElement(masterClan);
@@ -104,7 +127,9 @@ public class ClanWindow : L2TwoPanels
         RegisterCloseWindowEvent("btn-close-frame");
         RegisterClickWindowEvent(_windowEle, dragArea);
         HideDetailedInfo();
+
         OnCenterScreen(_root);
+        EnabledUnkButtons();
     }
 
     //Detailed Clan
@@ -124,6 +149,7 @@ public class ClanWindow : L2TwoPanels
         _listDropDown = _masterClan.SetDropdownList(_dropdown , packet.PledgeName);
         _masterClan.CreateMembersTable(packet.Members, _creatorTableWindows);
         _packet = packet;
+        SetDisabledButton(packet.SubPledgeLeaderName , packet.Members);
     }
 
     public void UpdateMemberData(PledgeShowMemberListUpdate packetUpdate)
@@ -174,10 +200,30 @@ public class ClanWindow : L2TwoPanels
 
     }
 
-    private void OnClickTest(ClickEvent evt)
+    private void OnClickEditAuthButton(ClickEvent evt)
     {
-        Debug.Log("Click Hide Element");
+            SendGameDataQueue.Instance().AddItem(
+                CreatorPacketsUser.CreateRequestPledgePowerGradeList(),
+                GameClient.Instance.IsCryptEnabled(),
+                GameClient.Instance.IsCryptEnabled());
+    }
 
+
+    private void OnClickLeave(ClickEvent evt)
+    {
+        if(_packet != null && !IsLeader(_packet.SubPledgeLeaderName))
+        {
+            SystemMessageWindow.Instance.OnButtonOk += OkLeave;
+            SystemMessageWindow.Instance.OnButtonClosed += On—ancel;
+            SystemMessageWindow.Instance.ShowWindowDialogYesOrNot("Are you sure you want to leave the clan?");
+        }
+
+    }
+
+    private bool IsLeader(string leaderName)
+    {
+        string userName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
+        return leaderName == userName;
     }
 
     private void OnClickPenalty(ClickEvent evt)
@@ -232,6 +278,102 @@ public class ClanWindow : L2TwoPanels
         //string playeName = evt.newValue;
         //_selectDropDown = playeName;
     }
+    private const string USS_STYLE_YELLOW = "button-label-yellow";
+    private const string USS_STYLE_DISABLED = "button-label-disabled";
+    private void SetDisabledButton(string leaderName, List<ClanMember> Members)
+    {
+        string userName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
+        ResetAllButtons();
+
+        if (IsLeader(leaderName))
+            EnabledLeaderButtons();
+        else
+        {
+            if (Members.FirstOrDefault(m => m.MemberName == userName) == null)
+                EnabledUnkButtons();
+            else
+                EnabledUserButtons();
+        }
+    }
+
+
+    private void ResetAllButtons()
+    {
+        _labelEditAuth.AddToClassList(USS_STYLE_DISABLED);
+        _labelMemberInfo.AddToClassList(USS_STYLE_DISABLED);
+        _labelPrivileges.AddToClassList(USS_STYLE_DISABLED);
+        _labelClanInfo.AddToClassList(USS_STYLE_DISABLED);
+        _labelPenalty.AddToClassList(USS_STYLE_DISABLED);
+        _labelLeave.AddToClassList(USS_STYLE_DISABLED);
+        _labelClanEntry.AddToClassList(USS_STYLE_DISABLED);
+    }
+
+
+    private void EnabledLeaderButtons()
+    {
+        //_labelEditAuth.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelMemberInfo.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelPrivileges.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelClanInfo.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelPenalty.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelLeave.RemoveFromClassList(USS_STYLE_DISABLED);
+
+
+
+        //_labelEditAuth.AddToClassList(USS_STYLE_YELLOW);
+        _labelMemberInfo.AddToClassList(USS_STYLE_YELLOW);
+        _labelPrivileges.AddToClassList(USS_STYLE_YELLOW);
+        _labelClanInfo.AddToClassList(USS_STYLE_YELLOW);
+        _labelPenalty.AddToClassList(USS_STYLE_YELLOW);
+        _labelLeave.AddToClassList(USS_STYLE_YELLOW);
+
+    }
+
+    private void EnabledUserButtons()
+    {
+        _labelMemberInfo.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelPrivileges.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelPenalty.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelClanInfo.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelLeave.RemoveFromClassList(USS_STYLE_DISABLED);
+
+        _labelMemberInfo.AddToClassList(USS_STYLE_YELLOW);
+        _labelPrivileges.AddToClassList(USS_STYLE_YELLOW);
+        _labelPenalty.AddToClassList(USS_STYLE_YELLOW);
+        _labelClanInfo.AddToClassList(USS_STYLE_YELLOW);
+        _labelLeave.AddToClassList(USS_STYLE_YELLOW);
+    }
+
+    private void EnabledUnkButtons()
+    {
+
+        _labelPenalty.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelLeave.RemoveFromClassList(USS_STYLE_DISABLED);
+
+        _labelPenalty.AddToClassList(USS_STYLE_YELLOW);
+        _labelLeave.AddToClassList(USS_STYLE_YELLOW);
+
+    }
+
+    private void OkLeave()
+    {
+        SendGameDataQueue.Instance().AddItem(
+               CreatorPacketsUser.CreateRequestWithdrawPledge(),
+               GameClient.Instance.IsCryptEnabled(),
+               GameClient.Instance.IsCryptEnabled());
+        CancelEvent();
+    }
+
+    private void On—ancel()
+    {
+        CancelEvent();
+    }
+    private void CancelEvent()
+    {
+        SystemMessageWindow.Instance.OnButtonOk -= OkLeave;
+        SystemMessageWindow.Instance.OnButtonClosed -= On—ancel;
+    }
+
 
     private void OnDestroy()
     {

@@ -4,6 +4,8 @@
     text-shadow: 0.5px 0.5px 3px rgb(0, 0, 0);
 }
 
+
+
 .resize-hor {
     cursor: resource('Data/UI/Assets/Cursor/Resize_Hor') 15 5;
 }
@@ -1227,8 +1229,36 @@
     -unity-font-definition: resource('Data/UI/Assets/Font/tahoma Light');
 }
 
+.button-label-yellow {
+    color: rgba(214, 204, 177, 0.96);
+    -unity-text-align: middle-center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.button-label-yellow {
+    -unity-font: resource('Data/UI/Assets/Font/tahoma');
+    -unity-font-definition: resource('Data/UI/Assets/Font/tahoma Light');
+}
+
 .button-label {
     color: rgba(255, 249, 227, 0.96);
+    -unity-text-align: middle-center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.button-label-disabled {
+    -unity-font: resource('Data/UI/Assets/Font/tahoma');
+    -unity-font-definition: resource('Data/UI/Assets/Font/tahoma Light');
+}
+
+.button-label-disabled {
+    color: rgba(149, 149, 149, 0.96);
     -unity-text-align: middle-center;
     margin-top: 0;
     margin-right: 0;

@@ -94,6 +94,13 @@ public abstract class L2PopupWindow : L2Window
         OnCenterScreen(_root);
     }
 
+    public void ShowWindowToCenterAndBringToFront()
+    {
+        base.ShowWindow();
+        OnCenterScreen(_root);
+        _windowEle.BringToFront();
+    }
+
     public void RefreshOpacity(float opacity)
     {
         _windowEle.style.opacity = opacity;
