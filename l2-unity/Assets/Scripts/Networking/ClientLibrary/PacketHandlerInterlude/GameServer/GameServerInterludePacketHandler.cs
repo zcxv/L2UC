@@ -451,7 +451,8 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
             Entity npc = World.Instance.GetEntityNoLockSync(npcHtmlMessage.GetNpcId());
 
             //npcId> 0 - the current use
-            if(npcHtmlMessage.GetNpcId() == 0) ShowHtmlPage(npcHtmlMessage);
+            if(npcHtmlMessage.GetNpcId() == 0) ShowHtmlBrightToFront(npcHtmlMessage);
+
             if (npc == null) return;
 
             var nsm = npc.GetComponent<NpcStateMachine>();
@@ -476,6 +477,14 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         HtmlWindow.Instance.InjectToWindow(npcHtmlMessage.Elements());
         HtmlWindow.Instance.ShowWindowToCenter();
     }
+
+    private void ShowHtmlBrightToFront(NpcHtmlMessage npcHtmlMessage)
+    {
+        HtmlWindow.Instance.InjectToWindow(npcHtmlMessage.Elements());
+        HtmlWindow.Instance.ShowWindowToCenterAndBringToFront();
+
+    }
+
     private void OnPackageToList(byte[] data)
     {
 

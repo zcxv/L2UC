@@ -42,7 +42,8 @@ public abstract class L2Window : MonoBehaviour
     }
 
 
-
+    protected float defaultWidth = 0;
+    protected float defaultHeight = 0;
     private void UpdateCenter(VisualElement root)
     {
         if (_isReg == false)
@@ -56,6 +57,13 @@ public abstract class L2Window : MonoBehaviour
 
                 float width = _windowEle.resolvedStyle.width;
                 float height = _windowEle.resolvedStyle.height;
+
+                if(width == 0 & height == 0)
+                {
+                    width = defaultWidth;
+                    height = defaultHeight;
+                }
+
 
                 float parentWidth = root.resolvedStyle.width;
                 float parentHeight = root.resolvedStyle.height;

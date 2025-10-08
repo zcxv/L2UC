@@ -71,6 +71,16 @@ public class CreatorPacketsUser
         return new RequestPledgeMemberPowerInfo(memberName);
     }
 
+    public static RequestPledgePowerGradeList CreateRequestPledgePowerGradeList()
+    {
+        return new RequestPledgePowerGradeList();
+    }
+
+    public static RequestWithdrawPledge CreateRequestWithdrawPledge()
+    {
+        return new RequestWithdrawPledge();
+    }
+
     public static RequestSellItem CreateRequestSellItem(int listId, List<Product> buyList)
     {
         return new RequestSellItem(listId, buyList);
