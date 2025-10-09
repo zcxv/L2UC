@@ -16,9 +16,10 @@ public class ClanWindow : L2TwoPanels
     private ICreatorTables _creatorTableWindows;
 
     private PledgeClanInfo _pladgeClanInfo = new PledgeClanInfo(new byte[1]);
+
     private DropdownField _dropdown;
     private string _selectDropDown = "";
-    private List<string> _listDropDown;
+
     private DataProviderClanInfo _dataProviderClanInfo;
 
     private Label _labelEditAuth;
@@ -28,6 +29,7 @@ public class ClanWindow : L2TwoPanels
     private Label _labelPenalty;
     private Label _labelLeave;
     private Label _labelClanEntry;
+    private Label _labelInvite;
 
     //data
     private PledgeShowMemberListAll _packet;
@@ -73,9 +75,9 @@ public class ClanWindow : L2TwoPanels
         dragArea.AddManipulator(drag);
 
 
-        _dropdown = _windowEle.Q<DropdownField>("comboBox");
+        _dropdown = _windowEle.Q<DropdownField>("clanComboBox");
+        _dropdown.pickingMode = PickingMode.Position;
         DisableEventOnOver(_dropdown);
-        _dropdown.RegisterValueChangedCallback(OnDropdownValueChanged);
         _dropdown.RegisterCallback<PointerDownEvent>(OnDropdownPointer, TrickleDown.TrickleDown);
 
 
@@ -108,6 +110,9 @@ public class ClanWindow : L2TwoPanels
         var leaveButton = (UnityEngine.UIElements.Button)GetElementById("LeaveButton");
         leaveButton?.RegisterCallback<ClickEvent>(evt => OnClickLeave(evt));
 
+        var inviteButton = (UnityEngine.UIElements.Button)GetElementById("InviteButton");
+        inviteButton?.RegisterCallback<ClickEvent>(evt => OnClickInvite(evt));
+
         _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
         var masterClan = (VisualElement)GetElementById("masterClan");
 
@@ -118,6 +123,7 @@ public class ClanWindow : L2TwoPanels
         _labelPenalty = (UnityEngine.UIElements.Label)GetElementById("PenaltyLabel");
         _labelLeave = (UnityEngine.UIElements.Label)GetElementById("LeaveLabel");
         _labelClanEntry = (UnityEngine.UIElements.Label)GetElementById("ClanEntryLabel");
+        _labelInvite = (UnityEngine.UIElements.Label)GetElementById("InviteLabel");
 
 
         SetMouseOverDetectionSubElement(_detailedInfoElement);
@@ -220,6 +226,15 @@ public class ClanWindow : L2TwoPanels
 
     }
 
+    private void OnClickInvite(ClickEvent evt)
+    {
+        if (_packet != null && IsLeader(_packet.SubPledgeLeaderName))
+        {
+            SystemMessageWindow.Instance.ShowWindowDialogDropdownYesOrNot(" Select a Unit " , new List<string> { _packet.PledgeName});
+        }
+
+    }
+
     private bool IsLeader(string leaderName)
     {
         string userName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
@@ -264,20 +279,9 @@ public class ClanWindow : L2TwoPanels
         }
     }
 
-    private void OnDropdownPointer(PointerDownEvent evt)
-    {
-        if (_listDropDown == null || _listDropDown.Count == 0)
-        {
-            evt.PreventDefault();
-            evt.StopImmediatePropagation();
-        }
-    }
 
-    private void OnDropdownValueChanged(ChangeEvent<string> evt)
-    {
-        //string playeName = evt.newValue;
-        //_selectDropDown = playeName;
-    }
+
+
     private const string USS_STYLE_YELLOW = "button-label-yellow";
     private const string USS_STYLE_DISABLED = "button-label-disabled";
     private void SetDisabledButton(string leaderName, List<ClanMember> Members)
@@ -306,6 +310,7 @@ public class ClanWindow : L2TwoPanels
         _labelPenalty.AddToClassList(USS_STYLE_DISABLED);
         _labelLeave.AddToClassList(USS_STYLE_DISABLED);
         _labelClanEntry.AddToClassList(USS_STYLE_DISABLED);
+        _labelInvite.AddToClassList(USS_STYLE_DISABLED);
     }
 
 
@@ -317,7 +322,7 @@ public class ClanWindow : L2TwoPanels
         _labelClanInfo.RemoveFromClassList(USS_STYLE_DISABLED);
         _labelPenalty.RemoveFromClassList(USS_STYLE_DISABLED);
         _labelLeave.RemoveFromClassList(USS_STYLE_DISABLED);
-
+        _labelInvite.RemoveFromClassList(USS_STYLE_DISABLED);
 
 
         //_labelEditAuth.AddToClassList(USS_STYLE_YELLOW);
@@ -326,6 +331,7 @@ public class ClanWindow : L2TwoPanels
         _labelClanInfo.AddToClassList(USS_STYLE_YELLOW);
         _labelPenalty.AddToClassList(USS_STYLE_YELLOW);
         _labelLeave.AddToClassList(USS_STYLE_YELLOW);
+        _labelInvite.AddToClassList(USS_STYLE_YELLOW);
 
     }
 

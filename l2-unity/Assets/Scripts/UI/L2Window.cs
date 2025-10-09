@@ -1,5 +1,7 @@
+using NUnit.Framework.Internal;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,9 +12,11 @@ public abstract class L2Window : MonoBehaviour
 {
     protected VisualElement _root;
     protected VisualTreeAsset _windowTemplate;
+
     protected VisualElement _windowEle;
     protected bool _isWindowHidden = false;
     protected MouseOverDetectionManipulator _mouseOverDetection;
+    protected List<string> _listDropDown;
 
     void Start()
     {
@@ -33,8 +37,8 @@ public abstract class L2Window : MonoBehaviour
         return asset;
     }
 
-    private bool _isCenter = false;
-    private bool _isReg = false;
+    protected bool _isCenter = false;
+    protected bool _isReg = false;
     public void OnCenterScreen(VisualElement root)
     {
         _isCenter = false;
@@ -113,8 +117,24 @@ public abstract class L2Window : MonoBehaviour
 
 
 
+    protected void OnDropdownPointer(PointerDownEvent evt)
+    {
+        if (_listDropDown == null || _listDropDown.Count == 0)
+        {
+            evt.PreventDefault();
+            evt.StopImmediatePropagation();
+        }
+    }
 
+    private DropdownFieldUtils dropDownUtils = new DropdownFieldUtils();
+    private System.Action<bool> onOpen;
+    private System.Action<bool> onClose;
+    private bool _IsCloseCreate = false;
 
+    //Algorutm Dropdown disabled click MoveTo
+    //_IsCloseCreate > The flag that indicates that we are entering the mode of selecting the desired element from the dropdown list.
+    //OnClose(bool check) > OnClose is triggered if the list is closed; it will be triggered even if there was no value in the list.
+    //Event Running: 1. OnMoveEvent 2.OnLeaveEvent 3.OnMouseOutFocus 4. OnClose 
     protected void DisableEventOnOver(VisualElement _windowEle)
     {
         var dropdowns = _windowEle.Query<DropdownField>().ToList();
@@ -124,19 +144,53 @@ public abstract class L2Window : MonoBehaviour
             foreach (var dropdown in dropdowns)
             {
                 DisablePointerEvents(dropdown);
-                dropdown.RegisterValueChangedCallback(OnDropdownValueChanged);
-                dropdown.RegisterCallback<MouseEnterEvent>(OnMouseEnter);
+
+                dropdown.RegisterCallback<PointerMoveEvent>(OnMoveEvent);
+                dropdown.RegisterCallback<FocusOutEvent>(evt => OnMouseOutFocus(evt ,  dropdown));
+                dropdown.RegisterCallback<PointerLeaveEvent>(OnLeaveEvent);
+                dropdown.RegisterCallback<PointerDownEvent>(evt => ClickDropdownElement(evt, dropdown));
+
             }
         }
     
     }
-    private void OnDropdownValueChanged(ChangeEvent<string> evt)
+
+    private void ClickDropdownElement(PointerDownEvent evt, DropdownField dropdown)
     {
-        SetEnableMouseOver(false);
+        _IsCloseCreate = true;
     }
-    private void OnMouseEnter(MouseEnterEvent evt)
+
+
+    private void OnClose(bool check)
     {
-        SetEnableMouseOver(true);
+        onClose -= OnClose;
+        SetUnBlockStatusMouseOver();
+        _IsCloseCreate = false;
+    }
+
+
+
+    //special for dropfield
+    private void OnMoveEvent(PointerMoveEvent evt)
+    {
+       SetBlockStatusMouseOver();
+    }
+
+    private void OnMouseOutFocus(FocusOutEvent evt, DropdownField dropdown)
+    {
+        onClose += OnClose;
+        _IsCloseCreate = false;
+        dropDownUtils.SubscribeToDropdownOpenClose(dropdown.panel.visualTree, onOpen, onClose , ref _IsCloseCreate);
+    }
+
+    private void OnLeaveEvent(PointerLeaveEvent evt)
+    {
+
+        if (_IsCloseCreate == false)
+        {
+            SetUnBlockStatusMouseOver();
+        }
+
     }
 
     private void DisablePointerEvents(VisualElement element)
@@ -248,5 +302,15 @@ public abstract class L2Window : MonoBehaviour
     protected void SetEnableMouseOver(bool isBlock)
     {
         _mouseOverDetection.SetBlock(isBlock);
+    }
+
+    protected void SetBlockStatusMouseOver()
+    {
+        _mouseOverDetection.SetBlockDropfieldStatus();
+    }
+
+    protected void SetUnBlockStatusMouseOver()
+    {
+        _mouseOverDetection.SetUnBlockDropfieldStatus();
     }
 }

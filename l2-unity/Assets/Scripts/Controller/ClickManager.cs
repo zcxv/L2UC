@@ -1,5 +1,6 @@
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UIElements;
+
 
 public class ClickManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class ClickManager : MonoBehaviour
     [SerializeField] private LayerMask _entityMask;
     [SerializeField] private LayerMask _clickThroughMask;
     private LayerMask _areaMask = 8192;
-
+    private UIDocument uiDocument;
     private static ClickManager _instance;
     public static ClickManager Instance { get { return _instance; } }
 
@@ -22,6 +23,7 @@ public class ClickManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
+            uiDocument = GetComponent<UIDocument>();
         }
         else
         {
@@ -48,44 +50,47 @@ public class ClickManager : MonoBehaviour
 
     void Update()
     {
-        if (L2GameUI.Instance.MouseOverUI)
-        {
-            return;
-        }
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 1000f, ~_clickThroughMask))
-        {
-            int hitLayer = hit.collider.gameObject.layer;
-            if (_entityMask == (_entityMask | (1 << hitLayer)))
+        
+            //if (IsPointerOverUIToolkit()) return;
+            if (L2GameUI.Instance.MouseOverUI)
             {
-                _hoverObjectData = new ObjectData(hit.transform.parent.gameObject);
-            }
-            else
-            {
-                _hoverObjectData = new ObjectData(hit.collider.gameObject);
+                return;
             }
 
-            if (InputManager.Instance.LeftClickDown &&
-                !InputManager.Instance.RightClickHeld)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 1000f, ~_clickThroughMask))
             {
-                _targetObjectData = _hoverObjectData;
-                Debug.Log("Click Manager type " + _targetObjectData.ObjectTag);
-                if (_entityMask == (_entityMask | (1 << hitLayer)) && _targetObjectData.ObjectTag != "Player")
+                int hitLayer = hit.collider.gameObject.layer;
+                if (_entityMask == (_entityMask | (1 << hitLayer)))
                 {
-                    OnClickOnEntity();
+                    _hoverObjectData = new ObjectData(hit.transform.parent.gameObject);
                 }
-                else if (_targetObjectData != null)
+                else
                 {
-                    OnClickToMove(hit);
+                    _hoverObjectData = new ObjectData(hit.collider.gameObject);
+                }
+
+                if (InputManager.Instance.LeftClickDown &&
+                    !InputManager.Instance.RightClickHeld)
+                {
+                    _targetObjectData = _hoverObjectData;
+
+                    if (_entityMask == (_entityMask | (1 << hitLayer)) && _targetObjectData.ObjectTag != "Player")
+                    {
+                        OnClickOnEntity();
+                    }
+                    else if (_targetObjectData != null)
+                    {
+                        OnClickToMove(hit);
+                    }
                 }
             }
-        }
+        
     }
 
-   
+
     public void OnClickToMove(RaycastHit hit)
     {
         _lastClickPosition = hit.point;
@@ -106,6 +111,19 @@ public class ClickManager : MonoBehaviour
         {
             HideLocator();
         }
+    }
+
+    private bool IsPointerOverUIToolkit()
+    {
+        if (uiDocument == null) return false;
+        var panel = uiDocument.rootVisualElement.panel;
+        if (panel == null) return false;
+
+        // Переводим из screen coords (0,0 = низ) в panel coords (0,0 = верх)
+        Vector2 panelPos = new Vector2(Input.mousePosition.x, Screen.height - Input.mousePosition.y);
+
+        var picked = panel.Pick(panelPos);
+        return picked != null; // true, если под курсором найден визуальный элемент
     }
 
     private void StopFollow()
