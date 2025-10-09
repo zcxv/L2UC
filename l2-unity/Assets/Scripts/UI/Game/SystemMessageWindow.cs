@@ -1,20 +1,25 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 using UnityEngine;
+
 using UnityEngine.UIElements;
-using Label = UnityEngine.UIElements.Label;
+
 
 public class SystemMessageWindow : L2PopupWindow
 {
     private static SystemMessageWindow _instance;
+    protected VisualTreeAsset _windowTemplateDropdown;
     public static SystemMessageWindow Instance { get { return _instance; } }
-    private Label _textLabel;
+    private UnityEngine.UIElements.Label _textLabel;
     private Button _ñancelButton;
     private Button _okButton;
 
     public event Action OnButtonOk;
     public event Action OnButtonClosed;
+
+
 
     private void Awake()
     {
@@ -31,6 +36,7 @@ public class SystemMessageWindow : L2PopupWindow
     protected override void LoadAssets()
     {
         _windowTemplate = LoadAsset("Data/UI/_Elements/Game/SystemMessageWindow");
+        _windowTemplateDropdown = LoadAsset("Data/UI/_Elements/Game/SystemMessageDropBoxWidow");
     }
 
 
@@ -41,7 +47,7 @@ public class SystemMessageWindow : L2PopupWindow
 
         _ñancelButton = _windowEle.Q<Button>("CancelButton");
         _okButton = _windowEle.Q<Button>("OkButton");
-        _textLabel = _windowEle.Q<Label>("labelText");
+        _textLabel = _windowEle.Q<UnityEngine.UIElements.Label>("labelText");
         //RegisterCloseWindowEventByName("OkButton");
         _ñancelButton.RegisterCallback<ClickEvent>(ClickEventClosed);
         _okButton.RegisterCallback<ClickEvent>(ClickEventOk);
@@ -72,6 +78,8 @@ public class SystemMessageWindow : L2PopupWindow
         base.ShowWindow();
     }
 
+
+
     public void ShowWindowDialogYesOrNot(string messageText)
     {
         OnCenterScreen(_root);
@@ -79,6 +87,40 @@ public class SystemMessageWindow : L2PopupWindow
         _okButton.style.display = DisplayStyle.Flex;
         _textLabel.text = messageText;
         base.ShowWindow();
+    }
+
+    public void ShowWindowDialogDropdownYesOrNot(string headerText , List<string> list)
+    {
+        ReplaceWindow(_windowTemplateDropdown);
+
+        UnityEngine.UIElements.Label headerName = _windowEle.Q<UnityEngine.UIElements.Label>("labelText");
+        DropdownField dropdown = _windowEle.Q<DropdownField>("comboBox");
+        headerName.text = headerText;
+
+        SetDropdownList(dropdown, list);
+        dropdown.RegisterCallback<PointerDownEvent>(OnDropdownPointer, TrickleDown.TrickleDown);
+
+        OnCenterScreen(_root);
+        base.ShowWindow();
+
+
+    }
+
+    public void SetDropdownList(DropdownField dropdown, List<string> list)
+    {
+        if (list == null && list.Count ==0)
+        {
+            dropdown.value = null;
+            dropdown.choices = null;
+            _listDropDown = list;
+        }
+        else
+        {
+            dropdown.value = list[0];
+            dropdown.choices = list;
+            _listDropDown = list;
+        }
+
     }
 
     private void OnDestroy()

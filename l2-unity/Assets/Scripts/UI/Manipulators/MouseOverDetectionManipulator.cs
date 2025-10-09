@@ -7,7 +7,7 @@ public class MouseOverDetectionManipulator : PointerManipulator
     private bool _overThisManipulator = false;
     private L2UI _ui;
     private VisualElement _subElement;
-
+    private bool _isSelectDropfield = false;
     public bool MouseOver => _overThisManipulator;
 
     public MouseOverDetectionManipulator(VisualElement target)
@@ -81,6 +81,10 @@ public class MouseOverDetectionManipulator : PointerManipulator
  
         Vector2 panelPos = new Vector2(posScreen.x, Screen.height - posScreen.y);
 
+
+        if (el.worldBound.Contains(posScreen))
+            return true;
+
         var picked = panel.Pick(panelPos); 
         if (picked == null) return false;
 
@@ -89,10 +93,10 @@ public class MouseOverDetectionManipulator : PointerManipulator
 
     private void PointerEnterHandler(PointerEnterEvent evt)
     {
-        Debug.Log("PointerLeaveHandler> enter enter");
+        //Debug.Log("PointerLeaveHandler> enter enter");
         if (_enabled && (_subElement == null || !IsVisibleAndContains(evt.position, _subElement)))
         {
-            Debug.Log("PointerLeaveHandler> enter enter block");
+            //Debug.Log("PointerLeaveHandler> enter enter block");
             Block();
         }
 
@@ -100,16 +104,16 @@ public class MouseOverDetectionManipulator : PointerManipulator
 
     private void PointerOverHandler(PointerOverEvent evt)
     {
-        Debug.Log("PointerLeaveHandler> over enter");
+        //Debug.Log("PointerLeaveHandler> over enter");
         if (_enabled && (_subElement == null || !IsVisibleAndContains(evt.position, _subElement)))
         {
-            Debug.Log("PointerLeaveHandler> over enter block");
+            //Debug.Log("PointerLeaveHandler> over enter block");
             Block();
         }
 
         else if (_enabled && _subElement != null && IsVisibleAndContains(evt.position, _subElement))
         {
-            Debug.Log("PointerLeaveHandler> over enter block");
+           // Debug.Log("PointerLeaveHandler> over enter block");
             Block();
         }
 
@@ -117,12 +121,21 @@ public class MouseOverDetectionManipulator : PointerManipulator
 
     private void PointerLeaveHandler(PointerLeaveEvent evt)
     {
-        Debug.Log("PointerLeaveHandler> leave enter");
+       
+        //Debug.Log("PointerLeaveHandler> leave enter");
+        //if(_subElement != null)
+        //{
+          //  Debug.Log("name level 1 subelement " + _subElement.name + "Reuslt " + IsVisibleAndContains(evt.position, _subElement) + " evt " + evt.target.ToString());
+         //   Debug.Log("name level 2 target element " + target.name + " Reuslt " + IsVisibleAndContains(evt.position, target) + " evt " + evt.target.ToString());
+        //}
+
+        if (_isSelectDropfield == true) return;
         if (!_enabled) return;
-        if (!IsVisibleAndContains(evt.position, target) && !IsVisibleAndContains(evt.position, _subElement))
+
+        if (!IsVisibleAndContains(Input.mousePosition, target) && !IsVisibleAndContains(Input.mousePosition, _subElement))
         {
             UnBlock();
-            Debug.Log("PointerLeaveHandler> leave unblock");
+            //Debug.Log("PointerLeaveHandler> leave unblock");
         }
 
     }
@@ -139,10 +152,22 @@ public class MouseOverDetectionManipulator : PointerManipulator
             Block();
         else
         {
-            Debug.Log("PointerDownHandler> leave1 unblock");
+            //Debug.Log("PointerDownHandler> leave1 unblock");
             UnBlock();
         }
 
+    }
+
+    public void SetBlockDropfieldStatus()
+    {
+        _isSelectDropfield = true;
+        Block();
+    }
+
+    public void SetUnBlockDropfieldStatus()
+    {
+        _isSelectDropfield = false;
+        UnBlock();
     }
 
     private void Block()
@@ -155,6 +180,6 @@ public class MouseOverDetectionManipulator : PointerManipulator
     {
         _ui.MouseOverUI = false;
         _overThisManipulator = false;
-        Debug.Log("PointerLeaveHandler> leave1 unblock root");
+        //Debug.Log("PointerLeaveHandler> leave1 unblock root");
     }
 }
