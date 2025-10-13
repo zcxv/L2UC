@@ -96,12 +96,13 @@ public class ClanWindow : L2TwoPanels
 
         var privilegesButton = (UnityEngine.UIElements.Button)GetElementById("PrivilegesButton");
         privilegesButton?.RegisterCallback<ClickEvent>(evt => OnClickPrivileges(evt));
-        //disabled
-        //var editAuthButton = (UnityEngine.UIElements.Button)GetElementById("EditAuthButton");
-        //editAuthButton?.RegisterCallback<ClickEvent>(evt => OnClickEditAuthButton(evt));
+   
+        var editAuthButton = (UnityEngine.UIElements.Button)GetElementById("EditAuthButton");
+        editAuthButton?.RegisterCallback<ClickEvent>(evt => OnClickEditAuthButton(evt));
 
         var clanInfo = (UnityEngine.UIElements.Button)GetElementById("ClanInoButton");
         clanInfo?.RegisterCallback<ClickEvent>(evt => OnClickClanInfo(evt));
+
 
 
         var penaltyButton = (UnityEngine.UIElements.Button)GetElementById("PenaltyButton");
@@ -145,7 +146,11 @@ public class ClanWindow : L2TwoPanels
         ShowDetailedInfo();
     }
 
-
+    public void ShowGradeInfo(ServerPacket packet)
+    {
+        _detailedClan.UpdateDetailedInfo(packet, _detailedInfoElement, _packet);
+        ShowDetailedInfo();
+    }
 
 
     //Master Clan 
@@ -206,12 +211,19 @@ public class ClanWindow : L2TwoPanels
 
     }
 
+
+
+
     private void OnClickEditAuthButton(ClickEvent evt)
     {
+        if (!string.IsNullOrEmpty(_masterClan.GetSelectMemberName()))
+        {
             SendGameDataQueue.Instance().AddItem(
                 CreatorPacketsUser.CreateRequestPledgePowerGradeList(),
                 GameClient.Instance.IsCryptEnabled(),
                 GameClient.Instance.IsCryptEnabled());
+        }
+
     }
 
 
@@ -231,6 +243,8 @@ public class ClanWindow : L2TwoPanels
         if (_packet != null && IsLeader(_packet.SubPledgeLeaderName))
         {
             SystemMessageWindow.Instance.ShowWindowDialogDropdownYesOrNot(" Select a Unit " , new List<string> { _packet.PledgeName});
+            SystemMessageWindow.Instance.OnButtonOk += OkInvite;
+            SystemMessageWindow.Instance.OnButtonClosed += On—ancel;
         }
 
     }
@@ -316,7 +330,7 @@ public class ClanWindow : L2TwoPanels
 
     private void EnabledLeaderButtons()
     {
-        //_labelEditAuth.RemoveFromClassList(USS_STYLE_DISABLED);
+        _labelEditAuth.RemoveFromClassList(USS_STYLE_DISABLED);
         _labelMemberInfo.RemoveFromClassList(USS_STYLE_DISABLED);
         _labelPrivileges.RemoveFromClassList(USS_STYLE_DISABLED);
         _labelClanInfo.RemoveFromClassList(USS_STYLE_DISABLED);
@@ -325,7 +339,7 @@ public class ClanWindow : L2TwoPanels
         _labelInvite.RemoveFromClassList(USS_STYLE_DISABLED);
 
 
-        //_labelEditAuth.AddToClassList(USS_STYLE_YELLOW);
+        _labelEditAuth.AddToClassList(USS_STYLE_YELLOW);
         _labelMemberInfo.AddToClassList(USS_STYLE_YELLOW);
         _labelPrivileges.AddToClassList(USS_STYLE_YELLOW);
         _labelClanInfo.AddToClassList(USS_STYLE_YELLOW);
@@ -367,6 +381,21 @@ public class ClanWindow : L2TwoPanels
                CreatorPacketsUser.CreateRequestWithdrawPledge(),
                GameClient.Instance.IsCryptEnabled(),
                GameClient.Instance.IsCryptEnabled());
+        CancelEvent();
+    }
+
+    private void OkInvite()
+    {
+        if (TargetManager.Instance.HasTarget() && TargetManager.Instance.Target.GetEntity() != null)
+        {
+            int id = TargetManager.Instance.Target != null ? TargetManager.Instance.Target.GetEntity().IdentityInterlude.Id : 0;
+
+            SendGameDataQueue.Instance().AddItem(
+                   CreatorPacketsUser.CreateRequestJoinPledge(id),
+                   GameClient.Instance.IsCryptEnabled(),
+                   GameClient.Instance.IsCryptEnabled());
+        }
+
         CancelEvent();
     }
 

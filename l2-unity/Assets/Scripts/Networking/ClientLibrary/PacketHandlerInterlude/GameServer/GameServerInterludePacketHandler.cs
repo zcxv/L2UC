@@ -235,6 +235,9 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
             case (int)GameInterludeExServerPacketType.ExPledgeReceiveMemberInfo:
                 OnExPledgeReceiveMemberInfo(itemQueue.DecodeExData());
                 break;
+            case (int)GameInterludeExServerPacketType.ExOnExPledgePowerGradeList:
+                OnExPledgePowerGradeList(itemQueue.DecodeExData());
+                break;
             case (int)GameInterludeExServerPacketType.ExPledgeReceivePowerInfo:
                 OnExPledgeReceivePowerInfo(itemQueue.DecodeExData());
                 break;
@@ -987,6 +990,14 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         PledgeReceiveMemberInfo showManorDefaultInfo = new PledgeReceiveMemberInfo(data);
         EventProcessor.Instance.QueueEvent(() => {
             ClanWindow.Instance.UpdateDetailedInfo(showManorDefaultInfo);
+        });
+    }
+
+    public void OnExPledgePowerGradeList(byte[] data)
+    {
+        PledgePowerGradeList pledgePowerGradeList = new PledgePowerGradeList(data);
+        EventProcessor.Instance.QueueEvent(() => {
+            ClanWindow.Instance.ShowGradeInfo(pledgePowerGradeList);
         });
     }
 
