@@ -31,6 +31,11 @@ public class CreatorPacketsUser
         return new RequestEnchantItem(_objectId);
     }
 
+    public static RequestJoinPledge CreateRequestJoinPledge(int _objectId)
+    {
+        return new RequestJoinPledge(_objectId);
+    }
+
     public static RequestPackageSendableItemList CreateSendableItemList(int _objectId)
     {
         return new RequestPackageSendableItemList(_objectId);

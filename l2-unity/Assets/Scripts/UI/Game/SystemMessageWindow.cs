@@ -11,6 +11,9 @@ public class SystemMessageWindow : L2PopupWindow
 {
     private static SystemMessageWindow _instance;
     protected VisualTreeAsset _windowTemplateDropdown;
+    private const string _dropDownTemplateName = "SystemMessageComboBox";
+    private const string _defaultNameCancel = "CancelButton";
+    private const string _defaultNameOk = "OkButton";
     public static SystemMessageWindow Instance { get { return _instance; } }
     private UnityEngine.UIElements.Label _textLabel;
     private Button _ñancelButton;
@@ -45,12 +48,13 @@ public class SystemMessageWindow : L2PopupWindow
         InitWindow(root);
         yield return new WaitForEndOfFrame();
 
-        _ñancelButton = _windowEle.Q<Button>("CancelButton");
-        _okButton = _windowEle.Q<Button>("OkButton");
+        _ñancelButton = _windowEle.Q<Button>(_defaultNameCancel);
+        _okButton = _windowEle.Q<Button>(_defaultNameOk);
         _textLabel = _windowEle.Q<UnityEngine.UIElements.Label>("labelText");
         //RegisterCloseWindowEventByName("OkButton");
         _ñancelButton.RegisterCallback<ClickEvent>(ClickEventClosed);
         _okButton.RegisterCallback<ClickEvent>(ClickEventOk);
+
         RegisterClickWindowEvent(_windowEle, null);
         OnCenterScreen(_root);
     }
@@ -71,6 +75,12 @@ public class SystemMessageWindow : L2PopupWindow
 
     public void ShowWindow(string messageText)
     {
+        if (_windowEle.name == _dropDownTemplateName)
+        {
+            ReplaceWindow(_windowTemplate);
+            ReRegisterCallBack();
+        }
+
         OnCenterScreen(_root);
         _ñancelButton.style.display = DisplayStyle.None;
         _okButton.style.display = DisplayStyle.Flex;
@@ -82,6 +92,12 @@ public class SystemMessageWindow : L2PopupWindow
 
     public void ShowWindowDialogYesOrNot(string messageText)
     {
+        if (_windowEle.name == _dropDownTemplateName)
+        {
+            ReplaceWindow(_windowTemplate);
+            ReRegisterCallBack();
+        }
+
         OnCenterScreen(_root);
         _ñancelButton.style.display = DisplayStyle.Flex;
         _okButton.style.display = DisplayStyle.Flex;
@@ -100,10 +116,20 @@ public class SystemMessageWindow : L2PopupWindow
         SetDropdownList(dropdown, list);
         dropdown.RegisterCallback<PointerDownEvent>(OnDropdownPointer, TrickleDown.TrickleDown);
 
+        ReRegisterCallBack();
+
         OnCenterScreen(_root);
         base.ShowWindow();
 
 
+    }
+
+    private void ReRegisterCallBack()
+    {
+        _ñancelButton = _windowEle.Q<Button>(_defaultNameCancel);
+        _okButton = _windowEle.Q<Button>(_defaultNameOk);
+        _ñancelButton.RegisterCallback<ClickEvent>(ClickEventClosed);
+        _okButton.RegisterCallback<ClickEvent>(ClickEventOk);
     }
 
     public void SetDropdownList(DropdownField dropdown, List<string> list)
