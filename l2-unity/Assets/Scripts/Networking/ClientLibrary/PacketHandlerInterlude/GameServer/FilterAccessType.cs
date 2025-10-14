@@ -38,6 +38,7 @@ public class FilterAccessType
         { GameInterludeServerPacketType.PledgeShowMemberListUpdate, true },
         { GameInterludeServerPacketType.PledgeShowMemberListAll, true },
         { GameInterludeServerPacketType.PledgeInfo, true },
+        { GameInterludeServerPacketType.ManagePledgePower, true },
         { GameInterludeServerPacketType.PledgeStatusChanged, true },
         { GameInterludeServerPacketType.NpcInfo, true },
         { GameInterludeServerPacketType.DeleteObject, true },

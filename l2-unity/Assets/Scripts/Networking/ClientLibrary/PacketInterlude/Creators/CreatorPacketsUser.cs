@@ -1,9 +1,11 @@
+using FMOD.Studio;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-using UnityEngine.UIElements;
 using Unity.Burst.CompilerServices;
+using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class CreatorPacketsUser 
 {
@@ -34,6 +36,11 @@ public class CreatorPacketsUser
     public static RequestJoinPledge CreateRequestJoinPledge(int _objectId)
     {
         return new RequestJoinPledge(_objectId);
+    }
+
+    public static RequestPledgePower CreateRequestPledgePower(int rank, int action, int privs)
+    {
+        return new RequestPledgePower(rank, action, privs);
     }
 
     public static RequestPackageSendableItemList CreateSendableItemList(int _objectId)

@@ -160,6 +160,10 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
                 OnPledgeInfo(itemQueue.DecodeData());
                 break;
+            case GameInterludeServerPacketType.ManagePledgePower:
+
+                OnManagePledgePower(itemQueue.DecodeData());
+                break;
             case GameInterludeServerPacketType.PledgeStatusChanged:
 
                 OnPledgeStatusChanged(itemQueue.DecodeData());
@@ -745,6 +749,23 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         if (!InitPacketsLoadWord.getInstance().IsInit)
         {
             EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.UpdatePledge(pledgeInfo));
+        }
+    }
+
+    private void OnManagePledgePower(byte[] data)
+    {
+        ManagePledgePower managerPledge = new ManagePledgePower(data);
+
+        if (!InitPacketsLoadWord.getInstance().IsInit)
+        {
+            Debug.Log("Rank " + managerPledge.Rank);
+            Debug.Log("Action " + managerPledge.Action);
+            Debug.Log("PrivilegesByRank " + managerPledge.PrivilegesByRank);
+
+            EventProcessor.Instance.QueueEvent(() => {
+                ClanWindow.Instance.UpdateDetailedInfo(managerPledge);
+            });
+            //EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.UpdatePledge(pledgeInfo));
         }
     }
 

@@ -91,6 +91,8 @@ public class ClanWindow : L2TwoPanels
 
         _detailedClan.LoadAssets(LoadAsset);
 
+
+
         var memberButton = (UnityEngine.UIElements.Button)GetElementById("MemberButton");
         memberButton?.RegisterCallback<ClickEvent>(evt => OnClickShowMember(evt));
 
@@ -116,6 +118,8 @@ public class ClanWindow : L2TwoPanels
 
         _detailedInfoElement = (VisualElement)GetElementById("detailedInfo");
         var masterClan = (VisualElement)GetElementById("masterClan");
+
+        _detailedClan.SetDetailedInfoElement(_detailedInfoElement);
 
         _labelEditAuth = (UnityEngine.UIElements.Label)GetElementById("EditAuthLabel");
         _labelMemberInfo = (UnityEngine.UIElements.Label)GetElementById("MemberInfoLabel");

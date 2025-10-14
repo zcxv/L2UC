@@ -18,10 +18,14 @@ public class ClanDetailedInfo
     private ClanInfoContent _clanInfoContent;
     private ICreatorPanelCheckBox _createPanelCheckBox;
     private ICreatorSkillsPanel _creatorSkillsPanel;
-
+    private VisualElement _detailedInfoElement;
 
     private int _showPanel = -1;
 
+    public void  SetDetailedInfoElement(VisualElement detailedInfoElement)
+    {
+        _detailedInfoElement = detailedInfoElement;
+    }
     public ClanDetailedInfo(DataProviderClanInfo dataProvider)
     {
         _dataProvider = dataProvider;
@@ -40,6 +44,7 @@ public class ClanDetailedInfo
 
         _rankingPrivilege = new RankingPrivelege(_dataProvider);
         _rankingPrivilege.OnClickHide += OnClickHide;
+        _rankingPrivilege.OnSwitchRank += OnSwitchSubWindow;
     }
 
    public void LoadAssets(Func<string, VisualTreeAsset> loaderFunc)
@@ -65,7 +70,7 @@ public class ClanDetailedInfo
                 break;
 
             case PledgeReceivePowerInfo powerInfo:
-                _privilegesInfoContent.PreShow(powerInfo, detailedInfoElement, packetAll);
+                _privilegesInfoContent.PreShow(powerInfo, detailedInfoElement);
                 _showPanel = 1;
                 break;
             case PledgeClanInfo clanInfo:
@@ -75,6 +80,10 @@ public class ClanDetailedInfo
             case PledgePowerGradeList authInfo:
                 _rankingPrivilege.PreShow(authInfo, detailedInfoElement, packetAll);
                 _showPanel = 3;
+                break;
+            case ManagePledgePower pladgePower:
+                _privilegesInfoContent.PreShow(pladgePower, detailedInfoElement);
+                _showPanel = 1;
                 break;
             default:
                 // Handle unknown packet types if necessary
@@ -88,5 +97,12 @@ public class ClanDetailedInfo
     private void OnClickHide(int id)
     {
         _showPanel = -1;
+    }
+
+    private void OnSwitchSubWindow(int id)
+    {
+        PledgeReceivePowerInfo powerInfo = new PledgeReceivePowerInfo(new byte[1]);
+        powerInfo.PowerGrade = id;
+        _privilegesInfoContent.PreShow(powerInfo, _detailedInfoElement);
     }
 }
