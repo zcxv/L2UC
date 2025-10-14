@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.Rendering.FilterWindow;
 
 
 public class PrivilegesInfoContent : AbstractClanContent
@@ -27,14 +28,15 @@ public class PrivilegesInfoContent : AbstractClanContent
 
     }
 
-    public void PreShow(PledgeReceivePowerInfo privilegesInfo, VisualElement detailedInfoElement, PledgeShowMemberListAll packetAll)
+    public void PreShow(ServerPacket serverPacket, VisualElement detailedInfoElement)
     {
         content = LoadContent(content, detailedInfoElement);
         ClearContent(content);
 
-        Show(privilegesInfo, detailedInfoElement, packetAll);
+        Show(serverPacket, detailedInfoElement);
     }
-    public void Show(PledgeReceivePowerInfo privilegesInfo, VisualElement detailedInfoElement, PledgeShowMemberListAll packetAll)
+
+    private void Show(ServerPacket serverPacket, VisualElement detailedInfoElement)
     {
 
 
@@ -49,24 +51,22 @@ public class PrivilegesInfoContent : AbstractClanContent
         var _panelClanHall = page.Q<VisualElement>(_panelSystemClanHallName);
         var _panelCastle = page.Q<VisualElement>(_panelSystemCastleName);
 
+        if(serverPacket.GetType() == typeof(PledgeReceivePowerInfo))
+        {
+            PledgeReceivePowerInfo privilegesInfo = serverPacket as PledgeReceivePowerInfo;
+            UsePowerGrade(privilegesInfo.PowerGrade, _panelPrivilages, _panelClanHall, _panelCastle);
+        }
+
+        if (serverPacket.GetType() == typeof(ManagePledgePower))
+        {
+            ManagePledgePower managePledgePower = serverPacket as ManagePledgePower;
+            UseRank(managePledgePower.PrivilegesByRank, _panelPrivilages, _panelClanHall, _panelCastle);
+        }
+
 
         // Clear and reuse lists
         _leftCheckBoxes.Clear();
         _rightCheckBoxes.Clear();
-
-
-        switch (privilegesInfo.PowerGrade)
-        {
-            case 1:
-                UsePowerGrade1(_panelPrivilages, _panelClanHall, _panelCastle);
-                break;
-            case 6:
-                UsePowerGrade6(_panelPrivilages, _panelClanHall, _panelCastle);
-                break;
-            default:
-                break;
-        }
-
 
         if (content != null & page != null)
         {
@@ -74,78 +74,36 @@ public class PrivilegesInfoContent : AbstractClanContent
         }
     }
 
-    private void UsePowerGrade1(VisualElement panelPrivilages , VisualElement panelClanHall , VisualElement panelCastle)
+
+
+
+
+    private void UsePowerGrade(int powerGrade , VisualElement _panelPrivilages , VisualElement _panelClanHall, VisualElement _panelCastle)
     {
-        CheckBoxRootElements elements = new CheckBoxRootElements(
-          new List<VisualElement> { panelPrivilages, panelClanHall, panelCastle },
-             CreateAllLeft1(),
-             CreateAllRight1()
-         );
-            _createPanelCheckBox.CreateTwoPanels(elements);
-    }
+        var elements = new VisualElement[] { _panelPrivilages, _panelClanHall, _panelCastle };
 
-    private void UsePowerGrade6(VisualElement panelPrivilages, VisualElement panelClanHall, VisualElement panelCastle)
-    {
-
-
-        CheckBoxRootElements elements = new CheckBoxRootElements(
-         new List<VisualElement> { panelPrivilages, panelClanHall, panelCastle },
-             CreateAllLeft6(),
-             CreateAllRight6()
-        );
-        _createPanelCheckBox.CreateTwoPanels(elements);
-
-    }
-
-    private List<List<SettingCheckBox>> CreateAllLeft1()
-    {
-        _leftCheckBoxes.AddRange(new List<List<SettingCheckBox>>
+        switch (powerGrade)
         {
-            CheckBoxInstaller.InitChecBoxPrivilegesLeft(true),
-            CheckBoxInstaller.InitChecBoxClanHallLeft(true),
-            CheckBoxInstaller.InitChecBoxCastleLeft(true)
-        });
-
-        return _leftCheckBoxes;
-
+            case -1:
+                CheckBoxInstaller.UsePowerGradeMinus1(_createPanelCheckBox , _leftCheckBoxes , _rightCheckBoxes, elements);
+                break;
+            case 1:
+                CheckBoxInstaller.UsePowerGrade1(_createPanelCheckBox, _leftCheckBoxes, _rightCheckBoxes, elements);
+                break;
+            case 6:
+                CheckBoxInstaller.UsePowerGrade6(_createPanelCheckBox, _leftCheckBoxes, _rightCheckBoxes, elements);
+                break;
+            default:
+                break;
+        }
     }
 
-    private List<List<SettingCheckBox>> CreateAllRight1()
+    private void UseRank(int rank, VisualElement _panelPrivilages, VisualElement _panelClanHall, VisualElement _panelCastle)
     {
-        _rightCheckBoxes.AddRange(new List<List<SettingCheckBox>>
-        {
-            CheckBoxInstaller.InitChecBoxPrivilegesRight(true),
-            CheckBoxInstaller.InitChecBoxClanHallRight(true),
-            CheckBoxInstaller.InitChecBoxCastleRight(true)
-        });
 
-        return _rightCheckBoxes;
+        PledgePowerCheckBoxInstaller.CreateCheckboxByPowerRanked(rank , new ModelPowerCheckBox(_createPanelCheckBox , _leftCheckBoxes , _rightCheckBoxes , new VisualElement[] { _panelPrivilages, _panelClanHall, _panelCastle }));
     }
 
-    private List<List<SettingCheckBox>> CreateAllLeft6()
-    {
-        _leftCheckBoxes.AddRange(new List<List<SettingCheckBox>>
-        {
-            CheckBoxInstaller.InitChecBoxPrivilegesLeft(false),
-            CheckBoxInstaller.InitChecBoxClanHallLeft(false),
-            CheckBoxInstaller.InitChecBoxCastleLeft(false)
-        });
-
-        return _leftCheckBoxes;
-
-    }
-
-    private List<List<SettingCheckBox>> CreateAllRight6()
-    {
-        _rightCheckBoxes.AddRange(new List<List<SettingCheckBox>>
-        {
-            CheckBoxInstaller.InitChecBoxPrivilegesRight(false),
-            CheckBoxInstaller.InitChecBoxClanHallRight(false),
-            CheckBoxInstaller.InitChecBoxCastleRight(false)
-        });
-
-        return _rightCheckBoxes;
-    }
 
 
 }

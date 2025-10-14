@@ -34,6 +34,7 @@ public enum GameInterludeServerPacketType : byte
     PledgeShowMemberListUpdate = 0x54,
     PledgeShowMemberListAll = 0x53,
     PledgeInfo = 0x83,
+    ManagePledgePower = 0x30,
     PledgeStatusChanged = 0xcd,
     NpcInfo = 0x16,
     DeleteObject = 0x12,

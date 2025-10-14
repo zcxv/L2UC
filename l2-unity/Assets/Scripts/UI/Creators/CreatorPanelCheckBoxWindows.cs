@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
@@ -48,7 +49,7 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
             List<SettingCheckBox> left = elements.GetLeft(i);
             List<SettingCheckBox> right = elements.GetRight(i);
 
-            SetCheckBoxHeaderPanel(twoPanel, _listTemplate[1], left[0]);
+            SetCheckBoxHeaderPanel(twoPanel, _listTemplate[1], left , right);
             left.RemoveAt(0);
             SetCheckBoxLeftPanel(twoPanel, checkBoxTemplate, left);
             SetCheckBoxRightPanel(twoPanel, checkBoxTemplate, right);
@@ -73,11 +74,14 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
 
     }
 
-    private void SetCheckBoxHeaderPanel(VisualElement panel, VisualTreeAsset checkboxTemplate , SettingCheckBox setting)
+    private void SetCheckBoxHeaderPanel(VisualElement panel, VisualTreeAsset checkboxTemplate , List<SettingCheckBox> left , List<SettingCheckBox> right)
     {
+        SettingCheckBox headerSetting = left[0];
         VisualElement checkbox = CreateCheckBox(checkboxTemplate);
+        headerSetting.SetElement(checkbox);
         VisualElement header = panel.Q<VisualElement>("GroupHeaderTwoPanels");
-        SetSetting(checkbox, setting);
+        SetSetting(checkbox, headerSetting);
+        AddClickHeaderEvent(checkbox, headerSetting ,  left,  right);
         header.Add(checkbox);
     }
 
@@ -110,7 +114,9 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
         {
             SettingCheckBox setting = listSettings[i];
             VisualElement checkbox = CreateCheckBox(checkboxTemplate);
+            setting.SetElement(checkbox);
             SetSetting(checkbox , setting);
+            AddClickEvent(checkbox, setting);
             panel.Add(checkbox);
         }
     }
@@ -125,7 +131,10 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
         VisualElement uncheckdDisabled = checkbox.Q<VisualElement>("imageUnCheckedDisabled");
         Label label = checkbox.Q<Label>("labelCheckBox");
 
-        SetChecked(checkbox, setting.IsChecked() , uncheked, cheked);
+        setting.SetElementChecked(cheked);
+        setting.SetElementUnChecked(uncheked);
+
+        SetChecked(setting.IsChecked() , uncheked, cheked);
         SetDisabled(checkbox, setting.IsDisabled(), setting.IsChecked(), uncheked, cheked, checkedDisabled , uncheckdDisabled);
         SetText(label, setting.GetName());
         SetColorText(label, setting.IsDisabled());
@@ -134,7 +143,67 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
 
     }
 
-    private void SetChecked(VisualElement checkbox, bool isChecked , VisualElement uncheked , VisualElement cheked)
+    private void AddClickEvent(VisualElement checkbox , SettingCheckBox setting)
+    {
+        if (!setting.IsDisabled())
+        {
+            VisualElement uncheked = checkbox.Q<VisualElement>("imageUnchecked");
+            VisualElement cheked = checkbox.Q<VisualElement>("imageChecked");
+
+            checkbox.RegisterCallback<ClickEvent>(evt => OnClick(evt , uncheked , cheked , setting));
+        }
+    }
+
+    private void AddClickHeaderEvent(VisualElement headerCheckBox, SettingCheckBox setting , List<SettingCheckBox> left, List<SettingCheckBox> right)
+    {
+        if (!setting.IsDisabled())
+        {
+            headerCheckBox.RegisterCallback<ClickEvent>(evt => OnClickHeader(evt, left, right, setting));
+        }
+    }
+
+    private void OnClick(ClickEvent evt, VisualElement uncheked , VisualElement cheked , SettingCheckBox setting)
+    {
+        if (setting.IsChecked())
+        {
+            SetChecked(false, uncheked, cheked);
+            setting.SetChecked(false);
+        }
+        else
+        {
+            SetChecked(true, uncheked, cheked);
+            setting.SetChecked(true);
+        }
+    }
+
+    private void OnClickHeader(ClickEvent evt, List<SettingCheckBox> left , List<SettingCheckBox> right , SettingCheckBox headerSetting)
+    {
+        if (headerSetting.IsChecked())
+        {
+            ForEachList(left, false);
+            ForEachList(right, false);
+            SetChecked(false, headerSetting.GetElementUnChecked(), headerSetting.GetElementChecked());
+            headerSetting.SetChecked(false);
+        }
+        else
+        {
+            ForEachList(left, true);
+            ForEachList(right, true);
+            SetChecked(true, headerSetting.GetElementUnChecked(), headerSetting.GetElementChecked());
+            headerSetting.SetChecked(true);
+        }
+
+    }
+
+    private void ForEachList(List<SettingCheckBox> list , bool isCheckedHeader)
+    {
+        foreach (SettingCheckBox setting in list)
+        {
+            SetChecked(isCheckedHeader, setting.GetElementUnChecked(), setting.GetElementChecked());
+        }
+    }
+
+    private void SetChecked(bool isChecked , VisualElement uncheked , VisualElement cheked)
     {
 
         if (isChecked)
