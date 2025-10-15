@@ -32,6 +32,7 @@ public class PrivilegesInfoContent : AbstractClanContent
     {
         content = LoadContent(content, detailedInfoElement);
         ClearContent(content);
+        _createPanelCheckBox.DestroyTempElements();
 
         Show(serverPacket, detailedInfoElement);
     }
@@ -44,6 +45,8 @@ public class PrivilegesInfoContent : AbstractClanContent
 
 
         Button cancelButton = page.Q<Button>("CancelButtonBox2");
+        Button applyButton = page.Q<Button>("ApplyButtonBox2"); 
+
         SubscribeCloseButton(cancelButton, detailedInfoElement);
 
 
@@ -53,6 +56,7 @@ public class PrivilegesInfoContent : AbstractClanContent
 
         if(serverPacket.GetType() == typeof(PledgeReceivePowerInfo))
         {
+            HideElement(applyButton);
             PledgeReceivePowerInfo privilegesInfo = serverPacket as PledgeReceivePowerInfo;
             UsePowerGrade(privilegesInfo.PowerGrade, _panelPrivilages, _panelClanHall, _panelCastle);
         }
@@ -60,6 +64,9 @@ public class PrivilegesInfoContent : AbstractClanContent
         if (serverPacket.GetType() == typeof(ManagePledgePower))
         {
             ManagePledgePower managePledgePower = serverPacket as ManagePledgePower;
+            SubscribeApplyButton(applyButton, detailedInfoElement , managePledgePower.Rank);
+            ShowElement(applyButton);
+
             UseRank(managePledgePower.PrivilegesByRank, _panelPrivilages, _panelClanHall, _panelCastle);
         }
 
@@ -101,7 +108,7 @@ public class PrivilegesInfoContent : AbstractClanContent
     private void UseRank(int rank, VisualElement _panelPrivilages, VisualElement _panelClanHall, VisualElement _panelCastle)
     {
 
-        PledgePowerCheckBoxInstaller.CreateCheckboxByPowerRanked(rank , new ModelPowerCheckBox(_createPanelCheckBox , _leftCheckBoxes , _rightCheckBoxes , new VisualElement[] { _panelPrivilages, _panelClanHall, _panelCastle }));
+        PledgePowerCheckBoxInstaller.CreateCheckboxUsePowerRanked(rank , new ModelPowerCheckBox(_createPanelCheckBox , _leftCheckBoxes , _rightCheckBoxes , new VisualElement[] { _panelPrivilages, _panelClanHall, _panelCastle }));
     }
 
 

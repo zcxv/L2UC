@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -38,6 +40,7 @@ public class ClanDetailedInfo
 
         _privilegesInfoContent = new PrivilegesInfoContent(_dataProvider , _createPanelCheckBox);
         _privilegesInfoContent.OnClickHide += OnClickHide;
+        _privilegesInfoContent.OnClickApply += OnClickApplyPrivilege;
 
         _clanInfoContent = new ClanInfoContent(_dataProvider , _creatorSkillsPanel);
         _clanInfoContent.OnClickHide += OnClickHide;
@@ -99,10 +102,41 @@ public class ClanDetailedInfo
         _showPanel = -1;
     }
 
+    private void OnClickApplyPrivilege(int useRank)
+    {
+        List<SettingCheckBox> listSelect = _createPanelCheckBox.GetSelectAllCheckBoxs();
+        int newPrivileges = GetCalcNewRank(listSelect);
+
+        if(newPrivileges != -1)
+        {
+            SendGameDataQueue.Instance().AddItem(
+                CreatorPacketsUser.CreateRequestPledgePower(useRank, 2, newPrivileges),
+                GameClient.Instance.IsCryptEnabled(),
+                GameClient.Instance.IsCryptEnabled());
+
+        }
+
+        Debug.Log(" Test Click Privilege panel Rank "+ useRank+" Privileges " + newPrivileges);
+    }
+
     private void OnSwitchSubWindow(int id)
     {
         PledgeReceivePowerInfo powerInfo = new PledgeReceivePowerInfo(new byte[1]);
         powerInfo.PowerGrade = id;
         _privilegesInfoContent.PreShow(powerInfo, _detailedInfoElement);
+    }
+
+    private int GetCalcNewRank(List<SettingCheckBox> list)
+    {
+        if(list.Count == 1)
+        {
+            return list[0].GetData();
+        }
+
+        int[] dataArray = list.Where(cb => cb.GetData() != 0)
+                               .Select(cb => cb.GetData())
+                               .ToArray();
+
+        return ByteUtils.CombineFlags(dataArray);
     }
 }

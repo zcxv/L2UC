@@ -32,4 +32,11 @@ public class CheckBoxRootElements
     {
         return _rightAll[index];
     }
+
+    public void Clear()
+    {
+        rootPanels = null;
+        _leftAll = null;
+        _rightAll = null;
+    }
 }
