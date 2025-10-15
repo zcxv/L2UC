@@ -11,12 +11,23 @@ public class SettingCheckBox
     private VisualElement _element;
     private VisualElement _elementUnchecked;
     private VisualElement _elementChecked;
+    private EventCallback<ClickEvent> _callback;
+    private int _data;
     public SettingCheckBox(string name, bool isChecked = false, bool isDisabled = false)
     {
         _name = name;
         _checked = isChecked;
         _disabled = isDisabled;
     }
+
+    public SettingCheckBox(string name, bool isChecked = false, bool isDisabled = false , int data  = 0)
+    {
+        _name = name;
+        _checked = isChecked;
+        _disabled = isDisabled;
+        _data = data;
+    }
+
 
     public void SetElement(VisualElement element)
     {
@@ -64,5 +75,25 @@ public class SettingCheckBox
     public string GetName()
     {
         return _name;
+    }
+
+    public void SetCallback(EventCallback<ClickEvent> callback)
+    {
+        _callback = callback;
+    }
+
+    public EventCallback<ClickEvent> GetCallBack()
+    {
+        return _callback;
+    }
+
+    public void SetData(int data)
+    {
+        _data = data;
+    }
+
+    public int GetData()
+    {
+        return _data;
     }
 }

@@ -76,8 +76,9 @@ public class RankingPrivelege : AbstractClanContent
     {
         if (_selectRank != null)
         {
+            Debug.Log("On Click edit power " + _selectRank.GetPower());
             SendGameDataQueue.Instance().AddItem(
-                CreatorPacketsUser.CreateRequestPledgePower(_selectRank.GetRank(), 1, 0),
+                CreatorPacketsUser.CreateRequestPledgePower(_selectRank.GetRank(), 1, _selectRank.GetPower()),
                 GameClient.Instance.IsCryptEnabled(),
                 GameClient.Instance.IsCryptEnabled());
 

@@ -10,6 +10,7 @@ public abstract class AbstractClanContent
 
     protected VisualElement content;
     public Action<int> OnClickHide;
+    public Action<int> OnClickApply;
     protected VisualElement LoadContent(VisualElement content, VisualElement detailedInfoElement)
     {
         if (content == null)
@@ -40,6 +41,37 @@ public abstract class AbstractClanContent
             }
 
             cancelButton.clicked += OnClick;
+        }
+    }
+
+    protected void SubscribeApplyButton(Button applylButton, VisualElement detailedInfoElement , int useRank)
+    {
+        if (applylButton != null)
+        {
+            void OnClick()
+            {
+                detailedInfoElement.style.display = DisplayStyle.None;
+                applylButton.clicked -= OnClick;  // Unsubscribe here
+                OnClickApply?.Invoke(useRank);
+            }
+
+            applylButton.clicked += OnClick;
+        }
+    }
+
+    protected void HideElement(VisualElement element)
+    {
+        if (element != null)
+        {
+            element.style.display = DisplayStyle.None;
+        }
+    }
+
+    protected void ShowElement(VisualElement element)
+    {
+        if (element != null)
+        {
+            element.style.display = DisplayStyle.Flex;
         }
     }
 }

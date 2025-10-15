@@ -7,6 +7,7 @@ public interface ICreatorPanelCheckBox
 {
     void LoadAsset(Func<string, VisualTreeAsset> loaderFunc);
     public void CreateTwoPanels(CheckBoxRootElements elements);
+    public void DestroyTempElements();
 
-    
+    public List<SettingCheckBox> GetSelectAllCheckBoxs();
 }

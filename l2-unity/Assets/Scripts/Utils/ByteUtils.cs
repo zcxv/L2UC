@@ -71,9 +71,62 @@ public class ByteUtils
     }
 
 
-    //private static short fromBytes(byte[] data)
-    //{
-    //    return (short)(data[0] << 8 | data[1] & 0xFF);
-    //}
+ 
+
+        public static int CombineFlags(params int[] flags)
+        {
+            if (flags == null) throw new ArgumentNullException(nameof(flags));
+            int mask = 0;
+            foreach (var f in flags)
+            {
+                if (f <= 0 || (f & (f - 1)) != 0)
+                    throw new ArgumentException($"Значение {f} не является степенью двойки.", nameof(flags));
+                mask |= f;
+            }
+            return mask;
+        }
+
+    
+        public static long CombineFlags(params long[] flags)
+        {
+            if (flags == null) throw new ArgumentNullException(nameof(flags));
+            long mask = 0;
+            foreach (var f in flags)
+            {
+                if (f <= 0 || (f & (f - 1)) != 0)
+                    throw new ArgumentException($"Значение {f} не является степенью двойки.", nameof(flags));
+                mask |= f;
+            }
+            return mask;
+        }
+
+
+    public static int[] SplitMask(int mask)
+    {
+        if (mask == 0) return Array.Empty<int>();
+        var list = new List<int>();
+        while (mask != 0)
+        {
+            int bit = mask & -mask; 
+            list.Add(bit);
+            mask &= mask - 1; 
+        }
+        return list.ToArray();
+    }
+
+
+    public static long[] SplitMask(long mask)
+    {
+        if (mask == 0L) return Array.Empty<long>();
+        var list = new List<long>();
+        while (mask != 0L)
+        {
+            long bit = mask & -mask;
+            list.Add(bit);
+            mask &= mask - 1;
+        }
+        return list.ToArray();
+    }
+
 
 }

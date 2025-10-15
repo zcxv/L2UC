@@ -11,11 +11,11 @@ public class CheckBoxInstaller
         List<SettingCheckBox> list = new List<SettingCheckBox>
         {
             new SettingCheckBox("System Privileges", isChecked, isDisabled ),
-            new SettingCheckBox("Invite", isChecked, isDisabled),
-            new SettingCheckBox("Manage Titles", isChecked, isDisabled),
-            new SettingCheckBox("Warehouse Search", isChecked, isDisabled),
-            new SettingCheckBox("Manage Ranks", isChecked, isDisabled),
-            new SettingCheckBox("ClanWar", isChecked, isDisabled),
+            new SettingCheckBox("Invite", isChecked, isDisabled , ClanPrivileges.CP_CL_JOIN_CLAN),
+            new SettingCheckBox("Manage Titles", isChecked, isDisabled , ClanPrivileges.CP_CL_GIVE_TITLE),
+            new SettingCheckBox("Warehouse Search", isChecked, isDisabled , ClanPrivileges.CP_CL_VIEW_WAREHOUSE),
+            new SettingCheckBox("Manage Ranks", isChecked, isDisabled , ClanPrivileges.CP_CL_MANAGE_RANKS),
+            new SettingCheckBox("ClanWar", isChecked, isDisabled , ClanPrivileges.CP_CL_PLEDGE_WAR),
 
         };
         return list;
@@ -25,8 +25,10 @@ public class CheckBoxInstaller
     {
         List<SettingCheckBox> list = new List<SettingCheckBox>
         {
-            new SettingCheckBox("Dismiss", isChecked, isDisabled),
-            new SettingCheckBox("Edit Crest", isChecked, isDisabled)
+            new SettingCheckBox("Dismiss", isChecked, isDisabled , ClanPrivileges.CP_CL_DISMISS),
+            new SettingCheckBox("Edit Crest", isChecked, isDisabled , ClanPrivileges.CP_CL_REGISTER_CREST),
+            new SettingCheckBox("Basic rights", isChecked, isDisabled , ClanPrivileges.CP_CL_MASTER_RIGHTS),
+            new SettingCheckBox("Manage levels", isChecked, isDisabled , ClanPrivileges.CP_CL_MANAGE_LEVELS),
         };
         return list;
     }
@@ -36,9 +38,9 @@ public class CheckBoxInstaller
         List<SettingCheckBox> list = new List<SettingCheckBox>
         {
             new SettingCheckBox("Clan Hall Privileges", isChecked, isDisabled ),
-            new SettingCheckBox("Entry/Exit Rights", isChecked, isDisabled),
-            new SettingCheckBox("Use Functions", isChecked, isDisabled),
-            new SettingCheckBox("Auction", isChecked, isDisabled),
+            new SettingCheckBox("Entry/Exit Rights", isChecked, isDisabled , ClanPrivileges.CP_CH_OPEN_DOOR),
+            new SettingCheckBox("Use Functions", isChecked, isDisabled, ClanPrivileges.CP_CH_USE_FUNCTIONS),
+            new SettingCheckBox("Auction", isChecked, isDisabled, ClanPrivileges.CP_CH_AUCTION),
         };
         return list;
     }
@@ -47,8 +49,8 @@ public class CheckBoxInstaller
     {
         List<SettingCheckBox> list = new List<SettingCheckBox>
         {
-            new SettingCheckBox("Right to Dismiss", isChecked, isDisabled),
-            new SettingCheckBox("Set Functions", isChecked, isDisabled)
+            new SettingCheckBox("Right to Dismiss", isChecked, isDisabled , ClanPrivileges.CP_CH_DISMISS),
+            new SettingCheckBox("Set Functions", isChecked, isDisabled , ClanPrivileges.CP_CH_SET_FUNCTIONS)
         };
         return list;
     }
@@ -57,11 +59,11 @@ public class CheckBoxInstaller
     {
         List<SettingCheckBox> list = new List<SettingCheckBox>
         {
-            new SettingCheckBox("Castle/Fortress", isChecked, isDisabled ),
-            new SettingCheckBox("Entry/Exit Rights", isChecked, isDisabled),
-            new SettingCheckBox("Siege War", isChecked, isDisabled),
-            new SettingCheckBox("Use Functions", isChecked, isDisabled),
-            new SettingCheckBox("Set Functions", isChecked, isDisabled),
+            new SettingCheckBox("Castle/Fortress", isChecked, isDisabled),
+            new SettingCheckBox("Entry/Exit Rights", isChecked, isDisabled, ClanPrivileges.CP_CS_OPEN_DOOR),
+            new SettingCheckBox("Siege War", isChecked, isDisabled , ClanPrivileges.CP_CS_MANAGE_SIEGE),
+            new SettingCheckBox("Use Functions", isChecked, isDisabled , ClanPrivileges.CP_CS_USE_FUNCTIONS),
+            new SettingCheckBox("Set Functions", isChecked, isDisabled ,ClanPrivileges.CP_CS_SET_FUNCTIONS),
         };
         return list;
     }
@@ -70,9 +72,9 @@ public class CheckBoxInstaller
     {
         List<SettingCheckBox> list = new List<SettingCheckBox>
         {
-            new SettingCheckBox("Right to Dismiss", isChecked, isDisabled),
-            new SettingCheckBox("Manage Taxes", isChecked, isDisabled),
-             new SettingCheckBox("Mercenaries", isChecked, isDisabled),
+            new SettingCheckBox("Right to Dismiss", isChecked, isDisabled , ClanPrivileges.CP_CS_DISMISS),
+            new SettingCheckBox("Manage Taxes", isChecked, isDisabled , ClanPrivileges.CP_CS_TAXES),
+             new SettingCheckBox("Mercenaries", isChecked, isDisabled , ClanPrivileges.CP_CS_MERCENARIES),
         };
         return list;
     }

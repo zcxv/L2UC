@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,10 +14,10 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
     private List<VisualTreeAsset> _listTemplate  = new List<VisualTreeAsset>();
     private  string DEFAULT_DISABLED_COLOR = "#7f7f7f";
     private Color _colorTextDisabled;
-
+    private CheckBoxRootElements _tempElements;
+    private List<SettingCheckBox> _registeredCallbacks = new List<SettingCheckBox>();
     public CreatePanelCheckBoxWindows()
     {
- 
         ColorUtility.TryParseHtmlString(DEFAULT_DISABLED_COLOR, out _colorTextDisabled);
     }
     public void LoadAsset(Func<string, VisualTreeAsset> loaderFunc)
@@ -46,6 +46,9 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
                 Debug.LogError("CreatePanelCheckBoxWindows-> Not Found Template");
                 return;
             }
+
+            _tempElements = elements;
+
             List<SettingCheckBox> left = elements.GetLeft(i);
             List<SettingCheckBox> right = elements.GetRight(i);
 
@@ -56,6 +59,30 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
         }
 
     }
+
+    public void DestroyTempElements()
+    {
+        if(_tempElements != null)
+        {
+            UnRegisterAllClick();
+            _tempElements.Clear();
+            _registeredCallbacks.Clear();
+        }
+    }
+
+    private void UnRegisterAllClick()
+    {
+        if (_registeredCallbacks != null)
+        {
+            foreach (var callbackInfo in _registeredCallbacks)
+            {
+                callbackInfo.GetElement().UnregisterCallback<ClickEvent>(callbackInfo.GetCallBack());
+            }
+            _registeredCallbacks.Clear();
+        }
+    }
+
+
     private VisualElement AddTwoPanels(VisualElement panel)
     {
 
@@ -150,7 +177,10 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
             VisualElement uncheked = checkbox.Q<VisualElement>("imageUnchecked");
             VisualElement cheked = checkbox.Q<VisualElement>("imageChecked");
 
-            checkbox.RegisterCallback<ClickEvent>(evt => OnClick(evt , uncheked , cheked , setting));
+            EventCallback<ClickEvent> callback = evt => OnClick(evt, uncheked, cheked, setting);
+            checkbox.RegisterCallback(callback);
+            setting.SetCallback(callback);
+            _registeredCallbacks.Add(setting);
         }
     }
 
@@ -158,7 +188,10 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
     {
         if (!setting.IsDisabled())
         {
-            headerCheckBox.RegisterCallback<ClickEvent>(evt => OnClickHeader(evt, left, right, setting));
+            EventCallback<ClickEvent> callback = evt => OnClickHeader(evt, left, right, setting);
+            headerCheckBox.RegisterCallback(callback);
+            setting.SetCallback(callback);
+            _registeredCallbacks.Add(setting);
         }
     }
 
@@ -200,6 +233,7 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
         foreach (SettingCheckBox setting in list)
         {
             SetChecked(isCheckedHeader, setting.GetElementUnChecked(), setting.GetElementChecked());
+            setting.SetChecked(isCheckedHeader);
         }
     }
 
@@ -254,4 +288,7 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
             unCheckedDisabled.style.display = DisplayStyle.Flex;
         }
     }
+
+    public List<SettingCheckBox> GetSelectAllCheckBoxs() =>
+      _registeredCallbacks.Any() ? _registeredCallbacks.Where(cb => cb.IsChecked()).ToList() : new List<SettingCheckBox>();
 }
