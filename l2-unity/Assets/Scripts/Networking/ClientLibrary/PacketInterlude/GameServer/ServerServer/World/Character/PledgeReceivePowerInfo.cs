@@ -13,7 +13,12 @@ public class PledgeReceivePowerInfo : ServerPacket
         get => _powerGrade;
         set => _powerGrade = value;
     }
-    public int PowerGradeByRank => _powerGradeByRank;
+
+    public int PowerGradeByRank
+    {
+        get => _powerGradeByRank;
+        set => _powerGradeByRank = value;
+    }
 
     public PledgeReceivePowerInfo(byte[] d) : base(d)
     {

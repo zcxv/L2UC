@@ -1,3 +1,4 @@
+using FMOD.Studio;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
@@ -50,15 +51,15 @@ public class PrivilegesInfoContent : AbstractClanContent
         SubscribeCloseButton(cancelButton, detailedInfoElement);
 
 
-        var _panelPrivilages = page.Q<VisualElement>(_panelSystemPrivilegesName);
-        var _panelClanHall = page.Q<VisualElement>(_panelSystemClanHallName);
-        var _panelCastle = page.Q<VisualElement>(_panelSystemCastleName);
+        var panelPrivilages = page.Q<VisualElement>(_panelSystemPrivilegesName);
+        var panelClanHall = page.Q<VisualElement>(_panelSystemClanHallName);
+        var panelCastle = page.Q<VisualElement>(_panelSystemCastleName);
 
         if(serverPacket.GetType() == typeof(PledgeReceivePowerInfo))
         {
             HideElement(applyButton);
             PledgeReceivePowerInfo privilegesInfo = serverPacket as PledgeReceivePowerInfo;
-            UsePowerGrade(privilegesInfo.PowerGrade, _panelPrivilages, _panelClanHall, _panelCastle);
+            PrepareUsePowerGrade(privilegesInfo.PowerGradeByRank, panelPrivilages, panelClanHall, panelCastle);
         }
 
         if (serverPacket.GetType() == typeof(ManagePledgePower))
@@ -67,7 +68,7 @@ public class PrivilegesInfoContent : AbstractClanContent
             SubscribeApplyButton(applyButton, detailedInfoElement , managePledgePower.Rank);
             ShowElement(applyButton);
 
-            UseRank(managePledgePower.PrivilegesByRank, _panelPrivilages, _panelClanHall, _panelCastle);
+            UseRank(managePledgePower.PrivilegesByRank, panelPrivilages, panelClanHall, panelCastle);
         }
 
 
@@ -85,30 +86,37 @@ public class PrivilegesInfoContent : AbstractClanContent
 
 
 
-    private void UsePowerGrade(int powerGrade , VisualElement _panelPrivilages , VisualElement _panelClanHall, VisualElement _panelCastle)
+    private void PrepareUsePowerGrade(int powerGrade , VisualElement _panelPrivilages , VisualElement _panelClanHall, VisualElement _panelCastle)
     {
-        var elements = new VisualElement[] { _panelPrivilages, _panelClanHall, _panelCastle };
-
-        switch (powerGrade)
-        {
-            case -1:
-                CheckBoxInstaller.UsePowerGradeMinus1(_createPanelCheckBox , _leftCheckBoxes , _rightCheckBoxes, elements);
-                break;
-            case 1:
-                CheckBoxInstaller.UsePowerGrade1(_createPanelCheckBox, _leftCheckBoxes, _rightCheckBoxes, elements);
-                break;
-            case 6:
-                CheckBoxInstaller.UsePowerGrade6(_createPanelCheckBox, _leftCheckBoxes, _rightCheckBoxes, elements);
-                break;
-            default:
-                break;
-        }
+        //var elements = new VisualElement[] { _panelPrivilages, _panelClanHall, _panelCastle };
+        UsePowerGrade(powerGrade, _panelPrivilages, _panelClanHall, _panelCastle);
+        //switch (powerGrade)
+        //{
+        //case -1:
+        //  CheckBoxInstaller.UsePowerGradeMinus1(_createPanelCheckBox , _leftCheckBoxes , _rightCheckBoxes, elements);
+        //  break;
+        //case 1:
+        // CheckBoxInstaller.UsePowerGrade1(_createPanelCheckBox, _leftCheckBoxes, _rightCheckBoxes, elements);
+        /// break;
+        // case 6:
+        // CheckBoxInstaller.UsePowerGrade6(_createPanelCheckBox, _leftCheckBoxes, _rightCheckBoxes, elements);
+        // break;
+        //default:
+        //   break;
+        //}
     }
 
-    private void UseRank(int rank, VisualElement _panelPrivilages, VisualElement _panelClanHall, VisualElement _panelCastle)
+    private void UsePowerGrade(int powerGrade, VisualElement panelPrivilages, VisualElement panelClanHall, VisualElement panelCastle)
     {
-
-        PledgePowerCheckBoxInstaller.CreateCheckboxUsePowerRanked(rank , new ModelPowerCheckBox(_createPanelCheckBox , _leftCheckBoxes , _rightCheckBoxes , new VisualElement[] { _panelPrivilages, _panelClanHall, _panelCastle }));
+        PledgePowerCheckBoxInstaller.CreateCheckboxUsePowerGrade(powerGrade,
+            new ModelPowerCheckBox(_createPanelCheckBox, _leftCheckBoxes, _rightCheckBoxes, new VisualElement[]
+        { panelPrivilages, panelClanHall, panelCastle }), true, true);
+    }
+    private void UseRank(int rank, VisualElement panelPrivilages, VisualElement panelClanHall, VisualElement panelCastle)
+    {
+        PledgePowerCheckBoxInstaller.CreateCheckboxUsePowerRanked(rank , 
+            new ModelPowerCheckBox(_createPanelCheckBox , _leftCheckBoxes , _rightCheckBoxes , new VisualElement[]
+            { panelPrivilages, panelClanHall, panelCastle }), true, false);
     }
 
 

@@ -73,6 +73,9 @@ public class ClanDetailedInfo
                 break;
 
             case PledgeReceivePowerInfo powerInfo:
+                //if leader max access
+                if (powerInfo.Name == packetAll.SubPledgeLeaderName) powerInfo.PowerGradeByRank = ClanPrivileges.CP_ALL;
+
                 _privilegesInfoContent.PreShow(powerInfo, detailedInfoElement);
                 _showPanel = 1;
                 break;
