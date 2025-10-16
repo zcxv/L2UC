@@ -13,6 +13,7 @@ public class SettingCheckBox
     private VisualElement _elementChecked;
     private EventCallback<ClickEvent> _callback;
     private int _data;
+    private SettingCheckBox _headerSetting;
     public SettingCheckBox(string name, bool isChecked = false, bool isDisabled = false)
     {
         _name = name;
@@ -20,12 +21,13 @@ public class SettingCheckBox
         _disabled = isDisabled;
     }
 
-    public SettingCheckBox(string name, bool isChecked = false, bool isDisabled = false , int data  = 0)
+    public SettingCheckBox(string name, bool isChecked = false, bool isDisabled = false , int data  = 0 , SettingCheckBox headerSetting = null)
     {
         _name = name;
         _checked = isChecked;
         _disabled = isDisabled;
         _data = data;
+        _headerSetting = headerSetting;
     }
 
 
@@ -57,9 +59,19 @@ public class SettingCheckBox
     {
         return _elementUnchecked;
     }
+
+    public SettingCheckBox GetMyHeaderSetting()
+    {
+        return _headerSetting;
+    }
+
     public void SetChecked(bool click_checked)
     {
         _checked = click_checked;
+    }
+    public void SetDisabled(bool disabled)
+    {
+        _disabled = disabled;
     }
     // Getters
     public bool IsChecked()
