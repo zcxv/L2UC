@@ -30,7 +30,10 @@ public class SettingCheckBox
         _headerSetting = headerSetting;
     }
 
-
+    public bool IsHeader()
+    {
+        return _headerSetting == null;
+    }
     public void SetElement(VisualElement element)
     {
         _element = element;

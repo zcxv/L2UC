@@ -82,7 +82,7 @@ public class RankingPrivelege : AbstractClanContent
                 GameClient.Instance.IsCryptEnabled(),
                 GameClient.Instance.IsCryptEnabled());
 
-            OnSwitchRank?.Invoke(EDIT_MODE_ALL_NOT_CHECKED);
+            //OnSwitchRank?.Invoke(EDIT_MODE_ALL_NOT_CHECKED);
 
         }
 

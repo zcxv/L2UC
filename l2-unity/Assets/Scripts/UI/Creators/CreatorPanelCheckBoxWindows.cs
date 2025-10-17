@@ -35,7 +35,7 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
 
     public void CreateTwoPanels(CheckBoxRootElements elements)
     {
-        for (int i =0; i <  elements.GetRootPanels().Count; i++)
+        for (int i =0; i <  elements.GetRootPanels().Length; i++)
         {
             VisualElement rootPanel = elements.GetRootPanels()[i];
             VisualElement twoPanel = AddTwoPanels(rootPanel);
@@ -53,11 +53,11 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
             List<SettingCheckBox> right = elements.GetRight(i);
 
             SetCheckBoxHeaderPanel(twoPanel, _listTemplate[1], left , right);
-            left.RemoveAt(0);
+            //left.RemoveAt(0);
             SetCheckBoxLeftPanel(twoPanel, checkBoxTemplate, left);
             SetCheckBoxRightPanel(twoPanel, checkBoxTemplate, right);
         }
-
+    
     }
 
     public void DestroyTempElements()
@@ -65,7 +65,7 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
         if(_tempElements != null)
         {
             UnRegisterAllClick();
-            _tempElements.Clear();
+            _tempElements = null;
             _registeredCallbacks.Clear();
         }
     }
@@ -139,7 +139,15 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
     {
         for (int i = 0; i < listSettings.Count; i++)
         {
+
             SettingCheckBox setting = listSettings[i];
+
+            if (setting.IsHeader())
+            {
+                Debug.Log("Detected Header " + setting.GetName());
+                continue;
+            }
+
             VisualElement checkbox = CreateCheckBox(checkboxTemplate);
             setting.SetElement(checkbox);
             SetSetting(checkbox , setting);
@@ -147,6 +155,8 @@ public class CreatePanelCheckBoxWindows : ICreatorPanelCheckBox
             panel.Add(checkbox);
         }
     }
+
+
 
     private VisualElement SetSetting(VisualElement checkbox , SettingCheckBox setting)
     {
