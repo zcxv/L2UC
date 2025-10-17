@@ -57,6 +57,7 @@ public class ClanDetailedInfo
         _clanInfoContent.template = loaderFunc(_templateNameClanInfo);
         _rankingPrivilege.template = loaderFunc(_templateNameRankingPrivelege);
 
+        _memberInfoContent.LoadAsset(loaderFunc);
         _createPanelCheckBox.LoadAsset(loaderFunc);
         _creatorSkillsPanel.LoadAsset(loaderFunc);
         _rankingPrivilege.LoadAsset(loaderFunc);

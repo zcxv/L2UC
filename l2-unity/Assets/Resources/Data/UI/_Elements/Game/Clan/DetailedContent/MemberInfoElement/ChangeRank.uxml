@@ -1,0 +1,24 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/Data/UI/_Elements/L2StyleSheet.uss?fileID=7433441132597879392&amp;guid=72e99cc94b130bf4ba100dceaa830b13&amp;type=3#L2StyleSheet" />
+    <engine:GroupBox name="MemberInfoChangeRank" class="l2-drop-down-windows" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: auto; height: auto; flex-direction: row; position: absolute; flex-shrink: 1; flex-grow: 1; align-content: stretch; align-self: center; justify-content: center;">
+        <engine:GroupBox name="Content" style="position: absolute; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; height: auto; width: auto; max-width: none; max-height: none; padding-right: 0; flex-shrink: 1; flex-grow: 1; align-items: stretch;">
+            <engine:GroupBox name="Header" style="margin-top: 0; margin-right: 0; margin-bottom: 10%; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; align-items: stretch; align-self: auto;">
+                <engine:GroupBox name="Info1" style="margin-top: 0; margin-right: 0; margin-bottom: 10%; margin-left: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-direction: row; height: auto; width: auto; align-self: flex-start; justify-content: center;">
+                    <engine:VisualElement style="flex-grow: 1; width: 32px; height: 32px; max-height: 32px; max-width: 32px; background-image: resource(&apos;Data/UI/Assets/Calculator/ICON_DF_Exclamation&apos;); min-width: 32px; min-height: 32px; display: none; visibility: hidden; overflow: hidden;" />
+                    <engine:Label text="Сhange Rank" name="labelText" class="calculator-header-label" style="margin-top: 10px; margin-right: 0; margin-bottom: 0; margin-left: 8px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(206, 206, 206); font-size: 11px; -unity-font-definition: resource(&apos;Data/UI/Font/tahoma&apos;);" />
+                </engine:GroupBox>
+                <engine:DropdownField name="comboBox" class="dropdown-field" style="height: auto; width: 180px; margin-top: 0; margin-right: 0; margin-bottom: 18px; margin-left: 0; max-width: none; justify-content: space-between; align-content: stretch; min-width: 50%; align-items: center; flex-shrink: 0; align-self: center; flex-grow: 0; flex-direction: row;" />
+            </engine:GroupBox>
+            <engine:GroupBox name="Footer" style="margin-top: 1%; margin-right: 0; margin-bottom: 0; margin-left: 3px; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-direction: row; align-self: stretch; justify-content: center; align-items: stretch; flex-grow: 0; flex-shrink: 0; width: auto;">
+                <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="OkButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
+                    <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
+                    <engine:Label text="OK" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
+                </engine:Button>
+                <engine:Button text="CancelButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CancelButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
+                    <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
+                    <engine:Label text="Cancel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
+                </engine:Button>
+            </engine:GroupBox>
+        </engine:GroupBox>
+    </engine:GroupBox>
+</engine:UXML>
