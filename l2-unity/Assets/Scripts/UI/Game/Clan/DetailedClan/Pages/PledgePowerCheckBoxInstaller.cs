@@ -5,8 +5,8 @@ using UnityEngine.UIElements;
 
 public class PledgePowerCheckBoxInstaller
 {
+    private static CheckBoxRootElements _defaultTrueTrue;
     private static CheckBoxRootElements _defaultFalseTrue;
-    private static CheckBoxRootElements _defaultFalseFalse;
 
     private static SettingCheckBox[] CreateHeaders() => new[]
     {
@@ -40,7 +40,7 @@ public class PledgePowerCheckBoxInstaller
                 var header = matchingCheckBox.GetMyHeaderSetting();
                 header?.SetChecked(defaultChecked);
                 header?.SetDisabled(defaultDisabled);
-                matchingCheckBox.SetChecked(true);
+                //matchingCheckBox.SetChecked(true);
                 matchingCheckBox.SetChecked(defaultChecked);
                 matchingCheckBox.SetDisabled(defaultDisabled);
                 return true;
@@ -88,11 +88,13 @@ public class PledgePowerCheckBoxInstaller
             CheckBoxInstaller.CreateAllRight1(model.RightCheckBoxes, defaultChecked, defaultDisabled, headers));
     }
 
+    private static void UsePowerGradeDefaultTrueTrue(ModelPowerCheckBox model, bool defaultChecked, bool defaultDisabled)
+     => CreateDefaultElements(model, defaultChecked, defaultDisabled, ref _defaultTrueTrue);
+
     private static void UsePowerGradeDefaultFalseTrue(ModelPowerCheckBox model, bool defaultChecked, bool defaultDisabled)
         => CreateDefaultElements(model, defaultChecked, defaultDisabled, ref _defaultFalseTrue);
 
-    private static void UsePowerGradeDefaultFalseFalse(ModelPowerCheckBox model, bool defaultChecked, bool defaultDisabled)
-        => CreateDefaultElements(model, defaultChecked, defaultDisabled, ref _defaultFalseFalse);
+
 
     private static void HandlePowerNotAll(int powerValue, ModelPowerCheckBox model, bool defaultChecked, bool defaultDisabled, bool isGrade)
     {
@@ -101,13 +103,16 @@ public class PledgePowerCheckBoxInstaller
             if (isGrade)
                 UsePowerGradeDefaultFalseTrue(model, false, true);
             else
-                UsePowerGradeDefaultFalseFalse(model, false, false);
+                UsePowerGradeCpAll(model, false, false);
             return;
         }
 
         if (powerValue == ClanPrivileges.CP_ALL)
         {
-            UsePowerGradeCpAll(model, true, isGrade);
+            if(isGrade)
+                UsePowerGradeDefaultTrueTrue(model, true, true);
+            else
+                UsePowerGradeCpAll(model, true, isGrade);
             return;
         }
 
