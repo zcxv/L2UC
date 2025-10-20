@@ -25,15 +25,15 @@
                 <engine:GroupBox name="GroupBoxButtons" style="flex-direction: row; margin-top: 3px; margin-right: 0; margin-bottom: 0; margin-left: -2px; padding-top: 0; padding-bottom: 0; padding-left: 0;">
                     <engine:Button text="ButtonBg" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TitleButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); width: 78px; margin-left: 0; margin-right: 2px;">
                         <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
-                        <engine:Label text="Change Title" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0; color: rgba(149, 149, 149, 0.96);" />
+                        <engine:Label text="Change Title" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TitleLabel" picking-mode="Ignore" class="button-label-disabled" style="letter-spacing: 0;" />
                     </engine:Button>
-                    <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RanklButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); width: 78px; margin-left: 0; margin-right: 2px;">
+                    <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RankButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); width: 78px; margin-left: 0; margin-right: 2px;">
                         <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
-                        <engine:Label text="Change Rank" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0; color: rgba(149, 149, 149, 0.96);" />
+                        <engine:Label text="Change Rank" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RankLabel" picking-mode="Ignore" class="button-label-disabled" style="letter-spacing: 0;" />
                     </engine:Button>
                     <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DismissButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0); width: 78px; margin-left: 0;">
                         <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
-                        <engine:Label text="Dismiss" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0; color: rgba(149, 149, 149, 0.96);" />
+                        <engine:Label text="Dismiss" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DismissLabel" picking-mode="Ignore" class="button-label-disabled" style="letter-spacing: 0;" />
                     </engine:Button>
                 </engine:GroupBox>
             </engine:VisualElement>
