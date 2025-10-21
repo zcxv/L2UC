@@ -88,6 +88,11 @@ public class CreatorPacketsUser
         return new RequestPledgePowerGradeList();
     }
 
+    public static RequestPledgeSetMemberPowerGrade CreateRequestPledgeSetMemberPowerGrade(string memberName, int powerGrade)
+    {
+        return new RequestPledgeSetMemberPowerGrade(memberName, powerGrade);
+    }
+
     public static RequestWithdrawPledge CreateRequestWithdrawPledge()
     {
         return new RequestWithdrawPledge();

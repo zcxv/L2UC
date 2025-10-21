@@ -44,7 +44,6 @@ public class ParseDetected : IParse
                     AddEdit(node);
                     break;
                 default:
-                    // Можно добавить обработку для других случаев или оставить пустым
                     break;
             }
         }

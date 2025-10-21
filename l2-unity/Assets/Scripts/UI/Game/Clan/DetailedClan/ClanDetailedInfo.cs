@@ -1,3 +1,4 @@
+using FMOD.Studio;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,10 @@ public class ClanDetailedInfo
 
         _memberInfoContent = new MemberInfoContent(_dataProvider);
         _memberInfoContent.OnClickHide += OnClickHide;
+        _memberInfoContent.OnOutsideClickRank += OnClickOkRank;
+        _memberInfoContent.OnOutsideClickTitle += OnClickOkTitle;
+         _memberInfoContent.OnOutsideClickDismiss += OnOkDismiss;
+
 
         _privilegesInfoContent = new PrivilegesInfoContent(_dataProvider , _createPanelCheckBox);
         _privilegesInfoContent.OnClickHide += OnClickHide;
@@ -101,6 +106,22 @@ public class ClanDetailedInfo
     {
         return _showPanel;
     }
+
+    private void OnClickOkRank(string memberName, int rank)
+    {
+        Debug.Log("Click OnClickOkRank memberName " + memberName + " Rank " + rank);
+    }
+
+    private void OnClickOkTitle(string memberName, string title)
+    {
+        Debug.Log("Click Ok OnClickOkTitle memberName " + memberName + " Rank " + title);
+    }
+
+    private void OnOkDismiss(string memberName)
+    {
+        Debug.Log("Click Ok OnOkDismiss memberName " + memberName);
+    }
+    
     private void OnClickHide(int id)
     {
         _showPanel = -1;

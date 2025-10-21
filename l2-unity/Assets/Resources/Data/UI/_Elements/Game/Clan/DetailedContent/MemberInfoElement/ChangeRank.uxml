@@ -10,11 +10,11 @@
                 <engine:DropdownField name="comboBox" class="dropdown-field" style="height: auto; width: 180px; margin-top: 0; margin-right: 0; margin-bottom: 18px; margin-left: 0; max-width: none; justify-content: space-between; align-content: stretch; min-width: 50%; align-items: center; flex-shrink: 0; align-self: center; flex-grow: 0; flex-direction: row;" />
             </engine:GroupBox>
             <engine:GroupBox name="Footer" style="margin-top: 1%; margin-right: 0; margin-bottom: 0; margin-left: 3px; padding-top: 0; padding-bottom: 0; padding-left: 0; flex-direction: row; align-self: stretch; justify-content: center; align-items: stretch; flex-grow: 0; flex-shrink: 0; width: auto;">
-                <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="OkButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
+                <engine:Button text="CloseButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="OkRankButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
                     <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
                     <engine:Label text="OK" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
                 </engine:Button>
-                <engine:Button text="CancelButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CancelButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
+                <engine:Button text="CancelButton" parse-escape-sequences="true" display-tooltip-when-elided="true" name="CancelRankButton" class="l2-button" style="height: 20px; background-color: rgba(188, 188, 188, 0);">
                     <engine:VisualElement name="ButtonBg" class="l2-button-bg" />
                     <engine:Label text="Cancel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ButtonLabel" picking-mode="Ignore" class="button-label" style="letter-spacing: 0;" />
                 </engine:Button>

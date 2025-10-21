@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public abstract class AbstractClanContent 
+public abstract class AbstractClanContent : AbstractButtonEvents
 {
     protected DataProviderClanInfo _dataProvider;
     public VisualTreeAsset template;

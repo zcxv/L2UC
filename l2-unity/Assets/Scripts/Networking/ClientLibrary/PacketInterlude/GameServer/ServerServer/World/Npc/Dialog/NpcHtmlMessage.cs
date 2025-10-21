@@ -37,30 +37,25 @@ public class NpcHtmlMessage : ServerPacket
         htmlDoc.LoadHtml(_html);
         parce = new ParseDetected();
 
-        PrintNode(htmlDoc.DocumentNode  , parce);
+        ProcessHtmlNodes(htmlDoc.DocumentNode  , parce);
 
 
     }
 
-    static void PrintNode(HtmlNode node , IParse parce)
+    static void ProcessHtmlNodes(HtmlNode node , IParse parce)
     {
-        // Если узел текстовый, выводим его текст
+
         if (node.NodeType == HtmlNodeType.Text)
         {
-           // Debug.Log("Какой то текст " + node.InnerText.Trim());
-
             parce.Parse(node.InnerText.Trim());
-            //Console.WriteLine($"Text: '{node.InnerText.Trim()}'");
+
         }
         else
         {
-            //Debug.Log("Какой то тэг  " + node.Name);
-
-            // Проходим по дочерним узлам
             foreach (var child in node.ChildNodes)
             {
                 parce.ParseNode(child);
-                PrintNode(child, parce);
+                ProcessHtmlNodes(child, parce);
             }
         }
     }
