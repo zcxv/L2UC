@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Inspector
+  m_Title: Project
   m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 40
+  controlID: 124
   draggingID: 0
 --- !u!114 &3
 MonoBehaviour:
@@ -69,8 +69,8 @@ MonoBehaviour:
     y: 0
     width: 381
     height: 933
-  m_MinSize: {x: 276, y: 76}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -4417,7 +4417,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 622
+    y: 677
     width: 1538
     height: 309
   m_SerializedDataModeController:
@@ -4432,7 +4432,7 @@ MonoBehaviour:
     m_ContainerData: []
     m_OverlaysVisible: 1
   m_SearchFilter:
-    m_NameFilter: 
+    m_NameFilter: ByteUtils
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -4442,26 +4442,26 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Data/UI/_Elements/Game/Calculator
+    - Assets/Scripts/UI/Game/SkillLearn
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
-    m_OriginalText: 
+    m_OriginalText: ByteUtils
     m_ImportLogFlags: 0
     m_FilterByTypeIntersection: 0
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Resources/Data/UI/_Elements/Game/Calculator
+  - Assets/Scripts/UI/Game/SkillLearn
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\unity\l2 client\l2-git-interlude\Unity-Client-for-L2J\l2-unity
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 227}
-    m_SelectedIDs: 78780200
-    m_LastClickedID: 161912
-    m_ExpandedIDs: 000000002c6802002e68020030680200326802003468020036680200386802003a6802003c6802003e68020040680200426802004468020046680200486802004a6802004c6802004e68020050680200526802005468020056680200586802005a6802005c6802005e68020060680200626802006468020066680200686802006a6802006c6802006e68020070680200726802007468020076680200786802007a6802007c6802007e68020080680200826802008468020086680200886802008a6802008c6802008e68020090680200926802009468020096680200
+    scrollPos: {x: 0, y: 2527}
+    m_SelectedIDs: 926a0200
+    m_LastClickedID: 158354
+    m_ExpandedIDs: 000000002c6802002e68020030680200326802003468020036680200386802003a6802003c6802003e68020040680200426802004468020046680200486802004a6802004c6802004e68020050680200526802005468020056680200586802005a6802005c6802005e68020060680200626802006468020066680200686802006a6802006c6802006e68020070680200726802007468020076680200786802007a6802007c6802007e68020080680200826802008468020086680200886802008a6802008c6802008e6802009068020092680200946802009668020082690200546a02005a6a0200686a0200726a020000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -4536,7 +4536,7 @@ MonoBehaviour:
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
-      m_ClientGUIView: {fileID: 5}
+      m_ClientGUIView: {fileID: 7}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -4569,8 +4569,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1540
-    y: 24
+    x: 1539
+    y: 79
     width: 380
     height: 907
   m_SerializedDataModeController:
@@ -4619,7 +4619,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 24
+    y: 79
     width: 306
     height: 572
   m_SerializedDataModeController:
@@ -4636,7 +4636,7 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: ac960000
       m_LastClickedID: 0
       m_ExpandedIDs: 
       m_RenameOverlay:
@@ -5320,8 +5320,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 308
-    y: 24
+    x: 307
+    y: 79
     width: 1230
     height: 572
   m_SerializedDataModeController:
@@ -5422,7 +5422,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 677
-    width: 1258
+    width: 1538
     height: 309
   m_SerializedDataModeController:
     m_DataMode: 0

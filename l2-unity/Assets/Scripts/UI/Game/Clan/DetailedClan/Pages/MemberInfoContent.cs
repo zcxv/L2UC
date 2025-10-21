@@ -1,35 +1,50 @@
 
 using System;
 using System.Collections.Generic;
-
-using UnityEngine.UI;
+using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UIElements;
 
 public class MemberInfoContent : AbstractClanContent
 {
     private const string _templateNameElementChangeRank = "Data/UI/_Elements/Game/Clan/DetailedContent/MemberInfoElement/ChangeRank";
+    private const string _templateNameElementChangeTitle = "Data/UI/_Elements/Game/Clan/DetailedContent/MemberInfoElement/ChangeTitle";
     private VisualTreeAsset _tamplateChangeRank;
+    private VisualTreeAsset _tamplateChangeTitle;
     private DropdownField _dropdown;
+    private TextField _textfield;
+    private string _selectMemeberName = "";
+    private VisualElement _centerBox;
 
     private const string _dropdownName = "comboBox";
+    private const string _textboxName = "userInputField";
     private const string _cancelButtonName = "CancelButtonBox2";
     private const string _centerBoxContentName = "Center";
     private const string _buttonRankName = "RankButton";
     private const string _buttonTitleName = "TitleButton";
+    private const string _buttonDismissName = "DismissButton";
 
     private const string _labelRankName = "RankLabel";
     private const string _labelTitleName = "TitleLabel";
     private const string _dismissTitleName = "DismissLabel";
+    private readonly List<string> _itemsDropdown = new List<string> { "1st level Privilege", "2st level Privilege", "3st level Privilege", "4st level Privilege", "Joint Rank" };
 
-    private bool _isRankButtonSubscribed = false;
-    private bool _isTitleButtonSubscribed = false;
 
-    private EventCallback<ClickEvent> _rankCallback;
-    private EventCallback<ClickEvent> _titleCallBack;
+    private const string _insideTitleTemplateButtonOkName = "OkTitleButton";
+    private const string _insideTitleTemplateButtonCancelName = "CancelTitleButton";
 
-    private UnityEngine.UIElements.Button cancelButton;
-    private UnityEngine.UIElements.Button rankButton;
-    private UnityEngine.UIElements.Button titleButton;
+
+    private const string _insideRankTemplateButtonOkName = "OkRankButton";
+    private const string _insideRankTemplateButtonCancelName = "CancelRankButton";
+
+
+
+    private Button cancelButton;
+
+
+    public Action<string , int> OnOutsideClickRank;
+    public Action<string , string> OnOutsideClickTitle;
+    public Action<string> OnOutsideClickDismiss;
 
 
     private bool _isLeader = false;
@@ -41,6 +56,7 @@ public class MemberInfoContent : AbstractClanContent
     public void LoadAsset(Func<string, VisualTreeAsset> loaderFunc)
     {
         _tamplateChangeRank = loaderFunc(_templateNameElementChangeRank);
+        _tamplateChangeTitle = loaderFunc(_templateNameElementChangeTitle);
     }
 
     public void PreShow(PledgeReceiveMemberInfo memberInfo, VisualElement detailedInfoElement, PledgeShowMemberListAll packetAll)
@@ -48,7 +64,7 @@ public class MemberInfoContent : AbstractClanContent
         content = LoadContent(content, detailedInfoElement);
         ClearContent(content);
         SetLeader(memberInfo, packetAll);
-        UnregisterCallBack(rankButton , titleButton);
+        UnregisterCallBackAllButtons();
 
         Show(memberInfo, detailedInfoElement, packetAll);
     }
@@ -58,28 +74,34 @@ public class MemberInfoContent : AbstractClanContent
 
         _dataProvider.SetMemberInfo(page, memberInfo, packetAll);
 
-        cancelButton = page.Q<UnityEngine.UIElements.Button>(_cancelButtonName);
-        rankButton = page.Q<UnityEngine.UIElements.Button>(_buttonRankName);
-        titleButton = page.Q<UnityEngine.UIElements.Button>(_buttonTitleName);
+        cancelButton = page.Q<Button>(_cancelButtonName);
+        var rankButton = page.Q<Button>(_buttonRankName);
+        var titleButton = page.Q<Button>(_buttonTitleName);
+        var dismissButton = page.Q<Button>(_buttonDismissName);
+        _centerBox = page.Q<VisualElement>(_centerBoxContentName);
+
+        var rankEvent = GetSubscribeOnRank(memberInfo.Name, rankButton, _centerBox, detailedInfoElement);
+        var titleEvent = GetSubscribeOnTitle(titleButton, _centerBox, detailedInfoElement);
+        var dismissEvent = GetSubscribeOnDismiss(memberInfo.Name, dismissButton, _centerBox, detailedInfoElement);
 
 
 
-        UnityEngine.UIElements.Label dismissLabel = page.Q<UnityEngine.UIElements.Label>(_dismissTitleName);
-        UnityEngine.UIElements.Label rankLabel = page.Q<UnityEngine.UIElements.Label>(_labelRankName);
-        UnityEngine.UIElements.Label titleLabel= page.Q<UnityEngine.UIElements.Label>(_labelTitleName);
+        _selectMemeberName = memberInfo.Name;
+
+
+        Label dismissLabel = page.Q<Label>(_dismissTitleName);
+        Label rankLabel = page.Q<Label>(_labelRankName);
+        Label titleLabel= page.Q<Label>(_labelTitleName);
 
         OnEnabledButton(memberInfo.Name , _isLeader, rankLabel, titleLabel , dismissLabel);
 
-        VisualElement centerBox = page.Q<VisualElement>(_centerBoxContentName);
 
 
+
+        RegisterCallBackAllButtons(new Button[3] { rankButton, titleButton, dismissButton },
+            new EventCallback<ClickEvent>[3] { rankEvent, titleEvent, dismissEvent });
 
         SubscribeCloseButton(cancelButton, detailedInfoElement);
-        SubscribeOnRank(memberInfo.Name , rankButton, centerBox , detailedInfoElement);
-        SubscribeOnTitle(titleButton, centerBox, detailedInfoElement);
-
-
-
 
         if (content != null & page != null)
         {
@@ -93,19 +115,123 @@ public class MemberInfoContent : AbstractClanContent
         _isLeader = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name == packetAll.SubPledgeLeaderName;
     }
 
-    private void UnregisterCallBack(UnityEngine.UIElements.Button rankButton , UnityEngine.UIElements.Button titleButton)
+
+    private EventCallback<ClickEvent> GetSubscribeOnRank(string selectName, Button rankButton, VisualElement centerBox, VisualElement detailedInfoElement)
     {
-        if(_isRankButtonSubscribed | _isTitleButtonSubscribed)
-        {
-            if(_rankCallback != null) rankButton?.UnregisterCallback(_rankCallback);
-            if (_titleCallBack != null) titleButton?.UnregisterCallback(_titleCallBack);
-            _isTitleButtonSubscribed = false;
-            _isRankButtonSubscribed = false;
-        }
+        string selfName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
+
+        return _isLeader && selectName != selfName && rankButton != null && !GetStatusCallBack(0)
+            ? new EventCallback<ClickEvent>(evt => OnRankButtonClick(centerBox))
+            : null;
     }
 
+
+    private EventCallback<ClickEvent> GetSubscribeOnTitle(UnityEngine.UIElements.Button titleButton, VisualElement centerBox, VisualElement detailedInfoElement)
+    {
+        return _isLeader && titleButton != null && !GetStatusCallBack(1)
+            ? new EventCallback<ClickEvent>(evt => OnTitleButtonClick(centerBox))
+            : null;
+    }
+
+    private EventCallback<ClickEvent> GetSubscribeOnDismiss(string selectName, Button rankButton, VisualElement centerBox, VisualElement detailedInfoElement)
+    {
+        string selfName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
+
+        return _isLeader && selectName != selfName && rankButton != null && !GetStatusCallBack(2)
+            ? new EventCallback<ClickEvent>(evt => OnDismissButtonClick(centerBox))
+            : null;
+    }
+
+    private void OnRankButtonClick(VisualElement centerBox)
+    {
+        centerBox.Clear();
+
+        InsideUnregisterAll();
+
+        VisualElement elementChangeRank = ToolTipsUtils.CloneOne(_tamplateChangeRank);
+        _dropdown = elementChangeRank.Q<DropdownField>(_dropdownName);
+        _dropdown.value = "";
+
+        var _insideOkButton = elementChangeRank.Q<Button>(_insideRankTemplateButtonOkName);
+        var _insideCancelButton = elementChangeRank.Q<Button>(_insideRankTemplateButtonCancelName);
+
+        var _isInsideRankOkSubscribed = GetStatusInsideCallBack(0);
+        var _isInsideRankCancelSubscribed = GetStatusInsideCallBack(1);
+
+        var _rankOkCallback = new EventCallback<ClickEvent>(evt => OnRankOkClick());
+        var _rankCancelCallback = new EventCallback<ClickEvent>(evt => OnTitleCancelClick(centerBox));
+
+        RegisterInsideCallBackAllButtons(new Button[2] { _insideOkButton , _insideCancelButton } , new EventCallback<ClickEvent>[2] { _rankOkCallback  , _rankCancelCallback } );
+
+
+        SetDropdownList(_dropdown, _itemsDropdown);
+        centerBox?.Add(elementChangeRank);
+    }
+
+
+
+
+    private void OnTitleButtonClick(VisualElement centerBox)
+    {
+        centerBox.Clear();
+
+        InsideUnregisterAll();
+
+        VisualElement elementChangeTitle= ToolTipsUtils.CloneOne(_tamplateChangeTitle);
+        _textfield = elementChangeTitle.Q<TextField>(_textboxName);
+
+
+        var _insideOkButton = elementChangeTitle.Q<Button>(_insideTitleTemplateButtonOkName);
+        var _insideCancelButton = elementChangeTitle.Q<Button>(_insideTitleTemplateButtonCancelName);
+
+
+        var _titleOkCallback = new EventCallback<ClickEvent>(evt => OnTitleOkClick());
+        var _titleCancelCallback = new EventCallback<ClickEvent>(evt => OnTitleCancelClick(centerBox));
+
+        RegisterInsideCallBackAllButtons(new Button[2] { _insideOkButton, _insideCancelButton }, new EventCallback<ClickEvent>[2] { _titleOkCallback, _titleCancelCallback });
+
+        centerBox?.Add(elementChangeTitle);
+    }
+
+    private void OnTitleOkClick(){
+        _centerBox.Clear();
+        OnOutsideClickTitle?.Invoke(_selectMemeberName, _textfield?.value);
+    } 
+    private void OnRankOkClick() {
+        _centerBox.Clear();
+        OnOutsideClickRank?.Invoke(_selectMemeberName, _dropdown?.index ?? -1);
+    } 
+    private void OnDismissButtonClick(VisualElement centerBox){ centerBox.Clear(); OnOutsideClickDismiss?.Invoke(_selectMemeberName); }
+
+
+    private void OnTitleCancelClick(VisualElement centerBox)
+    {
+        centerBox.Clear();
+    }
+
+    public void SetDropdownList(DropdownField dropdown, List<string> items)
+    {
+        if (items == null)
+        {
+            dropdown.value = null;
+            dropdown.choices = null;
+        }
+        else
+        {
+            dropdown.choices = items;
+        }
+
+    }
+
+    private void InsideUnregisterAll()
+    {
+        UnregisterInsideCallBackAllButtons();
+    }
+
+
+    //style code
     private void OnEnabledButton(string selectName, bool isLeader, UnityEngine.UIElements.Label rankLabel,
-    UnityEngine.UIElements.Label titleLabel, UnityEngine.UIElements.Label dismisslabel)
+UnityEngine.UIElements.Label titleLabel, UnityEngine.UIElements.Label dismisslabel)
     {
         ApplyLeaderStyles(isLeader, rankLabel, titleLabel, dismisslabel);
         ApplySelfRestrictions(selectName, rankLabel, dismisslabel);
@@ -140,73 +266,5 @@ public class MemberInfoContent : AbstractClanContent
     {
         label.RemoveFromClassList(removeStyle);
         label.AddToClassList(addStyle);
-    }
-
-
-    private void SubscribeOnRank(string selectName , UnityEngine.UIElements.Button rankButton, VisualElement centerBox, VisualElement detailedInfoElement)
-    {
-        string selfName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
-
-        if (_isLeader & selectName != selfName)
-        {
-            if (rankButton != null && !_isRankButtonSubscribed)
-            {
-                _rankCallback = (ClickEvent evt) => OnRankButtonClick(centerBox);
-                rankButton.RegisterCallback(_rankCallback);
-                _isRankButtonSubscribed = true;
-            }
-        }
-
-    }
-
-    private void SubscribeOnTitle(UnityEngine.UIElements.Button titleButton, VisualElement centerBox, VisualElement detailedInfoElement)
-    {
-        if (_isLeader)
-        {
-            if (titleButton != null && !_isTitleButtonSubscribed)
-            {
-
-                _titleCallBack = (ClickEvent evt) => OnTitleButtonClick(centerBox);
-                titleButton.RegisterCallback(_titleCallBack);
-
-                _isTitleButtonSubscribed = true;
-            }
-        }
-
-    }
-
-    private void OnRankButtonClick(VisualElement centerBox)
-    {
-        VisualElement elementChangeRank = ToolTipsUtils.CloneOne(_tamplateChangeRank);
-        _dropdown = elementChangeRank.Q<DropdownField>(_dropdownName);
-        _dropdown.value = "";
-        SetDropdownList(_dropdown, new List<string> { "1st level Privilege", "2st level Privilege", "3st level Privilege", "4st level Privilege", "Joint Rank"});
-        centerBox?.Add(elementChangeRank);
-    }
-
-
-    private void OnTitleButtonClick(VisualElement centerBox)
-    {
-        VisualElement elementChangeRank = ToolTipsUtils.CloneOne(_tamplateChangeRank);
-        _dropdown = elementChangeRank.Q<DropdownField>(_dropdownName);
-        SetDropdownList(_dropdown, new List<string> { "Title 1", "Title 2", "Title 3"});
-        centerBox?.Add(elementChangeRank);
-    }
-
-    public void SetDropdownList(DropdownField dropdown, List<string> items)
-    {
-        if (items == null)
-        {
-            dropdown.value = null;
-            dropdown.choices = null;
-        }
-        else
-        {
-            //var _listDropDown = new List<string> { "Main Clan - " + clanName };
-            //dropdown.value = "Main Clan - " + clanName;
-            dropdown.choices = items;
-
-        }
-
     }
 }
