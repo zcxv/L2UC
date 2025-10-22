@@ -20,7 +20,9 @@ public class SystemMessage {
 
         for (int i = 1; i <= _params.Length; i++ ){
             SMParam param = _params[i-1];
-           // Debug.LogWarning($"{i}: {param.Type}");
+            // Debug.LogWarning($"{i}: {param.Type}");
+
+            if (param != null) return "";
 
             switch (param.Type) {
                 case SMParamType.TYPE_TEXT:

@@ -10,6 +10,7 @@ public class MasterClan
     private const string ROLE_CREATE = "Data/UI/Clan/Role_create";
     private const string MEMBER_ONLINE = "Data/UI/Clan/Clan_sword_online";
     private const string MEMBER_OFFLINE = "Data/UI/Clan/Clan_sword_offline";
+    private const string DEFAULT_OFFLINE_COLOR = "#B3B2B2";
     private string _table_select_name_member = string.Empty;
 
     public string GetSelectMemberName()
@@ -18,25 +19,27 @@ public class MasterClan
     }
     public void ForEachClan( ICreatorTables _creatorTableWindows)
     {
+        List<TableColumn> listTableColumn = GetEmptyData();
+        _creatorTableWindows.CreateTable(listTableColumn);
+    }
 
-
+    public List<TableColumn> GetEmptyData()
+    {
         var namesList = new List<string>();
         var conditionsList = new List<string>();
         var levelList = new List<string>();
         var activity = new List<string>();
 
 
-        for(int i=0; i < 7; i++)
-        { 
+        for (int i = 0; i < 7; i++)
+        {
             namesList.Add("");
             conditionsList.Add("");
             levelList.Add("");
             activity.Add("");
         }
 
-        List<TableColumn> listTableColumn = GetColumns(namesList, conditionsList, levelList, activity);
-        _creatorTableWindows.CreateTable(listTableColumn);
-
+        return GetColumns(namesList, conditionsList, levelList, activity);
     }
 
     public List<string> SetDropdownList(DropdownField dropdown , string clanName)
@@ -57,6 +60,11 @@ public class MasterClan
 
     }
 
+
+    public void UpdateMembersTable(ClanMember clanMember, ICreatorTables _creatorTableWindows)
+    {
+        _creatorTableWindows.UpdateRowByName(clanMember.MemberName , "" , new string[4] { clanMember.MemberName, clanMember.Level.ToString(), ROLE_CREATE, GetOnline(clanMember.Online) });
+    }
     public void CreateMembersTable(List<ClanMember> listMemebers, ICreatorTables _creatorTableWindows)
     {
 
@@ -76,6 +84,22 @@ public class MasterClan
         _creatorTableWindows.UpdateTableData(tableColumns);
     }
 
+    public void DeleteMemeberTable(string memberName , PledgeShowMemberListAll packet , ICreatorTables _creatorTableWindows)
+    {
+        if(packet != null)
+        {
+            var deletemember = packet.Members.FirstOrDefault(m => m.MemberName == memberName);
+            packet.Members?.Remove(deletemember);
+            _creatorTableWindows.RemoveByName(memberName);
+        }
+
+    }
+
+    public void AddMemberData(ClanMember clanMember, PledgeShowMemberListAll packet, ICreatorTables _creatorTableWindows)
+    {
+        packet.Members.Add(clanMember);
+        _creatorTableWindows.AddRow(new string[4] { clanMember.MemberName , clanMember.Level.ToString() , ROLE_CREATE, GetOnline(clanMember.Online) });
+    }
 
     private void PopulateMemberData(List<ClanMember> members, List<string> names,
     List<string> levels, List<string> roles, List<string> activities)
@@ -107,15 +131,21 @@ public class MasterClan
 
     private void SetOfflineMemberColors(List<ClanMember> members, List<TableColumn> columns)
     {
+        UserInfo usrInfo = StorageNpc.getInstance().GetFirstUser();
         for (int i=0; i < members.Count; i++)
         {
             ClanMember member = members[i];
-
-            if (member.Online == 0)
+            if(usrInfo.PlayerInfoInterlude.Identity.Name != member.MemberName)
             {
-                columns[0].SetColor(i + member.MemberName, "#B3B2B2");
-                columns[1].SetColor(i + member.Level.ToString(), "#B3B2B2");
+                 columns[0].SetColor(i + member.MemberName, DEFAULT_OFFLINE_COLOR);
+                 columns[1].SetColor(i + member.Level.ToString(), DEFAULT_OFFLINE_COLOR);
             }
+            //if (member.Online == 0)
+            //{
+            // columns[0].SetColor(i + member.MemberName, "#B3B2B2");
+            // columns[1].SetColor(i + member.Level.ToString(), "#B3B2B2");
+            //}
+
         }
     }
 
@@ -132,6 +162,15 @@ public class MasterClan
         }
     }
 
+    public string GetOnline(int online)
+    {
+        return (online >= 1) ? MEMBER_ONLINE : MEMBER_OFFLINE;
+    }
+
+    private string  GetOnlineHexColors(int online)
+    {
+        return (online >= 1) ? "" : "#B3B2B2";
+    }
 
 
 
@@ -145,31 +184,37 @@ public class MasterClan
         return new List<TableColumn> { name, lvl, role, act };
     }
 
-
-    public void UpdateMemberData(PledgeShowMemberListUpdate packetUpdate , PledgeShowMemberListAll packet , ICreatorTables creatorTableWindows)
+    public void DeleteAllMember(ICreatorTables creatorTableWindows)
     {
-        if (packet != null && packetUpdate != null)
+        creatorTableWindows.ClearTable();
+    }
+    public void UpdateMemberData(ClanMember clanMember, PledgeShowMemberListAll packet , ICreatorTables creatorTableWindows)
+    {
+        if (packet != null && clanMember != null)
         {
 
-            var memberToUpdate = packet.Members.FirstOrDefault(m => m.MemberName == packetUpdate.MemberName);
+            var memberToUpdate = packet.Members.FirstOrDefault(m => m.MemberName == clanMember.MemberName);
 
             if (memberToUpdate != null)
             {
 
-                memberToUpdate.MemberName = packetUpdate.MemberName;
-                memberToUpdate.Level = packetUpdate.Level;
-                memberToUpdate.ClassId = packetUpdate.ClassId;
-                memberToUpdate.Sex = packetUpdate.Sex;
-                memberToUpdate.Race = packetUpdate.Race;
-                memberToUpdate.Online = packetUpdate.IsOnline;
+                memberToUpdate.MemberName = clanMember.MemberName;
+                memberToUpdate.Level = clanMember.Level;
+                memberToUpdate.ClassId = clanMember.ClassId;
+                memberToUpdate.Sex = clanMember.Sex;
+                memberToUpdate.Race = clanMember.Race;
+                memberToUpdate.Online = clanMember.Online;
                 //memberToUpdate. = packetUpdate.PledgeType;
                 //memberToUpdate.HasSponsor = packetUpdate.HasSponsor;
 
+                UpdateMembersTable(clanMember, creatorTableWindows);
 
-                CreateMembersTable(packet.Members, creatorTableWindows);
+               // CreateMembersTable(packet.Members, creatorTableWindows);
             }
         }
     }
+
+  
 
     public void SelectMember(int selectIndex, string select_text)
     {

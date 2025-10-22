@@ -30,7 +30,7 @@ public class SystemMessagePacket : ServerPacket {
                 switch ((SMParamType)paramType) {
                     case SMParamType.TYPE_TEXT:
                     case SMParamType.TYPE_PLAYER_NAME:
-                        param.SetValue(ReadS());
+                        param.SetValue(ReadOtherS());
                         break;
                     case SMParamType.TYPE_LONG_NUMBER:
                         param.SetValue(ReadL());

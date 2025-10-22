@@ -33,6 +33,16 @@ public class CreatorPacketsUser
         return new RequestEnchantItem(_objectId);
     }
 
+    public static RequestOustPledgeMember CreateRequestOustPledgeMember(string memberName)
+    {
+        return new RequestOustPledgeMember(memberName);
+    }
+
+    public static RequestGiveNickName CreateRequestGiveNickName(string memberName, string title)
+    {
+        return new RequestGiveNickName(memberName, title);
+    }
+
     public static RequestJoinPledge CreateRequestJoinPledge(int _objectId)
     {
         return new RequestJoinPledge(_objectId);
