@@ -1,7 +1,10 @@
 
+using Org.BouncyCastle.Bcpg;
+using Org.BouncyCastle.Utilities.Encoders;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Sprites;
 using UnityEngine;
 
 using UnityEngine.UI;
@@ -167,9 +170,28 @@ public class ClanWindow : L2TwoPanels
         SetDisabledButton(packet.SubPledgeLeaderName , packet.Members);
     }
 
+    //not wornig 
+    public void DeleteMemberData()
+    {
+        //_packet.Members.Clear();
+        //_creatorTableWindows.UpdateTableData(_masterClan.GetEmptyData());
+        //_masterClan.Up(_creatorTableWindows);
+    }
+
     public void UpdateMemberData(PledgeShowMemberListUpdate packetUpdate)
     {
-        _masterClan.UpdateMemberData(packetUpdate, _packet, _creatorTableWindows);
+        ClanMember clanMember = new ClanMember(packetUpdate.MemberName, packetUpdate.Level, packetUpdate.ClassId, packetUpdate.Sex, packetUpdate.Race, packetUpdate.IsOnline, packetUpdate.PledgeType);
+        _masterClan.UpdateMemberData(clanMember, _packet, _creatorTableWindows);
+    }
+
+    public void DeleteMemberData(PledgeShowMemberListDelete packetDelete)
+    {
+        _masterClan.DeleteMemeberTable(packetDelete.MemberName, _packet, _creatorTableWindows);
+    }
+
+    public void AddMemberData(PledgeShowMemberListAdd packetAdd)
+    {
+        _masterClan.AddMemberData(packetAdd.ClanMember, _packet, _creatorTableWindows);
     }
 
     public void UpdatePledge(PledgeInfo pledge)

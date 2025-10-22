@@ -9,7 +9,9 @@ public interface ICreatorTables
     void LoadAsset(Func<string, VisualTreeAsset> loaderFunc);
     void CreateTable(List<TableColumn> headersName);
     void UpdateTableData(List<TableColumn> headersName);
-
+    void RemoveByName(string rowName);
+    void AddRow(string[] allList);
+    void UpdateRowByName(string rowName, string hex_color , string[] allList);
     void ClearTable();
 
     void DestroyTable();

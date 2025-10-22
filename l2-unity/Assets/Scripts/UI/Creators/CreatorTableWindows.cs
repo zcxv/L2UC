@@ -1,4 +1,5 @@
 
+
 using System;
 using System.Collections.Generic;
 
@@ -49,11 +50,12 @@ public class CreatorTableWindows : ICreatorTables
     private Texture2D _defaultCursor;
     public int _index_row = 0;
     public event Action<int , string> OnRowClicked;
-
+    private TableFunction _functions;
     public void InitTable(VisualElement content)
     {
         _content = content;
         _defaultCursor = IconManager.Instance.LoadCursorByName("Default");
+        _functions = new TableFunction();
     }
 
 
@@ -106,6 +108,8 @@ public class CreatorTableWindows : ICreatorTables
         IfSize0HideListView(columnsList[0].ListData.Count, _listView);
         _content.Add(_table);
     }
+
+  
 
     private void IfSize0HideListView(int size , VisualElement table)
     {
@@ -316,7 +320,7 @@ public class CreatorTableWindows : ICreatorTables
         }
         else
         {
-            ResetSelectInner(highlightLast, highlightTile);
+            _functions.ResetSelectInner(highlightLast, highlightTile);
         }
     }
 
@@ -324,7 +328,7 @@ public class CreatorTableWindows : ICreatorTables
     {
         if (_lastSelectIndex == i && _lastSelectIndex != _currentSelectIndex)
         {
-            ResetSelectInner(highlightLast, highlightTile);
+            _functions.ResetSelectInner(highlightLast, highlightTile);
         }
 
     }
@@ -447,6 +451,44 @@ public class CreatorTableWindows : ICreatorTables
         IfSize0HideListView(columnsList[0].ListData.Count, _listView);
 
     }
+
+
+
+
+    public void RemoveByName(string rowName)
+    {
+        if (!IsTableInitialized()) return;
+
+        _functions.RemoveByName(rowName, _columnsList, _listView, ref _currentSelectIndex, OnRowClicked);
+    }
+
+    public void AddRow(string[] allList)
+    {
+        if (!IsTableInitialized()) return;
+
+        _functions.AddRow(allList , _columnsList , _listView);
+    }
+
+
+    public void UpdateRowByName(string rowName , string hex_color , string[] allList)
+    {
+        if (!IsTableInitialized()) return;
+
+        _functions.UpdateRowByName(rowName, hex_color , allList, _columnsList, _listView);
+    }
+
+    private bool IsTableInitialized()
+    {
+        if (_listView == null || _columnsList == null || _columnsList.Count == 0)
+        {
+            Debug.LogError("ListView or columns not initialized");
+            return false;
+        }
+        return true;
+    }
+
+
+
 
     public void DestroyTable()
     {
@@ -659,8 +701,7 @@ public class CreatorTableWindows : ICreatorTables
                     VisualElement last_row1 = _lastSelectElement[i];
                     VisualElement highlightLast = last_row1.Q<VisualElement>("highlight");
                     VisualElement highlightLastTile = last_row1.Q<VisualElement>("highlightTile");
-                    ResetSelectInner(highlightLast, highlightLastTile);
-
+                    _functions.ResetSelectInner(highlightLast, highlightLastTile);
                 }
 
 
@@ -682,16 +723,12 @@ public class CreatorTableWindows : ICreatorTables
         return isSelect;
     }
 
-   
+
     private void EventClickOut(string select_text , int currentSelectIndex)
     {
         OnRowClicked?.Invoke(currentSelectIndex, select_text);
     }
-    public void ResetSelectInner(VisualElement highlightLast, VisualElement highlightLastTile)
-    {
-        if (highlightLast != null) highlightLast.style.display = DisplayStyle.None;
-        if (highlightLastTile != null) highlightLastTile.style.display = DisplayStyle.None;
-    }
+
 
     private void ShowSelectHighLightInner(VisualElement highlight, VisualElement highlightTile, int lastChild, int i)
     {

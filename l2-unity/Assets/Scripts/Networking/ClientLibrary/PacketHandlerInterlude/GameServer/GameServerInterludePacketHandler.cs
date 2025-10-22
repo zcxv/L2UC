@@ -152,9 +152,21 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
                 OnPledgeShowMemberListUpdate(itemQueue.DecodeData());
                 break;
+            case GameInterludeServerPacketType.PledgeShowMemberListDelete:
+
+                OnPledgeShowMemberListDelete(itemQueue.DecodeData());
+                break;
             case GameInterludeServerPacketType.PledgeShowMemberListAll:
 
                 OnPledgeShowMemberListAll(itemQueue.DecodeData());
+                break;
+            case GameInterludeServerPacketType.PledgeShowMemberListDeleteAll:
+
+                OnPledgeShowMemberListDeleteAll(itemQueue.DecodeData());
+                break;
+            case GameInterludeServerPacketType.PledgeShowMemberListAdd:
+
+                OnPledgeShowMemberListAdd(itemQueue.DecodeData());
                 break;
             case GameInterludeServerPacketType.PledgeInfo:
 
@@ -758,10 +770,6 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
         if (!InitPacketsLoadWord.getInstance().IsInit)
         {
-            Debug.Log("Rank " + managerPledge.Rank);
-            Debug.Log("Action " + managerPledge.Action);
-            Debug.Log("PrivilegesByRank " + managerPledge.PrivilegesByRank);
-
             EventProcessor.Instance.QueueEvent(() => {
                 ClanWindow.Instance.UpdateDetailedInfo(managerPledge);
             });
@@ -778,6 +786,16 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         }
     }
 
+    private void OnPledgeShowMemberListDelete(byte[] data)
+    {
+        PledgeShowMemberListDelete memberDelete = new PledgeShowMemberListDelete(data);
+
+        if (!InitPacketsLoadWord.getInstance().IsInit)
+        {
+            EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.DeleteMemberData(memberDelete));
+        }
+    }
+
     private void OnPledgeShowMemberListAll(byte[] data)
     {
         PledgeShowMemberListAll allMembers = new PledgeShowMemberListAll(data);
@@ -789,6 +807,31 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         {
             EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.AddClanData(allMembers));
         }
+
+    }
+
+    private void OnPledgeShowMemberListDeleteAll(byte[] data)
+    {
+        PledgeShowMemberListAll allMembers = new PledgeShowMemberListAll(data);
+
+        if (!InitPacketsLoadWord.getInstance().IsInit)
+        {
+            Debug.Log("Delete All Data");
+            EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.DeleteMemberData());
+        }
+
+
+    }
+    //The packet order is broken due to asynchrony. PledgeShowMemberListAll arrives first, followed by OnPledgeShowMemberListDeleteAll. It should be the other way around.
+    private void OnPledgeShowMemberListAdd(byte[] data)
+    {
+        PledgeShowMemberListAdd packetAdd = new PledgeShowMemberListAdd(data);
+
+        if (!InitPacketsLoadWord.getInstance().IsInit)
+        {
+            EventProcessor.Instance.QueueEvent(() => ClanWindow.Instance.AddMemberData(packetAdd));
+        }
+
 
     }
     private void OnPledgeStatusChanged(byte[] data)

@@ -40,7 +40,8 @@ public class ClanDetailedInfo
         _memberInfoContent.OnClickHide += OnClickHide;
         _memberInfoContent.OnOutsideClickRank += OnClickOkRank;
         _memberInfoContent.OnOutsideClickTitle += OnClickOkTitle;
-         _memberInfoContent.OnOutsideClickDismiss += OnOkDismiss;
+        _memberInfoContent.OnOutsideClickDeleteTitle += OnDeleteTitle;
+        _memberInfoContent.OnOutsideClickDismiss += OnOkDismiss;
 
 
         _privilegesInfoContent = new PrivilegesInfoContent(_dataProvider , _createPanelCheckBox);
@@ -109,19 +110,60 @@ public class ClanDetailedInfo
 
     private void OnClickOkRank(string memberName, int rank)
     {
-        Debug.Log("Click OnClickOkRank memberName " + memberName + " Rank " + rank);
+        SendGameDataQueue.Instance().AddItem(
+            CreatorPacketsUser.CreateRequestPledgeSetMemberPowerGrade(memberName , rank),
+            GameClient.Instance.IsCryptEnabled(),
+            GameClient.Instance.IsCryptEnabled());
+
+        //Debug.Log("Click OnClickOkRank memberName " + memberName + " Rank " + rank);
     }
 
     private void OnClickOkTitle(string memberName, string title)
     {
-        Debug.Log("Click Ok OnClickOkTitle memberName " + memberName + " Rank " + title);
+        SendGameDataQueue.Instance().AddItem(
+            CreatorPacketsUser.CreateRequestGiveNickName(memberName, title),
+            GameClient.Instance.IsCryptEnabled(),
+            GameClient.Instance.IsCryptEnabled());
+
+        //Debug.Log("Click Ok OnClickOkTitle memberName " + memberName + " Rank " + title);
     }
 
+    private void OnDeleteTitle(string memberName)
+    {
+        SendGameDataQueue.Instance().AddItem(
+            CreatorPacketsUser.CreateRequestGiveNickName(memberName, ""),
+            GameClient.Instance.IsCryptEnabled(),
+            GameClient.Instance.IsCryptEnabled());
+    }
+    private string _selectDismiss = "";
     private void OnOkDismiss(string memberName)
     {
-        Debug.Log("Click Ok OnOkDismiss memberName " + memberName);
+        _selectDismiss = memberName;
+        SystemMessageWindow.Instance.OnButtonOk += SystemMessageClickOkDismiss;
+        SystemMessageWindow.Instance.OnButtonClosed += On—ancel;
+        SystemMessageWindow.Instance.ShowWindowDialogYesOrNot("Do you want to be kicked from the clan?");
     }
-    
+
+    private void SystemMessageClickOkDismiss()
+    {
+        SendGameDataQueue.Instance().AddItem(
+            CreatorPacketsUser.CreateRequestOustPledgeMember(_selectDismiss),
+            GameClient.Instance.IsCryptEnabled(),
+            GameClient.Instance.IsCryptEnabled());
+        CancelEvent();
+    }
+
+    private void On—ancel()
+    {
+        CancelEvent();
+    }
+
+    private void CancelEvent()
+    {
+        SystemMessageWindow.Instance.OnButtonOk -= SystemMessageClickOkDismiss;
+        SystemMessageWindow.Instance.OnButtonClosed -= On—ancel;
+    }
+
     private void OnClickHide(int id)
     {
         _showPanel = -1;
@@ -141,7 +183,7 @@ public class ClanDetailedInfo
 
         }
 
-        Debug.Log(" Test Click Privilege panel Rank "+ useRank+" Privileges " + newPrivileges);
+
     }
 
     private void OnSwitchSubWindow(int id)
