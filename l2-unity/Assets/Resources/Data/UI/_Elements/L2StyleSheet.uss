@@ -1238,10 +1238,15 @@
     margin-left: 0;
 }
 
+.test-class1{
+     color: rgb(127, 127, 127);
+}
+
 .button-label-yellow {
     -unity-font: resource('Data/UI/Assets/Font/tahoma');
     -unity-font-definition: resource('Data/UI/Assets/Font/tahoma Light');
 }
+
 
 .button-label {
     color: rgba(255, 249, 227, 0.96);
