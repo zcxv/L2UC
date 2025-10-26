@@ -1,0 +1,7 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement name="inject_content" style="flex-grow: 1; width: auto; height: auto; max-width: none; max-height: none;">
+        <engine:VisualElement name="viewport" style="flex-grow: 1; overflow: hidden; margin-left: 0; margin-right: 0; max-width: 294px; max-height: 300px; width: 294px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-left-color: rgba(253, 18, 18, 0.84); border-right-color: rgba(253, 18, 18, 0.84); border-top-color: rgba(253, 18, 18, 0.84); border-bottom-color: rgba(253, 18, 18, 0.84); border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px; height: 300px;">
+            <engine:VisualElement name="map" style="flex-grow: 0; background-image: resource(&apos;Data/UI/Map/WorldMap&apos;); width: 1812px; height: 2620px; overflow: visible; flex-shrink: 0; position: absolute; top: 0; left: 0; bottom: 0; right: 0;" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

@@ -207,6 +207,12 @@ public class L2GameUI : L2UI
             SeedInfoWindow.Instance.AddWindow(_rootVisualContainer);
             SeedInfoWindow.Instance.HideWindow();
         }
+
+        if (MapWindow.Instance != null)
+        {
+            MapWindow.Instance.AddWindow(_rootVisualContainer);
+            MapWindow.Instance.HideWindow();
+        }
     }
 
     public void EnableMouse()
