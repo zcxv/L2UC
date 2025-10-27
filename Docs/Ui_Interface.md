@@ -5,7 +5,7 @@ UI Window Skills Проверка обновления списка скилов
 <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ243bDRrNnZ0czRlcDZwMTAxZDdnNG14Z2IxMmNubmF2bTRuaHpjdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/FfIusrCpGRhIUoz5Bz/giphy.gif" alt="Preview0" style="max-width: 75%; height: auto;"> 
 
 
-UI Window Map Установка маркера в позиццию игрока и перемещение viewport  
+UI Window Map Установка маркера в позицию игрока и перемещение viewport  
 <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXA5eXNna3M4ZW9jaWgzbzk4ZXYyNjdmZHozZTAyZGpzZjJhcHBvZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/6NJFdKlpuFteRln7Xs/giphy.gif" alt="Preview0" style="max-width: 75%; height: auto;">   
 
 
