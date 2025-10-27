@@ -70,6 +70,10 @@ public class NetworkIdentityInterlude
         _position = VectorUtils.ConvertPosToUnity(l2jpos);
     }
 
+    public Vector3 GetXZPos()
+    {
+        return _position;
+    }
 
     public void SetHideHp(int npcId)
     {
