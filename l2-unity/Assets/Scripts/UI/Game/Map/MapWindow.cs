@@ -55,9 +55,9 @@ public class MapWindow : L2PopupWindow
         _creatorSimpleTab.InitContentTabs(new string[1] { _tabName });
         _creatorSimpleTab.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
         _creatorSimpleTab.SetContent(0);
-
-        var elements = _creatorSimpleTab.GetVisualElements(new string[2] { "viewport" , "map" });
-        _mapPanner.SetElements(elements[0], elements[1]);
+        Button button = (Button)GetElementById("MyLocation");
+        var elements = _creatorSimpleTab.GetVisualElements(new string[3] { "viewport" , "map", "minimapPos" });
+        _mapPanner.SetElements(elements[0], elements[1] , elements[2] , button);
         _mapPanner.RegisterCallback();
 
         RegisterCloseWindowEvent("btn-close-frame");
@@ -67,6 +67,19 @@ public class MapWindow : L2PopupWindow
         yield return new WaitForEndOfFrame();
 
   
+    }
+
+    public override void ShowWindow()
+    {
+        _mapPanner.SetDisabled(false);
+        base.ShowWindow();
+    }
+
+    public override void HideWindow()
+    {
+        _mapPanner.SetDisabled(true);
+        _mapPanner.MoveMarkerToOrigin();
+        base.HideWindow();
     }
 }
 

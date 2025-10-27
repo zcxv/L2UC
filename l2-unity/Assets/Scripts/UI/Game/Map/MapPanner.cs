@@ -1,14 +1,19 @@
 using UnityEditor;
+using UnityEditor.Sprites;
 using UnityEngine;
+using UnityEngine.Timeline;
 using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class MapPanner 
 {
     private VisualElement _viewport;
     private VisualElement _map;
+    private VisualElement _marker;
 
     private Vector2 lastPointer;
-    private Vector2 offset; // текущее смещение по карте (от левого-верхнего угла)
+    private Vector2 offset; 
 
     private bool dragging;
 
@@ -16,18 +21,37 @@ public class MapPanner
     private const float VIEW_H = 300f;
     private const float MAP_W = 1812f;
     private const float MAP_H = 2620f;
-
-    public void SetElements(VisualElement viewport, VisualElement map)
+    private int offsetMap = 10;
+    private Vector3 MIN_POS_LEFT = VectorUtils.ConvertPosToUnity(new Vector3(-127845f, 259384, -4530));
+    private Vector3 MAX_POS_TOP = VectorUtils.ConvertPosToUnity(new Vector3(197885f, -258615f , -4672f));
+    private Button _buttonLocation;
+    private bool _isDisabled = false;
+    public void SetElements(VisualElement viewport, VisualElement map, VisualElement minmapElement , Button buttonLocation)
     {
         _viewport = viewport;
         _viewport.pickingMode = PickingMode.Position;
+        _marker = minmapElement;
         _map = map;
+        _buttonLocation = buttonLocation;
+        _buttonLocation.RegisterCallback<MouseUpEvent>(MoveMarkerToPoint);
+        _marker.RegisterCallback<GeometryChangedEvent>(OnMarkerGeometryChanged);
+        _viewport.RegisterCallback<GeometryChangedEvent>(MoveMarkerToPoint);
+
+        viewport.RegisterCallback<PointerDownEvent>(evt => {
+            dragging = true;
+            lastPointer = evt.localPosition; // инициализируем, чтобы избежать прыжка
+            viewport.CapturePointer(evt.pointerId);
+        });
 
     }
 
+    public void SetDisabled(bool disabled)
+    {
+        _isDisabled = disabled;
+    }
     public void RegisterCallback()
     {
-        // подписываемся на указательные события
+
         _viewport.RegisterCallback<PointerDownEvent>(OnPointerDown);
         _viewport.RegisterCallback<PointerMoveEvent>(OnPointerMove);
         _viewport.RegisterCallback<PointerUpEvent>(OnPointerUp);
@@ -46,10 +70,50 @@ public class MapPanner
         }
     }
 
+
+
+    void MoveMarkerToPoint(GeometryChangedEvent up)
+    {
+        MoveMarker();
+
+    }
+
+    void MoveMarkerToPoint(MouseUpEvent up)
+    {
+        MoveMarker();
+    }
+
+    private void MoveMarker()
+    {
+        if (_map == null || _marker == null || _isDisabled) return;
+
+        Vector3 worldPos2D = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.GetXZPos();
+
+        Vector2 mapSize = new Vector2(MAP_H, MAP_W);
+        Vector2 mapSizeD = new Vector2(MAP_W, MAP_H);
+
+        Vector2 _mapPos = MapUtils.WorldToMap(worldPos2D, MIN_POS_LEFT, MAX_POS_TOP, mapSize, useXZ: true, invertYForUI: false);
+
+        //y + 100 right
+        //x + 100 bottom
+        if(!MapUtils.PlaceMarkerOnMap(ref offset , _map, _marker, new Vector2(_mapPos.y - offsetMap, _mapPos.x - offsetMap), mapSizeD))
+        {
+            if (_isDisabled) return;
+            MapUtils.PanViewportToMarker(ref offset, _map, _viewport, _marker);
+        }
+
+    }
+
+    private void OnMarkerGeometryChanged(GeometryChangedEvent evt)
+    {
+        if(_isDisabled) return;
+        MapUtils.PanViewportToMarker(ref offset , _map, _viewport, _marker);
+    }
+
     void OnPointerDown(PointerDownEvent evt)
     {
-        // захватить указатель, чтобы получать перемещения даже если курсор уходит за пределы элемента
-        Debug.Log("OnPointerDown");
+
+       
         _viewport.CapturePointer(evt.pointerId);
         dragging = true;
         lastPointer = evt.localPosition;
@@ -58,22 +122,22 @@ public class MapPanner
 
     void OnPointerMove(PointerMoveEvent evt)
     {
-        Debug.Log("OnPointerMove ");
+       
         if (!dragging) return;
 
         Vector2 local = evt.localPosition;
         Vector2 delta = local - lastPointer;
 
-        // перемещение карты противоположно движению мыши (таскаем карту)
+
         offset -= delta;
 
-        // clamp по границам карты
+
         float maxX = Mathf.Max(0f, MAP_W - VIEW_W);
         float maxY = Mathf.Max(0f, MAP_H - VIEW_H);
         offset.x = Mathf.Clamp(offset.x, 0f, maxX);
         offset.y = Mathf.Clamp(offset.y, 0f, maxY);
 
-        // применяем смещение: сдвигаем карту влево/вверх на offset
+
         _map.style.left = -offset.x;
         _map.style.top = -offset.y;
 
@@ -81,9 +145,11 @@ public class MapPanner
         evt.StopPropagation();
     }
 
-    void OnPointerUp(PointerUpEvent evt)
+
+
+void OnPointerUp(PointerUpEvent evt)
     {
-        Debug.Log("OnPointerUp ");
+       
         if (dragging)
         {
             _viewport.ReleasePointer(evt.pointerId);
@@ -96,15 +162,20 @@ public class MapPanner
     {
         if (dragging)
         {
-            Debug.Log("OnPointerCancel ");
+            
             _viewport.ReleasePointer(evt.pointerId);
             dragging = false;
             evt.StopPropagation();
         }
     }
 
+    public void MoveMarkerToOrigin()
+    {
+        _marker.style.left = 0;
+        _marker.style.top = 0;
 
-
-
+        _viewport.style.left = 0;
+        _viewport.style.top = 0;
+    }
 
 }
