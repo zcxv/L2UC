@@ -105,6 +105,7 @@ public class World : MonoBehaviour {
        
         go.transform.position = identity.Position;
         go.transform.rotation = identity.Heading;
+
         // go.transform.name = "_Player";
         go.transform.name = identity.Name;
         PlayerEntity player = go.GetComponent<PlayerEntity>();
@@ -147,6 +148,7 @@ public class World : MonoBehaviour {
 
         CameraController.Instance.enabled = true;
         CameraController.Instance.SetTarget(go);
+        CameraController.Instance.SetHeading(identity.OrigHeading);
 
         CharacterInfoWindow.Instance.UpdateValues();
         PlayerStateMachine.Instance.Player = player;
@@ -165,7 +167,7 @@ public class World : MonoBehaviour {
 
         if (_npcs.ContainsKey(identity.Id)) return;
 
-        Debug.Log("Запуск обработки Spawn Npc Interlude ++++++++++++++++++ ");
+        //Debug.Log("Запуск обработки Spawn Npc Interlude ++++++++++++++++++ ");
         Npcgrp npcgrp = NpcgrpTable.Instance.GetNpcgrp(identity.NpcId);
         NpcName npcName = NpcNameTable.Instance.GetNpcName(identity.NpcId);
 
@@ -203,7 +205,10 @@ public class World : MonoBehaviour {
             
             identity.SetPosY(GetGroundHeight(identity.Position));
 
+            //GameObject npcGo = Instantiate(go, identity.Position, identity.Heading);
             GameObject npcGo = Instantiate(go, identity.Position, identity.Heading);
+
+
             NpcData npcData = new NpcData(npcName, npcgrp);
 
            

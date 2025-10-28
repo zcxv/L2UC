@@ -24,6 +24,7 @@ public class NetworkIdentityInterlude
     [SerializeField] private Vector3 _position = new Vector3(4724, -68, -1731);
     [SerializeField] private Quaternion _heading;
 
+    private float _origHeading;
     private int _clanId;
 
     [SerializeField] private bool _owned = false;
@@ -40,6 +41,10 @@ public class NetworkIdentityInterlude
     public string TitleColor { get => _titleColor; set => _titleColor = value; }
     public Vector3 Position { get => _position; set => _position = value; }
     public Quaternion Heading { get => _heading; set => _heading = value; }
+
+    public float OrigHeading { get => _origHeading; set => _origHeading = value; }
+
+
     public bool Owned { get => _owned; set => _owned = value; }
     public int PlayerClass { get => _playerClass; set => _playerClass = value; }
     //public int  BaseClass { get => _baseClass; set => _baseClass = value; }

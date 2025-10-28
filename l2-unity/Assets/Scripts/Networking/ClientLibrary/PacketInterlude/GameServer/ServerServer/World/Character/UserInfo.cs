@@ -12,6 +12,9 @@ public class UserInfo : ServerPacket
 {
     private PlayerInfoInterlude _info;
     public PlayerInfoInterlude PlayerInfoInterlude { get { return _info; } }
+
+
+
     public UserInfo(byte[] d , PlayerInfoInterlude info) : base(d)
     {
         this._info = info;
@@ -26,7 +29,9 @@ public class UserInfo : ServerPacket
 
         //Vector3 unityPos = VectorUtils.ConvertPosToUnity(new Vector3(x,y,z));
         _info.Identity.SetL2jPos(x, y, z);
-        _info.Identity.Heading = VectorUtils.ConvertHeadingL2jToUnity(ReadI());
+        float heading = ReadI();
+        _info.Identity.OrigHeading = VectorUtils.HeadingToUnityQuaternionForNpc(heading);
+        _info.Identity.Heading = Quaternion.Euler(0, _info.Identity.OrigHeading, 0); 
         _info.Identity.Id = ReadI();
      
         _info.Identity.Name = ReadOtherS();
