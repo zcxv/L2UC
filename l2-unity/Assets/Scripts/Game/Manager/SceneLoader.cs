@@ -147,7 +147,7 @@ public class SceneLoader : MonoBehaviour
 
         Debug.LogWarning("All scenes loaded, sending LoadWorld packet.");
 
-        if (World.Instance != null && !World.Instance.OfflineMode)
+        if (World.Instance != null)
         {
             GameManager.Instance.OnWorldSceneLoaded();
         }

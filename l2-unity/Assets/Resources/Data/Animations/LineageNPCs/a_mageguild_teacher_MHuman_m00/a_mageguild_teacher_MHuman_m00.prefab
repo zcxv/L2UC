@@ -84,31 +84,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da5dc88f4bf1db48a8f107a35136801, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4084.056
+      value: 4666.686
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da5dc88f4bf1db48a8f107a35136801, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -61.8531
+      value: -71.5044
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da5dc88f4bf1db48a8f107a35136801, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1949.3049
+      value: -1613.8857
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da5dc88f4bf1db48a8f107a35136801, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.38268346
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da5dc88f4bf1db48a8f107a35136801, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da5dc88f4bf1db48a8f107a35136801, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.92387956
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da5dc88f4bf1db48a8f107a35136801, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da5dc88f4bf1db48a8f107a35136801, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -718,7 +718,7 @@ MonoBehaviour:
     _npcClass: 
     _playerClass: 0
     _position: {x: 4724, y: -68, z: -1731}
-    _heading: 0
+    _heading: {x: 0, y: 0, z: 0, w: 0}
     _owned: 0
   _stats:
     _level: 0

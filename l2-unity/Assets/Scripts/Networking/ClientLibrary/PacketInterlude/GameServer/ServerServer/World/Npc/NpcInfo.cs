@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Principal;
 using UnityEngine;
+using UnityEngine.UIElements.Experimental;
 
 public class NpcInfo : ServerPacket
 {
@@ -51,7 +52,11 @@ public class NpcInfo : ServerPacket
         int y = ReadI();
         int z = ReadI();
         Identity.SetL2jPos(x, y, z);
-        Identity.Heading = VectorUtils.ConvertHeadingL2jToUnity(ReadI());
+        float heading = ReadI();
+
+        Identity.OrigHeading = VectorUtils.HeadingToUnityQuaternionForNpc(heading);
+        Identity.Heading = Quaternion.Euler(0, Identity.OrigHeading, 0);
+
         int empty = ReadI();
 
         if (Identity.NpcId == 31775)

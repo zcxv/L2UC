@@ -182,11 +182,23 @@ public class VectorUtils : MonoBehaviour {
         float angle = Mathf.Atan2(directionX, directionZ) * Mathf.Rad2Deg;
         return angle;
     }
-
-    public static Quaternion ConvertHeadingL2jToUnity(float heading)
+    //use npc heading
+    public static float HeadingToUnityQuaternionForNpc(float heading)
     {
         // Преобразуем heading из диапазона [0, 65535] в угол в градусах [0, 360]
         float angleInDegrees = (heading / 182.04444444444444444444444444444f) % 360;
-        return  Quaternion.Euler(0, angleInDegrees, 0);
+        return angleInDegrees;
+
     }
+
+    //use Player heading
+    public static float HeadingToUnityQuaternionForPlayer(float heading) 
+    {
+        const float ServerToDegrees = 182.04444444444444f; 
+        float angleServer = heading / ServerToDegrees;     
+        float unityY = 90f + angleServer;
+        return  Mathf.Repeat(unityY + 180f, 360f); // если нужен противоположный
+    }
+
+
 }

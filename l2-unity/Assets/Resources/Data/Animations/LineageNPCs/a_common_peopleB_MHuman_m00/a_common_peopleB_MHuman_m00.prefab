@@ -84,15 +84,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 094d762d7461e3145afb7a26a35a249f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4083.6316
+      value: 4654.8955
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 094d762d7461e3145afb7a26a35a249f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -61.87332
+      value: -71.542145
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 094d762d7461e3145afb7a26a35a249f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1950.3699
+      value: -1580.8572
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 094d762d7461e3145afb7a26a35a249f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -575,7 +575,7 @@ MonoBehaviour:
     _npcClass: 
     _playerClass: 0
     _position: {x: 4724, y: -68, z: -1731}
-    _heading: 0
+    _heading: {x: 0, y: 0, z: 0, w: 0}
     _owned: 0
   _stats:
     _level: 0

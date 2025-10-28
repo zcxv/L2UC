@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.LookDev;
+using UnityEngine.Timeline;
 using UnityEngine.UIElements;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
@@ -15,6 +16,7 @@ public class MapWindow : L2PopupWindow
     private VisualTreeAsset _tabHeaderTemplate;
     private const string _mapTemplateName = "Data/UI/_Elements/Game/Map/MapAdenTemplate";
     private MapPanner _mapPanner;
+    private MapMarkerFollowCamera _mapMarkerFollowCamera;
     public static MapWindow Instance { get { return _instance; } }
 
     private void Awake()
@@ -23,6 +25,7 @@ public class MapWindow : L2PopupWindow
         {
             _creatorSimpleTab = new CreatorSimpleTab();
             _mapPanner = new MapPanner();
+            _mapMarkerFollowCamera = new MapMarkerFollowCamera();
             _instance = this;
 
         }
@@ -60,6 +63,8 @@ public class MapWindow : L2PopupWindow
         _mapPanner.SetElements(elements[0], elements[1] , elements[2] , button);
         _mapPanner.RegisterCallback();
 
+        _mapMarkerFollowCamera.SetElement(elements[2]);
+
         RegisterCloseWindowEvent("btn-close-frame");
         RegisterClickWindowEvent(_windowEle, dragArea);
         OnCenterScreen(_root);
@@ -67,6 +72,11 @@ public class MapWindow : L2PopupWindow
         yield return new WaitForEndOfFrame();
 
   
+    }
+
+    public void TurnMarker(Camera targetCamera)
+    {
+        _mapMarkerFollowCamera.UpdateTurn(targetCamera);
     }
 
     public override void ShowWindow()

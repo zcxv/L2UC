@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Principal;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -29,7 +30,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float _rootBoneHeight = 0;
 
     [SerializeField] private CameraCollisionDetection _collisionDetector;
-
+    private bool _isStartRotate = false;
     public Transform Target { get { return _target; } set { _target = value; } }
 
     public bool StickToBone { get { return _stickToBone; } set { _stickToBone = value; } }
@@ -149,6 +150,7 @@ public class CameraController : MonoBehaviour
             _x += Input.GetAxis("Mouse X") * _camSpeed;
             _y -= Input.GetAxis("Mouse Y") * _camSpeed;
             _y = ClampAngle(_y, -90, 90);
+            Debug.Log("Update position turn");
         }
     }
 
@@ -195,7 +197,15 @@ public class CameraController : MonoBehaviour
 
         Vector3 adjustedPosition = rotation * (Vector3.forward * -_currentDistance) + _lerpTargetPos;
 
+        //Debug.Log("Update position  camera pos x " + _x + " pos y " + _y);
+
         transform.position = adjustedPosition;
+    }
+
+    public void SetHeading(float heading)
+    {
+        //_y = heading.x;
+        _x = heading;
     }
 
     private float ClampAngle(float angle, float min, float max)
