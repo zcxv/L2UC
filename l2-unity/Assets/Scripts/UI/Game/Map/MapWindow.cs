@@ -74,15 +74,23 @@ public class MapWindow : L2PopupWindow
   
     }
 
+    public void LateUpdate()
+    {
+        _mapPanner.UpdateMarker(_isWindowHidden);
+    }
+
     public void TurnMarker(Camera targetCamera)
     {
-        _mapMarkerFollowCamera.UpdateTurn(targetCamera);
+        _mapMarkerFollowCamera.TurnUpdate(targetCamera , _isWindowHidden);
     }
 
     public override void ShowWindow()
     {
         _mapPanner.SetDisabled(false);
+        _mapPanner.SetManualUpdate(true);
+        _mapMarkerFollowCamera.ManualTurnUpdate();
         base.ShowWindow();
+
     }
 
     public override void HideWindow()
