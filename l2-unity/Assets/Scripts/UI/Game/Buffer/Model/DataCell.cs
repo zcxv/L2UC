@@ -5,7 +5,7 @@ using static UnityEditor.Experimental.GraphView.Port;
 using static UnityEngine.Rendering.DebugUI;
 
 
-public class DataCell
+public class DataCell : L2Slot
 {
     private bool _isBusy;
     private int _idSkill;
@@ -25,7 +25,9 @@ public class DataCell
     private Label _label;
     private Label _labelShadow;
     private VisualElement _labelTemplate;
-    public DataCell(int idSkill , VisualElement element  ,  VisualElement labelTemplate, int position)
+    private SkillInstance _skillInstance;
+    public DataCell(int idSkill , VisualElement element  ,  VisualElement labelTemplate, VisualElement slot  , int position) :
+        base(slot, position, SlotType.BuffPanel)
     {
         _idSkill = idSkill;
         _element = element;
@@ -34,6 +36,7 @@ public class DataCell
         _label = labelTemplate.Q<Label>("LabelText");
         _labelShadow = labelTemplate.Q<Label>("LabelTextShadow");
         _labelTemplate = labelTemplate;
+        _skillInstance = new SkillInstance(idSkill , 0 , false , false);
         RegisterLabelChange(_label);
     }
 
@@ -45,6 +48,7 @@ public class DataCell
         SetBusy(false);
         SetText("");
         ResetDurationSmooth();
+        _skillInstance.RefreshData(-1, -1, false, false);
         _skill = null;
     }
 
@@ -60,8 +64,13 @@ public class DataCell
         SetSkillId(skillId);
         SetLevel(level);
         SetBusy(isbusy);
+        _skillInstance.RefreshData(skillId , level , IsPassiveSkill() , false);
+        if (isbusy != false) SetIcon(skillId, level);
+    }
 
-        if(isbusy != false) SetIcon(skillId, level);
+    public SkillInstance GetSkillInstance()
+    {
+        return _skillInstance;
     }
 
     public int GetSkillId()
@@ -72,11 +81,13 @@ public class DataCell
     public void SetSkillId(int skillId)
     {
         _idSkill = skillId;
+        _skillInstance.RefreshData(skillId , _level , IsPassiveSkill() , false);
     }
 
     public void SetLevel(int level)
     {
         _level = level;
+        _skillInstance.RefreshData(_idSkill, level, IsPassiveSkill(), false);
     }
 
     public void ResetDurationSmooth()
