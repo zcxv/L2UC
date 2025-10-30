@@ -15,6 +15,7 @@ public class L2Slot
         Gear,
         Skill,
         SkillBar,
+        BuffPanel,
         SkillWindow,
         Action,
         Trash,

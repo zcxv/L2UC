@@ -33,7 +33,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
     private float _widtchContent = 0;
     private VisualElement _selectShow;
     private TooltipDataProvider _dataProvider;
-
+    private CalcNewPosition _calcPosition;
     public static ToolTipSimple Instance { get { return _instance; } }
 
 
@@ -46,6 +46,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
  
              _showToolTip = new ShowToolTip(this);
             _dataProvider = new TooltipDataProvider();
+            _calcPosition = new CalcNewPosition();
         }
         else
         {
@@ -264,13 +265,14 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
             _contentInside.MarkDirtyRepaint();
 
             AddData(ids, template);
+            bool isBelow = GetForceBelow(ids);
             _selectShow = ve;
             //esle position layout != 0 <--- (EndNewPosition add new Vector2(0,0))
             //This means the layout did not return to the base, most likely this is an error. Restarting the transition to a new position
             //if (_windowEle.worldBound.height != 0)
             if (_contentInside.worldBound.height != 0)
             {
-                _showToolTip.Show(_selectShow);
+                _showToolTip.Show(_selectShow , isBelow);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -338,6 +340,9 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                     int skillId  = position;
                     SkillInstance skillItem = SkillListWindow.Instance.GetSkillInstanceBySkillId(skillId);
                     return GetSkillContainer(skillItem);
+                case (int)SlotType.BuffPanel:
+                    SkillInstance instance = BufferPanel.Instance.GetCellByPosition(position);
+                    return GetSkillContainer(instance);
             }
         }
 
@@ -459,87 +464,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         return null;
     }
 
-    //backup code for switch tooltip
-    // private TemplateContainer SwitchToolTip(string[] ids , bool isClickLeft)
-    //{
-    //int position = Int32.Parse(ids[0]);
-    //  int type = Int32.Parse(ids[1]);
-
-    //if (isClickLeft)
-    //{
-    //if (type == (int)SlotType.PriceSell)
-    //{
-    // Product product =  ToolTipManager.GetInstance().FindProductInSellList(position);
-    //if(product != null)
-    //{
-    // switch (product.GetTypeItem())
-    // {
-    // case EnumType2.TYPE2_WEAPON:
-    //  return SwitchToWeapon();
-    // case EnumType2.TYPE2_ACCESSORY:
-    //   return SwitchToAccessories();
-    // case EnumType2.TYPE2_OTHER:
-    //  return SwitchToAccessories();
-    //case EnumType2.TYPE2_SHIELD_ARMOR:
-    //    return SwitchToArmor();
-    // }
-    // }
-
-    // }else if (type == (int)SlotType.PriceBuy)
-    //{
-    //Product product = ToolTipManager.GetInstance().FindProductInBuyList(position);
-    //if(product != null)
-    // {
-    //switch (product.GetTypeItem())
-    //{
-    //case EnumType2.TYPE2_WEAPON:
-    //    return SwitchToWeapon();
-    // case EnumType2.TYPE2_ACCESSORY:
-    //   return SwitchToAccessories();
-    //case EnumType2.TYPE2_OTHER:
-    //  return SwitchToAccessories();
-    //case EnumType2.TYPE2_SHIELD_ARMOR:
-    //  return SwitchToArmor();
-    //}
-    //}
-
-    // }
-    // else if (type == (int)SlotType.Inventory)
-    //{
-    // ItemInstance item = InventoryWindow.Instance.GetItemByPosition(position);
-    // if (item != null)
-    /// {
-    // switch (item.Category)
-    // {
-    // case ItemCategory.Weapon:
-    //    return SwitchToWeapon();
-    // case ItemCategory.Jewel:
-    //    return SwitchToAccessories();
-    // case ItemCategory.Item:
-    //       return SwitchToAccessories();
-    //   case ItemCategory.ShieldArmor:
-    //       return SwitchToArmor();
-    //  }
-    // }
-    // }
-    // }
-    //else
-    // {
-    //if (type == (int)SlotType.PriceSell | type == (int)SlotType.PriceBuy)
-    // {
-    //     return SwitchToSimple();
-    // }else if (type == (int)SlotType.Inventory)
-    // {
-    //    return SwitchToString();
-    // }
-    // else if (type == (int)SlotType.Gear)
-    // {
-    //     return SwitchToString();
-    // }
-    // }
-
-    // return null;
-    //}
+   
 
     public object GetDataClickLeft(int type , int position)
     {
@@ -604,11 +529,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         return template;
     }
 
-    private TemplateContainer GetStringContainerToGear(int position)
-    {
-        GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
-        return GetGearContainer(gearItem);
-    }
+
 
     private TemplateContainer SwitchToWeapon()
     {
@@ -657,7 +578,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         return  ve.name.Split('_');
     }
 
-
+    private bool _isForceBelow = false;
     //experimental code 
     private void OnGeometryChanged(GeometryChangedEvent evt)
     {
@@ -668,62 +589,24 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         {
             _heightContent = _contentInside.worldBound.height;
             _widtchContent = _contentInside.worldBound.width;
-            _showToolTip.Show(_selectShow);
+            _showToolTip.Show(_selectShow , _isForceBelow);
         }
 
     }
 
  
     //experimental code 
-    public void NewPosition(Vector2 newPoint, float sdfig)
+    public void NewPosition(Vector2 newPoint, float sdfig , bool isForceBelow)
     {
-        
-        var highest = highestPoint(newPoint, _heightContent);
-        var lowest = lowestPoint(newPoint, _heightContent);
+        _isForceBelow = isForceBelow;
+        var highest = _calcPosition.HighestPoint(newPoint, _heightContent);
         bool insideRoot = L2GameUI.Instance.IsWindowContain(highest);
-        //if (!ActionWindow.Instance.IsWindowContain(lowest) | IsTop(newPoint))
-       // {
-            if (!insideRoot)
-            {
-                //shift down to 0 and to the right to the icon border
-                //2px border 
-                float sdfig1 = sdfig + 2;
-               // float new_x = newPoint.x + _widtchContent;
-                float new_x2 = newPoint.x + sdfig1;
-                Vector2 reversePoint = new Vector2(new_x2, 0);
-            
-                // var test1 = _windowTemplateWeapon.Instantiate()[0];
-               // _content.Add(test1);
-                _content.transform.position = reversePoint;
-            }
-            else
-            {
-                float width = _heightContent;
-                float newddfig = width;
-                //2px border 
-                float sdfig1 = sdfig + 2;
-                float new_y = newPoint.y - newddfig;
-                float new_y2 = new_y - sdfig1;
-                Vector2 reversePoint = new Vector2(newPoint.x, new_y2);
-
-                _content.transform.position = reversePoint;
-            }
-
+        Vector2 reversePoint = _calcPosition.GetNewPosition(newPoint, sdfig, _heightContent , insideRoot , isForceBelow);
+        _content.transform.position = reversePoint;
         BringToFront();
     }
 
-    private Vector2 highestPoint(Vector2 newPoint, float element)
-    {
-        //Added 28px. If there are problems with the upper tooltips, you need to remove them
-        var element1 = element + 28;
-        return new Vector2(newPoint.x, newPoint.y - element1);
-    }
 
-
-    private Vector2 lowestPoint(Vector2 newPoint, float element)
-    {
-        return new Vector2(newPoint.x, newPoint.y + element);
-    }
 
 
 
@@ -761,6 +644,10 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                 SkillInstance skillInstance = SkillListWindow.Instance.GetSkillInstanceBySkillId(skillId);
                 SetSkillToolTip(skillInstance, template);
                 break;
+            case (int)SlotType.BuffPanel:
+                SkillInstance instance = BufferPanel.Instance.GetCellByPosition(position);
+                SetSkillToolTip(instance, template);
+                break;
             case (int)SlotType.Gear:
                 GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
 
@@ -776,7 +663,22 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         }
     }
 
-   
+    private bool GetForceBelow(string[] ids)
+    {
+        int position = Int32.Parse(ids[0]);
+        int type = Int32.Parse(ids[1]);
+
+        switch (type)
+        {
+            case (int)SlotType.BuffPanel:
+                return true;
+
+            default: return false;
+        }
+    }
+
+
+
 
 
 
