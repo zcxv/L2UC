@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using UnityEditor;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class PlayerInventory : MonoBehaviour
         UNCHANGED = 0, ADDED = 1, REMOVED = 3, MODIFIED = 2
     }
 
+    private const string TYPE_RECIPE = "recipe";
+    private int _objectIdEtcType = -1;
     private Dictionary<int , ItemInstance> _playerInventory;
     private Dictionary<int, ItemInstance> _playerEquipInventory;
     private ChangeInventoryData _changeInventoryData;
@@ -431,25 +434,89 @@ public class PlayerInventory : MonoBehaviour
 
     public bool UseItem(int objectId)
     {
-        //Cache Name for Message Equip
- 
-        if (_playerInventory.ContainsKey(objectId))
+        if (!TryGetItem(objectId, out ItemInstance item))
         {
-
-            ItemInstance item = _playerInventory[objectId];
-            SetVariableInfoS1(item);
-            var sendPaket = CreatorPacketsUser.CreateUseItem(objectId, 0);
-            bool enable = GameClient.Instance.IsCryptEnabled();
-            SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
-            return true;
-        }
-        else
-        {
-            Debug.Log("Not found use items");
             return false;
         }
 
+        SetVariableInfoS1(item);
+
+        if (IsRecipeItem(item))
+        {
+            HandleRecipeItem(objectId);
+        }
+        else
+        {
+            SendUseItemPacket(objectId);
+        }
+
+        return true;
     }
+
+
+    private bool IsRecipeItem(ItemInstance item)
+    {
+        if (item.ItemData is EtcItem etcItem)
+        {
+            return etcItem.EtcItemgrp.EtcItemType == TYPE_RECIPE;
+        }
+        return false;
+    }
+
+    private void HandleRecipeItem(int objectId)
+    {
+        _objectIdEtcType = objectId;
+        SetupMessageWindow();
+    }
+
+    private void SendUseItemPacket(int objectId)
+    {
+        bool isCryptEnabled = GameClient.Instance.IsCryptEnabled();
+        SendGameDataQueue.Instance().AddItem(
+            CreatorPacketsUser.CreateUseItem(objectId, 0),
+            isCryptEnabled,
+            isCryptEnabled
+        );
+    }
+
+    private void SetupMessageWindow()
+    {
+        SystemMessageWindow.Instance.OnButtonOk += OkUse;
+        SystemMessageWindow.Instance.OnButtonClosed += On—ancel;
+        SystemMessageWindow.Instance.ShowWindowDialogYesOrNot("Component registration is not reversible, do you want to continue?");
+    }
+
+    private bool TryGetItem(int objectId, out ItemInstance item)
+    {
+        if (!_playerInventory.TryGetValue(objectId, out item))
+        {
+            Debug.Log("Item not found");
+            return false;
+        }
+        return true;
+    }
+
+
+
+    private void OkUse()
+    {
+        SendUseItemPacket(_objectIdEtcType);
+        CleanupMessageWindow();
+    }
+
+    private void On—ancel()
+    {
+        _objectIdEtcType = -1;
+        CleanupMessageWindow();
+    }
+
+    private void CleanupMessageWindow()
+    {
+        SystemMessageUtils.CancelEvent(SystemMessageWindow.Instance, OkUse, On—ancel);
+    }
+
+
+
 
     private async void SetVariableInfoS1(ItemInstance item)
     {

@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 using static L2Slot;
-using static UnityEditor.Progress;
+
 
 public class TradeTab : AbstractTab, ITab
 {
@@ -12,7 +10,7 @@ public class TradeTab : AbstractTab, ITab
     private CreateScroller _createScroller;
 
     private int _selectedSlot = -1;
-    public TradeTab(string tabName , int countSlot , VisualElement tabContainer, VisualElement tabHeader, bool initEmpty)
+    public TradeTab(string tabName , int countSlot , VisualElement tabContainer, VisualElement tabHeader, bool initEmpty , SlotType slotType , bool isDragged)
     {
         _createScroller = new CreateScroller();
         _tabName = tabName;
@@ -21,7 +19,7 @@ public class TradeTab : AbstractTab, ITab
         _tabContainer = tabContainer;
         _contentContainer = tabContainer.Q<VisualElement>("Content");
         _createScroller.Start(tabContainer);
-        CreateEmptyInventory(initEmpty);
+        CreateEmptyInventory(initEmpty , slotType , isDragged);
         OnRegisterClickTab(tabHeader);
     }
 
@@ -36,26 +34,24 @@ public class TradeTab : AbstractTab, ITab
     }
 
 
-    public void CreateEmptyInventory(bool initEmty)
+    public void CreateEmptyInventory(bool initEmty , SlotType slotType , bool isDragged)
     {
         if (_contentContainer != null && initEmty)
         {
             _contentContainer.Clear();
             _tradeSlots = new TradingSlot[_defaultCountSlot];
-            CreateSlots(_tradeSlots, _contentContainer);
-            //UpdateInventorySlots(_inventorySlots);
+            CreateSlots(_tradeSlots, _contentContainer , slotType , isDragged);
         }
 
     }
 
 
-    private void CreateSlots(TradingSlot[] tradeSlots , VisualElement contentContainer)
+    private void CreateSlots(TradingSlot[] tradeSlots , VisualElement contentContainer , SlotType slotType , bool isDragged)
     {
         for (int i = 0; i < _tradeSlots.Length; i++)
         {
-
             VisualElement slotElement = CretaVisualElement();
-            TradingSlot slot = CreateTradeSlot(new TradingSlotModel(i, this, slotElement, SlotType.Multisell));
+            TradingSlot slot = CreateTradeSlot(new TradingSlotModel(i, isDragged, slotElement, slotType));
             slot.EventLeftClick += OnClickLeftEvent;
             contentContainer.Add(slotElement);
             tradeSlots[i] = slot;

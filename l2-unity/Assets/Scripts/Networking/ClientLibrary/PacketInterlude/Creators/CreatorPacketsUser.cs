@@ -118,6 +118,11 @@ public class CreatorPacketsUser
         return new RequestQuestAbort(questId);
     }
 
+    public static RequestRecipeBookDestroy CreateRequestRecipeBookDestroy(int recipeId)
+    {
+        return new RequestRecipeBookDestroy(recipeId);
+    }
+
     public static SendWarehouseDepositList CreateWHDepositList(List<Product> depositList)
     {
         return new SendWarehouseDepositList(depositList);

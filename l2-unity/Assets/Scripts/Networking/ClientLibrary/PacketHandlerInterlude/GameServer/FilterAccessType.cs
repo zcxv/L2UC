@@ -56,7 +56,8 @@ public class FilterAccessType
         { GameInterludeServerPacketType.Revive, true },
         { GameInterludeServerPacketType.AbnormalStatusUpdate, true },
         { GameInterludeServerPacketType.AcquireSkillList, true },
-        { GameInterludeServerPacketType.AcquireSkillInfo, true }
+        { GameInterludeServerPacketType.AcquireSkillInfo, true },
+        { GameInterludeServerPacketType.RecipeBookItemList, true }
     };
 
     private static readonly Dictionary<GSInterludeCombatPacketType, bool> CombatPacketTypes = new Dictionary<GSInterludeCombatPacketType, bool>

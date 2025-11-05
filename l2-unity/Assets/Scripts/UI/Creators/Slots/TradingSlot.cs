@@ -10,7 +10,7 @@ public class TradingSlot : L2DraggableSlot
     private AssignData _data;
     public event Action<int> EventLeftClick;
     public TradingSlot(TradingSlotModel model)
-        : base(model.GetPosition(), model.GetSlotElement(), model.GetSlotType())
+        : base(model.GetPosition(), model.GetSlotElement(), model.GetSlotType() , model.isDragged)
     {
         _data = new AssignData();
         _empty = true;
@@ -29,7 +29,7 @@ public class TradingSlot : L2DraggableSlot
         }
         else
         {
-            Debug.LogWarning("Не критическая ошибка не смогли найти TradingSlotModel>SlotElement");
+            Debug.LogWarning("TradingSlot> AssignItem: Не критическая ошибка не смогли найти TradingSlotModel>SlotElement");
         }
     }
 
@@ -122,19 +122,22 @@ public class TradingSlotModel
     private VisualElement _slotElement;
     private SlotType _slotType;
     private int _position;
+    private bool _isDragged;
 
-
-    public TradingSlotModel(int position , TradeTab currentTab , VisualElement slotElement , SlotType slotType)
+    public TradingSlotModel(int position , bool isDragged ,  VisualElement slotElement , SlotType slotType)
     {
         _position = position;
         _slotElement = slotElement;
         _slotType = slotType;
+        _isDragged = isDragged;
     }
 
  
     public VisualElement GetSlotElement(){ return _slotElement;}
 
     public SlotType GetSlotType() { return _slotType;}
+
+    public bool isDragged { get { return _isDragged; } }
 
     public int GetPosition() { return _position; }
 }
