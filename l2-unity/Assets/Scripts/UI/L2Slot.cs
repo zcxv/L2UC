@@ -11,6 +11,7 @@ public class L2Slot
         Inventory,
         Enchant,
         Multisell,
+        Recipe,
         InventoryBis, //other tab slots
         Gear,
         Skill,

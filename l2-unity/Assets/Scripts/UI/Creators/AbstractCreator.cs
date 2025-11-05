@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static L2Slot;
 
 public abstract class AbstractCreator 
 {
@@ -37,7 +38,7 @@ public abstract class AbstractCreator
         return -1;
     }
 
-    public void CreateTradeTabs(VisualElement inventoryTabView, VisualTreeAsset _tabTemplate, VisualTreeAsset _tabHeaderTemplate)
+    public void CreateTradeTabs(VisualElement inventoryTabView, VisualTreeAsset _tabTemplate, VisualTreeAsset _tabHeaderTemplate , SlotType slotType , bool isDragged)
     {
         VisualElement tabHeaderContainer = inventoryTabView.Q<VisualElement>("tab-header-container");
         VisualElement tabContainer = inventoryTabView.Q<VisualElement>("tab-content-container");
@@ -62,7 +63,7 @@ public abstract class AbstractCreator
                 tabHeaderContainer.Add(tabHeaderElement);
                 tabContainer.Add(tabElement);
 
-                _tabsTradeTabs[i] = new TradeTab(tabName, 96, tabElement, tabHeaderElement, true);
+                _tabsTradeTabs[i] = new TradeTab(tabName, 96, tabElement, tabHeaderElement, true , slotType , isDragged);
 
                 _tabsTradeTabs[i].EventSwitch += OnSwitchEvent;
                 _tabsTradeTabs[i].EventLeftClick += OnLeftClick;
