@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -37,7 +38,7 @@ public abstract class AbstractCreator
         }
         return -1;
     }
-
+    
     public void CreateTradeTabs(VisualElement inventoryTabView, VisualTreeAsset _tabTemplate, VisualTreeAsset _tabHeaderTemplate , SlotType slotType , bool isDragged)
     {
         VisualElement tabHeaderContainer = inventoryTabView.Q<VisualElement>("tab-header-container");
@@ -80,6 +81,11 @@ public abstract class AbstractCreator
         }
 
         SetMainTab(0, true , true);
+    }
+
+    public void ClearSlotsActiveTab(List<ItemInstance> oldListItems)
+    {
+        _activeTab.ClearSlots(oldListItems);
     }
 
     public void CreateTabs(VisualElement _inventoryTabView, VisualTreeAsset _tabTemplate, VisualTreeAsset _tabHeaderTemplate)

@@ -5,13 +5,14 @@ using static L2Slot;
 
 public class TradingSlot : L2DraggableSlot
 {
-    private TradingSlotModel model;
+    private TradingSlotModel _model;
     protected bool _empty = true;
     private AssignData _data;
     public event Action<int> EventLeftClick;
     public TradingSlot(TradingSlotModel model)
         : base(model.GetPosition(), model.GetSlotElement(), model.GetSlotType() , model.isDragged)
     {
+        _model = model;
         _data = new AssignData();
         _empty = true;
     }
@@ -23,6 +24,8 @@ public class TradingSlot : L2DraggableSlot
         _data.RefreshDataItem(item);
         _empty = false;
 
+        if (_model != null && _slotDragManipulator != null) SetDragged(_model.isDragged);
+
         if (_slotElement != null)
         {
             AddImage(SlotBg, SlotElement, _data.GetItemId());
@@ -30,6 +33,14 @@ public class TradingSlot : L2DraggableSlot
         else
         {
             Debug.LogWarning("TradingSlot> AssignItem: Не критическая ошибка не смогли найти TradingSlotModel>SlotElement");
+        }
+    }
+
+    public void SetDragged(bool isDragged)
+    {
+        if(_slotDragManipulator != null)
+        {
+            _slotDragManipulator.enabled = isDragged;
         }
     }
 

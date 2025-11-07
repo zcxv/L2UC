@@ -10,7 +10,7 @@ public class RecipeBookWindow : L2PopupWindow
     private VisualTreeAsset _tabTemplate;
     private VisualTreeAsset _tabHeaderTemplate;
     private VisualElement _inventoryTabView;
-
+    private Label _sizelabel;
     private static RecipeBookWindow _instance;
     private RecipeBookItemList _packet;
     public static RecipeBookWindow Instance { get { return _instance; } }
@@ -47,7 +47,7 @@ public class RecipeBookWindow : L2PopupWindow
         _creatorWindow.InitTradeTabs(new string[] { "ALL" });
         _creatorWindow.CreateTradeTabs(GetElementById("InventoryTabView") , L2Slot.SlotType.Recipe , true);
 
-
+        _sizelabel = (Label)GetElementById("sizeLabel");
         Button trashBtn = (Button)GetElementById("TrashBtn");
         trashBtn.AddManipulator(new ButtonClickSoundManipulator(trashBtn));
         trashBtn.AddManipulator(new TooltipManipulator(trashBtn, "Trash"));
@@ -64,13 +64,32 @@ public class RecipeBookWindow : L2PopupWindow
     {
         if(packet.ListRecipes != null)
         {
+
+            if (_packet != null) _creatorWindow.ClearSlots(_packet.ListItemInstance);
+
             _packet = packet;
             _creatorWindow.AddData(packet.ListItemInstance);
+            UpdateSizeLabel(_sizelabel, packet);
+        }
+    }
+
+    private void UpdateSizeLabel(Label sizeLabel , RecipeBookItemList packet)
+    {
+        if (sizeLabel != null & packet != null)
+        {
+            sizeLabel.text = "(" + _packet.ListItemInstance.Count + "/" + "0" + ")";
         }
     }
 
     public int GetRecipeIdByPosition(int position)
     {
         return _packet.ListRecipes.FirstOrDefault(x => x.GetPosition() == position + 1)?.GetIDMK() ?? 0;
+    }
+
+    private ItemInstance item;
+    public ItemInstance GetRecipeInstanceByPosition(int position)
+    {
+        return   _packet.ListRecipes.FirstOrDefault(x => x.GetPosition() == position + 1)?.GetRecipeItemInstance();
+
     }
 }

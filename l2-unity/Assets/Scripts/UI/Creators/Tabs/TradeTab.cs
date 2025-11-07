@@ -46,6 +46,7 @@ public class TradeTab : AbstractTab, ITab
     }
 
 
+
     private void CreateSlots(TradingSlot[] tradeSlots , VisualElement contentContainer , SlotType slotType , bool isDragged)
     {
         for (int i = 0; i < _tradeSlots.Length; i++)
@@ -65,6 +66,16 @@ public class TradeTab : AbstractTab, ITab
             ItemInstance item = allItems[i];
             item.SetSlot(i);
             _tradeSlots[i].AssignItem(item);
+        }
+    }
+
+    public void ClearSlots(List<ItemInstance> oldListItems)
+    {
+        for (int i = 0; i < oldListItems.Count; i++)
+        {
+            ItemInstance item = oldListItems[i];
+            item.SetSlot(i);
+            _tradeSlots[i].AssignEmpty();
         }
     }
 

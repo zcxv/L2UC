@@ -308,6 +308,10 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                     ItemInstance multiSelltItem = MultiSellWindow.Instance.GetItemByPosition(position);
                     if (multiSelltItem != null) return GetInventoryContainer(multiSelltItem);
                     break;
+                case (int)SlotType.Recipe:
+                    ItemInstance receiptInstance = RecipeBookWindow.Instance.GetRecipeInstanceByPosition(position);
+                    if (receiptInstance != null) return GetInventoryContainer(receiptInstance);
+                    break;
                 case (int)SlotType.Gear:
                     GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
                     return GetGearContainer(gearItem);
@@ -331,6 +335,8 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                 case (int)SlotType.Enchant:
                     return SwitchToString();
                 case (int)SlotType.Multisell:
+                    return SwitchToString();
+                case (int)SlotType.Recipe:
                     return SwitchToString();
                 case (int)SlotType.Gear:
                     GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
@@ -464,48 +470,47 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         return null;
     }
 
-   
 
-    public object GetDataClickLeft(int type , int position)
+
+    public object GetDataClickLeft(int type, int position)
     {
-            if (type == (int)SlotType.PriceSell)
-            {
+        switch ((SlotType)type)
+        {
+            case SlotType.PriceSell:
                 return ToolTipManager.GetInstance().FindProductInSellList(position);
-            }
-            else if (type == (int)SlotType.PriceBuy)
-            {
-                return ToolTipManager.GetInstance().FindProductInBuyList(position);
-            }
-            else if (type == (int)SlotType.Inventory)
-            {
-                return InventoryWindow.Instance.GetItemByPosition(position);
-            }
-            else if (type == (int)SlotType.Enchant)
-            {
-                return EnchantWindow.Instance.GetItemByPosition(position);
-            }
-            else if (type == (int)SlotType.Multisell)
-            {
-                return MultiSellWindow.Instance.GetItemByPosition(position);
-            }
-            else if (type == (int)SlotType.SkillWindow)
-            {
-                int skillId = position;
-                return SkillListWindow.Instance.GetSkillInstanceBySkillId(position);
-            }
-        else if (type == (int)SlotType.Gear)
-            {
-                GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
 
+            case SlotType.PriceBuy:
+                return ToolTipManager.GetInstance().FindProductInBuyList(position);
+
+            case SlotType.Inventory:
+                return InventoryWindow.Instance.GetItemByPosition(position);
+
+            case SlotType.Enchant:
+                return EnchantWindow.Instance.GetItemByPosition(position);
+
+            case SlotType.Multisell:
+                return MultiSellWindow.Instance.GetItemByPosition(position);
+
+            case SlotType.Recipe:
+                return RecipeBookWindow.Instance.GetRecipeInstanceByPosition(position);
+
+            case SlotType.SkillWindow:
+                return SkillListWindow.Instance.GetSkillInstanceBySkillId(position);
+
+            case SlotType.Gear:
+                GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
                 if (gearItem != null && gearItem.GetItemId() != 0)
                 {
                     int objectId = gearItem.GetObjectId();
-                    return  PlayerInventory.Instance.GetItemEquip(objectId);
+                    return PlayerInventory.Instance.GetItemEquip(objectId);
                 }
-            }
+                return null;
 
-        return null;
+            default:
+                return null;
+        }
     }
+
 
     private TemplateContainer SwitchToSimple()
     {
@@ -638,6 +643,10 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
             case (int)SlotType.Multisell:
                 ItemInstance itemMultisell = MultiSellWindow.Instance.GetItemByPosition(position);
                 SetSimpleItemSingleToolTip(itemMultisell, template);
+                break;
+            case (int)SlotType.Recipe:
+                ItemInstance recipeInstance = RecipeBookWindow.Instance.GetRecipeInstanceByPosition(position);
+                SetSimpleItemSingleToolTip(recipeInstance, template);
                 break;
             case (int)SlotType.SkillWindow:
                 int skillId = position;
@@ -789,7 +798,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
 
     public void SetTextEnchantIfNot0(int data , Label element)
     {
-        if (data != 0)
+        if (data != 0 & data != -1)
         {
             element.style.display = DisplayStyle.Flex;
             element.text = "+"+ data;
@@ -822,9 +831,6 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
 
         }
     }
-
-
-
 
     public void ResetPosition(Vector2 vector2)
     {

@@ -186,30 +186,20 @@ public class ItemInstance : AbstractServerItem
 
     public string GetName()
     {
-        if (_category == ItemCategory.Weapon)
+        switch (_category)
         {
-            return ItemNameTable.Instance.GetItemName(_itemId).Name;
+            case ItemCategory.Weapon:
+            case ItemCategory.ShieldArmor:
+            case ItemCategory.Jewel:
+            case ItemCategory.Item:
+            case ItemCategory.Adena:
+                return ItemNameTable.Instance.GetItemName(_itemId).Name;
 
+            default:
+                return "";
         }
-        else if (_category == ItemCategory.ShieldArmor)
-        {
-            return ItemNameTable.Instance.GetItemName(_itemId).Name;
-        }
-        else if (_category == ItemCategory.Jewel)
-        {
-            return ItemNameTable.Instance.GetItemName(_itemId).Name;
-        }
-        else if (_category == ItemCategory.Item)
-        {
-            return ItemNameTable.Instance.GetItemName(_itemId).Name;
-        }
-        else if (_category == ItemCategory.Adena)
-        {
-            return ItemNameTable.Instance.GetItemName(_itemId).Name;
-        }
-        return "";
     }
- 
+
     public Texture2D GetGradeTexture()
     {
         if (Category == ItemCategory.Weapon)
@@ -238,35 +228,35 @@ public class ItemInstance : AbstractServerItem
     }
     private Texture2D GetGradeImage(ItemGrade grade)
     {
-        if(grade == ItemGrade.none)
+        switch (grade)
         {
-            return null;
-        }else if (grade == ItemGrade.d)
-        {
-            return IconManager.Instance.GetInterfaceIcon("grade_d");
+            case ItemGrade.none:
+                return null;
+
+            case ItemGrade.d:
+                return IconManager.Instance.GetInterfaceIcon("grade_d");
+
+            case ItemGrade.c:
+                return IconManager.Instance.GetInterfaceIcon("grade_c");
+
+            case ItemGrade.b:
+                return IconManager.Instance.GetInterfaceIcon("grade_b");
+
+            case ItemGrade.a:
+                return IconManager.Instance.GetInterfaceIcon("grade_a");
+
+            case ItemGrade.s:
+                return IconManager.Instance.GetInterfaceIcon("grade_s");
+
+            default:
+                return null;
         }
-        else if (grade == ItemGrade.c)
-        {
-            return IconManager.Instance.GetInterfaceIcon("grade_c");
-        }
-        else if (grade == ItemGrade.b)
-        {
-            return IconManager.Instance.GetInterfaceIcon("grade_b");
-        }
-        else if (grade == ItemGrade.a)
-        {
-            return IconManager.Instance.GetInterfaceIcon("grade_a");
-        }
-        else if (grade == ItemGrade.s)
-        {
-            return IconManager.Instance.GetInterfaceIcon("grade_s");
-        }
-        return null;
     }
 
 
 
 
-   
+
+
 
 }

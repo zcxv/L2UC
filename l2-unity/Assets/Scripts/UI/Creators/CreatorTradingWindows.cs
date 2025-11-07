@@ -35,6 +35,11 @@ public class CreatorTradingWindows : AbstractCreator , ICreatorTradeTab
         base.CreateTradeTabs(inventoryTabView, tabTemplate, tabHeaderTemplate , slotType, isDragged);
     }
 
+    public void ClearSlots(List<ItemInstance> oldListItems)
+    {
+        base.ClearSlotsActiveTab(oldListItems);
+    }
+
     public void SetClickActiveTab(int position)
     {
         if(_activeTab != null)
