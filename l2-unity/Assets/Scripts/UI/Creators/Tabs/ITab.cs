@@ -13,6 +13,8 @@ public interface ITab
     public event Action<int, ItemCategory, int> EventLeftClick;
     void OnClickLeftEvent(int position);
 
+    void ClearSlots(List<ItemInstance> oldListItems);
+
     void AddDataTrade(List<ItemInstance> allItems);
     ItemInstance GetSlotByPosition(int position);
 

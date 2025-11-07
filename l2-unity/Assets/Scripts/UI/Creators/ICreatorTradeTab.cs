@@ -15,6 +15,8 @@ public interface ICreatorTradeTab
 
     public ItemInstance GetActiveByPosition(int position);
 
+    public void ClearSlots(List<ItemInstance> oldListItems);
+
     public void LoadAsset(Func<string, VisualTreeAsset> loaderFunc);
 
     public event Action<int, ItemCategory, int> EventLeftClick;

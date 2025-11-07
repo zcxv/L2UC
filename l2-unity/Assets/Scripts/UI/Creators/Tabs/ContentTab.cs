@@ -47,4 +47,9 @@ public class ContentTab : AbstractTab , ITab
     {
         return _tabName;
     }
+
+    public void ClearSlots(List<ItemInstance> oldListItems)
+    {
+        throw new NotImplementedException();
+    }
 }

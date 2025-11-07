@@ -56,11 +56,18 @@ public class RecipeInstance :ItemInstance
 {
     private RecipeData _data;
     private int _position;
+    private ItemInstance _recipeInstance;
     public RecipeInstance(RecipeData data , int position): 
-        base(-1, data.ItemId, ItemLocation.Void, position, 1, ItemCategory.None, false, ItemSlot.none, -1, -1)
+        base(-1, data.ItemId, ItemLocation.Void, position, 1, ItemCategory.Item, false, ItemSlot.none, 0, -1)
     {
         _data = data;
         _position = position;
+        _recipeInstance = new ItemInstance(-1, data.RecipeId, ItemLocation.Void, position, 1, ItemCategory.Item, false, ItemSlot.none, 0, -1);
+    }
+
+    public ItemInstance GetRecipeItemInstance()
+    {
+        return _recipeInstance;
     }
 
     public ItemInstance GetItemInstance()
