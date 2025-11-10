@@ -58,6 +58,7 @@ public class MapWindow : L2PopupWindow
         _creatorSimpleTab.InitContentTabs(new string[1] { _tabName });
         _creatorSimpleTab.CreateTabs(content, _tabTemplate, _tabHeaderTemplate);
         _creatorSimpleTab.SetContent(0);
+
         Button button = (Button)GetElementById("MyLocation");
         var elements = _creatorSimpleTab.GetVisualElements(new string[3] { "viewport" , "map", "minimapPos" });
         _mapPanner.SetElements(elements[0], elements[1] , elements[2] , button);
