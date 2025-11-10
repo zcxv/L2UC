@@ -229,6 +229,11 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
                 OnRecipeBookItemList(itemQueue.DecodeData());
                 break;
+            case GameInterludeServerPacketType.RecipeItemMakeInfo:
+
+                OnRecipeItemMakeInfo(itemQueue.DecodeData());
+                break;
+
 
         }
     }
@@ -1078,6 +1083,19 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
             EventProcessor.Instance.QueueEvent(() => {
                 RecipeBookWindow.Instance.AddData(packet);
                 RecipeBookWindow.Instance.ShowWindow();
+            });
+        }
+
+    }
+
+    private void OnRecipeItemMakeInfo(byte[] data)
+    {
+        if (!InitPacketsLoadWord.getInstance().IsInit)
+        {
+            RecipeItemMakeInfo packet = new RecipeItemMakeInfo(data);
+
+            EventProcessor.Instance.QueueEvent(() => {
+                RecipeBookWindow.Instance.HideWindow();
                 CraftingItemWindow.Instance.ShowWindow();
             });
         }

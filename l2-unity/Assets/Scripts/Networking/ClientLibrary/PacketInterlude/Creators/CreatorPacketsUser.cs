@@ -123,6 +123,11 @@ public class CreatorPacketsUser
         return new RequestRecipeBookDestroy(recipeId);
     }
 
+    public static RequestRecipeItemMakeInfo CreateRequestRecipeItemMakeInfo(int recipeId)
+    {
+        return new RequestRecipeItemMakeInfo(recipeId);
+    }
+
     public static SendWarehouseDepositList CreateWHDepositList(List<Product> depositList)
     {
         return new SendWarehouseDepositList(depositList);
