@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static L2Slot;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class RecipeBookWindow : L2PopupWindow
@@ -73,6 +75,31 @@ public class RecipeBookWindow : L2PopupWindow
         }
     }
 
+
+    public void EventDoubleClick(VisualElement slotElement)
+    {
+        string[] ids = ToolTipsUtils.GetUniquePosition(slotElement);
+        int position = Int32.Parse(ids[0]);
+        int type = Int32.Parse(ids[1]);
+        SlotType slot = ToolTipsUtils.DetectedClickPanel(type);
+
+        if(SlotType.Recipe == slot)
+        {
+            int recipeId = GetRecipeIdByPosition(position);
+            SendRequestOpenCraftWindow(recipeId);
+        }
+    }
+
+
+    private void SendRequestOpenCraftWindow(int recipeId)
+    {
+        SendGameDataQueue.Instance().AddItem(
+            CreatorPacketsUser.CreateRequestRecipeItemMakeInfo(recipeId),
+            GameClient.Instance.IsCryptEnabled(),
+            GameClient.Instance.IsCryptEnabled()
+        );
+    }
+
     private void UpdateSizeLabel(Label sizeLabel , RecipeBookItemList packet)
     {
         if (sizeLabel != null & packet != null)
@@ -86,7 +113,7 @@ public class RecipeBookWindow : L2PopupWindow
         return _packet.ListRecipes.FirstOrDefault(x => x.GetPosition() == position + 1)?.GetIDMK() ?? 0;
     }
 
-    private ItemInstance item;
+
     public ItemInstance GetRecipeInstanceByPosition(int position)
     {
         return   _packet.ListRecipes.FirstOrDefault(x => x.GetPosition() == position + 1)?.GetRecipeItemInstance();

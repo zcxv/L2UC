@@ -21,6 +21,7 @@ public enum GameInterludeClientPacketType : byte
     RequestJoinPledge = 0x24,
     RequestQuestAbort = 0x64,
     RequestRecipeBookDestroy = 0xad,
+    RequestRecipeItemMakeInfo = 0xae,
     RequestPackageSendableItemList = 0x9e,
     MultiSellChoose = 0xa7,
     SendWarehouseDepositList = 0x31,

@@ -54,5 +54,6 @@ public enum GameInterludeServerPacketType : byte
     AbnormalStatusUpdate = 0x7f,
     AcquireSkillList = 0x8a,
     AcquireSkillInfo = 0x8b,
-    RecipeBookItemList = 0xD6
+    RecipeBookItemList = 0xD6,
+    RecipeItemMakeInfo = 0xD7
 }
