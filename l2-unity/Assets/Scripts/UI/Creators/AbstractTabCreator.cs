@@ -6,8 +6,8 @@ public class AbstractTabCreator : AbstractLoaderTemplate
 {
     protected ITab _useTab;
 
-    public void CreateSimpleTradeTab(VisualElement container , SlotType slotType, bool isDragged = false)
+    public void CreateSimpleTradeTab(VisualElement container , SlotType slotType, int countSlots , bool isDragged = false)
     {
-        _useTab = new TradeTab("SimpleTan", 96, container, new VisualElement(), true, slotType, isDragged);
+        _useTab = new TradeTab("SimpleTan", countSlots, container, new VisualElement(), true, slotType, isDragged);
     }
 }

@@ -17,7 +17,7 @@ public class TradingSlot : L2DraggableSlot
         _empty = true;
     }
 
-    public void AssignItem(ItemInstance item)
+    public void AssignItem(ItemInstance item, bool isDisabled = false)
     {
         _slotElement.RemoveFromClassList("empty");
         _data.RefreshData(item);
@@ -25,6 +25,7 @@ public class TradingSlot : L2DraggableSlot
         _empty = false;
 
         if (_model != null && _slotDragManipulator != null) SetDragged(_model.isDragged);
+        SetDisabled(_slotDisabled , isDisabled);
 
         if (_slotElement != null)
         {
@@ -33,6 +34,21 @@ public class TradingSlot : L2DraggableSlot
         else
         {
             Debug.LogWarning("TradingSlot> AssignItem: Не критическая ошибка не смогли найти TradingSlotModel>SlotElement");
+        }
+    }
+
+    public void SetDisabled(VisualElement slotDisabled , bool isDisabled)
+    {
+        if(slotDisabled != null)
+        {
+            if (!isDisabled)
+            {
+                slotDisabled.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                slotDisabled.style.display = DisplayStyle.Flex;
+            }
         }
     }
 
@@ -63,6 +79,7 @@ public class TradingSlot : L2DraggableSlot
     {
         _empty = true;
         _data.ResetData();
+        SetDisabled(_slotDisabled, false);
 
         if (_slotElement != null)
         {

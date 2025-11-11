@@ -67,6 +67,13 @@ public class ItemInstance : AbstractServerItem
 
         //Debug.Log(this.ToString());
     }
+
+    public ItemInstance(int itemId, int count, int position)
+      : this(-1, itemId, ItemLocation.Void, position, count, ItemCategory.Item, false, ItemSlot.none, 0, -1)
+    {
+
+    }
+
     public void SetSlot(int slot)
     {
         _slot = slot;

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class RecipeItemMakeInfo : ServerPacket
 {
@@ -8,9 +10,13 @@ public class RecipeItemMakeInfo : ServerPacket
     private int _currentMp;
     private int _maxMp;
     private int _status;
-
-    // Публичные геттеры
+    private RecipeData _data;
+    private List<ItemInstance> _requiredItems;
     public int RecipeId => _recipeId;
+
+    public RecipeData RecipeData => _data;
+
+    public List<ItemInstance>  RequiredItems => _requiredItems;
     public bool IsDwarvenRecipe => _isDwarven == 0;
     public int CurrentMp => _currentMp;
     public int MaxMp => _maxMp;
@@ -18,6 +24,7 @@ public class RecipeItemMakeInfo : ServerPacket
 
     public RecipeItemMakeInfo(byte[] data) : base(data)
     {
+        _requiredItems = new List<ItemInstance>();
         Parse();
     }
 
@@ -25,12 +32,30 @@ public class RecipeItemMakeInfo : ServerPacket
     {
         try
         {
-            // OpCode (0xD7) уже должен быть прочитан базовым классом
+            
             _recipeId = ReadI();
             _isDwarven = ReadI();
             _currentMp = ReadI();
             _maxMp = ReadI();
             _status = ReadI();
+
+            _data = RecipeTable.Instance.GetRecipeData(_recipeId);
+            if(_data != null)
+            {
+                RecipeMaterials[] materials = _data.Materials;
+
+                for(int i=0; i < materials.Length; i++)
+                {
+                    RecipeMaterials material = materials[i];
+
+                    if(material != null && material.MaterialsMCnt > 0)
+                    {
+                        _requiredItems.Add(new ItemInstance(-1, material.MaterialsMId, ItemLocation.Void, i, material.MaterialsMCnt, ItemCategory.Item, false, ItemSlot.none, 0, -1));
+                    }
+
+                }
+            }
+
         }
         catch (Exception ex)
         {

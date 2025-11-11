@@ -16,6 +16,7 @@ public class RecipeTable
     private int _indexItemId = 4;
     private int _indexCount = 5;
     private int _indexMpCost = 6;
+    private int _indexSuccesRate = 7;
     public static RecipeTable Instance
     {
         get
@@ -96,7 +97,7 @@ public class RecipeTable
         recipe.ItemId = Int32.Parse(ids[_indexItemId]);
         recipe.Count = Int32.Parse(ids[_indexCount]);
         recipe.MpCost = Int32.Parse(ids[_indexMpCost]);
-
+        recipe.SuccessRate = Int32.Parse(ids[_indexSuccesRate]);
 
         // Set materials with bounds checking
         SetMaterialSafely(0, recipe, ids);

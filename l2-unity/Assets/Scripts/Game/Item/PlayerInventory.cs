@@ -77,6 +77,14 @@ public class PlayerInventory : MonoBehaviour
         return null;
     }
 
+    public ItemInstance GetItemByItemId(int itemId)
+    {
+        if (_playerInventory == null) return null;
+
+        return _playerInventory.Values.FirstOrDefault(item => item.ItemId == itemId);
+    }
+
+
     public bool IsItemEquipByItemId(int itemId)
     {
         foreach (var item in _playerEquipInventory)

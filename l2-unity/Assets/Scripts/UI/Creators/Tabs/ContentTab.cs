@@ -21,7 +21,7 @@ public class ContentTab : AbstractTab , ITab
         return _contentContainer;
     }
 
-    public void AddDataTrade(List<ItemInstance> allItems)
+    public void AddDataTrade(List<ItemInstance> allItems, bool isInventory = false)
     {
         throw new NotImplementedException();
     }
