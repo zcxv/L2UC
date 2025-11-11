@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using static L2Slot;
+using static UnityEditor.Progress;
 
 
 public class TradeTab : AbstractTab, ITab
@@ -59,13 +60,35 @@ public class TradeTab : AbstractTab, ITab
         }
     }
 
-    public void AddDataTrade(List<ItemInstance> allItems)
+    public void AddDataTrade(List<ItemInstance> allItems , bool checkInventory = false)
     {
         for (int i = 0; i < allItems.Count; i++)
         {
             ItemInstance item = allItems[i];
             item.SetSlot(i);
-            _tradeSlots[i].AssignItem(item);
+            Assign(item, checkInventory, i);
+
+        }
+    }
+
+    private void Assign(ItemInstance item , bool checkInventory,  int position)
+    {
+
+        if (!checkInventory)
+        {
+            _tradeSlots[position].AssignItem(item);
+            return;
+        }
+
+        ItemInstance inventoryItem = PlayerInventory.Instance.GetItemByItemId(item.ItemId);
+
+        if (inventoryItem != null && inventoryItem.Count >= item.Count)
+        {
+            _tradeSlots[position].AssignItem(item , false);
+        }
+        else
+        {
+            _tradeSlots[position].AssignItem(item, true);
         }
     }
 

@@ -1096,6 +1096,7 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
 
             EventProcessor.Instance.QueueEvent(() => {
                 RecipeBookWindow.Instance.HideWindow();
+                CraftingItemWindow.Instance.AddData(packet);
                 CraftingItemWindow.Instance.ShowWindow();
             });
         }
