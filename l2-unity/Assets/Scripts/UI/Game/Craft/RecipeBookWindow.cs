@@ -117,6 +117,5 @@ public class RecipeBookWindow : L2PopupWindow
     public ItemInstance GetRecipeInstanceByPosition(int position)
     {
         return   _packet.ListRecipes.FirstOrDefault(x => x.GetPosition() == position + 1)?.GetRecipeItemInstance();
-
     }
 }

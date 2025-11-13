@@ -52,4 +52,9 @@ public class ContentTab : AbstractTab , ITab
     {
         throw new NotImplementedException();
     }
+
+    public void ClearAllSlots()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -16,6 +16,7 @@ public class CreatorSimpleTrade : AbstractTabCreator, ICreatorSimpleTrade
     {
         if(allItems != null)
         {
+            _useTab.ClearAllSlots();
             _useTab.AddDataTrade(allItems , checkInventory);
         }
 

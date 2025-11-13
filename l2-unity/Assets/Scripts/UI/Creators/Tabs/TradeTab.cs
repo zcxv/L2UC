@@ -67,7 +67,6 @@ public class TradeTab : AbstractTab, ITab
             ItemInstance item = allItems[i];
             item.SetSlot(i);
             Assign(item, checkInventory, i);
-
         }
     }
 
@@ -116,6 +115,28 @@ public class TradeTab : AbstractTab, ITab
         }
 
         return null;
+    }
+
+   
+    public void ClearAllSlots()
+    {
+        if (_tradeSlots == null) return;
+
+   
+        if (_selectedSlot != -1 && ArrayUtils.IsValidIndexArray(_tradeSlots, _selectedSlot))
+        {
+            _tradeSlots[_selectedSlot].UnSelect();
+            _selectedSlot = -1;
+        }
+
+     
+        for (int i = 0; i < _tradeSlots.Length; i++)
+        {
+            if (_tradeSlots[i] != null)
+            {
+                _tradeSlots[i].AssignEmpty();
+            }
+        }
     }
 
     public void SelectSlot(int slotPosition)

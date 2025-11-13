@@ -5,7 +5,7 @@ public class DataProviderCraftItem : AbstractDataFunction
 {
 
 
-    public void SetDataInfo(VisualElement container, ItemInstance itemInstance , int mpData , int successRate)
+    public void SetDataInfo(VisualElement container, ItemInstance itemInstance , RecipeData recipeData)
     {
         if (container != null)
         {
@@ -15,6 +15,10 @@ public class DataProviderCraftItem : AbstractDataFunction
             //labelChanceData
             //labelReceiveData
             //labellQuantityData
+
+            int rate = recipeData.SuccessRate;
+            int mpCost = recipeData.MpCost;
+
 
             IDataTips text = ToolTipManager.GetInstance().GetProductText(itemInstance);
 
@@ -31,11 +35,11 @@ public class DataProviderCraftItem : AbstractDataFunction
             Label labelName = container.Q<Label>("labelName");
             AddElementIfNotEmpty(labelName, labelName, name);
 
-            string mp = mpData.ToString();
+            string mp = mpCost.ToString();
             Label labelMpData = container.Q<Label>("labelMpData");
             AddElementIfNotEmpty(labelMpData, labelMpData, mp);
 
-            string chance = successRate + "%";
+            string chance = rate + "%";
             Label labelChanceData = container.Q<Label>("labelChanceData");
             AddElementIfNotEmpty(labelChanceData, labelChanceData, chance);
 

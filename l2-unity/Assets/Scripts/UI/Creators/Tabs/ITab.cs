@@ -15,6 +15,8 @@ public interface ITab
 
     void ClearSlots(List<ItemInstance> oldListItems);
 
+   void  ClearAllSlots();
+
     void AddDataTrade(List<ItemInstance> allItems, bool isInventory = false);
     ItemInstance GetSlotByPosition(int position);
 

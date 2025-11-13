@@ -16,15 +16,13 @@ using static UnityEditor.Progress;
 public class EnchantWindow : L2PopupWindow
 {
     private static EnchantWindow _instance;
-    private VisualElement _content;
     private VisualTreeAsset _inventorySlotTemplate;
     private VisualTreeAsset _inventorySlotChoiceTemplate;
     private VisualElement _slot1;
     private VisualElement _slot2;
-    private VisualElement _itemBox;
     private VisualElement _progressBar;
     private Label _textLabel;
-    private String _defaultTextLabel = "Please place the item to be enchanted in the empty slot below.";
+    private const string _defaultTextLabel = "Please place the item to be enchanted in the empty slot below.";
     private VisualElement _progressBarBg;
     private VisualElement _animElement;
     private List<Texture2D> _loadingAnimWaitPng;
@@ -35,7 +33,7 @@ public class EnchantWindow : L2PopupWindow
     private float _moveDuration = 1.5f;
     private float offsetLeft2 = 76;//default offset element2
     private float offsetLeft1 = 0;//default offset element2
-    private EtcItemgrp _useScroll;
+   // private EtcItemgrp _useScroll;
     private EnchantSlot _enchant1;
     private EnchantSlot _enchant2;
     private ItemInstance _selectItem;
@@ -117,7 +115,7 @@ public class EnchantWindow : L2PopupWindow
 
         _slot1 = GetElementById("slot1");
         _slot2 = GetElementById("slot2");
-        _itemBox = GetElementById("itemBox");
+        //_itemBox = GetElementById("itemBox");
         InitSlotElement1(_slot1);
         InitSlotElement2(_slot2);
         OnCenterScreen(root);
@@ -227,7 +225,7 @@ public class EnchantWindow : L2PopupWindow
         while (index <= endValue)
         {
             index = index + 7;
-            UpdatePb(_progressBarBg, _progressBar, endValue, index, endValue);
+            ProgressBarUtils.UpdatePb(_progressBarBg, _progressBar, endValue, index, endValue);
             float delayPerIteration = _moveDuration / endValue * 1000;
             await Task.Delay((int)delayPerIteration);
         }
@@ -235,15 +233,7 @@ public class EnchantWindow : L2PopupWindow
         _isRun = false ;
     }
 
-    private void UpdatePb(VisualElement pbBg, VisualElement pbGauge, float bgWidth, float currentData, float maxData)
-    {
-        if (pbBg != null && pbGauge != null)
-        {
-            double hpRatio = (currentData / maxData); 
-            double barWidth = bgWidth * (1 - hpRatio); 
-            pbGauge.style.width = Convert.ToSingle(barWidth);
-        }
-    }
+
 
 
 
@@ -346,8 +336,8 @@ public class EnchantWindow : L2PopupWindow
         var itemInstance = PlayerInventory.Instance.GetItem(_selectItem.ObjectId);
         if (itemInstance != null && itemInstance.EnchantLevel > 0)
         {
-            StorageVariable.getInstance().AddS1Items(new VariableItem(itemInstance.Count.ToString(), itemInstance.ObjectId));
-            StorageVariable.getInstance().AddS2Items(new VariableItem(itemInstance.ItemData.ItemName.Name, itemInstance.ObjectId));
+            //StorageVariable.getInstance().AddS1Items(new VariableItem(itemInstance.Count.ToString(), itemInstance.ObjectId));
+            //StorageVariable.getInstance().AddS2Items(new VariableItem(itemInstance.ItemData.ItemName.Name, itemInstance.ObjectId));
         }
     }
 

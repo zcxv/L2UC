@@ -17,7 +17,7 @@ public class RecipeItemMakeInfo : ServerPacket
     public RecipeData RecipeData => _data;
 
     public List<ItemInstance>  RequiredItems => _requiredItems;
-    public bool IsDwarvenRecipe => _isDwarven == 0;
+    public int IsDwarvenRecipe => _isDwarven;
     public int CurrentMp => _currentMp;
     public int MaxMp => _maxMp;
     public int CraftStatus => _status;
@@ -44,13 +44,15 @@ public class RecipeItemMakeInfo : ServerPacket
             {
                 RecipeMaterials[] materials = _data.Materials;
 
-                for(int i=0; i < materials.Length; i++)
+                for(int i = 0; i < materials.Length; i++)
                 {
                     RecipeMaterials material = materials[i];
 
                     if(material != null && material.MaterialsMCnt > 0)
                     {
-                        _requiredItems.Add(new ItemInstance(-1, material.MaterialsMId, ItemLocation.Void, i, material.MaterialsMCnt, ItemCategory.Item, false, ItemSlot.none, 0, -1));
+                        var item = new ItemInstance(-1, material.MaterialsMId, ItemLocation.Void, i, material.MaterialsMCnt, ItemCategory.RequiredItem, false, ItemSlot.none, 0, -1);
+                        item.SetItemRequiredType(true, material.MaterialsMCnt);
+                        _requiredItems.Add(item);
                     }
 
                 }
@@ -70,7 +72,7 @@ public class RecipeItemMakeInfo : ServerPacket
 
     public override string ToString()
     {
-        return $"[RecipeItemMakeInfo] RecipeId: {_recipeId}, Type: {(IsDwarvenRecipe ? "Dwarven" : "Common")}, " +
+        return $"[RecipeItemMakeInfo] RecipeId: {_recipeId}, Type: {(IsDwarvenRecipe)}, " +
                $"MP: {_currentMp}/{_maxMp}, Status: {_status}";
     }
 }
