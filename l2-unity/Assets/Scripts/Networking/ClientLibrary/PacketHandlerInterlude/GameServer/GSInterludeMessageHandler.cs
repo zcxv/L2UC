@@ -13,18 +13,18 @@ using static UnityEngine.Rendering.DebugUI;
 public class GSInterludeMessageHandler : ServerPacketHandler
 {
 
-    private ConcurrentDictionary<int, SystemMessage> _delayMessage;
+    //private ConcurrentDictionary<int, SystemMessage> _delayMessage;
     private ManualResetEvent _ewh = new ManualResetEvent(false);
     private static CancellationTokenSource _cancelTokenSource;
     private static CancellationToken _token;
     public GSInterludeMessageHandler()
     {
-        _delayMessage = new ConcurrentDictionary<int, SystemMessage>();
+        //_delayMessage = new ConcurrentDictionary<int, SystemMessage>();
         _ewh = new ManualResetEvent(false);
         _cancelTokenSource = new CancellationTokenSource();
         _token = _cancelTokenSource.Token;
         StorageVariable.getInstance().SetManualMessage(_ewh);
-        WaitDelayMessage();
+       // WaitDelayMessage();
     }
     public override void HandlePacket(IData itemQueue)
     {
@@ -121,20 +121,20 @@ public class GSInterludeMessageHandler : ServerPacketHandler
 
         if (messageData != null)
         {
-            if(messageData.Id == (int)StorageVariable.MessageID.ADD_INVENTORY 
-            | messageData.Id == (int)StorageVariable.MessageID.ADD_EXP_SP
-            | messageData.Id == (int)StorageVariable.MessageID.USE_SKILL)
-            {
-                SystemMessage systemMessage = new SystemMessage(smParams, messageData);
-                if (!_delayMessage.ContainsKey(messageData.Id))
-                {
+            //if(messageData.Id == (int)StorageVariable.MessageID.ADD_INVENTORY 
+            //| messageData.Id == (int)StorageVariable.MessageID.ADD_EXP_SP
+            //| messageData.Id == (int)StorageVariable.MessageID.USE_SKILL)
+            //{
+               // SystemMessage systemMessage = new SystemMessage(smParams, messageData);
+               // if (!_delayMessage.ContainsKey(messageData.Id))
+               // {
                     
-                    _delayMessage.TryAdd(messageData.Id, systemMessage);
-                }
+                //    _delayMessage.TryAdd(messageData.Id, systemMessage);
+               // }
                 
-            }
-            else
-            {
+           // }
+           // else
+            //{
                 SystemMessage systemMessage = new SystemMessage(smParams, messageData);
 
                 
@@ -143,7 +143,7 @@ public class GSInterludeMessageHandler : ServerPacketHandler
                     ChatWindow.Instance.ReceiveSystemMessage(systemMessage);
                 });
                 //EventProcessor.Instance.QueueEvent(() => ChatWindow.Instance.ReceiveSystemMessage(systemMessage));
-            }
+           // }
            
         }
         else
@@ -176,8 +176,6 @@ public class GSInterludeMessageHandler : ServerPacketHandler
                     SkillNameData sNameData = SkillNameTable.Instance.GetName(skillId, skilllvl);
                     string text = messageData.AddSkillName(sNameData.Name);
 
-
-
                     EventProcessor.Instance.QueueEvent(() => SystemMessageWindow.Instance.ShowWindow(text));
                 }
           
@@ -189,56 +187,55 @@ public class GSInterludeMessageHandler : ServerPacketHandler
 
    
 
-    public void WaitDelayMessage()
-    {
+    //public void WaitDelayMessage()
+   // {
 
-        Task.Run(() =>
-        {
-            int exit = 0;
-            while (true)
-            {
-                _ewh.WaitOne();
-                Debug.Log("DELAAAAAAAAAY MESSSSSSSSSSAAAAAAAAGEEEEEEE ");
-                if (_token.IsCancellationRequested)
-                {
-                    break;
-                }
+      //  Task.Run(() =>
+      //  {
+          //  int exit = 0;
+          //  while (true)
+          //  {
+              //  _ewh.WaitOne();
+              //  Debug.Log("DELAAAAAAAAAY MESSSSSSSSSSAAAAAAAAGEEEEEEE ");
+              //  if (_token.IsCancellationRequested)
+              //  {
+              //  }
 
-                if(exit == 300)
-                {
-                    Block();
-                }
-                Thread.Sleep(10);
-                if (_delayMessage.Count > 0)
-                {
-                    int messageId = StorageVariable.getInstance().GetMessageIdResume();
+              //  if(exit == 300)
+              //  {
+               //     Block();
+               // }
+               // Thread.Sleep(10);
+               // if (_delayMessage.Count > 0)
+              //  {
+                    //int messageId = StorageVariable.getInstance().GetMessageIdResume();
 
                     //SystemMessage messageDelay;
-                    SystemMessage messageDelay = _delayMessage[messageId];
-                    if (messageDelay != null)
-                    {
-                        SystemMessageDat newText = SystemMessageTable.Instance.GetSystemMessage(messageDelay.MessageDat.Id);
-                        SystemMessage newMessage = new SystemMessage(messageDelay.Params, newText);
-                        EventProcessor.Instance.QueueEvent(() => ChatWindow.Instance.ReceiveSystemMessage(newMessage));
-                        _delayMessage.Remove(messageId , out messageDelay);
+                    //SystemMessage messageDelay = _delayMessage[messageId];
+                    //if (messageDelay != null)
+                    //{
+                        //SystemMessageDat newText = SystemMessageTable.Instance.GetSystemMessage(messageDelay.MessageDat.Id);
+                       // SystemMessage newMessage = new SystemMessage(messageDelay.Params, newText);
+                        //EventProcessor.Instance.QueueEvent(() => ChatWindow.Instance.ReceiveSystemMessage(newMessage));
+                        //_delayMessage.Remove(messageId , out messageDelay);
                         //Debug.Log("Выведено на экран и удалено!" + messageId);
-                        exit = 0;
-                        Block();
-                    }
-                    else
-                    {
-                        Debug.Log("GSInterludeMessageHandler DelayMessage: Ждем сообщения для вывода на экран!!! ");
-                    }
-                }
-                else
-                {
-                    Block();
-                }
+                       // exit = 0;
+                       // Block();
+                   // }
+                   // else
+                   // {
+                    //    Debug.Log("GSInterludeMessageHandler DelayMessage: Ждем сообщения для вывода на экран!!! ");
+                  //  }
+               // }
+              //  else
+              //  {
+                  //  Block();
+              //  }
 
-                exit++;
-            }
-        });
-    }
+             //   exit++;
+          //  }
+      //  });
+   // }
 
  
     private void Block()

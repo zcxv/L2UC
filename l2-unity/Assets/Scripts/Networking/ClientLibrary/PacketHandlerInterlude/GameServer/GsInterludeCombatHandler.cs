@@ -174,8 +174,8 @@ public class GsInterludeCombatHandler : ServerPacketHandler
         SkillNameData skillData = SkillNameTable.Instance.GetName(skillId, skillLvl);
         if (skillData != null)
         {
-            StorageVariable.getInstance().AddS1Items(new VariableItem(skillData.Name, skillId));
-            StorageVariable.getInstance().ResumeShowDelayMessage((int)MessageID.USE_SKILL);
+            //StorageVariable.getInstance().AddS1Items(new VariableItem(skillData.Name, skillId));
+            //StorageVariable.getInstance().ResumeShowDelayMessage((int)MessageID.USE_SKILL);
         }
     }
 

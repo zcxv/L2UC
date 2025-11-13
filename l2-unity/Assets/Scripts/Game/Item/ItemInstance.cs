@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using static UnityEditor.Progress;
 
@@ -16,6 +17,8 @@ public class ItemInstance : AbstractServerItem
     [SerializeField] private int _enchantLevel;
     [SerializeField] private long _remainingTime;
     [SerializeField] private int _lastChange;
+    private bool  _requiredItems = false;
+    private int  _requiredCount = 0;
 
     public AbstractItem ItemData { get { return _itemData; } }
     public int ObjectId { get { return _objectId; } }
@@ -44,7 +47,14 @@ public class ItemInstance : AbstractServerItem
         _remainingTime = remainingTime;
         _enchantLevel = enchantLevel;
 
+        SetItemData(category, bodyPart);
 
+
+        //Debug.Log(this.ToString());
+    }
+
+    private void SetItemData(ItemCategory category , ItemSlot bodyPart)
+    {
         if (_category == ItemCategory.Weapon)
         {
             _itemData = ItemTable.Instance.GetWeapon(_itemId);
@@ -64,14 +74,17 @@ public class ItemInstance : AbstractServerItem
         {
             _itemData = ItemTable.Instance.GetEtcItem(_itemId);
         }
-
-        //Debug.Log(this.ToString());
     }
 
     public ItemInstance(int itemId, int count, int position)
       : this(-1, itemId, ItemLocation.Void, position, count, ItemCategory.Item, false, ItemSlot.none, 0, -1)
     {
 
+    }
+
+    public int GetPosition()
+    {
+        return _slot;
     }
 
     public void SetSlot(int slot)
@@ -95,6 +108,17 @@ public class ItemInstance : AbstractServerItem
         _equipped = newItem.Equipped;
         _objectId = newItem.ObjectId;
         _bodyPart = newItem.BodyPart;
+    }
+
+    public void SetItemRequiredType(bool isRequired , int count)
+    {
+        _requiredItems = isRequired;
+        _requiredCount = count;
+    }
+
+    public int GetRequiredCount()
+    {
+        return _requiredCount;
     }
 
     public override string ToString()
@@ -200,6 +224,7 @@ public class ItemInstance : AbstractServerItem
             case ItemCategory.Jewel:
             case ItemCategory.Item:
             case ItemCategory.Adena:
+            case ItemCategory.RequiredItem:
                 return ItemNameTable.Instance.GetItemName(_itemId).Name;
 
             default:
@@ -221,11 +246,7 @@ public class ItemInstance : AbstractServerItem
             if(armor != null) return GetGradeImage(armor.Grade);
             if(weapon != null) return GetGradeImage(weapon.Grade);
         }
-       // else if (Category == ItemCategory.Jewel)
-        //{
-          //  EtcItemgrp etc =  EtcItemgrpTable.Instance.GetEtcItem(_itemId);
-          //  return GetGradeImage(etc.Grade);
-        //}
+
         return null;
     }
 
@@ -233,37 +254,6 @@ public class ItemInstance : AbstractServerItem
     {
         return _itemData.Itemgrp.Grade;
     }
-    private Texture2D GetGradeImage(ItemGrade grade)
-    {
-        switch (grade)
-        {
-            case ItemGrade.none:
-                return null;
-
-            case ItemGrade.d:
-                return IconManager.Instance.GetInterfaceIcon("grade_d");
-
-            case ItemGrade.c:
-                return IconManager.Instance.GetInterfaceIcon("grade_c");
-
-            case ItemGrade.b:
-                return IconManager.Instance.GetInterfaceIcon("grade_b");
-
-            case ItemGrade.a:
-                return IconManager.Instance.GetInterfaceIcon("grade_a");
-
-            case ItemGrade.s:
-                return IconManager.Instance.GetInterfaceIcon("grade_s");
-
-            default:
-                return null;
-        }
-    }
-
-
-
-
-
 
 
 }

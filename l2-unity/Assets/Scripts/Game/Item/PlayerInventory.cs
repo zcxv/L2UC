@@ -292,8 +292,8 @@ public class PlayerInventory : MonoBehaviour
             if (!item.Equipped)
             {
                 
-                StorageVariable.getInstance().AddS1Items(new VariableItem(item.Count.ToString(), item.ObjectId));
-                StorageVariable.getInstance().AddS2Items(new VariableItem(item.ItemData.ItemName.Name, item.ObjectId));
+               // StorageVariable.getInstance().AddS1Items(new VariableItem(item.Count.ToString(), item.ObjectId));
+               // StorageVariable.getInstance().AddS2Items(new VariableItem(item.ItemData.ItemName.Name, item.ObjectId));
                 AddInventory(item); 
             }
         }
@@ -304,8 +304,8 @@ public class PlayerInventory : MonoBehaviour
             int count = item.Count - oldItem.Count;
             item.SetSlot(oldItem.Slot);
             
-            StorageVariable.getInstance().AddS1Items(new VariableItem(count.ToString(), item.ObjectId));
-            StorageVariable.getInstance().AddS2Items(new VariableItem(item.ItemData.ItemName.Name, item.ObjectId));
+            //StorageVariable.getInstance().AddS1Items(new VariableItem(count.ToString(), item.ObjectId));
+           // StorageVariable.getInstance().AddS2Items(new VariableItem(item.ItemData.ItemName.Name, item.ObjectId));
             oldItem.Update(item);
         }
     }
@@ -530,8 +530,8 @@ public class PlayerInventory : MonoBehaviour
     {
        // if (item.Category == ItemCategory.Item)
        // {
-            StorageVariable.getInstance().AddS1Items(new VariableItem(item.ItemData.ItemName.Name, item.ObjectId));
-            StorageVariable.getInstance().AddS2Items(new VariableItem(item.Count.ToString(), item.ObjectId));
+           // StorageVariable.getInstance().AddS1Items(new VariableItem(item.ItemData.ItemName.Name, item.ObjectId));
+           // StorageVariable.getInstance().AddS2Items(new VariableItem(item.Count.ToString(), item.ObjectId));
        // }
        // else
        // {
@@ -549,7 +549,7 @@ public class PlayerInventory : MonoBehaviour
         {
 
             ItemInstance item = _playerInventory[objectId];
-            getInstance().AddS1Items(new VariableItem(item.ItemData.ItemName.Name, objectId));
+            //getInstance().AddS1Items(new VariableItem(item.ItemData.ItemName.Name, objectId));
             //AudioManager.Instance.PlayEquipSound("trash_basket");
             var sendPaket = CreatorPacketsUser.CreateDestroyItem(objectId, quantity);
             bool enable = GameClient.Instance.IsCryptEnabled();

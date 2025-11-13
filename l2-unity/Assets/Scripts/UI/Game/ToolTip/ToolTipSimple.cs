@@ -24,6 +24,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
     private VisualTreeAsset _windowTemplateSimple;
     private VisualTreeAsset _windowTemplateString;
     private VisualTreeAsset _windowTemplateAcccesories;
+    private VisualTreeAsset _windowTemplateRequiredAcccesories;
     private VisualTreeAsset _windowTemplateArmor;
     private VisualTreeAsset _setsElements;
     private VisualTreeAsset _setsEffects;
@@ -61,6 +62,7 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         _windowTemplateSimple = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipSimple");
         _windowTemplateWeapon = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipWeapon");
         _windowTemplateAcccesories = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipAccessories");
+        _windowTemplateRequiredAcccesories = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipRequiredAccessories");
         _windowTemplateArmor = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipArmor");
         _windowTemplateSkill = LoadAsset("Data/UI/_Elements/Game/ToolTips/ToolTipSkill");
         _setsElements = LoadAsset("Data/UI/_Elements/Game/ToolTips/Elements/SetsElements");
@@ -153,6 +155,9 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                 break;
             case ItemCategory.Item:
                 _dataProvider.AddDataOther(template, item);
+                break;
+            case ItemCategory.RequiredItem:
+                _dataProvider.AddRequiredData(template, item);
                 break;
             case ItemCategory.ShieldArmor:
                 _dataProvider.AddDataArmor(template, item, _setsElements, _setsEffects);
@@ -312,6 +317,10 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                     ItemInstance receiptInstance = RecipeBookWindow.Instance.GetRecipeInstanceByPosition(position);
                     if (receiptInstance != null) return GetInventoryContainer(receiptInstance);
                     break;
+                case (int)SlotType.RecipeCraftItem:
+                    ItemInstance requiredItem = CraftingItemWindow.Instance.GetRequiredInstanceByPosition(position);
+                    if (requiredItem != null) return GetInventoryContainer(requiredItem);
+                    break;
                 case (int)SlotType.Gear:
                     GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
                     return GetGearContainer(gearItem);
@@ -337,6 +346,8 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
                 case (int)SlotType.Multisell:
                     return SwitchToString();
                 case (int)SlotType.Recipe:
+                    return SwitchToString();
+                case (int)SlotType.RecipeCraftItem:
                     return SwitchToString();
                 case (int)SlotType.Gear:
                     GearItem gearItem = InventoryWindow.Instance.GetGearPosition(position);
@@ -379,6 +390,8 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
             case ItemCategory.Jewel:
             case ItemCategory.Item:
                 return SwitchToAccessories();
+            case ItemCategory.RequiredItem:
+                return SwitchToRequiredAccessories();
             case ItemCategory.ShieldArmor:
                 return SwitchToArmor();
         }
@@ -493,7 +506,8 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
 
             case SlotType.Recipe:
                 return RecipeBookWindow.Instance.GetRecipeInstanceByPosition(position);
-
+            case SlotType.RecipeCraftItem:
+                return CraftingItemWindow.Instance.GetRequiredInstanceByPosition(position);
             case SlotType.SkillWindow:
                 return SkillListWindow.Instance.GetSkillInstanceBySkillId(position);
 
@@ -560,6 +574,16 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
     {
         _content.Clear();
         var _accessories = _windowTemplateAcccesories.CloneTree();
+        _content.Add(_accessories);
+        _contentInside = _accessories.Q<VisualElement>(className: "content");
+        _contentInside.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+        return _accessories;
+    }
+
+    private TemplateContainer SwitchToRequiredAccessories()
+    {
+        _content.Clear();
+        var _accessories = _windowTemplateRequiredAcccesories.CloneTree();
         _content.Add(_accessories);
         _contentInside = _accessories.Q<VisualElement>(className: "content");
         _contentInside.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
@@ -647,6 +671,10 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
             case (int)SlotType.Recipe:
                 ItemInstance recipeInstance = RecipeBookWindow.Instance.GetRecipeInstanceByPosition(position);
                 SetSimpleItemSingleToolTip(recipeInstance, template);
+                break;
+            case (int)SlotType.RecipeCraftItem:
+                ItemInstance requiredItem = CraftingItemWindow.Instance.GetRequiredInstanceByPosition(position);
+                SetSimpleRequireditemToolTip(requiredItem, template);
                 break;
             case (int)SlotType.SkillWindow:
                 int skillId = position;
@@ -762,7 +790,26 @@ public class ToolTipSimple : L2PopupWindow, IToolTips
         }
     }
 
+    public void SetSimpleRequireditemToolTip(ItemInstance item, TemplateContainer template)
+    {;
+        SetSimpleItemSingleToolTip(item, template);
+        SetNameRequiredItem(item, template);
 
+    }
+    public void SetNameRequiredItem(ItemInstance item, TemplateContainer template)
+    {
+        if(item != null)
+        {
+            IDataTips data = ToolTipManager.GetInstance().GetProductText(item);
+            ItemInstance inventoryItem = PlayerInventory.Instance.GetItemByItemId(item.ItemId);
+            Label nameText = (Label)template.Q<VisualElement>("name");
+            if(nameText != null) nameText.text = data.GetName(true);
+
+
+
+        }
+
+    }
 
     private void SetImageElement(VisualElement element , Texture2D texture)
     {
