@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class Gear : MonoBehaviour {
     [Header("Meta")]
     [SerializeField] private Weapon _rightHandWeapon;
     [SerializeField] private Weapon _leftHandWeapon;
+
+
     [Header("Models")]
     [Header("Right hand")]
     [SerializeField] private WeaponType _rightHandType;
@@ -72,13 +75,22 @@ public class Gear : MonoBehaviour {
         go.SetActive(false);
         go.transform.name = "weapon";
 
-        if (weapon.Weapongrp.WeaponType == WeaponType.none) {
+
+
+        if (weapon.Weapongrp.WeaponType == WeaponType.none)
+        {
             go.transform.SetParent(GetShieldBone(), false);
-        } else if (weapon.Weapongrp.WeaponType == WeaponType.bow) {
+        }
+        else if (weapon.Weapongrp.WeaponType == WeaponType.bow)
+        {
             go.transform.SetParent(GetLeftHandBone(), false);
-        } else if (leftSlot) {
+        }
+        else if (leftSlot)
+        {
             go.transform.SetParent(GetLeftHandBone(), false);
-        } else {
+        }
+        else
+        {
             go.transform.SetParent(GetRightHandBone(), false);
         }
 
@@ -117,18 +129,15 @@ public class Gear : MonoBehaviour {
         return VectorUtils.ConvertL2jDistance(_weaponRange);
     }
 
-        
-    protected virtual void UnequipWeapon(bool leftSlot) {
-        Transform weapon;
-        if (leftSlot) {
-            weapon = GetLeftHandBone().Find("weapon");
-        } else {
-            weapon = GetRightHandBone().Find("weapon");
-        }
 
-        if (weapon != null) {
+    protected virtual void UnequipWeapon(bool leftSlot)
+    {
+        Transform weapon = (leftSlot ? GetLeftHandBone() : GetRightHandBone())?.Find("weapon");
+        if (weapon != null)
+        {
             Debug.LogWarning("Unequip weapon");
-            Destroy(weapon);
+            Destroy(weapon.gameObject);
         }
     }
+
 }

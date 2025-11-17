@@ -75,28 +75,18 @@ public class GsInterludeCombatHandler : ServerPacketHandler
         {
             var _items = itemList.Items;
             var showWindow = itemList.ShowWindow;
-
-            //_synchronizationContext.Post(_ =>
-            //{
-
-            //}, null);
-            //Debug.Log("������ ����� IntelList");
             PlayerInventory.Instance.SetInventory(_items, itemList.EquipItems, showWindow, itemList.AdenaCount , itemList.Items.Count + itemList.EquipItems.Count);
-
-            
         }
 
     }
 
     private void OnInventoryUpdate(byte[] data)
     {
-        //Debug.Log(" Inventory Update Server Get ");
         if (!InitPacketsLoadWord.getInstance().IsInit)
         {
             InventoryUpdate packet = new InventoryUpdate(data);
             PlayerInventory.Instance.UpdateInventory(packet.Items, packet.EquipItems);
         }
-  
     }
 
     private void OnChooseInventoryItem(byte[] data)
