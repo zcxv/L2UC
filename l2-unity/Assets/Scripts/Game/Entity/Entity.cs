@@ -264,4 +264,9 @@ public class Entity : MonoBehaviour {
     {
         Running = running;
     }
+
+    public void EquipWeapon(int weaponId , bool isLeftHand)
+    {
+        _gear.EquipWeapon(weaponId, isLeftHand);
+    }
 }

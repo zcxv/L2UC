@@ -23,15 +23,15 @@ public class StorageItems
     }
     public void AddShortCuts(List<Shortcut> shortCuts)
     {
-        lock (_sync)
-        {
+       // lock (_sync)
+       // {
             if (this.shortCuts != null)
             {
                 this.shortCuts.Clear();
             }
 
             this.shortCuts = shortCuts;
-        }
+       // }
        
     }
     public void AddItems(Dictionary<int, ItemInstance> itemsParce)

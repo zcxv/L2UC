@@ -134,7 +134,7 @@ public class PlayerInventory : MonoBehaviour
     {
         _instance = null;
     }
-
+    private UserInfo _currentUser;
     public void SetInventory(Dictionary<int, ItemInstance> items, Dictionary<int, ItemInstance> equipItems , bool openInventory , int adenaCount , int usedSlot)
     {
         _playerInventory = items;
@@ -144,13 +144,15 @@ public class PlayerInventory : MonoBehaviour
         List<ItemInstance> equip_collect = _playerEquipInventory.Values.ToList();
 
         //if (_playerEquipInventory != null)
-       //{
+        //{
         //    equip_collect = _playerEquipInventory.Values.ToList();
-       // }
+        // }
+        if (_currentUser == null) _currentUser = StorageNpc.getInstance().GetFirstUser();
+        int userId1 = _currentUser.PlayerInfoInterlude.Identity.Id;
 
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-            InventoryWindow.Instance.SetItemList(items_collect, equip_collect, adenaCount , usedSlot);
+            InventoryWindow.Instance.SetItemList(items_collect, equip_collect, adenaCount , usedSlot , userId1);
 
             if (openInventory)
             {
@@ -162,6 +164,7 @@ public class PlayerInventory : MonoBehaviour
 
 
     private readonly object _lock = new object();
+
     public void UpdateInventory(Dictionary<int, ItemInstance> items , Dictionary<int, ItemInstance> equipitems)
     {
         lock (_lock)
@@ -177,16 +180,18 @@ public class PlayerInventory : MonoBehaviour
 
             try
             {
-                //Debug.Log("start Equip " + _playerEquipInventory.Count + " inventory " + _playerInventory.Count);
+
                 UpdatePlayerInventory(_tempForRemoveAndAdd, _tempForModified , listEquip);
                 ModifiedEquip(_playerInventory, _playerEquipInventory, listEquip);
-               // Debug.Log("Equip " + equipitems.Count + " inventory " + items.Count);
-                //Debug.Log("end Equip " + _playerEquipInventory.Count + " inventory " + _playerInventory.Count);
+
                 int adenaCount = GetAdenaCount(_playerInventory.Values.ToList());
                 int useSlot = _playerInventory.Count + _playerEquipInventory.Count;
+
+                if(_currentUser == null) _currentUser =  StorageNpc.getInstance().GetFirstUser();
+                int userId = _currentUser.PlayerInfoInterlude.Identity.Id;
                 UnityMainThreadDispatcher.Instance().Enqueue(() => {
-                    InventoryWindow.Instance.UpdateItemList(_tempForRemoveAndAdd, _tempForModified, listEquip, adenaCount, useSlot, _changeInventoryData);
-                    InventoryWindow.Instance.RemoveOldEquipItemOrNoQuipItem(_changeInventoryData);
+                    InventoryWindow.Instance.UpdateItemList(_tempForRemoveAndAdd, _tempForModified, listEquip, adenaCount, useSlot, _changeInventoryData, userId);
+                    InventoryWindow.Instance.RemoveOldEquipItemOrNoQuipItem(_changeInventoryData , userId);
                 });
             
 
@@ -280,7 +285,7 @@ public class PlayerInventory : MonoBehaviour
    
         if (playerEquipInventory.ContainsKey(item.ObjectId) & !item.Equipped)
         {
-            //ItemInstance del_item = playerEquipInventory[item.ObjectId];
+           
             ItemInstance del_item_replace = listEquip.FirstOrDefault(itemEquip => itemEquip.EqualsBodyPart(item.BodyPart));
             if (del_item_replace != null)
             {
@@ -299,9 +304,6 @@ public class PlayerInventory : MonoBehaviour
         {
             if (!item.Equipped)
             {
-                
-               // StorageVariable.getInstance().AddS1Items(new VariableItem(item.Count.ToString(), item.ObjectId));
-               // StorageVariable.getInstance().AddS2Items(new VariableItem(item.ItemData.ItemName.Name, item.ObjectId));
                 AddInventory(item); 
             }
         }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.Progress;
 
 [System.Serializable]
 public class InventoryGearTab : L2Tab
@@ -73,7 +74,7 @@ public class InventoryGearTab : L2Tab
     }
    
 
-    public void UpdateEquipList(List<ItemInstance> modified, ChangeInventoryData changeInventoryData)
+    public void UpdateEquipList(List<ItemInstance> modified, ChangeInventoryData changeInventoryData , int userId)
     {
         if(PlayerInventory.Instance.GetPlayerEquipInventory().Count == 0)
         {
@@ -83,18 +84,20 @@ public class InventoryGearTab : L2Tab
          for(int i = 0; i < modified.Count; i++)
          {
             ItemInstance currentSlotEquip = modified[i];
+
             if(currentSlotEquip.Equipped == true)
             {
                 if (currentSlotEquip == null) return;
                 if (changeInventoryData.IsReplaceSourceItem(currentSlotEquip.ObjectId)) return;
                 EquipItem(currentSlotEquip);
+                EventBus.Instance.Equipped(currentSlotEquip , userId);
             }
         }
     }
-    public void SetEquipList(List<ItemInstance> equipItems)
+    public void SetEquipList(List<ItemInstance> equipItems , int userId)
     {
         if (equipItems == null) return;
-        EquipList(equipItems);
+        EquipList(equipItems , userId);
 
         if (_selectedSlot != -1)
         {
@@ -102,12 +105,13 @@ public class InventoryGearTab : L2Tab
         }
     }
 
-    private void EquipList(List<ItemInstance> equipItems)
+    private void EquipList(List<ItemInstance> equipItems  , int userId)
     {
         for (int i = 0; i < equipItems.Count; i++)
         {
             ItemInstance itemInstance = equipItems[i];
             EquipItem(itemInstance);
+            EventBus.Instance.Equipped(itemInstance, userId);
         }
     }
     private void EquipEmptyAll()
@@ -123,7 +127,9 @@ public class InventoryGearTab : L2Tab
    
     private void EquipItem(ItemInstance item)
     {
-        //Debug.Log("Body part staff " + item.BodyPart);
+
+
+
         switch (item.BodyPart)
         {
             case ItemSlot.lrhand:
@@ -203,9 +209,10 @@ public class InventoryGearTab : L2Tab
         _equip.EquipItemEmpty(bodyPart , item);
     }
 
-    public void ModifiedReplace(ItemInstance item)
+    public void ModifiedReplace(ItemInstance item , int userId)
     {
         EquipItem(item);
+        EventBus.Instance.Equipped(item, userId);
     }
 
  

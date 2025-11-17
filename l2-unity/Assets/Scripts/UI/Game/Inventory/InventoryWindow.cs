@@ -353,21 +353,21 @@ public class InventoryWindow : L2PopupWindow
 
     }
 
-    public void SetItemList(List<ItemInstance> allItems , List<ItemInstance> quipAllItems, int adenaCount, int usedSlots)
+    public void SetItemList(List<ItemInstance> allItems , List<ItemInstance> quipAllItems, int adenaCount, int usedSlots , int userId)
     {
         //_adenaCountLabel.text = adenaCount.ToString();
         SetAdenaCountLabel(adenaCount);
         //_tabs[0].ForEach((tab) =>
         //{
         _tabs[0].SetItemList(allItems);
-        _gearTab.SetEquipList(quipAllItems);
+        _gearTab.SetEquipList(quipAllItems , userId);
         _slotCount = PLAYER_INVENTORY_SIZE;
         _inventoryCountLabel.text = $"({usedSlots}/{_slotCount})";
         // });
         SwitchTab(_tabs[0]);
 
 }
-    public void UpdateItemList(List<ItemInstance> removeAndAdd , List<ItemInstance> modified , List<ItemInstance> listEquipModified,  int adenaCount , int usedSlots , ChangeInventoryData changeInventoryData)
+    public void UpdateItemList(List<ItemInstance> removeAndAdd , List<ItemInstance> modified , List<ItemInstance> listEquipModified,  int adenaCount , int usedSlots , ChangeInventoryData changeInventoryData , int userId)
     {
         if (_activeTab.MainTab)
         {
@@ -377,7 +377,7 @@ public class InventoryWindow : L2PopupWindow
             _inventoryCountLabel.text = $"({usedSlots}/{_slotCount})";
             SetAdenaCountLabel(adenaCount);
             _tabs[0].UpdateItemList(removeAndAdd, modified , changeInventoryData);
-            _gearTab.UpdateEquipList(listEquipModified , changeInventoryData);
+            _gearTab.UpdateEquipList(listEquipModified , changeInventoryData , userId);
         }
         else
         {
@@ -386,12 +386,12 @@ public class InventoryWindow : L2PopupWindow
             _inventoryCountLabel.text = $"({usedSlots}/{_slotCount})";
             SetAdenaCountLabel(adenaCount);
             _activeTab.SetItemList(PlayerInventory.Instance.FilterInventory(_activeTab.GetFilterCategories));
-            _gearTab.SetEquipList(PlayerInventory.Instance.GetPlayerEquipToList());
+            _gearTab.SetEquipList(PlayerInventory.Instance.GetPlayerEquipToList(), userId);
         }
 
     }
 
-    public void RemoveOldEquipItemOrNoQuipItem(ChangeInventoryData changeInventoryData)
+    public void RemoveOldEquipItemOrNoQuipItem(ChangeInventoryData changeInventoryData , int userId)
     {
         List<ItemInstance> obsoleteItemsInventory = changeInventoryData.ItemsInventory();
         List<ItemInstance> obsoleteItemsGear = changeInventoryData.ItemsGears();
@@ -405,11 +405,14 @@ public class InventoryWindow : L2PopupWindow
             }
         }
 
-        obsoleteItemsGear.ForEach(item=>_gearTab.ModifiedRemove(item.BodyPart , item));
+        //obsoleteItemsGear.ForEach(item=>_gearTab.ModifiedRemove(item.BodyPart , item));
 
-        //foreach (ItemInstance item in obsoleteItemsGear) {
-        //    _gearTab.ModifiedRemove(item.BodyPart);
-        //}
+        obsoleteItemsGear.ForEach(item =>
+        {
+            _gearTab.ModifiedRemove(item.BodyPart, item);
+            EventBus.Instance.UnEquipped(item , userId);
+        });
+
 
         foreach (ReplaceGearData item in obsoleteItemsGearReplace)
         {
@@ -421,14 +424,14 @@ public class InventoryWindow : L2PopupWindow
 
             if (source_item_slot != null && source_item_slot.ItemInstance != null)
             {
-                _gearTab.ModifiedReplace(source_item_slot.ItemInstance);
+                _gearTab.ModifiedReplace(source_item_slot.ItemInstance , userId);
             }
 
-            //Debug.Log("GearItem source " + source.ItemId);
-            //Debug.Log("GearItem " + gearItem.ItemId);
+
 
             if(gearItem != null & source_item_slot != null)
             {
+                EventBus.Instance.UnEquipped(gearItem , userId);
                 source_item_slot.AssignItem(gearItem);
             }
             //if there are 2 items in LHand and Rhand, we move 1 to the position of the one who is trying to change, and insert the second item into the inventory
@@ -436,8 +439,6 @@ public class InventoryWindow : L2PopupWindow
             {
                 _tabs[0].AddItem(gearItem);
             }
-     
-            //source_item_slot.AssignItem(source);
 
         }
 

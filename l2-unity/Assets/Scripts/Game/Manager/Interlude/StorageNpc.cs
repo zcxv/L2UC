@@ -67,17 +67,17 @@ public class StorageNpc
     }
     public NpcInfo GetNpcInfo(int objId)
     {
-        lock (_sync)
-        {
+        //lock (_sync)
+        //{
             return (npcs.ContainsKey(objId)) ? npcs[objId] : null;
-        }
+        //}
     }
 
     public UserInfo GetUserInfo(int objId)
     {
-        lock (_sync)
-        {
+        //lock (_sync)
+        //{
             return (users.ContainsKey(objId)) ? users[objId] : null;
-        }
+        ////}
     }
 }
