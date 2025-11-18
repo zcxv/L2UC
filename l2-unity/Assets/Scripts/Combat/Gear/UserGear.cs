@@ -103,7 +103,7 @@ public class UserGear : Gear
             var child3 = _container.transform.GetChild(2);
             var child4 = _container.transform.GetChild(3);
             var child5 = _container.transform.GetChild(4);
-            Debug.Log("");
+     
         }
         //var child1 = _container.transform.GetChild(2);
         //var mesh = child1.GetComponentInChildren<SkinnedMeshRenderer>();
