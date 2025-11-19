@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
-public class Gear : MonoBehaviour {
+public class Gear : AbstractMeshManager 
+{
     protected NetworkAnimationController _networkAnimationReceive;
     protected int _ownerId;
     protected CharacterRaceAnimation _raceId;
-
+    public const string weaponName = "weapon";
+    public Transform[] allBone = new Transform[4];
     [Header("Weapons")]
     [Header("Meta")]
     [SerializeField] private Weapon _rightHandWeapon;
@@ -41,68 +44,53 @@ public class Gear : MonoBehaviour {
     }
 
     public virtual void EquipWeapon(int weaponId, bool leftSlot) {
-        UnequipWeapon(leftSlot);
-        if (weaponId == 0) {
-            return;
-        }
 
-        // Loading from database
         Weapon weapon = ItemTable.Instance.GetWeapon(weaponId);
-        if (weapon == null) {
-            Debug.LogWarning($"Could find weapon {weaponId} in DB for entity {_ownerId}.");
+
+        ErrorPrint(weapon, weaponId);
+
+        if (weaponId == 0 | IsWeaponEquipped(weaponId, leftSlot) | weapon == null) {
             return;
         }
 
-        GameObject weaponPrefab = ModelTable.Instance.GetWeaponById(weaponId);
-        if (weaponPrefab == null) {
-            Debug.LogWarning($"Could load prefab for {weaponId} in DB for entity {_ownerId}.");
-            return;
-        }
 
-        // Updating weapon type
-        if (leftSlot) {
-            _leftHandWeapon = weapon;
-            _leftHandType = weapon.Weapongrp.WeaponType;
-        } else {
-            _rightHandWeapon = weapon;
-            _rightHandType = weapon.Weapongrp.WeaponType;
-        }
+        GameObject weaponPrefab = (GameObject)LoadMash(EquipmentCategory.Weapon , weaponId);
 
-        UpdateWeaponType(weapon.Weapongrp.WeaponType);
+        WeaponType type = weapon.Weapongrp.WeaponType;
+        RefreshData(leftSlot, weapon);
+        UpdateWeaponType(type);
+        Transform[] refreshAllBone = RefreshBone(allBone);
 
-        // Instantiating weapon
-        GameObject go = GameObject.Instantiate(weaponPrefab);
-        go.SetActive(false);
-        go.transform.name = "weapon";
-
-
-
-        if (weapon.Weapongrp.WeaponType == WeaponType.none)
-        {
-            go.transform.SetParent(GetShieldBone(), false);
-        }
-        else if (weapon.Weapongrp.WeaponType == WeaponType.bow)
-        {
-            go.transform.SetParent(GetLeftHandBone(), false);
-        }
-        else if (leftSlot)
-        {
-            go.transform.SetParent(GetLeftHandBone(), false);
-        }
-        else
-        {
-            go.transform.SetParent(GetRightHandBone(), false);
-        }
-
+        GameObject go = CreateCopy(weaponPrefab, weaponName);
+        SetType(type, leftSlot, refreshAllBone);
         go.SetActive(true);
     }
 
+
+
+
+
+    private void ErrorPrint(Weapon weapon , int weaponId)
+    {
+        if (weapon == null)
+        {
+            Debug.LogWarning("Gear->EquipWeapon: Not Found item in database id " + weaponId);
+        }
+
+    }
     private void UpdateWeaponType(WeaponType weaponType) {
         _weaponAnim = WeaponTypeParser.GetWeaponAnim(weaponType);
         _weaponRange = WeaponTypeParser.WeaponRange(weaponType);
     }
 
-
+    private Transform[] RefreshBone(Transform[] allBone)
+    {
+        allBone[0] = GetShieldBone();
+        allBone[1] = GetLeftHandBone();
+        allBone[2] = GetLeftHandBone();
+        allBone[3] = GetRightHandBone();
+        return allBone;
+    }
 
     protected virtual Transform GetLeftHandBone() {
         if (_leftHandBone == null) {
@@ -130,13 +118,36 @@ public class Gear : MonoBehaviour {
     }
 
 
-    protected virtual void UnequipWeapon(bool leftSlot)
+    public  void UnequipWeapon(bool leftSlot)
     {
         Transform weapon = (leftSlot ? GetLeftHandBone() : GetRightHandBone())?.Find("weapon");
         if (weapon != null)
         {
             Debug.LogWarning("Unequip weapon");
             Destroy(weapon.gameObject);
+            RefreshData(leftSlot, null);
+        }
+    }
+
+    public bool IsWeaponEquipped(int weaponId, bool leftSlot)
+    {
+        Weapon weapon = leftSlot ? _leftHandWeapon : _rightHandWeapon;
+        return weapon != null && weapon.Id == weaponId;
+    }
+
+
+    private void RefreshData(bool leftSlot , Weapon weapon)
+    {
+        // Updating weapon type
+        if (leftSlot)
+        {
+            _leftHandWeapon = weapon;
+            _leftHandType = (weapon == null) ? WeaponType.none : weapon.Weapongrp.WeaponType;
+        }
+        else
+        {
+            _rightHandWeapon = weapon;
+            _rightHandType = (weapon == null) ? WeaponType.none : weapon.Weapongrp.WeaponType;
         }
     }
 
