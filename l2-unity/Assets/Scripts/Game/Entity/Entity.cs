@@ -269,4 +269,9 @@ public class Entity : MonoBehaviour {
     {
         _gear.EquipWeapon(weaponId, isLeftHand);
     }
+
+    public void UnEquipWeapon(bool isLeftHand)
+    {
+        _gear.UnequipWeapon(isLeftHand);
+    }
 }
