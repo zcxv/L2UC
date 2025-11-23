@@ -33,10 +33,14 @@ public class AbstractMeshManager : MonoBehaviour
     protected GameObject CreateCopy(GameObject originalGameObject , string name)
     {
         // Instantiating weapon
-        _go = GameObject.Instantiate(originalGameObject);
-        _go.SetActive(false);
-        _go.transform.name = name;
-        return _go;
+        if(originalGameObject != null)
+        {
+            _go = GameObject.Instantiate(originalGameObject);
+            _go.SetActive(false);
+            _go.transform.name = name;
+            return _go;
+        }
+        return null;
     }
 
     protected GameObject CreateCopy(GameObject originalGameObject)

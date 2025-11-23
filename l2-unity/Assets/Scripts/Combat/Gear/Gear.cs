@@ -51,7 +51,7 @@ public class Gear : AbstractMeshManager
         Weapon weapon = ItemTable.Instance.GetWeapon(weaponId);
         ErrorPrint(weapon, weaponId);
 
-        if (weaponId == 0 | IsShieldEquipped(weaponId) | weapon == null)
+        if (weaponId == 0 | IsShieldEquipped(weaponId) | IsWeaponEquipped(weaponId , true) | weapon == null)
         {
             return;
         }
@@ -61,11 +61,11 @@ public class Gear : AbstractMeshManager
         WeaponType type = WeaponType.none;
         RefreshDataShield(weapon);
         UpdateWeaponType(type);
-        Transform[] refreshAllBone = RefreshBone(allBone);
 
+        Transform[] refreshAllBone = RefreshBone(allBone);
         GameObject go = CreateCopy(weaponPrefab, shieldName);
-        SetType(type, true, refreshAllBone);
-        go.SetActive(true);
+
+        ActivateGameObject(go, type, true, refreshAllBone);
 
     }
 
@@ -85,14 +85,24 @@ public class Gear : AbstractMeshManager
         WeaponType type = weapon.Weapongrp.WeaponType;
         RefreshData(leftSlot, weapon);
         UpdateWeaponType(type);
-        Transform[] refreshAllBone = RefreshBone(allBone);
 
+        Transform[] refreshAllBone = RefreshBone(allBone);
         GameObject go = CreateCopy(weaponPrefab, weaponName);
-        SetType(type, leftSlot, refreshAllBone);
-        go.SetActive(true);
+
+        ActivateGameObject(go, type, leftSlot, refreshAllBone);
+
     }
 
 
+
+    private void ActivateGameObject(GameObject go, WeaponType type , bool leftSlot , Transform[] refreshAllBone)
+    {
+        if (go != null)
+        {
+            SetType(type, leftSlot, refreshAllBone);
+            go.SetActive(true);
+        }
+    }
 
     private void ErrorPrint(Weapon weapon , int weaponId)
     {
@@ -170,9 +180,9 @@ public class Gear : AbstractMeshManager
         return weapon != null && weapon.Id == weaponId;
     }
 
-    public bool IsShieldEquipped(int weaponId , bool leftSlot = true)
+    public bool IsShieldEquipped(int weaponId)
     {
-        Weapon weapon = leftSlot ? _leftHandWeapon : _leftHandShield;
+        Weapon weapon = _leftHandShield;
         return weapon != null && weapon.Id == weaponId;
     }
 
