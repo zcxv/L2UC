@@ -1,11 +1,12 @@
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 
 public class AbstractMeshManager : MonoBehaviour
 {
 
   protected GameObject _go;
-  protected object LoadMash(EquipmentCategory category , params int[] itemIds)
+  protected object LoadMesh(EquipmentCategory category , params int[] itemIds)
   {
 
         switch (category)
@@ -106,4 +107,6 @@ public class AbstractMeshManager : MonoBehaviour
             _go.transform.SetParent(allBone[3], false);
         }
     }
+
+
 }
