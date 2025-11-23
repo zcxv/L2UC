@@ -37,15 +37,7 @@ public class UserGear : Gear
 
 
 
-    //public void EquipShield(int itemId , bool leftHand)
-    //{
-    //    var weapon = ItemTable.Instance.GetWeapon(itemId);
 
-      //  if(weapon != null)
-      //  {
-       //     EquipShield(itemId);
-       // }
-    //}
     /// <summary>
     /// Equips armor piece to the specified slot
     /// </summary>
