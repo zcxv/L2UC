@@ -348,7 +348,7 @@ public class ModelTable
         _armors[model].materials.TryGetValue(armor.Armorgrp.Texture[(byte) raceId], out material);
 
         if (material == null) {
-            Debug.LogWarning($"Can't find armor material for {model} and {raceId} in ModelTable");
+            Debug.LogWarning($"Can't find armor material for model: {model} and material: {textureName} and race: {raceId} in ModelTable");
             return null;
         }
 
