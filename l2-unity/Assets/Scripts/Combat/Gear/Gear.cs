@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ModelTable;
+using static Unity.Burst.Intrinsics.Arm;
 using static UnityEditor.Progress;
 
 public class Gear : AbstractMeshManager 
@@ -10,11 +12,13 @@ public class Gear : AbstractMeshManager
     protected int _ownerId;
     protected CharacterRaceAnimation _raceId;
     public const string weaponName = "weapon";
+    public const string shieldName = "shield";
     public Transform[] allBone = new Transform[4];
     [Header("Weapons")]
     [Header("Meta")]
-    [SerializeField] private Weapon _rightHandWeapon;
-    [SerializeField] private Weapon _leftHandWeapon;
+    private Weapon _rightHandWeapon;
+    private Weapon _leftHandWeapon;
+    private Weapon _leftHandShield;
 
 
     [Header("Models")]
@@ -32,8 +36,7 @@ public class Gear : AbstractMeshManager
 
     public WeaponType WeaponType { get { return _leftHandType != WeaponType.none ? _leftHandType : _rightHandType; } }
     public string WeaponAnim { get { return _weaponAnim; } }
-    public int OwnerId { get { return _ownerId; } set { _ownerId = value; } }
-    public CharacterRaceAnimation RaceId { get { return _raceId; } set { _raceId = value; } }
+
 
     public virtual void Initialize(int ownderId, CharacterRaceAnimation raceId) {
         TryGetComponent(out _networkAnimationReceive);
@@ -41,6 +44,29 @@ public class Gear : AbstractMeshManager
         _raceId = raceId;
         _weaponAnim = "hand";
         _weaponRange = 40; //default
+    }
+
+    public void EquipShield(int weaponId)
+    {
+        Weapon weapon = ItemTable.Instance.GetWeapon(weaponId);
+        ErrorPrint(weapon, weaponId);
+
+        if (weaponId == 0 | IsShieldEquipped(weaponId) | weapon == null)
+        {
+            return;
+        }
+
+        GameObject weaponPrefab = (GameObject)LoadMesh(EquipmentCategory.Weapon, weaponId);
+
+        WeaponType type = WeaponType.none;
+        RefreshDataShield(weapon);
+        UpdateWeaponType(type);
+        Transform[] refreshAllBone = RefreshBone(allBone);
+
+        GameObject go = CreateCopy(weaponPrefab, shieldName);
+        SetType(type, true, refreshAllBone);
+        go.SetActive(true);
+
     }
 
     public virtual void EquipWeapon(int weaponId, bool leftSlot) {
@@ -54,7 +80,7 @@ public class Gear : AbstractMeshManager
         }
 
 
-        GameObject weaponPrefab = (GameObject)LoadMash(EquipmentCategory.Weapon , weaponId);
+        GameObject weaponPrefab = (GameObject)LoadMesh(EquipmentCategory.Weapon, weaponId);
 
         WeaponType type = weapon.Weapongrp.WeaponType;
         RefreshData(leftSlot, weapon);
@@ -65,8 +91,6 @@ public class Gear : AbstractMeshManager
         SetType(type, leftSlot, refreshAllBone);
         go.SetActive(true);
     }
-
-
 
 
 
@@ -123,15 +147,32 @@ public class Gear : AbstractMeshManager
         Transform weapon = (leftSlot ? GetLeftHandBone() : GetRightHandBone())?.Find("weapon");
         if (weapon != null)
         {
-            Debug.LogWarning("Unequip weapon");
+            Debug.LogWarning("Gear: UnequipShield->Unequip weapon");
             Destroy(weapon.gameObject);
             RefreshData(leftSlot, null);
+        }
+    }
+
+    public void UnequipShield()
+    {
+        Transform shield = GetShieldBone()?.Find("shield");
+        if (shield != null)
+        {
+            Debug.LogWarning("Gear: UnequipShield->Unequip shield");
+            Destroy(shield.gameObject);
+            RefreshDataShield(null);
         }
     }
 
     public bool IsWeaponEquipped(int weaponId, bool leftSlot)
     {
         Weapon weapon = leftSlot ? _leftHandWeapon : _rightHandWeapon;
+        return weapon != null && weapon.Id == weaponId;
+    }
+
+    public bool IsShieldEquipped(int weaponId , bool leftSlot = true)
+    {
+        Weapon weapon = leftSlot ? _leftHandWeapon : _leftHandShield;
         return weapon != null && weapon.Id == weaponId;
     }
 
@@ -149,6 +190,13 @@ public class Gear : AbstractMeshManager
             _rightHandWeapon = weapon;
             _rightHandType = (weapon == null) ? WeaponType.none : weapon.Weapongrp.WeaponType;
         }
+    }
+
+    private void RefreshDataShield(Weapon weapon)
+    {
+        _leftHandShield = weapon;
+        _leftHandWeapon = weapon;
+        _leftHandType = WeaponType.none;
     }
 
 }
