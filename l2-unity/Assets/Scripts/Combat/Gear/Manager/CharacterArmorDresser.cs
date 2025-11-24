@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static ModelTable;
 
 public class CharacterArmorDresser
 {
@@ -9,6 +10,7 @@ public class CharacterArmorDresser
 
     public Action<GameObject> OnDestroyGameObject;
     public Action<int> OnSyncMash;
+    public Action<GameObject> OnAddSyncMash;
     public Action<int, ItemSlot> OnEquipArmor;
 
     public CharacterArmorDresser(Transform containerTransform)
@@ -22,15 +24,14 @@ public class CharacterArmorDresser
     {
         var armorConfigs = new Dictionary<ItemSlot, List<ArmorDresserModel.ArmorPart>>
         {
-            [ItemSlot.chest] = new List<ArmorDresserModel.ArmorPart> { ArmorDresserModel.ArmorPart.Torso, ArmorDresserModel.ArmorPart.FullArmor },
+            [ItemSlot.chest] = new List<ArmorDresserModel.ArmorPart> { ArmorDresserModel.ArmorPart.Torso },
             [ItemSlot.fullarmor] = new List<ArmorDresserModel.ArmorPart> {
                 ArmorDresserModel.ArmorPart.Torso,
                 ArmorDresserModel.ArmorPart.Legs,
-                ArmorDresserModel.ArmorPart.FullArmor
             },
-            [ItemSlot.legs] = new List<ArmorDresserModel.ArmorPart> { ArmorDresserModel.ArmorPart.Legs, ArmorDresserModel.ArmorPart.FullArmor },
-            [ItemSlot.gloves] = new List<ArmorDresserModel.ArmorPart> { ArmorDresserModel.ArmorPart.Gloves, ArmorDresserModel.ArmorPart.FullArmor },
-            [ItemSlot.feet] = new List<ArmorDresserModel.ArmorPart> { ArmorDresserModel.ArmorPart.Boots }
+            [ItemSlot.legs] = new List<ArmorDresserModel.ArmorPart> { ArmorDresserModel.ArmorPart.Legs},
+            [ItemSlot.gloves] = new List<ArmorDresserModel.ArmorPart> { ArmorDresserModel.ArmorPart.Gloves},
+            [ItemSlot.feet] = new List<ArmorDresserModel.ArmorPart> { ArmorDresserModel.ArmorPart.Boots },
         };
 
         foreach (var config in armorConfigs)
@@ -53,41 +54,52 @@ public class CharacterArmorDresser
         }
 
 
-        
+
+
         if (IsArmorEquipped(armor, slot))
         {
             Debug.Log($"Armor {armor.Id} is already equipped in slot {slot}");
             return;
         }
 
-        HandleArmorConflicts(slot);
 
-
-        EquipNewArmor(armor, armorPiece, slot);
-
-
+        EquipNewArmor(slot, armor, armorPiece);
         OnSyncMash?.Invoke(1);
     }
 
-    private void HandleArmorConflicts(ItemSlot slot)
+    public void UnequipArmorPiece(ItemSlot slot , int unequipId , Armor baseArmor, GameObject armorPiece)
     {
-        switch (slot)
+
+        ItemSlot slotArmor = GetExtendedOrGetCurrentArmorPart(slot, _equippedArmor);
+
+        switch (slotArmor)
         {
-            case ItemSlot.chest when HasEquipped(ItemSlot.fullarmor):
-                UnequipArmorParts(ItemSlot.fullarmor, new[] { ArmorDresserModel.ArmorPart.Torso, ArmorDresserModel.ArmorPart.Legs });
-                OnEquipArmor?.Invoke(ItemTable.NAKED_LEGS, ItemSlot.legs);
+            case ItemSlot.chest when HasEquipped(ItemSlot.chest , unequipId):
+                //UnequipArmorParts(ItemSlot.chest, new[] { ArmorDresserModel.ArmorPart.Torso});
+                EquipNewArmor(slotArmor , baseArmor, armorPiece);
+                OnSyncMash?.Invoke(1);
                 break;
 
-            case ItemSlot.legs when HasEquipped(ItemSlot.fullarmor):
-                UnequipArmorParts(ItemSlot.fullarmor, new[] { ArmorDresserModel.ArmorPart.Torso, ArmorDresserModel.ArmorPart.Legs });
-                OnEquipArmor?.Invoke(ItemTable.NAKED_CHEST, ItemSlot.chest);
+            case ItemSlot.feet when HasEquipped(ItemSlot.feet, unequipId):
+                //UnequipArmorParts(ItemSlot.feet, new[] { ArmorDresserModel.ArmorPart.Boots });
+                Debug.Log("Existing armor piece was " + destroy);
+                EquipNewArmor(slotArmor, baseArmor, armorPiece);
+                OnSyncMash?.Invoke(1);
                 break;
 
-            case ItemSlot.fullarmor:
-                UnequipArmorParts(ItemSlot.fullarmor, new[] { ArmorDresserModel.ArmorPart.Torso, ArmorDresserModel.ArmorPart.Legs });
-                break;
+                // case ItemSlot.legs when HasEquipped(ItemSlot.fullarmor):
+                //    UnequipArmorParts(ItemSlot.fullarmor, new[] { ArmorDresserModel.ArmorPart.Torso, ArmorDresserModel.ArmorPart.Legs });
+                //    OnEquipArmor?.Invoke(ItemTable.NAKED_CHEST, ItemSlot.chest);
+                //    break;
+
+                // case ItemSlot.fullarmor:
+                //    UnequipArmorParts(ItemSlot.fullarmor, new[] { ArmorDresserModel.ArmorPart.Torso, ArmorDresserModel.ArmorPart.Legs });
+                //    break;
         }
     }
+
+
+
 
     private void UnequipArmorParts(ItemSlot slot, ArmorDresserModel.ArmorPart[] parts)
     {
@@ -102,14 +114,33 @@ public class CharacterArmorDresser
         }
     }
 
-    private void EquipNewArmor(Armor armor, GameObject armorPiece, ItemSlot slot)
+    public bool destroy = false;
+
+    private void EquipNewArmor(ItemSlot slot , Armor armor, GameObject armorPiece)
     {
         var mainPart = GetMainArmorPart(slot);
-        armorPiece.transform.SetParent(_containerTransform, false);
 
+        if (ArmorDresserModel.ArmorPart.Unknow == mainPart)
+        {
+            Debug.LogWarning($"CharacterArmorDresser: EquipNewArmor-> Unknown armor part detected for slot {slot}. Armor will not be equipped.");
+            return;
+        }
+
+        var existingArmorPiece = GetGameObject(slot, mainPart);
+
+        if (existingArmorPiece != null)
+        {
+            DefaultDestroy(existingArmorPiece);
+        }
+
+        //OnAddSyncMash?.Invoke(armorPiece);
+        armorPiece.transform.SetParent(_containerTransform, false);
         UpdateGo(slot, mainPart, armorPiece);
         UpdateData(slot, mainPart, armor);
     }
+
+
+       
 
     private ArmorDresserModel.ArmorPart GetMainArmorPart(ItemSlot slot)
     {
@@ -120,15 +151,22 @@ public class CharacterArmorDresser
             ItemSlot.legs => ArmorDresserModel.ArmorPart.Legs,
             ItemSlot.gloves => ArmorDresserModel.ArmorPart.Gloves,
             ItemSlot.feet => ArmorDresserModel.ArmorPart.Boots,
-            _ => ArmorDresserModel.ArmorPart.Torso
+            _ => ArmorDresserModel.ArmorPart.Unknow
         };
     }
 
-    private bool HasEquipped(ItemSlot slot)
+    private bool HasEquipped(ItemSlot slot, int itemId)
     {
-        return _equippedArmor.ContainsKey(slot) &&
-               _equippedArmor[slot].GetGo(ArmorDresserModel.ArmorPart.FullArmor) != null;
+        if (_equippedArmor.ContainsKey(slot) && _equippedArmor[slot].GetGo(slot) != null)
+        {
+
+            var equippedArmor = _equippedArmor[slot].GetData(slot);
+ 
+            return equippedArmor != null && equippedArmor.Id == itemId;
+        }
+        return false;
     }
+
 
     private void UpdateData(ItemSlot slot, ArmorDresserModel.ArmorPart part, Armor data)
     {
@@ -147,30 +185,36 @@ public class CharacterArmorDresser
 
     private void DefaultDestroy(GameObject go)
     {
+        Debug.Log("Existing armor piece was not destroyed properly. 1");
         OnDestroyGameObject?.Invoke(go);
     }
 
-    /// <summary>
-    /// Checks if the specified armor is already equipped
-    /// </summary>
-    /// <param name="armor">Armor to check</param>
-    /// <param name="slot">Slot to check in</param>
-    /// <returns>True if the armor is already equipped, false otherwise</returns>
+
     public bool IsArmorEquipped(Armor armor, ItemSlot slot)
     {
-        if (armor == null || !_equippedArmor.ContainsKey(slot))
+        if (armor == null)
             return false;
 
-        var equippedArmor = _equippedArmor[slot];
-        var mainPart = GetMainArmorPart(slot);
+        if (_equippedArmor.ContainsKey(slot))
+        {
+            var equippedArmor = _equippedArmor[slot];
+            var mainPart = GetMainArmorPart(slot);
+            var currentArmor = equippedArmor.GetData(mainPart);
+            return currentArmor != null && currentArmor.Id == armor.Id;
+        }
 
-        // Get the currently equipped armor data
-        var currentArmor = equippedArmor.GetData(mainPart);
-
-        // Compare item IDs to check if it's the same armor
-        return currentArmor != null && currentArmor.Id == armor.Id;
+        return false;
     }
 
+    public ItemSlot GetExtendedOrGetCurrentArmorPart(ItemSlot slot, Dictionary<ItemSlot, ArmorDresserModel> equippedArmor)
+    {
+        return equippedArmor.ContainsKey(slot) ? slot : ArmorDresserModel.GetExtendedArmorPart(slot);
+    }
+
+    public ItemSlot GetExtendedOrGetCurrentArmorPart(ItemSlot slot)
+    {
+        return _equippedArmor.ContainsKey(slot) ? slot : ArmorDresserModel.GetExtendedArmorPart(slot);
+    }
 }
 
 
