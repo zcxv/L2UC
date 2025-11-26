@@ -69,12 +69,18 @@ public class UserGear : Gear
             return;
         }
 
+        ItemSlot slotArmor = _armorDresser.GetExtendedOrGetCurrentArmorPart(slot);
+
+        if (_armorDresser.IsArmorEquipped(armor, slotArmor))
+        {
+            return;
+        }
 
         L2ArmorPiece armorPiece = (L2ArmorPiece)LoadMesh(EquipmentCategory.Armor, itemId, (int)_raceId);
 
-        ItemSlot slotArmor = _armorDresser.GetExtendedOrGetCurrentArmorPart(slot);
 
-        if (!ValidateArmorPiece(armorPiece, itemId) | _armorDresser.IsArmorEquipped(armor, slotArmor))
+
+        if (!ValidateArmorPiece(armorPiece, itemId))
         {
             return;
         }
@@ -86,6 +92,7 @@ public class UserGear : Gear
             if (armorMesh != null)
             {
                 _armorDresser.SetArmorPiece(armor, armorMesh, slotArmor);
+
             }
         }
         catch (System.Exception e)
@@ -114,7 +121,7 @@ public class UserGear : Gear
     /// </summary>
     private GameObject CreateArmorMesh(L2ArmorPiece armorPiece)
     {
-        GameObject mesh = CreateCopy(armorPiece.baseArmorModel);
+        GameObject mesh = GetOrCreate(armorPiece.baseArmorModel , ObjectType.Armor);
         if (mesh == null)
         {
             Debug.LogWarning("UserGear-> Failed to create armor model copy");
@@ -214,7 +221,18 @@ public class UserGear : Gear
 
     public void OnDestroyGameObject(GameObject go)
     {
-        Destroy(go);
+        if(ObjectPoolManager.Instance != null)
+        {
+            if (!ObjectPoolManager.Instance.ReturnToPool(ObjectType.Armor , go))
+            {
+                Destroy(go);
+            }
+        }
+        else
+        {
+            Destroy(go);
+        }
+
         Debug.LogWarning("Запрос на удаление. Удаление состоялось размер " + _container.transform.childCount);
     }
 
