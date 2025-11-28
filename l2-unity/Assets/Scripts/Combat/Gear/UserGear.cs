@@ -50,16 +50,20 @@ public class UserGear : Gear
     public void UnequipArmor(int itemId, ItemSlot slot)
     {
         int race = (int)_raceId;
-        slot = ArmorDresserModel.GetExtendedArmorPart(slot);
-        Armor baseArmor = CharacterDefaultEquipment.GetDefaultArmorByItemSlot(slot);
-        var armorPiece = GetMeshBaseArmor(slot, baseArmor.Id ,  race);
+        //slot = ArmorDresserModel.GetExtendedArmorPart(slot);
+        //Armor[] defaultArmor = CharacterDefaultEquipment.GetDefaultArmorByItemSlot(slot);
+       // GameObject[] listArmorPiece = CopyListMash(slot,  defaultArmor, race);
 
-        if(armorPiece != null)
+        GetDefaultGoWithArmorModel(slot, out Armor[] defaultArmor, out GameObject[] listArmorPiece , (int)_raceId);
+
+        if (listArmorPiece != null && listArmorPiece.Length > 0)
         {
-            _armorDresser.UnequipArmorPiece(slot, itemId, baseArmor, CreateArmorMesh(armorPiece.baseArmorModel, armorPiece.material));
+            _armorDresser.UnequipArmorPiece(slot, itemId, defaultArmor, listArmorPiece);
         }
 
     }
+
+
 
 
 
@@ -145,10 +149,12 @@ public class UserGear : Gear
 
         try
         {
+            GetDefaultGoWithArmorModel(ItemSlot.fullarmor, out Armor[] defaultArmor, out GameObject[] listArmorPiece , (int)_raceId);
+
             GameObject armorMesh = CreateArmorMesh(armorPiece.baseArmorModel, armorPiece.material);
             if (armorMesh != null)
             {
-                _armorDresser.SetArmorPiece(armor, armorMesh, slotArmor);
+                _armorDresser.SetArmorPiece(armor, armorMesh, slotArmor , defaultArmor , listArmorPiece);
 
             }
         }
@@ -157,6 +163,8 @@ public class UserGear : Gear
             Debug.LogError($"UserGear-> Error equipping armor {itemId}: {e.Message}");
         }
     }
+
+
 
 
 
@@ -197,25 +205,6 @@ public class UserGear : Gear
         return listGo;
     }
 
-    private GameObject CreateArmorMesh(GameObject baseArmorModel , Material material)
-    {
-        GameObject mesh = GetOrCreate(baseArmorModel, ObjectType.Armor);
-        if (mesh == null)
-        {
-            Debug.LogWarning("UserGear-> Failed to create armor model copy");
-            return null;
-        }
-
-        SkinnedMeshRenderer renderer = mesh.GetComponentInChildren<SkinnedMeshRenderer>();
-        if (renderer == null)
-        {
-            Debug.LogWarning("UserGear-> No SkinnedMeshRenderer found in the armor model");
-            return null;
-        }
-
-        renderer.material = material;
-        return mesh;
-    }
 
 
 
