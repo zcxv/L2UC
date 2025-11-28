@@ -236,9 +236,6 @@ public class Gear : AbstractMeshManager
         _leftHandType = WeaponType.none;
     }
 
-    public L2ArmorPiece GetMeshBaseArmor(ItemSlot slot , int baseArmorId , int raceId)
-    {
-        return (L2ArmorPiece)LoadMesh(EquipmentCategory.Armor, baseArmorId, raceId);
-    }
+
 
 }
