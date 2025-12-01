@@ -54,6 +54,7 @@ public class UserGear : Gear
         //Armor[] defaultArmor = CharacterDefaultEquipment.GetDefaultArmorByItemSlot(slot);
        // GameObject[] listArmorPiece = CopyListMash(slot,  defaultArmor, race);
 
+        
         GetDefaultGoWithArmorModel(slot, out Armor[] defaultArmor, out GameObject[] listArmorPiece , (int)_raceId);
 
         if (listArmorPiece != null && listArmorPiece.Length > 0)
@@ -154,7 +155,7 @@ public class UserGear : Gear
             GameObject armorMesh = CreateArmorMesh(armorPiece.baseArmorModel, armorPiece.material);
             if (armorMesh != null)
             {
-                _armorDresser.SetArmorPiece(armor, armorMesh, slotArmor , defaultArmor , listArmorPiece);
+                _armorDresser.SetArmorPiece(armor, armorMesh, slotArmor , defaultArmor, listArmorPiece);
 
             }
         }
@@ -300,14 +301,14 @@ public class UserGear : Gear
             Destroy(go);
         }
 
-        Debug.LogWarning("Запрос на удаление. Удаление состоялось размер " + _container.transform.childCount);
+        //Debug.LogWarning("Запрос на удаление. Удаление состоялось размер " + _container.transform.childCount);
     }
 
     public void OnSyncMash(int status)
     {
-        Debug.LogWarning("Запрос на удаление. Синхронизация начало");
+        //Debug.LogWarning("Запрос на удаление. Синхронизация начало");
         _skinnedMeshSync?.SyncMesh();
-        Debug.LogWarning("Запрос на удаление. Синхронизация конец");
+        //Debug.LogWarning("Запрос на удаление. Синхронизация конец");
     }
 
     public void OnAddSyncMash(GameObject add)

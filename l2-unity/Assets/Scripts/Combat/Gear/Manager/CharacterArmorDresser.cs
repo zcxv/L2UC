@@ -35,7 +35,27 @@ public class CharacterArmorDresser : AbstractArmorDresser
 
         if(ItemSlot.chest == slot | ItemSlot.legs == slot)
         {
-            if (IsFullPlateEquipped(ItemSlot.fullarmor)) ResetFullArmor(ItemSlot.fullarmor, slot, defaultArmor, defaultGo);
+            if (IsFullPlateEquipped(ItemSlot.fullarmor))
+            {
+                ResetFullArmor(ItemSlot.fullarmor, slot, defaultArmor, defaultGo);
+                //OnSyncMash?.Invoke(1);
+            }
+            else
+            {
+                if (ItemSlot.chest == slot)
+                {
+                    DestroyIfNotUse(false, defaultGo);
+                }
+                else if(ItemSlot.legs == slot)
+                {
+                    DestroyIfNotUse(false, defaultGo);
+                }
+            }
+       
+        }
+        else
+        {
+            DestroyIfNotUse(false , defaultGo);
         }
 
 
@@ -57,12 +77,6 @@ public class CharacterArmorDresser : AbstractArmorDresser
             ResetArmorPiece(ItemSlot.chest);
             ResetArmorPiece(ItemSlot.legs);
         }
-        else
-        {
-
-        }
-
-
 
         EquipNewArmorFullPlate(armor, armorPiece, fullPlate, slotInFullArmor);
 
@@ -73,6 +87,7 @@ public class CharacterArmorDresser : AbstractArmorDresser
     public void UnequipArmorPiece(ItemSlot slot , int unequipId , Armor[] baseArmor, GameObject[] armorPiece)
     {
         ItemSlot slotArmor = GetExtendedOrGetCurrentArmorPart(slot, _equippedArmor);
+        bool isUseDefault = false;
         switch (slotArmor)
         {
             case ItemSlot.chest:
@@ -88,20 +103,45 @@ public class CharacterArmorDresser : AbstractArmorDresser
                         EquipNewArmor(slotArmor, defaultArmor, defaultPiece);
                         OnSyncMash?.Invoke(1);
                         defaultPiece.SetActive(true);
+                        isUseDefault = true;
                     }
                 }
-                break;
+                else
+                {
+                    isUseDefault = false;
+                }
+               break;
             case ItemSlot.fullarmor:
+                isUseDefault = true;
                 if (HasEquipped(slotArmor, unequipId))
                 {
+
                     UnequipFullPlateArmor(slot, slotArmor, baseArmor, armorPiece);
                 }
-                break;
+                else
+                {
+                    isUseDefault = false;
+                }
+                    break;
 
             default:
                 Debug.LogWarning($"UnequipArmorPiece: Slot {slotArmor} is not supported for unequipping");
                 break;
         }
+
+        DestroyIfNotUse(isUseDefault, armorPiece);
+    }
+
+    private void DestroyIfNotUse( bool isUse , GameObject[] listGameObject)
+    {
+        if(isUse == false)
+        {
+            foreach (GameObject go in listGameObject)
+            {
+                Destroy(go);
+            }
+        }
+
     }
 
 
@@ -131,47 +171,54 @@ public class CharacterArmorDresser : AbstractArmorDresser
         pieceLegs.SetActive(true);
     }
 
-    public void ResetFullArmor(ItemSlot slot , ItemSlot useSlot , Armor[] defaultArmor, GameObject[] defaultGo)
+    public void ResetFullArmor( ItemSlot slot , ItemSlot useSlot , Armor[] defaultArmor, GameObject[] defaultGo)
     {
 
         var mainPartChest = GetMainArmorPart(ItemSlot.chest);
         var mainPartLegs = GetMainArmorPart(ItemSlot.legs);
 
+        Debug.Log("Destroy test 1 chest " + " slot " + slot + " data " + mainPartChest.ToString() + " go " + GetGameObject(slot, mainPartChest));
+        Debug.Log("Destroy test 2 legs " + " slot " + slot + " data " + mainPartLegs.ToString() + "go " + GetGameObject(slot, mainPartLegs));
         Destroy(GetGameObject(slot, mainPartChest));
         Destroy(GetGameObject(slot, mainPartLegs));
 
         UpdateDataFullPlate(slot, mainPartChest, null, null);
         UpdateDataFullPlate(slot, mainPartLegs, null, null);
 
-        ResetToDefaultEquipment(useSlot, defaultArmor, defaultGo);
-
+        ResetToDefaultEquipment( useSlot, defaultArmor, defaultGo);
     }
 
     private void ResetToDefaultEquipment(ItemSlot useSlot , Armor[] defaultArmor, GameObject[] defaultGo)
     {
+        //0 - m001_u
+        //1 - m001_l
         if (defaultArmor != null && defaultGo != null)
-
+        {
             if (ItemSlot.chest == useSlot)
             {
                 EquipNewArmor(ItemSlot.legs, defaultArmor[1], defaultGo[1]);
+                Destroy(defaultGo[0]);
                 defaultGo[1].SetActive(true);
             }
             else if (ItemSlot.legs == useSlot)
             {
                 EquipNewArmor(ItemSlot.chest, defaultArmor[0], defaultGo[0]);
+                Destroy(defaultGo[1]);
                 defaultGo[0].SetActive(true);
             }
+        }
+
+
     }
     public void ResetArmorPiece(ItemSlot slot)
     {
         var mainPart = GetMainArmorPart(slot);
         Destroy(GetGameObject(slot, mainPart));
-
         UpdateGo(slot, mainPart, null);
         UpdateData(slot, mainPart, null);
     }
     
-    private void EquipNewArmor(ItemSlot slot , Armor armor, GameObject armorPiece)
+    private void EquipNewArmor(ItemSlot slot , Armor armor, GameObject armorPiece , bool isDelete = true)
     {
         var mainPart = GetMainArmorPart(slot);
 
@@ -180,10 +227,8 @@ public class CharacterArmorDresser : AbstractArmorDresser
             Debug.LogWarning($"CharacterArmorDresser: EquipNewArmor-> Unknown armor part detected for slot {slot}. Armor will not be equipped.");
             return;
         }
-
-        Destroy(GetGameObject(slot, mainPart));
-
-
+        Debug.Log("EquipNewArmor destroy " + GetGameObject(slot, mainPart));
+        if(isDelete) Destroy(GetGameObject(slot, mainPart));
         SetParent(armorPiece);
 
         UpdateGo(slot, mainPart, armorPiece);
@@ -203,7 +248,15 @@ public class CharacterArmorDresser : AbstractArmorDresser
 
     private void SetParent(GameObject armorPiece)
     {
-        armorPiece.transform.SetParent(_containerTransform, false);
+        if(armorPiece != null)
+        {
+            armorPiece.transform.SetParent(_containerTransform, false);
+        }
+        else
+        {
+            Debug.LogWarning("CharacterArmorDresser->SetParent: GameObject its null");
+        }
+
     }
 
     public void UpdateDataFullPlate(ItemSlot slot, ArmorDresserModel.ArmorPart part, Armor armor , GameObject armorPiece)
