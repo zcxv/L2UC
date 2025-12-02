@@ -47,7 +47,7 @@ public class WeaponTypeParser {
     public static string GetWeaponAnim(WeaponType weaponType) {
         switch (weaponType) {
             case WeaponType.none:
-                return "shield";
+                return "1HS";
             case WeaponType.fist:
             case WeaponType.hand:
                 return "hand";
