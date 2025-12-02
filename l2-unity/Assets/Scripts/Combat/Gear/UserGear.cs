@@ -38,11 +38,9 @@ public class UserGear : Gear
         _armorDresser.OnEquipArmor += OnEquipArmor;
         _skinnedMeshSync = _container.GetComponentInChildren<SkinnedMeshSync>();
 
-        Debug.Log($"Container '{_container.name}' has {_container.transform.childCount} children:");
         for (int i = 0; i < _skinnedMeshSync.transform.childCount; i++)
         {
             var children = _skinnedMeshSync.transform.GetChild(i);
-            Debug.Log($"Child {i}: {_skinnedMeshSync.transform.GetChild(i).name}");
         }
     }
 
@@ -50,11 +48,6 @@ public class UserGear : Gear
     public void UnequipArmor(int itemId, ItemSlot slot)
     {
         int race = (int)_raceId;
-        //slot = ArmorDresserModel.GetExtendedArmorPart(slot);
-        //Armor[] defaultArmor = CharacterDefaultEquipment.GetDefaultArmorByItemSlot(slot);
-       // GameObject[] listArmorPiece = CopyListMash(slot,  defaultArmor, race);
-
-        
         GetDefaultGoWithArmorModel(slot, out Armor[] defaultArmor, out GameObject[] listArmorPiece , (int)_raceId);
 
         if (listArmorPiece != null && listArmorPiece.Length > 0)
@@ -80,7 +73,7 @@ public class UserGear : Gear
         }
 
         ItemSlot slotArmor = _armorDresser.GetExtendedOrGetCurrentArmorPart(slot);
-        if(ItemSlot.fullarmor != slotArmor)
+        if (ItemSlot.fullarmor != slotArmor)
         {
             EquipSingleArmor(armor, slotArmor, itemId);
         }
@@ -88,7 +81,6 @@ public class UserGear : Gear
         {
             EquipFullArmor(armor, slotArmor, itemId);
         }
-
     }
 
     private void EquipFullArmor(Armor armor, ItemSlot slotArmor, int itemId)

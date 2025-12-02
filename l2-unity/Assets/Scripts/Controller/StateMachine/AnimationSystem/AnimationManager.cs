@@ -37,6 +37,7 @@ public class AnimationManager : IAnimationManager
     {
        
         string finalAnimName = GetFinalNameAnim(animationName);
+        Debug.Log($"AnimationManager> start name player  {_player.name} animation {finalAnimName}");
         SetRecentName(finalAnimName);
         AddDebugInfo(finalAnimName);
         PlayerAnimationController.Instance.SetBool(finalAnimName, true);

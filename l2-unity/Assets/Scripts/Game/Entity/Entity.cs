@@ -1,4 +1,5 @@
 using System;
+using UnityEditorInternal;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
@@ -91,6 +92,8 @@ public class Entity : MonoBehaviour {
         UpdateSpeed(_stats.Speed);
 
         EquipAllWeapons();
+        _gear.OnEquipWeapon += OnWeaponEquipped;
+        _gear.OnUnequipWeapon += OnWeaponUnequipped;
     }
 
     public NetworkAnimationController GetAnimatorController()
@@ -108,6 +111,7 @@ public class Entity : MonoBehaviour {
         return VectorUtils.ConvertL2jDistance(_appearance.CollisionRadius);
     }
 
+ 
 
 
     // Called when ApplyDamage packet is received 
@@ -269,11 +273,12 @@ public class Entity : MonoBehaviour {
     public void EquipWeapon(int weaponId , bool isLeftHand)
     {
         _gear.EquipWeapon(weaponId, isLeftHand);
+
     }
 
-    public void UnequipWeapon(bool isLeftHand)
+    public void UnequipWeapon(bool isLeftHand , int itemId)
     {
-        _gear.UnequipWeapon(isLeftHand);
+        _gear.UnequipWeapon(isLeftHand , itemId);
     }
 
     public void UnequipAndDetermineType(ItemInstance item)
@@ -283,7 +288,7 @@ public class Entity : MonoBehaviour {
         switch (item.Category)
         {
             case ItemCategory.Weapon:
-                UnequipWeapon(false);
+                UnequipWeapon(false, item.ItemId);
                 break;
 
             case ItemCategory.ShieldArmor:
@@ -324,8 +329,8 @@ public class Entity : MonoBehaviour {
 
         if (weapon != null)
         {
-            usergear.UnequipWeapon(true);
-            usergear.UnequipShield();
+            usergear.UnequipWeapon(true , item.ItemId);
+            usergear.UnequipShield(item.ItemId);
         }
         else
         {
@@ -346,7 +351,27 @@ public class Entity : MonoBehaviour {
         else
         {
             usergear.EquipArmor(itemId, item.BodyPart);
+
         }
+    }
+
+    private void OnWeaponEquipped(int weaponId, Weapon weapon)
+    {
+        if(weapon != null)
+        {
+            if(this.GetType() == typeof(PlayerEntity))
+            {
+                PlayerStateMachine.Instance.NotifyEvent(Event.CHANGE_EQUIP);
+            }
+        }
+    }
+
+    private void OnWeaponUnequipped(string lastWeaponAnim)
+    {
+       if (this.GetType() == typeof(PlayerEntity))
+       {
+          PlayerStateMachine.Instance.NotifyEvent(Event.CHANGE_EQUIP);
+       }
     }
 
 }
