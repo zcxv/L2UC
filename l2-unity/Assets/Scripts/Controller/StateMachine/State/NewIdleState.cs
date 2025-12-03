@@ -1,4 +1,5 @@
 using UnityEditorInternal;
+using UnityEngine;
 
 public class NewIdleState : StateBase
 {
@@ -32,7 +33,6 @@ public class NewIdleState : StateBase
 
     private void HandleEquipChange()
     {
-        StopPreviousEquipAnimation();
         PlayAnimation(AnimationNames.WAIT);
     }
 
@@ -52,9 +52,11 @@ public class NewIdleState : StateBase
     private void StopPreviousEquipAnimation()
     {
         string lastAnimName = _stateMachine.Player.GetLastAnimName();
+        Debug.Log("StopPreviousEquipAnimation>>> stop " + lastAnimName);
         if (!string.IsNullOrEmpty(lastAnimName))
         {
             string paramName = AnimationNames.WAIT.Concat(lastAnimName);
+            Debug.Log("StopPreviousEquipAnimation>>> start " + paramName);
             AnimationManager.Instance.StopCurrentAnimation(paramName);
         }
     }

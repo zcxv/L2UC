@@ -122,7 +122,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: wait_pole
-  m_Speed: 0.3
+  m_Speed: 0.1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -1292,7 +1292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0405c13ddaf88874bbff9c836f2fae22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parameterName: 
+  parameterName: walk_hand
 --- !u!1101 &-3278478516532948859
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1737,7 +1737,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 0f79c550a29381a4084db99c5381c5be, type: 2}
   m_Tag: 
-  m_SpeedParameter: speed
+  m_SpeedParameter: run_speed
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -1890,7 +1890,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: wait_2HS
-  m_Speed: 0.3
+  m_Speed: 0.1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -2008,7 +2008,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 469f9d1f29ef02941a7b81a6cd119aeb, type: 2}
   m_Tag: 
-  m_SpeedParameter: speed
+  m_SpeedParameter: run_speed
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -3926,7 +3926,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 9847aecb47056e040ae8d56c5d2b1437, type: 2}
   m_Tag: 
-  m_SpeedParameter: speed
+  m_SpeedParameter: run_speed
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 

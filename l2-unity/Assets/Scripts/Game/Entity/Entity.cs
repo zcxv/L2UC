@@ -288,7 +288,8 @@ public class Entity : MonoBehaviour {
         switch (item.Category)
         {
             case ItemCategory.Weapon:
-                UnequipWeapon(false, item.ItemId);
+                bool leftHand = (item.IsBow())? true : false;
+                UnequipWeapon(leftHand, item.ItemId);
                 break;
 
             case ItemCategory.ShieldArmor:

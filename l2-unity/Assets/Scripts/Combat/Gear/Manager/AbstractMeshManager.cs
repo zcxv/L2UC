@@ -1,5 +1,6 @@
 using UnityEngine;
 using static ModelTable;
+using static UnityEditor.Progress;
 using static UnityEngine.EventSystems.EventTrigger;
 
 
@@ -210,6 +211,17 @@ public class AbstractMeshManager : MonoBehaviour
 
         renderer.material = material;
         return mesh;
+    }
+
+    protected string GetWeaponModelName(int itemId)
+    {
+        Weapon weapon = ItemTable.Instance.GetWeapon(itemId);
+        if (weapon == null)
+        {
+            return "Not_Found_Model_Name";
+        }
+       return  weapon.Weapongrp.Model.Replace("LineageWeapons." , "");
+
     }
 
 
