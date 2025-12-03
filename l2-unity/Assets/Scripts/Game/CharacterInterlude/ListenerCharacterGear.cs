@@ -5,7 +5,7 @@ public class ListenerCharacterGear : MonoBehaviour
 {
 
     public static ListenerCharacterGear Instance { get; private set; }
-    private Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
+
 
     private void Awake()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AnimationManager : IAnimationManager
 {
-    private PlayerAnimationController _controller;
+   
     private PlayerEntity _player;
     private static AnimationManager _instance;
     private string[] recentAnimationNames = new string[2];
@@ -12,10 +12,7 @@ public class AnimationManager : IAnimationManager
     private List<string> listTriggerAfterStart = new List<string>(10);
     public void SetAnimationManager(PlayerAnimationController controller , PlayerEntity player)
     {
-        _controller = controller;
         _player = player;
-
-
     }
 
 
@@ -48,7 +45,6 @@ public class AnimationManager : IAnimationManager
     {
         
         DesibleLastAnimationElseTrue(mId , controllerAnimator, animationName);
-        //Debug.Log("MosterAnimation> start animation " + animationName + " animatorName " + controllerAnimator.name);
         SetMonsterRecentName(mId , animationName);
         controllerAnimator.SetBool(animationName, true);
     }

@@ -137,6 +137,9 @@ public abstract class AbstractServerItem
         return "";
     }
 
+    public bool IsBow() => WeapongrpTable.Instance.GetWeapon(itemId)?.WeaponType == WeaponType.bow;
+
+
     public string GetDescription()
     {
         return "";

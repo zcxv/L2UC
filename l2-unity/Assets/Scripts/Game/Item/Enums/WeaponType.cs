@@ -62,6 +62,7 @@ public class WeaponTypeParser {
             case WeaponType.dualfist:
                 return "dual";
             case WeaponType.pole:
+            case WeaponType.staff:
                 return "pole";
             case WeaponType.bow:
                 return "bow";
