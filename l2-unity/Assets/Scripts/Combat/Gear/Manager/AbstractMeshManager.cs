@@ -128,7 +128,16 @@ public class AbstractMeshManager : MonoBehaviour
     //GetRightHandBone
     protected void SetType(WeaponType weaponType , bool leftSlot , Transform[] allBone)
     {
-        if(_go == null)
+        SetParentGo(_go, weaponType, leftSlot, allBone);
+    }
+
+    protected void SetTypeOtherGo(GameObject go, WeaponType weaponType, bool leftSlot, Transform[] allBone)
+    {
+        SetParentGo(go, weaponType, leftSlot, allBone);
+    }
+    private void SetParentGo(GameObject go , WeaponType weaponType, bool leftSlot, Transform[] allBone)
+    {
+        if (go == null)
         {
             Debug.LogError("Gear: Not Create GameObject " + weaponType);
             return;
@@ -136,19 +145,19 @@ public class AbstractMeshManager : MonoBehaviour
 
         if (weaponType == WeaponType.none)
         {
-            _go.transform.SetParent(allBone[0], false);
+            go.transform.SetParent(allBone[0], false);
         }
         else if (weaponType == WeaponType.bow)
         {
-            _go.transform.SetParent(allBone[1], false);
+            go.transform.SetParent(allBone[1], false);
         }
         else if (leftSlot)
         {
-            _go.transform.SetParent(allBone[2], false);
+            go.transform.SetParent(allBone[2], false);
         }
         else
         {
-            _go.transform.SetParent(allBone[3], false);
+            go.transform.SetParent(allBone[3], false);
         }
     }
 

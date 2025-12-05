@@ -1,6 +1,7 @@
 using System;
 using UnityEditorInternal;
 using UnityEngine;
+using static UnityEditor.Progress;
 using static UnityEngine.EventSystems.EventTrigger;
 
 [System.Serializable]
@@ -92,8 +93,8 @@ public class Entity : MonoBehaviour {
         UpdateSpeed(_stats.Speed);
 
         EquipAllWeapons();
-        _gear.OnEquipWeapon += OnWeaponEquipped;
-        _gear.OnUnequipWeapon += OnWeaponUnequipped;
+        _gear.OnEquipAnimationRefresh += OnWeaponEquipped;
+        _gear.OnUnequipAnimationRefresh += OnWeaponUnequipped;
     }
 
     public NetworkAnimationController GetAnimatorController()
@@ -139,7 +140,19 @@ public class Entity : MonoBehaviour {
             _gear.EquipWeapon(_appearance.LHand, true);
         }
         if (_appearance.RHand != 0) {
+            var weapon =  WeapongrpTable.Instance.GetWeapon(_appearance.RHand);
+
+            if(weapon != null)
+            {
+                if(weapon.WeaponType == WeaponType.dual)
+                {
+                    _gear.EquipLeftAndRightWeapon(_appearance.RHand);
+                    return;
+                }
+
+            }
             _gear.EquipWeapon(_appearance.RHand, false);
+
         }
     }
 
@@ -273,12 +286,16 @@ public class Entity : MonoBehaviour {
     public void EquipWeapon(int weaponId , bool isLeftHand)
     {
         _gear.EquipWeapon(weaponId, isLeftHand);
-
     }
 
-    public void UnequipWeapon(bool isLeftHand , int itemId)
+    public void EquipDualWeapon(int weaponId)
     {
-        _gear.UnequipWeapon(isLeftHand , itemId);
+        _gear.EquipLeftAndRightWeapon(weaponId);
+    }
+
+    public void UnequipWeapon(bool isLeftHand , int itemId , bool lrDestroy)
+    {
+        _gear.UnequipWeapon(isLeftHand , itemId, lrDestroy);
     }
 
     public void UnequipAndDetermineType(ItemInstance item)
@@ -289,7 +306,8 @@ public class Entity : MonoBehaviour {
         {
             case ItemCategory.Weapon:
                 bool leftHand = (item.IsBow())? true : false;
-                UnequipWeapon(leftHand, item.ItemId);
+                bool lrDestroy = (item.IsDual())? true : false;
+                UnequipWeapon(leftHand, item.ItemId , lrDestroy);
                 break;
 
             case ItemCategory.ShieldArmor:
@@ -310,7 +328,7 @@ public class Entity : MonoBehaviour {
         switch (item.Category)
         {
             case ItemCategory.Weapon:
-                EquipWeapon(item.ItemId, false);
+                HandleWeaponEquip(item, objectId);
                 break;
 
             case ItemCategory.ShieldArmor:
@@ -323,6 +341,17 @@ public class Entity : MonoBehaviour {
         }
     }
 
+    private void HandleWeaponEquip(ItemInstance item, int objectId)
+    {
+        if (item.IsDual())
+        {
+            EquipDualWeapon(item.ItemId);
+        }
+        else
+        {
+            EquipWeapon(item.ItemId, false);
+        }
+    }
     private void HandleUnequipSheildArmorItem(ItemInstance item, UserGear usergear)
     {
         int itemId = item.ItemId;

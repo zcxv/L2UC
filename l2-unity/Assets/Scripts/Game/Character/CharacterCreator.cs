@@ -333,6 +333,7 @@ public class CharacterCreator : MonoBehaviour
             gear.EquipWeapon(appearance.RHand, false);
         }
 
+
         return pawnObject;
     }
 
