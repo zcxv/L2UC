@@ -34,6 +34,9 @@ public class AnimationManager : IAnimationManager
     {
        
         string finalAnimName = GetFinalNameAnim(animationName);
+
+        DesibleLastAnimationElseTrue();
+
         Debug.Log($"AnimationManager> start name player  {_player.name} animation {finalAnimName}");
         SetRecentName(finalAnimName);
         AddDebugInfo(finalAnimName);
@@ -62,6 +65,22 @@ public class AnimationManager : IAnimationManager
             }
         }
     }
+
+    private void DesibleLastAnimationElseTrue()
+    {
+        if (!string.IsNullOrEmpty(GetCurrentAnimationName()))
+        {
+            string currentAnimation = GetCurrentAnimationName();
+            if (PlayerAnimationController.Instance.GetBool(currentAnimation))
+            {
+                PlayerAnimationController.Instance.SetBool(currentAnimation, false);
+            }
+
+            //Debug.Log($"AnimationManager> start name player  {_player.name} name animation {currentAnimation}");
+        }
+    }
+
+    
 
     public void StopMonsterCurrentAnimation(Animator animator, string animationName)
     {

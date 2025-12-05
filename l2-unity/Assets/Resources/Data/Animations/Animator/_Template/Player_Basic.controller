@@ -651,7 +651,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: wait_bow
-  m_Speed: 0.3
+  m_Speed: 0.1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -859,9 +859,9 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 9847aecb47056e040ae8d56c5d2b1437, type: 2}
+  m_Motion: {fileID: 7400000, guid: 80eb07d93cccac0439a474920f9f1114, type: 2}
   m_Tag: 
-  m_SpeedParameter: speed
+  m_SpeedParameter: run_speed
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -3515,7 +3515,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: wait_dual
-  m_Speed: 0.3
+  m_Speed: 0.1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -4964,9 +4964,9 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 9847aecb47056e040ae8d56c5d2b1437, type: 2}
+  m_Motion: {fileID: 7400000, guid: 2c763227965a47f4796f65922ff7c9d4, type: 2}
   m_Tag: 
-  m_SpeedParameter: speed
+  m_SpeedParameter: run_speed
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
