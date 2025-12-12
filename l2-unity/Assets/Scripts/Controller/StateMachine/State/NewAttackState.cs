@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class NewAttackState : StateBase
 {
+
     public NewAttackState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
     }
@@ -18,13 +19,31 @@ public class NewAttackState : StateBase
         {
             case Event.READY_TO_ACT:
                 Debug.Log("Attack Sate to Intention> начало новой атакие пришел запрос от сервера");
+
                 PlayerEntity.Instance.RefreshRandomPAttack();
-                AnimationManager.Instance.PlayAnimation(PlayerEntity.Instance.RandomName.ToString(), true);
-                break;
+                Animation random = PlayerEntity.Instance.RandomName;
+
+                //if (PlayerEntity.Instance.LastAtkAnimation == null)
+                //{
+                //    PlayerEntity.Instance.LastAtkAnimation = PlayerEntity.Instance.RandomName;
+                    AnimationManager.Instance.PlayAnimation(random.ToString(), true);
+               // }
+               // else
+               // {
+                 //   if (!PlayerEntity.Instance.LastAtkAnimation.AreAnimationsEqual(PlayerEntity.Instance.LastAtkAnimation, random))
+                  //  {
+                  //      AnimationManager.Instance.PlayAnimation(random.ToString(), true);
+                   //     Debug.Log($"AnimationManager> start name player  test2 animation pre start random {random} and {PlayerEntity.Instance.LastAtkAnimation}");
+                   //     PlayerEntity.Instance.LastAtkAnimation = random;
+                   // }
+                //}
+
+                    break;
             case Event.CANCEL:
                 Debug.Log("Attack Sate to Intention> Отмена скорее всего запрос пришел из ActionFaild");
                 PlayerStateMachine.Instance.ChangeIntention(Intention.INTENTION_IDLE);
                 PlayerStateMachine.Instance.NotifyEvent(Event.WAIT_RETURN);
+                PlayerEntity.Instance.LastAtkAnimation = null;
                 break;
 
         }

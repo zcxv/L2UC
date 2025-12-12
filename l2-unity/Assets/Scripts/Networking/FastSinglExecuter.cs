@@ -70,11 +70,10 @@ public class FastSinglExecuter : MonoBehaviour
     {
         Attack attackPacket = new Attack(data);
         AttackTest(attackPacket);
-        SaveVariable(attackPacket);
     }
 
 
-    //private async Task AttackTest(int attaker_id , int target_id , UnityEngine.Vector3 attackerPos , UnityEngine.Vector3 targetPos)
+ 
     private void AttackTest(Attack attackPacket)
     {
         synchronizationContext.Post(_ =>
@@ -82,18 +81,10 @@ public class FastSinglExecuter : MonoBehaviour
             Entity targetEntity = World.Instance.GetEntityNoLockSync(attackPacket.TargetId);
             Entity attakerEntity = World.Instance.GetEntityNoLockSync(attackPacket.AttackerObjId);
 
-            if (attakerEntity != null)
-            {
-                PlayerAttack(attackPacket, attakerEntity, targetEntity);
-            }
+            if (attakerEntity != null) PlayerAttack(attackPacket, attakerEntity, targetEntity);
+            if (targetEntity != null) MonsterAttack(attakerEntity, attackPacket);
 
-            if (targetEntity != null)
-            {
-                MonsterAttack(attakerEntity, attackPacket);
-                //Debug.Log("Monster Attack First ");
-            }
         }, null);
-
 
     }
 
@@ -142,21 +133,7 @@ public class FastSinglExecuter : MonoBehaviour
         }
     }
 
-    private void SaveVariable(Attack attackPacket)
-    {
-        EventProcessor.Instance.QueueEvent(() => {
-            string name = World.Instance.getEntityName(attackPacket.TargetId);
-            //example "$c1 hit you for $s2 damage."
-            //system message info c1
-            //StorageVariable.getInstance().Add�1Items(new VariableItem(name, attackPacket.AttackerObjId));
-            //system message info s1
 
-        });
-        //StorageVariable.getInstance().AddS1Items(new VariableItem(attackPacket.Damage.ToString(), attackPacket.AttackerObjId));
-        //system message info s2
-        //StorageVariable.getInstance().AddS2Items(new VariableItem(attackPacket.Damage.ToString(), attackPacket.AttackerObjId));
-
-    }
 
     private void MoveToPawn(byte[] data)
     {

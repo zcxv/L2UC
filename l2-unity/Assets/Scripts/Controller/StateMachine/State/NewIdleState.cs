@@ -47,6 +47,7 @@ public class NewIdleState : StateBase
     private void HandleWaitReturn()
     {
         PlayAnimation(AnimationNames.ATK_WAIT);
+        PlayerEntity.Instance.LastAtkAnimation = null;
     }
 
     private void StopPreviousEquipAnimation()

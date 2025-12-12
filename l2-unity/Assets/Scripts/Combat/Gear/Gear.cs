@@ -104,6 +104,7 @@ public class Gear : AbstractMeshManager
         }
 
         GameObject weaponPrefab = (GameObject)LoadMesh(EquipmentCategory.Weapon, weaponId);
+        if (weaponPrefab == null) return;
         _origWeaponPrefabName = weaponPrefab.name;
         var weaponNameAndId = weaponName + weaponId;
         WeaponType type = weapon.Weapongrp.WeaponType;

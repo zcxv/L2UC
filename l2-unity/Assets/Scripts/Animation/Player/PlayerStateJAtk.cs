@@ -94,15 +94,17 @@ public class PlayerStateJAtk : StateMachineBehaviour
     }
 
 
-    private void RecreateAnimationCurve(AnimationCurve animationCurve , float timeAtk , float timeAnimation)
+    private void RecreateAnimationCurveDefault(AnimationCurve animationCurve , float timeAtk , float timeAnimation)
     {
         Keyframe startKey = new Keyframe(0f, 0f); 
         Keyframe endKey = new Keyframe(timeAtk, timeAnimation);
         //float speedAtk = (float)0.362 / timeAtk;
-        float speedAtk = (float)0.3585 / timeAtk;
+        //float speedAtk = (float)0.3585 / timeAtk;
+        float speedAtk = (float)0.1585 / timeAtk; //default
         //default to sword slow down
         //test 0,603 для стандартной атакие или 0.36293652 0.1 на еденицу времени
-        Keyframe slowDownAttackKey = new Keyframe(0.07511136f, speedAtk);
+         //Keyframe slowDownAttackKey = new Keyframe(0.07511136f, speedAtk); //default
+        Keyframe slowDownAttackKey = new Keyframe(0.09011136f, speedAtk); 
         // Keyframe slowDownAttackKey = new Keyframe(0.07511136f, 0.4373413f);
         //Keyframe slowDownAttackKey = new Keyframe(0.07511136f, 0.9073413f);
 
@@ -111,6 +113,37 @@ public class PlayerStateJAtk : StateMachineBehaviour
         animationCurve.AddKey(endKey);
     }
 
-  
+    private void RecreateAnimationCurve(AnimationCurve animationCurve, float timeAtk, float timeAnimation)
+    {
+        // Очищаем старые ключи, если они есть
+        animationCurve.keys = new Keyframe[0];
+
+        // Создаем более плавную кривую с несколькими ключевыми точками
+        Keyframe startKey = new Keyframe(0f, 0f);
+        Keyframe windupKey = new Keyframe(timeAtk * 0.2f, timeAnimation * 0.15f);  // Начало замаха
+        Keyframe slowDownKey = new Keyframe(timeAtk * 0.5f, timeAnimation * 0.4f);  // Плавное замедление
+        Keyframe powerKey = new Keyframe(timeAtk * 0.8f, timeAnimation * 0.8f);    // Накопление силы
+        Keyframe endKey = new Keyframe(timeAtk, timeAnimation);  // Завершение атаки
+
+        // Добавляем ключи в кривую
+        animationCurve.AddKey(startKey);
+        animationCurve.AddKey(windupKey);
+        animationCurve.AddKey(slowDownKey);
+        animationCurve.AddKey(powerKey);
+        animationCurve.AddKey(endKey);
+
+        // Настраиваем плавность переходов между ключами
+        animationCurve.preWrapMode = WrapMode.ClampForever;
+        animationCurve.postWrapMode = WrapMode.ClampForever;
+
+        // Опционально: добавляем плавность кривым
+        for (int i = 1; i < animationCurve.keys.Length - 1; i++)
+        {
+            animationCurve.SmoothTangents(i, 0);
+        }
+    }
+
+
+
 
 }
