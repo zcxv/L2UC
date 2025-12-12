@@ -391,7 +391,9 @@ public class Entity : MonoBehaviour {
         {
             if(this.GetType() == typeof(PlayerEntity))
             {
+               
                 PlayerStateMachine.Instance.NotifyEvent(Event.CHANGE_EQUIP);
+
             }
         }
     }

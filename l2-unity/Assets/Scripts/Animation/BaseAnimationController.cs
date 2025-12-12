@@ -31,7 +31,10 @@ public class BaseAnimationController : MonoBehaviour
 
     public void SetWalkSpeedLobby(float value) => _animator.SetFloat("walk_speed", value);
 
-
+    public void OnAnimationComplete(string animationName)
+    {
+        Debug.Log($"AnimationManager> start name player  final animation {animationName}");
+    }
     public void SetPAtkSpd(float value)
     {
         //Debug.Log("Update Patak speed set " + value);

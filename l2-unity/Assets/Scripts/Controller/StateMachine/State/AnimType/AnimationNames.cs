@@ -19,6 +19,18 @@ public class Animation
     {
         return Value;
     }
+
+    public bool AreAnimationsEqual(Animation first, Animation second)
+    {
+        if (ReferenceEquals(first, second))
+            return true;
+
+        if (first is null || second is null)
+            return false;
+
+        return first.Value == second.Value;
+    }
+
 }
 
 public static class AnimationNames
@@ -38,4 +50,6 @@ public static class AnimationNames
     public static readonly Animation MONSTER_RUN = new Animation("run");
     public static readonly Animation MONSTER_ATK01 = new Animation("atk01");
 }
+
+
 

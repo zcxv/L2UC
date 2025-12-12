@@ -9,6 +9,8 @@ public class PlayerEntity : Entity
 
     private static PlayerEntity _instance;
     public Animation RandomName { get; set; }
+    
+    
     public int CountAtk { get; set; }
     public int CurrentAttackCount { get; set; }
 
@@ -17,6 +19,8 @@ public class PlayerEntity : Entity
 
     public bool IsAttack { get; set; }
     public bool isAutoAttack { get; set; }
+
+    public  Animation LastAtkAnimation { get; set; }
     public static PlayerEntity Instance { get => _instance; }
 
     //default combo name
@@ -142,8 +146,8 @@ public class PlayerEntity : Entity
     {
         int randomIndex = UnityEngine.Random.Range(0, pAtkList.Length);
         RandomName = pAtkList[randomIndex];
-        //RandomName = pAtkList[2];
     }
+
 
     public void UpdatePAtkSpeedPlayer(int pAtkSpd)
     {
