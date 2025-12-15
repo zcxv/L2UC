@@ -8,7 +8,7 @@ public interface IAnimationManager
     void PlayOriginalAnimation(string animationName);
     string GetCurrentAnimationName();
     string GetLastAnimationName();
-    void StopCurrentAnimation(string paramName);
+    void StopCurrentAnimation(string paramName , string runName = "");
 
     void PlayMonsterAnimation(int objId, NetworkAnimationController controllerAnimator, string animationName);
 

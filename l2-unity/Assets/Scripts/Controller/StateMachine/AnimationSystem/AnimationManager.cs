@@ -37,10 +37,10 @@ public class AnimationManager : IAnimationManager
 
         DesibleLastAnimationElseTrue();
 
-        Debug.Log($"AnimationManager> start name player  {_player.name} animation {finalAnimName}");
+        //Debug.Log($"AnimationManager> start name player  {_player.name} animation {finalAnimName}");
         SetRecentName(finalAnimName);
         AddDebugInfo(finalAnimName);
-        PlayerAnimationController.Instance.SetBool(finalAnimName, true);
+        PlayerAnimationController.Instance.SetBool(finalAnimName, true , _player.name);
     }
 
 
@@ -213,7 +213,7 @@ public class AnimationManager : IAnimationManager
         return _player.GetEquippedWeaponName();
     }
 
-    public void StopCurrentAnimation(string paramName)
+    public void StopCurrentAnimation(string paramName , string runName = "")
     {
         //Debug.Log("Walking State STOP Event param name 1 " + paramName);
         if (!string.IsNullOrEmpty(paramName))
@@ -222,7 +222,7 @@ public class AnimationManager : IAnimationManager
             if (PlayerAnimationController.Instance != null)
             {
                 //Debug.Log("Walking State STOP Event param name 3 " + paramName);
-                PlayerAnimationController.Instance.SetBool(paramName, false);
+                PlayerAnimationController.Instance.SetBool(paramName, false , runName);
             }
             
         }
