@@ -147,30 +147,6 @@ public class MonsterEntity : NetworkEntity
     }
 
  
-    public void StartRunAnim(bool run)
-    {
-        if (run)
-        {
-            //Debug.Log("GETTTTTTTTTTTTT ANIIIIIIII MATION STATUS " + _networkAnimationReceive.name);
-            _networkAnimationReceive.Test();
-            _networkAnimationReceive.SetAnimationProperty((int)MonsterAnimationEvent.Run, 1f);
-            //if (!_networkAnimationReceive.GetBool(_run))
-            // {
-            //   _networkAnimationReceive.SetBool("wait", true);
-            _networkAnimationReceive.SetBool(_run, true);
-            //    _networkAnimationReceive.SetBool("wait", false);
-           // }
-        }
-        else
-        {
-            if (!_networkAnimationReceive.GetBool(_walk))
-            {
-                _networkAnimationReceive.SetBool(_walk, true);
-            }
-        }
-    }
-
-
 
 
     public void OnDestroyDepends()

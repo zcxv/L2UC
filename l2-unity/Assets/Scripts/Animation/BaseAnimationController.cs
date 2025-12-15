@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -11,12 +13,25 @@ public class BaseAnimationController : MonoBehaviour
     private string _lastAnimationVariableName;
     private float _lastAtkClipLength;
     private float _pAtkSpd;
+    private Dictionary<string, bool> _priorityAnimations = new Dictionary<string, bool>();
+    private Queue<string> _animationQueue = new Queue<string>();
+    private bool _isProcessingQueue = false;
 
     public virtual void Initialize()
     {
         _animator = gameObject.GetComponentInChildren<Animator>(true);
         _lastAnimationVariableName = "wait_hand";
-        
+        _priorityAnimations = new Dictionary<string, bool>
+        {    
+            { "jatk01_1HS", false },
+            { "jatk02_1HS", false },
+            { "jatk03_1HS", false },
+ 
+            { "jatk01_pole", false },
+            { "jatk02_pole", false },
+            { "jatk03_pole", false },
+        };
+
     }
 
     public void SetRunSpeed(float value)
@@ -33,7 +48,23 @@ public class BaseAnimationController : MonoBehaviour
 
     public void OnAnimationComplete(string animationName)
     {
-        Debug.Log($"AnimationManager> start name player  final animation {animationName}");
+        if (_priorityAnimations.ContainsKey(animationName)){
+
+            _priorityAnimations[animationName] = false;
+            _isProcessingQueue = false;
+
+            if (_animationQueue.Count > 0)
+            {
+                Debug.Log($"AnimationManager> start name player  final animation {animationName}");
+                var lastAnimation = _animationQueue.Last();
+                Debug.Log($"AnimationManager> start name player  final возвращение блокировавшей  animation {lastAnimation}");
+
+                SetBool(lastAnimation, true , "player");
+
+            }
+
+        }
+
     }
     public void SetPAtkSpd(float value)
     {
@@ -101,34 +132,21 @@ public class BaseAnimationController : MonoBehaviour
         }
     }
 
-    public void WeaponAnimChanged(string newWeaponAnim)
-    {
-        ClearAnimParams();
 
-        if (!_lastAnimationVariableName.Contains("_"))
+
+
+    public void SetBool(string name, bool value , string entityName = "")
+    {
+        if(_isProcessingQueue && value == true)
         {
-            Debug.LogWarning($"The last animation was not a weapon animation: {_lastAnimationVariableName}");
-            // The last animation was not a weapon animation
-            return;
+            IfAnimationNeedsWait( _priorityAnimations, name);
+
+            if (value) return;
+            Debug.Log($"AnimationManager> start name player  добавление в список ожидания {name} статус {value} продолжение return ");
         }
 
-        string[] parts = _lastAnimationVariableName.Split("_");
-        if (parts.Length < 1)
-        {
-            // Should not happen
-            Debug.LogWarning($"Error while parsing previous animation name: {_lastAnimationVariableName}");
-            return;
-        }
 
-        string newAnimation = parts[0] + "_" + newWeaponAnim;
-        Debug.Log($"New Weapon animation name: {newAnimation}");
-        SetBool(newAnimation, true);
-    }
-
-
-    public void SetBool(string name, bool value)
-    {
-        //Debug.Log($"Set bool loooooooooooogggggggggg +++++++++++++ {name}={value}");
+        IfSpecialAnimationsCreateProcessQueue(name , ref _isProcessingQueue, _priorityAnimations, value);
 
         // Save the last animation name
         if (value == true)
@@ -138,14 +156,34 @@ public class BaseAnimationController : MonoBehaviour
         
         _animator.SetBool(name, value);
 
+        if (!string.IsNullOrEmpty(entityName))
+        {
+            Debug.Log($"AnimationManager> start name player  animation {name} and value {value}");
+        }
+
     }
 
-    public void Rebind()
+    private void IfSpecialAnimationsCreateProcessQueue(string animName , ref bool _isProcessingQueue , Dictionary<string, bool> _priorityAnimations , bool value)
     {
-        _animator.Rebind();
+       
+        if (_priorityAnimations.ContainsKey(animName) && _priorityAnimations[animName] == false && value == true)
+        {
+            _priorityAnimations[animName] = true;
+            _isProcessingQueue = true;
+        }
     }
 
-    public void debugPrint()
+    private void IfAnimationNeedsWait(Dictionary<string, bool> _priorityAnimations , string animName)
+    {
+        if (!_priorityAnimations.ContainsKey(animName))
+        {
+            _animationQueue.Enqueue(animName);
+            Debug.Log($"AnimationManager> start name player  добавление в список ожидания {animName} испольнение return ");
+        }
+    }
+
+
+public void debugPrint()
     {
         AnimatorControllerParameter[] parameters = _animator.parameters;
 
@@ -174,13 +212,7 @@ public class BaseAnimationController : MonoBehaviour
         }
     }
 
-    public void Test()
-    {
-        //bool t1 = _animator.GetBool("wait");
-        //bool t2 = _animator.GetBool("atk01");
-        //bool t3 = _animator.GetBool("run");
-        Debug.Log("");
-    }
+
     public bool GetBool(string name)
     {
         return _animator.GetBool(name);

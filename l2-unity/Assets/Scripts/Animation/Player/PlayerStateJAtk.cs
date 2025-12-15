@@ -29,7 +29,9 @@ public class PlayerStateJAtk : StateMachineBehaviour
         _startTime = Time.time;
         _endTime = TimeUtils.ConvertMsToSec(timeAtk);
         float timeAnimation = clipInfos[0].clip.length;
-        RecreateAnimationCurve(_animationCurve, _endTime, timeAnimation);
+        //default
+        //RecreateAnimationCurve(_animationCurve, _endTime, timeAnimation , 1.0f, 1.3f);
+        RecreateAnimationCurve(_animationCurve, _endTime, timeAnimation, 1.0f, 1.1f);
 
         PlayerAnimationController.Instance.UpdateAnimatorAtkSpeedL2j(timeAtk , timeAnimation);
 
@@ -82,7 +84,7 @@ public class PlayerStateJAtk : StateMachineBehaviour
     {
         if (animator.GetBool(parameterName) != false)
         {
-            AnimationManager.Instance.StopCurrentAnimation(parameterName);
+            AnimationManager.Instance.StopCurrentAnimation(parameterName , "player");
         }
 
     }
@@ -113,17 +115,35 @@ public class PlayerStateJAtk : StateMachineBehaviour
         animationCurve.AddKey(endKey);
     }
 
-    private void RecreateAnimationCurve(AnimationCurve animationCurve, float timeAtk, float timeAnimation)
+    // Normal speed
+    //RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation);
+
+    // 2-5% faster attack (speedMultiplier = 0.95-0.98)
+    //RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation, 0.96f, 1.0f);
+
+    // Slower attack (if needed)
+    //RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation, 1.0f, 1.2f);
+
+    // Faster and slower combination
+   // RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation, 0.97f, 1.1f);
+    private void RecreateAnimationCurve(AnimationCurve animationCurve, float timeAtk, float timeAnimation,
+    float speedMultiplier = 1.0f, float slowDownFactor = 1.0f)
     {
+        // Apply speed multiplier to the total time
+        float adjustedTimeAtk = timeAtk * speedMultiplier;
+
+        // Apply slow down factor to the animation values
+        float adjustedTimeAnimation = timeAnimation * slowDownFactor;
+
         // Очищаем старые ключи, если они есть
         animationCurve.keys = new Keyframe[0];
 
         // Создаем более плавную кривую с несколькими ключевыми точками
         Keyframe startKey = new Keyframe(0f, 0f);
-        Keyframe windupKey = new Keyframe(timeAtk * 0.2f, timeAnimation * 0.15f);  // Начало замаха
-        Keyframe slowDownKey = new Keyframe(timeAtk * 0.5f, timeAnimation * 0.4f);  // Плавное замедление
-        Keyframe powerKey = new Keyframe(timeAtk * 0.8f, timeAnimation * 0.8f);    // Накопление силы
-        Keyframe endKey = new Keyframe(timeAtk, timeAnimation);  // Завершение атаки
+        Keyframe windupKey = new Keyframe(adjustedTimeAtk * 0.2f, adjustedTimeAnimation * 0.15f);  // Начало замаха
+        Keyframe slowDownKey = new Keyframe(adjustedTimeAtk * 0.5f, adjustedTimeAnimation * 0.4f);  // Плавное замедление
+        Keyframe powerKey = new Keyframe(adjustedTimeAtk * 0.8f, adjustedTimeAnimation * 0.8f);    // Накопление силы
+        Keyframe endKey = new Keyframe(adjustedTimeAtk, adjustedTimeAnimation);  // Завершение атаки
 
         // Добавляем ключи в кривую
         animationCurve.AddKey(startKey);
@@ -142,6 +162,7 @@ public class PlayerStateJAtk : StateMachineBehaviour
             animationCurve.SmoothTangents(i, 0);
         }
     }
+
 
 
 
