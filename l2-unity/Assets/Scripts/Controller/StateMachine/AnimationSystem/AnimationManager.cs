@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,12 +11,18 @@ public class AnimationManager : IAnimationManager
     private string[] recentAnimationNames = new string[2];
     private Dictionary<int, string[]> recentMonsterAnimationNames = new Dictionary<int, string[]>();
     private List<string> listTriggerAfterStart = new List<string>(10);
-    public void SetAnimationManager(PlayerAnimationController controller , PlayerEntity player)
+
+    public event Action<string> OnAnimationFinished;
+    public event Action<string> OnAnimationStartShoot;
+    public event Action<string> OnAnimationLoadArrow;
+
+    public void SetAnimationManager(PlayerAnimationController controller, PlayerEntity player)
     {
         _player = player;
+        PlayerAnimationController.Instance.OnAnimationFinished += AnimationFinishedPlayerCallback;
+        PlayerAnimationController.Instance.OnAnimationStartShoot += AnimationShootPlayerCallback;
+        PlayerAnimationController.Instance.OnAnimationStartLoadArrow += AnimationShootPlayerCallback;
     }
-
-
     public static IAnimationManager Instance
     {
         get
@@ -232,5 +239,22 @@ public class AnimationManager : IAnimationManager
         }
     }
 
-   
+    public void AnimationFinishedPlayerCallback(string animationName)
+    {
+        OnAnimationFinished?.Invoke(animationName);
+    }
+
+    public void AnimationShootPlayerCallback(string animationName)
+    {
+        OnAnimationStartShoot?.Invoke(animationName);
+    }
+
+    public void AnimationLoadArrowPlayerCallback(string animationName)
+    {
+        OnAnimationLoadArrow?.Invoke(animationName);
+    }
+
+
+
+
 }

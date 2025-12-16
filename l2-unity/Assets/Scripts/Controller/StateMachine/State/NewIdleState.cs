@@ -33,7 +33,11 @@ public class NewIdleState : StateBase
 
     private void HandleEquipChange()
     {
-        PlayAnimation(AnimationNames.WAIT);
+        var animation = _stateMachine.Player.isAutoAttack
+            ? AnimationNames.ATK_WAIT
+            : AnimationNames.WAIT;
+        PlayAnimation(animation);
+
     }
 
     private void HandleArrival()

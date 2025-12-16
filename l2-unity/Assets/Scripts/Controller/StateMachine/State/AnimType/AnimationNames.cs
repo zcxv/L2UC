@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Animation
 {
-    public string Value { get; }
+    public string Value { get; set; }
 
     public Animation(string value)
     {
@@ -13,6 +13,11 @@ public class Animation
     public string Concat(string name)
     {
         return Value + name;
+    }
+
+    public void MergeStrings(string name)
+    {
+        Value = Value + name;
     }
 
     public override string ToString()
@@ -49,6 +54,26 @@ public static class AnimationNames
     public static readonly Animation MONSTER_WALK = new Animation("walk");
     public static readonly Animation MONSTER_RUN = new Animation("run");
     public static readonly Animation MONSTER_ATK01 = new Animation("atk01");
+}
+
+public static class SpecialAnimationNames
+{
+    public static readonly Animation ATK_BOW_ATK1 = new Animation("jatk01_bow");
+    public static readonly Animation ATK_BOW_ATK2 = new Animation("jatk02_bow");
+    public static readonly Animation ATK_BOW_ATK3 = new Animation("jatk03_bow");
+
+    public static readonly Animation[]  arrayAtkSpecials = new Animation[]{ ATK_BOW_ATK1,ATK_BOW_ATK2,ATK_BOW_ATK3 };
+    public static readonly Animation[]  arrayAtkBow = new Animation[] { ATK_BOW_ATK1, ATK_BOW_ATK2, ATK_BOW_ATK3 };
+
+    public static Animation[] GetSpecialsAttackAnimations()
+    {
+            return arrayAtkSpecials;
+    }
+
+    public static Animation[] GetArrowAttackName()
+    {
+        return arrayAtkBow;
+    }
 }
 
 

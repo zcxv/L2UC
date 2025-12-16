@@ -288,6 +288,14 @@ public class Entity : MonoBehaviour {
         _gear.EquipWeapon(weaponId, isLeftHand);
     }
 
+
+    public void EquipArrow(int itemId , bool leftSlot = false)
+    {
+        _gear.EquipArrowEtcItem(itemId, leftSlot);
+    }
+
+    public bool IsUseBow() => PlayerEntity.Instance.GetCurrentAnimName().IndexOf("bow") > -1;
+
     public void EquipDualWeapon(int weaponId)
     {
         _gear.EquipLeftAndRightWeapon(weaponId);

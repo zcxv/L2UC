@@ -179,6 +179,12 @@ public class FastSinglExecuter : MonoBehaviour
 
     private void StopMoveUpdate(StopMove stopMovePacket)
     {
+        if(stopMovePacket == null)
+        {
+            Debug.LogError("FastSinglExecuter->StopMoveUpdate: пришел пакет null");
+            return;
+        }
+
         Entity entity = World.Instance.GetEntityNoLockSync(stopMovePacket.ObjId);
 
         if(entity == null) return;
