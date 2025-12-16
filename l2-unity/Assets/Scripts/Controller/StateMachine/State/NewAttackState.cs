@@ -1,10 +1,14 @@
 using UnityEngine;
+using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 public class NewAttackState : StateBase
 {
-
+    private const int WOODEN_ARROW = 17;
     public NewAttackState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
+        AnimationManager.Instance.OnAnimationFinished += CallBackAnimationFinish;
+        AnimationManager.Instance.OnAnimationStartShoot += CallBackStartShoot;
+        AnimationManager.Instance.OnAnimationStartShoot += CallBackLoadArrow;
     }
 
 
@@ -18,27 +22,13 @@ public class NewAttackState : StateBase
         switch (evt)
         {
             case Event.READY_TO_ACT:
-                Debug.Log("Attack Sate to Intention> начало новой атакие пришел запрос от сервера");
+                Debug.Log("Attack Sate to Intention> начало новой atk пришел запрос от сервера");
 
                 PlayerEntity.Instance.RefreshRandomPAttack();
                 Animation random = PlayerEntity.Instance.RandomName;
+                AnimationManager.Instance.PlayAnimation(random.ToString(), true);
 
-                //if (PlayerEntity.Instance.LastAtkAnimation == null)
-                //{
-                //    PlayerEntity.Instance.LastAtkAnimation = PlayerEntity.Instance.RandomName;
-                    AnimationManager.Instance.PlayAnimation(random.ToString(), true);
-               // }
-               // else
-               // {
-                 //   if (!PlayerEntity.Instance.LastAtkAnimation.AreAnimationsEqual(PlayerEntity.Instance.LastAtkAnimation, random))
-                  //  {
-                  //      AnimationManager.Instance.PlayAnimation(random.ToString(), true);
-                   //     Debug.Log($"AnimationManager> start name player  test2 animation pre start random {random} and {PlayerEntity.Instance.LastAtkAnimation}");
-                   //     PlayerEntity.Instance.LastAtkAnimation = random;
-                   // }
-                //}
-
-                    break;
+                break;
             case Event.CANCEL:
                 Debug.Log("Attack Sate to Intention> Отмена скорее всего запрос пришел из ActionFaild");
                 PlayerStateMachine.Instance.ChangeIntention(Intention.INTENTION_IDLE);
@@ -48,4 +38,57 @@ public class NewAttackState : StateBase
 
         }
     }
+
+
+
+    private void CallBackAnimationFinish(string animName)
+    {
+        Animation[] specials = SpecialAnimationNames.GetSpecialsAttackAnimations();
+
+        foreach (Animation special in specials)
+        {
+            if (animName == special.ToString())
+            {
+                PlayerStateMachine.Instance.ChangeIntention(Intention.INTENTION_IDLE);
+                PlayerStateMachine.Instance.NotifyEvent(Event.WAIT_RETURN);
+                break;
+            }
+        }
+    }
+
+    private void CallBackStartShoot(string animName)
+    {
+        Animation[] specials = SpecialAnimationNames.GetSpecialsAttackAnimations();
+
+        foreach (Animation special in specials)
+        {
+            if (animName == special.ToString())
+            {
+                
+
+                // Общая проверка всех необходимых компонентов
+                if (PlayerEntity.Instance == null ||
+                    PlayerEntity.Instance.GetGoEtcItem() == null ||
+                    PlayerEntity.Instance.Target == null)
+                {
+                    Debug.LogError("NewAttackState->CallBackStartShoot: Критическая ошибка не все компоненты загрузились что-бы отправить стрелу в полет");
+                    return;
+                }
+
+                Vector3 startPos = PlayerEntity.Instance.GetPositionRightHand();
+                GameObject go = PlayerEntity.Instance.GetGoEtcItem();
+                Vector3 target = PlayerEntity.Instance.Target.position;
+   
+                ProjectileManager.Instance.LaunchProjectile(go,  startPos, target);
+                break;
+            }
+        }
+    }
+
+    private void CallBackLoadArrow(string animName)
+    {
+        PlayerEntity.Instance.EquipArrow(WOODEN_ARROW);
+    }
+
+
 }

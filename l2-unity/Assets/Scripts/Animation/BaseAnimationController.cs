@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,27 @@ public class BaseAnimationController : MonoBehaviour
     private Dictionary<string, bool> _priorityAnimations = new Dictionary<string, bool>();
     private Queue<string> _animationQueue = new Queue<string>();
     private bool _isProcessingQueue = false;
-
+    public Action<string> OnAnimationFinished;
+    public Action<string> OnAnimationStartShoot;
+    public Action<string> OnAnimationStartLoadArrow;
     public virtual void Initialize()
     {
         _animator = gameObject.GetComponentInChildren<Animator>(true);
         _lastAnimationVariableName = "wait_hand";
         _priorityAnimations = new Dictionary<string, bool>
-        {    
+        {
+            { "jatk01_bow", false },
+            { "jatk02_bow", false },
+            { "jatk03_bow", false },
+
+            { "jatk01_dual", false },
+            { "jatk02_dual", false },
+            { "jatk03_dual", false },
+
+            { "jatk01_2HS", false },
+            { "jatk02_2HS", false },
+            { "jatk03_2HS", false },
+
             { "jatk01_1HS", false },
             { "jatk02_1HS", false },
             { "jatk03_1HS", false },
@@ -52,19 +67,26 @@ public class BaseAnimationController : MonoBehaviour
 
             _priorityAnimations[animationName] = false;
             _isProcessingQueue = false;
+            OnAnimationFinished?.Invoke(animationName);
 
             if (_animationQueue.Count > 0)
             {
-                Debug.Log($"AnimationManager> start name player  final animation {animationName}");
                 var lastAnimation = _animationQueue.Last();
-                Debug.Log($"AnimationManager> start name player  final возвращение блокировавшей  animation {lastAnimation}");
-
                 SetBool(lastAnimation, true , "player");
-
             }
 
         }
 
+    }
+
+    public void OnAnimationShoot(string animationName)
+    {
+        OnAnimationStartShoot?.Invoke(animationName);
+    }
+
+    public void OnAnimationLoadArrow(string animationName)
+    {
+        OnAnimationStartLoadArrow?.Invoke(animationName);
     }
     public void SetPAtkSpd(float value)
     {

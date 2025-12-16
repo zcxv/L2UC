@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static ModelTable;
+using static UnityEditor.Progress;
 
 public abstract class AbstractGetCache
 {
@@ -10,6 +11,7 @@ public abstract class AbstractGetCache
     protected static int HAIR_COLOR_COUNT = 4;
 
     protected Dictionary<string, GameObject> _weapons;
+    protected Dictionary<string, GameObject> _etcItems;
     protected Dictionary<string, GameObject> _npcs;
     protected Dictionary<string, L2Armor> _armors;
 
@@ -102,56 +104,7 @@ public abstract class AbstractGetCache
 
         return true;
     }
-//backup
-    //public L2ArmorPiece GetArmorPiece(Armor armor, CharacterRaceAnimation raceId)
-    // {
-    //  if (armor == null)
-    //  {
-    //     Debug.LogWarning($"Given armor is null");
-    //      return null;
-    //  }
 
-    // string model = armor.Armorgrp.FirstModel[(byte)raceId];
-    // if (!_armors.ContainsKey(model))
-    // {
-    //     Debug.LogWarning($"Can't find armor model {model} in ModelTable");
-    //    return null;
-    // }
-
-    // GameObject baseModel = _armors[model].baseModel;
-    // GameObject[] baseModelAllModels = _armors[model].allModels;
-    // if (baseModel == null)
-    // {
-    //    Debug.LogWarning($"Can't find armor model {model} for {raceId} in ModelTable");
-    //    return null;
-    ///}
-
-    // if (_armors[model].materials == null)
-    // {
-    //    Debug.LogWarning($"Can't find armor material for {model} and {raceId} in ModelTable");
-    //    return null;
-    //}
-
-    //if (armor.Armorgrp.FirstTexture == null || armor.Armorgrp.FirstTexture.Length < RACE_COUNT || armor.Armorgrp.FirstTexture[(byte)raceId] == null)
-    // {
-    //    Debug.LogWarning($"Can't find armor material for {model} and {raceId} in ModelTable");
-    //    return null;
-    //}
-    //var textureName = armor.Armorgrp.FirstTexture[(byte)raceId];
-    //Material firstMaterial;
-    //Material[] allMaterials;
-    //_armors[model].materials.TryGetValue(armor.Armorgrp.FirstTexture[(byte)raceId], out firstMaterial);
-    // _armors[model].allMaterials.TryGetValue(armor.Armorgrp.FirstTexture[(byte)raceId], out allMaterials);
-
-    //if (firstMaterial == null)
-    //{
-    //    Debug.LogWarning($"Can't find armor material for model: {model} and material: {textureName} and race: {raceId} in ModelTable");
-    //    return null;
-    //}
-
-    ///L2ArmorPiece armorModel = new L2ArmorPiece(baseModel, firstMaterial, baseModelAllModels, allMaterials);
-    //return armorModel;
-    //}
 
     public GameObject GetWeaponById(int itemId)
     {
@@ -164,6 +117,17 @@ public abstract class AbstractGetCache
         return GetWeapon(weapon.Weapongrp.Model);
     }
 
+    public GameObject GetEtcById(int itemId)
+    {
+        EtcItem etcItem = ItemTable.Instance.GetEtcItem(itemId);
+        if (etcItem == null)
+        {
+            Debug.LogWarning($"Can't find etcItem  {itemId} in ItemTable");
+        }
+
+        return GetEtcItem(etcItem.EtcItemgrp.Model);
+    }
+
     public GameObject GetWeapon(string model)
     {
         if (!_weapons.ContainsKey(model))
@@ -173,6 +137,24 @@ public abstract class AbstractGetCache
         }
 
         GameObject go = _weapons[model];
+        if (go == null)
+        {
+            Debug.LogWarning($"Can't find weapon model {model} in ModelTable");
+            return null;
+        }
+
+        return go;
+    }
+
+    public GameObject GetEtcItem(string model)
+    {
+        if (!_etcItems.ContainsKey(model))
+        {
+            Debug.LogWarning($"Can't find weapon model {model} in ModelTable");
+            return null;
+        }
+
+        GameObject go = _etcItems[model];
         if (go == null)
         {
             Debug.LogWarning($"Can't find weapon model {model} in ModelTable");

@@ -145,7 +145,7 @@ public class PlayerEntity : Entity
     public void RefreshRandomPAttack()
     {
         int randomIndex = UnityEngine.Random.Range(0, pAtkList.Length);
-        RandomName = pAtkList[randomIndex];
+        RandomName = pAtkList[1];
     }
 
 
@@ -232,5 +232,20 @@ public class PlayerEntity : Entity
     public string GetLastAnimName()
     {
         return _gear.LastWeaponAnim;
+    }
+
+    public string GetCurrentAnimName()
+    {
+        return _gear.WeaponAnim;
+    }
+
+    public Vector3 GetPositionRightHand()
+    {
+        return _gear.GetPositionRightHand();
+    }
+
+    public GameObject GetGoEtcItem()
+    {
+        return _gear.GetGoEtcItem();
     }
 }

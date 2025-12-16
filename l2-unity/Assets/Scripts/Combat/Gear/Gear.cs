@@ -13,9 +13,11 @@ public class Gear : AbstractMeshManager
     protected NetworkAnimationController _networkAnimationReceive;
     protected int _ownerId;
     protected CharacterRaceAnimation _raceId;
+    public const string etcName = "etc_";
     public const string weaponName = "weapon_";
     public const string shieldName = "shield_";
     public Transform[] allBone = new Transform[4];
+    private GameObject _goCurrentEtcItem;
     [Header("Weapons")]
     [Header("Meta")]
     private Weapon _rightHandWeapon;
@@ -131,6 +133,29 @@ public class Gear : AbstractMeshManager
         }
 
         _lastRightHandType = type;
+
+    }
+
+
+    public void EquipArrowEtcItem(int etcId, bool leftSlot)
+    {
+        EtcItem etcItem = ItemTable.Instance.GetEtcItem(etcId);
+
+        if (etcId == 0 | IsWeaponEquipped(etcId, leftSlot) | etcItem == null)
+        {
+            return;
+        }
+
+        GameObject etcItemPrefab = (GameObject)LoadMesh(EquipmentCategory.EtcItem, etcId);
+        if (etcItemPrefab == null) return;
+
+        var etcIdNameAndId = etcName + etcId;
+        Transform[] refreshAllBone = RefreshBone(allBone);
+        GameObject go = CreateCopy(etcItemPrefab, etcIdNameAndId, ObjectType.Arrow);
+
+        _goCurrentEtcItem = go;
+
+        ActivateGameObject(go, WeaponType.arrow, leftSlot, refreshAllBone);
 
     }
 
@@ -443,5 +468,13 @@ public class Gear : AbstractMeshManager
         return allWeaponsFound.Count + allShieldsFound.Count;
     }
 
+    public Vector3 GetPositionRightHand()
+    {
+        return GetRightHandBone().position;
+    }
 
+    public GameObject GetGoEtcItem()
+    {
+        return _goCurrentEtcItem;
+    }
 }

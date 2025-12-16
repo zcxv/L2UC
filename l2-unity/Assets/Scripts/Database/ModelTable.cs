@@ -40,6 +40,7 @@ public class ModelTable : AbstractCache
         CacheHair();
         CacheWeapons();
         CacheArmors();
+        CacheEtcItems();
         CacheNpcs();
     }
 
@@ -155,6 +156,31 @@ public class ModelTable : AbstractCache
         Debug.Log($"Successfully loaded {success}/{ItemTable.Instance.Weapons.Count} weapon model(s).");
     }
 
+    private void CacheEtcItems()
+    {
+          _etcItems = new Dictionary<string, GameObject>();
+          int success = 0;
+          foreach (KeyValuePair<int, EtcItem> kvp in ItemTable.Instance.EtcItems)
+          {
+
+            if (kvp.Value.EtcItemgrp == null || kvp.Value.EtcItemgrp.Model == null ||
+             _etcItems.ContainsKey(kvp.Value.EtcItemgrp.Model))
+            {
+                continue;
+            }
+
+
+            GameObject etcItem = LoadWeaponModel(kvp.Value.EtcItemgrp.Model);
+                if (etcItem != null)
+                {
+                    success++;
+                    _etcItems[kvp.Value.EtcItemgrp.Model] = etcItem;
+                }
+          }
+
+          Debug.Log($"Successfully loaded {success}/{ItemTable.Instance.EtcItems.Count} EtcItemgrp model(s).");
+    }
+
 
 
     private void CacheArmors()
@@ -252,93 +278,6 @@ public class ModelTable : AbstractCache
         Debug.Log($"Successfully loaded {modelCount} armor model(s).");
         Debug.Log($"Successfully loaded {materialCount} armor material(s).");
     }
-
-
-    //backup
-    //private void CacheArmors() {
-    // _armors = new Dictionary<string, L2Armor>();
-
-    //  int armorMaterials = 0;
-    //  foreach (KeyValuePair<int, Armor> kvp in ItemTable.Instance.Armors) {
-    //  for (int i = 0; i < RACE_COUNT; i++) {
-    //    string model = kvp.Value.Armorgrp.FirstModel[i];
-    //   List<string> models = kvp.Value.Armorgrp.AllModels[i];
-    //   ItemSlot slot = kvp.Value.Armorgrp.BodyPart;
-
-    //   if (ItemSlot.alldress == slot) return;
-
-    //  if (model?.IndexOf("MFighter_m007_u") > -1)
-    //  {
-    //      Debug.Log("");
-    // }
-    // if (model == null) {
-    //     Debug.LogWarning($"Model string is null for race {(CharacterRaceAnimation)i} in armor {kvp.Key}");
-    //      continue;
-    //  }
-
-    //  L2Armor l2Model = null;
-    //  if (!_armors.ContainsKey(model)) {
-    //    l2Model = new L2Armor();
-    //     l2Model.baseModel = LoadArmorModel(model);
-    //   if(l2Model.baseModel != null) {
-    //      l2Model.materials = new Dictionary<string, Material>();
-    //      l2Model.allMaterials = new Dictionary<string, Material[]>();
-    //      _armors.Add(model, l2Model);
-    //  }
-
-    //  l2Model.allModels = LoadAllArmorModels(models);
-
-    // }
-
-    //  if (l2Model == null) {
-    //      _armors.TryGetValue(model, out l2Model);
-    //  }
-
-    // if (l2Model == null || l2Model.baseModel == null) {
-    //Debug.LogWarning($"Armor {kvp.Key} model cannot be loaded for race {(CharacterRaceAnimation)i} at {model}");
-    //    continue;
-    //}
-
-
-    //string texture = kvp.Value.Armorgrp.FirstTexture[i];
-    // List<string> textures = kvp.Value.Armorgrp.AllTextures[i];
-
-    //if(l2Model.materials.ContainsKey(texture)) {
-    //    continue;
-    //}
-
-    //Material[] allArmorMaterials = LoadAllArmorMaterials(textures);
-    // Material armorMaterial = LoadArmorMaterial(texture);
-    // if (l2Model.allModels[0] == null |
-    //    l2Model.allModels.Length < models.Count &
-    //    ItemSlot.fullarmor == slot)
-    //{
-    //    l2Model.allModels = LoadAllArmorModels(models);
-    //   Debug.Log($"До загрузка в кеш всех моделей, а не только 1 для модели {model} загружаем {l2Model.allModels.Length}");
-    //}
-
-
-    //if (armorMaterial == null) {
-    // Debug.LogWarning($"Armor {kvp.Key} material cannot be loaded for race {(CharacterRaceAnimation)i} at {texture}");
-    //    continue;
-    // }
-
-    //if(allArmorMaterials.Length > 0 & ItemSlot.fullarmor == slot) l2Model.allMaterials.Add(texture, allArmorMaterials);
-
-    // l2Model.materials.Add(texture, armorMaterial);
-    //armorMaterials++;
-    //}
-    //}
-
-   // Debug.Log($"Successfully loaded {_armors.Count} armor model(s).");
-    //    Debug.Log($"Successfully loaded {armorMaterials} armor marerial(s).");
-    //}
-
-
-
-
-
-
 
     private void CacheNpcs() {
         _npcs = new Dictionary<string, GameObject>();
