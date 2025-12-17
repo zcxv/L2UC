@@ -42,7 +42,7 @@ public class ObjectPoolManager : AbstractPoolManager, IPoolManager
             objectTypePoolLimits[type] = _maxSizePool;
         }
 
-        SetPoolLimit(ObjectType.Arrow , 5);
+        SetPoolLimit(ObjectType.Arrow , 25);
         SetupPoolHierarchy(pools, poolParent);
         Debug.Log($"Создание пула объектов успешно. Размер: {poolDictionary.Count}");
     }

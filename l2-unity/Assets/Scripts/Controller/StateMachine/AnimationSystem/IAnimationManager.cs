@@ -14,8 +14,11 @@ public interface IAnimationManager
     void StopMonsterCurrentAnimation(Animator animator, string animationName);
     Dictionary<string, float> PlayerGetAllFloat();
     void PlayerSetAllFloat(Dictionary<string, float> floatValues);
+    void UpdateRemainingAtkTime(float remainingAtkTime);
+    float GetRemainingAtkTime();
 
     public event Action<string> OnAnimationFinished;
-    public event Action<string> OnAnimationStartShoot;
+    public event Action<string , float> OnAnimationStartShoot;
     public event Action<string> OnAnimationLoadArrow;
+   
 }

@@ -108,7 +108,6 @@ public class BaseAnimationController : MonoBehaviour
     public void UpdateAnimatorAtkSpeedL2j(float timeAtk , float clipLength)
     {
         float newAtkSpd = clipLength * 1000f / timeAtk;
-        //Debug.Log("PATACK speed set " + newAtkSpd);
         _animator.SetFloat("patkspd", newAtkSpd);
     }
 

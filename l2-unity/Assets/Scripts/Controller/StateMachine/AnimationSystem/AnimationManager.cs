@@ -11,9 +11,9 @@ public class AnimationManager : IAnimationManager
     private string[] recentAnimationNames = new string[2];
     private Dictionary<int, string[]> recentMonsterAnimationNames = new Dictionary<int, string[]>();
     private List<string> listTriggerAfterStart = new List<string>(10);
-
+    private float _remainingAtkTime = 0;
     public event Action<string> OnAnimationFinished;
-    public event Action<string> OnAnimationStartShoot;
+    public event Action<string , float> OnAnimationStartShoot;
     public event Action<string> OnAnimationLoadArrow;
 
     public void SetAnimationManager(PlayerAnimationController controller, PlayerEntity player)
@@ -21,7 +21,7 @@ public class AnimationManager : IAnimationManager
         _player = player;
         PlayerAnimationController.Instance.OnAnimationFinished += AnimationFinishedPlayerCallback;
         PlayerAnimationController.Instance.OnAnimationStartShoot += AnimationShootPlayerCallback;
-        PlayerAnimationController.Instance.OnAnimationStartLoadArrow += AnimationShootPlayerCallback;
+        PlayerAnimationController.Instance.OnAnimationStartLoadArrow += AnimationLoadArrowPlayerCallback;
     }
     public static IAnimationManager Instance
     {
@@ -246,7 +246,7 @@ public class AnimationManager : IAnimationManager
 
     public void AnimationShootPlayerCallback(string animationName)
     {
-        OnAnimationStartShoot?.Invoke(animationName);
+        OnAnimationStartShoot?.Invoke(animationName , _remainingAtkTime);
     }
 
     public void AnimationLoadArrowPlayerCallback(string animationName)
@@ -254,7 +254,15 @@ public class AnimationManager : IAnimationManager
         OnAnimationLoadArrow?.Invoke(animationName);
     }
 
+    public void UpdateRemainingAtkTime(float remainingAtkTime)
+    {
+        _remainingAtkTime = remainingAtkTime;
+    }
 
+    public float GetRemainingAtkTime()
+    {
+        return _remainingAtkTime;
+    }
 
 
 }

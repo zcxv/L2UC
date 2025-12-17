@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class VectorUtils : MonoBehaviour {
@@ -127,6 +128,15 @@ public class VectorUtils : MonoBehaviour {
 
             // ¬озвращаем новую позицию, смещенную от позиции attacker
             return attacker.position + direction * raduis + Vector3.up * particleHeight;
+    }
+
+    public static Vector3 GetCollision(Vector3 attacker, Transform target)
+    {
+        var heading = attacker - target.position;
+        float angle = Vector3.Angle(heading, target.forward);
+        float particleHeight = target.GetComponent<Entity>().Appearance.CollisionHeight * 1.25f;
+        Vector3 direction = Quaternion.Euler(0, angle, 0) * target.forward;
+        return target.position + direction * 0.15f + Vector3.up * particleHeight;
     }
 
     public static Vector3 ConvertToUnityUnscaled(Vector3 ueVector) {

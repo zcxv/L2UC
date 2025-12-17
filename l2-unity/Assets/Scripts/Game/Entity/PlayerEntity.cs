@@ -9,8 +9,9 @@ public class PlayerEntity : Entity
 
     private static PlayerEntity _instance;
     public Animation RandomName { get; set; }
-    
-    
+
+    public float RemainingTime { get; set; }
+
     public int CountAtk { get; set; }
     public int CurrentAttackCount { get; set; }
 
@@ -247,5 +248,13 @@ public class PlayerEntity : Entity
     public GameObject GetGoEtcItem()
     {
         return _gear.GetGoEtcItem();
+    }
+
+    public float TargetDistance()
+    {
+        Vector3 startPos = GetPositionRightHand();
+        Transform target = PlayerEntity.Instance.Target;
+
+        return VectorUtils.Distance2D(startPos , target.position);
     }
 }
