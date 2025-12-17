@@ -1,4 +1,6 @@
+using Org.BouncyCastle.Bcpg;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 public class NewAttackState : StateBase
@@ -8,7 +10,7 @@ public class NewAttackState : StateBase
     {
         AnimationManager.Instance.OnAnimationFinished += CallBackAnimationFinish;
         AnimationManager.Instance.OnAnimationStartShoot += CallBackStartShoot;
-        AnimationManager.Instance.OnAnimationStartShoot += CallBackLoadArrow;
+        AnimationManager.Instance.OnAnimationLoadArrow += CallBackLoadArrow;
     }
 
 
@@ -56,7 +58,7 @@ public class NewAttackState : StateBase
         }
     }
 
-    private void CallBackStartShoot(string animName)
+    private void CallBackStartShoot(string animName , float remainingAtkTime)
     {
         Animation[] specials = SpecialAnimationNames.GetSpecialsAttackAnimations();
 
@@ -64,22 +66,36 @@ public class NewAttackState : StateBase
         {
             if (animName == special.ToString())
             {
-                
 
-                // Общая проверка всех необходимых компонентов
+
+                GameObject go = PlayerEntity.Instance.GetGoEtcItem();
+                Transform target = PlayerEntity.Instance.Target;
+
                 if (PlayerEntity.Instance == null ||
-                    PlayerEntity.Instance.GetGoEtcItem() == null ||
-                    PlayerEntity.Instance.Target == null)
+                    go == null ||
+                    target == null)
                 {
                     Debug.LogError("NewAttackState->CallBackStartShoot: Критическая ошибка не все компоненты загрузились что-бы отправить стрелу в полет");
                     return;
                 }
 
+                //I'm currently considering it as an attack for bows. Basically, when we attack with a bow,
+                //we take the total attack time. For example, the entire attack time is 1552ms. Then, using /2,
+                //we get 770 for the bow attack and 770 for the arrow flight. Therefore, in the bow attack code,
+                //we take the time of 770 and use the 2nd part here.
+                //float timeAtk = CalcBaseParam.CalculateTimeL2j(PlayerEntity.Instance.Stats.BasePAtkSpeed) / 2;
+                //timeAtk = TimeUtils.ConvertMsToSec(timeAtk); // Convert to seconds if needed
                 Vector3 startPos = PlayerEntity.Instance.GetPositionRightHand();
-                GameObject go = PlayerEntity.Instance.GetGoEtcItem();
-                Vector3 target = PlayerEntity.Instance.Target.position;
-   
-                ProjectileManager.Instance.LaunchProjectile(go,  startPos, target);
+
+                float baseAttackTime = CalcBaseParam.CalculateTimeL2j(PlayerEntity.Instance.Stats.BasePAtkSpeed);
+                float targetDistance = PlayerEntity.Instance.TargetDistance();
+                float[] timeAndFlye = CalcBaseParam.CalculateAttackAndFlightTimes(targetDistance, baseAttackTime);
+                var timeAtk = TimeUtils.ConvertMsToSec(timeAndFlye[1]);
+
+                ProjectileData settings = new ProjectileData(go, target, startPos, target);
+                settings.lifetime = timeAtk;
+
+                ProjectileManager.Instance.LaunchProjectile(go,  startPos, target , settings);
                 break;
             }
         }

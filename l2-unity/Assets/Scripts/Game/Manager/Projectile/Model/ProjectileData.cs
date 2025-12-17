@@ -9,11 +9,11 @@ public class ProjectileData
         prefab = null;
         transform = null;
         startPosition = Vector3.zero;
-        targetPosition = Vector3.zero;
-        speed = 10f;
-        damage = 10f;
+        targetTransform = null;
+        speed = 8f;
         lifetime = 5f;
-        speedCurve = AnimationCurve.Linear(0, 1, 1, 1);
+        //speedCurve = AnimationCurve.Linear(0, 1, 1, 1);
+        speedCurve = GetDefaultCurve();
         startTime = 0f;
         distance = 0f;
         useGravity = false;
@@ -21,17 +21,17 @@ public class ProjectileData
         isActive = true;
     }
 
-    public ProjectileData(GameObject prefabGo , Transform transform1 , Vector3 startPos , Vector3 endPos)
+    public ProjectileData(GameObject prefabGo , Transform transform1 , Vector3 startPos , Transform endPos)
     {
         id = 0;
         prefab = prefabGo;
         transform = transform1; 
         startPosition = startPos;
-        targetPosition = endPos;
-        speed = 10f;
-        damage = 10f;
+        targetTransform = endPos;
+        speed = 8f;
         lifetime = 5f;
-        speedCurve = AnimationCurve.Linear(0, 1, 1, 1);
+        //speedCurve = AnimationCurve.Linear(0, 1, 1, 1);
+        speedCurve = GetDefaultCurve();
         startTime = 0f;
         distance = 0f;
         useGravity = false;
@@ -47,7 +47,7 @@ public class ProjectileData
             prefab = other.prefab;
             transform = other.transform;
             startPosition = other.startPosition;
-            targetPosition = other.targetPosition;
+            targetTransform = other.targetTransform;
             speed = other.speed;
             damage = other.damage;
             lifetime = other.lifetime;
@@ -61,10 +61,23 @@ public class ProjectileData
 
     }
 
+    private AnimationCurve GetDefaultCurve()
+    {
+        return new AnimationCurve(
+            new Keyframe(0, 0.3f, 0, 0.5f),     // Начало: 30% скорости, плавный старт
+            new Keyframe(0.3f, 0.5f, 0, 1f),     // 30% пути: 50% скорости
+            new Keyframe(0.6f, 0.6f, 0, 1.5f),   // 60% пути: 70% скорости
+            new Keyframe(0.8f, 0.9f, 0, 2f),     // 80% пути: 90% скорости
+            new Keyframe(0.9f, 0.95f, 0, 1f),   // 90% пути: 95% скорости
+            new Keyframe(1, 1f, 0, 0)           // Конец: 100% скорости
+        );
+    }
+
     public int id;
     public GameObject prefab;
     public Transform transform;
     public Vector3 startPosition;
+    public Transform targetTransform;
     public Vector3 targetPosition;
     public float speed;
     public float damage;
