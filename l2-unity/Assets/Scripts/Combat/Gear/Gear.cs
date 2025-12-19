@@ -267,6 +267,8 @@ public class Gear : AbstractMeshManager
         return _shieldBone;
     }
 
+    
+
     public float GetWeaponRange() {
         return VectorUtils.ConvertL2jDistance(_weaponRange);
     }
@@ -477,4 +479,11 @@ public class Gear : AbstractMeshManager
     {
         return _goCurrentEtcItem;
     }
+
+    public Transform FindRecursiveBone(string boneName)
+    {
+        return transform.FindRecursive(boneName);
+    }
+
+
 }

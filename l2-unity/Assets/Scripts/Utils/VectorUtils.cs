@@ -201,13 +201,10 @@ public class VectorUtils : MonoBehaviour {
 
     }
 
-    //use Player heading
-    public static float HeadingToUnityQuaternionForPlayer(float heading) 
+
+    public static Vector3 CalcHitDirection(Vector3 currentPosition, Vector3 startPosition)
     {
-        const float ServerToDegrees = 182.04444444444444f; 
-        float angleServer = heading / ServerToDegrees;     
-        float unityY = 90f + angleServer;
-        return  Mathf.Repeat(unityY + 180f, 360f); // если нужен противоположный
+        return (currentPosition - startPosition).normalized;
     }
 
 

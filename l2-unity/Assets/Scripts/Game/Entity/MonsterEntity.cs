@@ -145,8 +145,14 @@ public class MonsterEntity : NetworkEntity
             
         }
     }
+  
+    public void AttachArrowToNearestBone(GameObject attach , Vector3 hitPointCollider, Transform target , Vector3 hitDirection)
+    {
+        MonsterGear gear = (MonsterGear)_gear;
+        Transform targetBone = gear.DetermineHitSide(hitPointCollider, target);
+        gear.SetPositionArrowRandomlyNearCenter( attach,  targetBone  , hitDirection);
+    }
 
- 
 
 
     public void OnDestroyDepends()
