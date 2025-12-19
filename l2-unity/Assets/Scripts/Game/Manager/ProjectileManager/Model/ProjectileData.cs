@@ -88,4 +88,10 @@ public class ProjectileData
     public bool useGravity;
     public float gravityScale;
     public bool isActive;
+    public Vector3 hitPoint;
+    public Vector3 hitNormal;
+
+    public Vector3 hitPointCollider;
+    public Vector3 hitNormalCollider;
+    public Vector3 hitDirection;
 }

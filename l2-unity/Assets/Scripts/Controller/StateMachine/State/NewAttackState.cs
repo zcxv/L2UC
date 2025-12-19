@@ -1,7 +1,6 @@
-using Org.BouncyCastle.Bcpg;
+
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
+
 
 public class NewAttackState : StateBase
 {
@@ -11,6 +10,7 @@ public class NewAttackState : StateBase
         AnimationManager.Instance.OnAnimationFinished += CallBackAnimationFinish;
         AnimationManager.Instance.OnAnimationStartShoot += CallBackStartShoot;
         AnimationManager.Instance.OnAnimationLoadArrow += CallBackLoadArrow;
+        ProjectileManager.Instance.OnHit += OnHit;
     }
 
 
@@ -79,12 +79,6 @@ public class NewAttackState : StateBase
                     return;
                 }
 
-                //I'm currently considering it as an attack for bows. Basically, when we attack with a bow,
-                //we take the total attack time. For example, the entire attack time is 1552ms. Then, using /2,
-                //we get 770 for the bow attack and 770 for the arrow flight. Therefore, in the bow attack code,
-                //we take the time of 770 and use the 2nd part here.
-                //float timeAtk = CalcBaseParam.CalculateTimeL2j(PlayerEntity.Instance.Stats.BasePAtkSpeed) / 2;
-                //timeAtk = TimeUtils.ConvertMsToSec(timeAtk); // Convert to seconds if needed
                 Vector3 startPos = PlayerEntity.Instance.GetPositionRightHand();
 
                 float baseAttackTime = CalcBaseParam.CalculateTimeL2j(PlayerEntity.Instance.Stats.BasePAtkSpeed);
@@ -104,6 +98,11 @@ public class NewAttackState : StateBase
     private void CallBackLoadArrow(string animName)
     {
         PlayerEntity.Instance.EquipArrow(WOODEN_ARROW);
+    }
+
+    private void OnHit(GameObject prefab, Transform target, Vector3 hitPointCollider, Vector3 hitDirection)
+    {
+        HitManager.Instance.HandleHit(prefab, target, hitPointCollider, hitDirection);
     }
 
 
