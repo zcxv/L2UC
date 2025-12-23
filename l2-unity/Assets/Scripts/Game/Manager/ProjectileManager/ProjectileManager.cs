@@ -6,7 +6,8 @@ using UnityEngine.ProBuilder;
 public class ProjectileManager : AbstractProjectile , IProjectileManager
 {
     [SerializeField] public ProjectileData defaultSettings;
-    public event Action<GameObject, Transform, Vector3, Vector3> OnHit;
+    public event Action<GameObject , Transform, Vector3, Vector3> OnHitMonster;
+    public event Action<Transform, Vector3, Vector3> OnHitCollider;
 
     private Dictionary<int, ProjectileData> activeProjectiles = new Dictionary<int, ProjectileData>();
     private int nextId = 0;
@@ -79,17 +80,27 @@ public class ProjectileManager : AbstractProjectile , IProjectileManager
 
     private void Update()
     {
+       
         List<int> projectilesToRemove = new List<int>();
 
         foreach (var pair in activeProjectiles)
         {
             int projectileId = pair.Key;
             ProjectileData projectile = pair.Value;
-
-            if (!projectile.isActive || !UpdateProjectile(projectile))
+            try
             {
+                if (!projectile.isActive || !UpdateProjectile(projectile))
+                {
+                    projectilesToRemove.Add(projectileId);
+                }
+            }
+            catch (InvalidCastException ex)
+            {
+                Debug.LogError($"Error updating projectile {projectileId}: {ex.Message}");
                 projectilesToRemove.Add(projectileId);
             }
+
+
         }
 
         foreach (int projectileId in projectilesToRemove)
@@ -127,11 +138,19 @@ public class ProjectileManager : AbstractProjectile , IProjectileManager
 
         if (fractionOfJourney >= 1f)
         {
+
             projectile.hitPoint = projectile.targetPosition;
             projectile.hitNormal = Vector3.up;
             projectile.hitDirection = VectorUtils.CalcHitDirection(currentPosition, projectile.startPosition);
 
-            OnHit?.Invoke(projectile.prefab, projectile.targetTransform, projectile.hitPointCollider, projectile.hitDirection);
+
+            if (projectile.prefab == null & projectile.targetTransform == null)
+            {
+                Debug.LogError("Prefab is null before OnHit invoke");
+                return false;
+            }
+
+            OnHitMonster?.Invoke(projectile.prefab, projectile.targetTransform, projectile.hitPointCollider, projectile.hitDirection);
             return false;
         }
 
@@ -179,7 +198,7 @@ public class ProjectileManager : AbstractProjectile , IProjectileManager
                     projectile.hitPointCollider = hit.point;
                     projectile.hitNormalCollider = hit.normal;
                     projectile.hitDirection = VectorUtils.CalcHitDirection(hit.point, projectile.startPosition);
-
+                    OnHitCollider?.Invoke(projectile.targetTransform , projectile.hitPointCollider , projectile.hitDirection);
                 }
             
         }

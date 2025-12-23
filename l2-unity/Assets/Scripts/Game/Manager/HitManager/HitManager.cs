@@ -1,6 +1,7 @@
 using Org.BouncyCastle.Security;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 using static ChangeWaitTypePacket;
 
 public class HitManager : MonoBehaviour
@@ -12,22 +13,23 @@ public class HitManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton pattern
+        
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Optional: keep between scenes
+            DontDestroyOnLoad(gameObject); 
         }
         else
         {
             Destroy(gameObject);
         }
     }
-    public void HandleHit(GameObject source, Transform target , Vector3 hitPointCollider, Vector3 hitDirection)
+    public void HandleHitBody(GameObject source, Transform target , Vector3 hitPointCollider, Vector3 hitDirection)
     {
         
         string sourceNameLower = source.name.ToLower();
         string etcNameLower = ETC_NAME.ToLower();
+        HandleHitCollider(target, hitPointCollider, hitDirection);
 
         if (sourceNameLower.IndexOf(etcNameLower) > -1)
         {
@@ -37,6 +39,24 @@ public class HitManager : MonoBehaviour
         {
             Debug.LogWarning("HitManager> HandleHit Errors no detected hit type");
         }
+
+
+    }
+
+    public void HandleHitCollider(Transform target, Vector3 hitCollider, Vector3 hitColliderDirection)
+    {
+        GameObject targetGameObject = target.gameObject;
+
+        if(targetGameObject != null)
+        {
+            MonsterStateMachine targetStateMachine = targetGameObject.GetComponent<MonsterStateMachine>();
+
+            if(targetStateMachine != null & targetStateMachine.State == MonsterState.IDLE)
+            {
+                targetStateMachine.NotifyEvent(Event.HIT_REACTION);
+            }
+        }
+
     }
 
 

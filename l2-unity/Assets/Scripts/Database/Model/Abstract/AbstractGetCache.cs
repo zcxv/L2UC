@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static ModelTable;
 using static UnityEditor.Progress;
@@ -12,7 +13,7 @@ public abstract class AbstractGetCache
 
     protected Dictionary<string, GameObject> _weapons;
     protected Dictionary<string, GameObject> _etcItems;
-    protected Dictionary<string, GameObject> _npcs;
+    protected Dictionary<string, L2Npc> _npcs;
     protected Dictionary<string, L2Armor> _armors;
 
     protected GameObject[] _playerContainers;
@@ -26,6 +27,17 @@ public abstract class AbstractGetCache
         public GameObject baseModel;
         public GameObject[] allModels;
         public Dictionary<string, Material> materials;
+        public Dictionary<string, Material[]> allMaterials;
+    }
+
+    protected class L2Npc
+    {
+        public L2Npc(GameObject baseModel , Dictionary<string, Material[]> materials)
+        {
+            this.baseModel = baseModel;
+            this.allMaterials = materials;
+        }
+        public GameObject baseModel;
         public Dictionary<string, Material[]> allMaterials;
     }
 
@@ -244,7 +256,7 @@ public abstract class AbstractGetCache
 
     public GameObject GetNpc(string meshname)
     {
-        GameObject npc = null;
+        L2Npc npc = null;
         _npcs.TryGetValue(meshname, out npc);
         if (npc == null)
         {
@@ -252,6 +264,26 @@ public abstract class AbstractGetCache
             return null;
         }
 
-        return npc;
+        AddMaterial(npc);
+
+
+        return npc.baseModel;
     }
+
+    private void AddMaterial(L2Npc npc)
+    {
+        if (npc.allMaterials.Count > 0)
+        {
+            GameObject mesh = npc.baseModel;
+            SkinnedMeshRenderer renderer = mesh.GetComponentInChildren<SkinnedMeshRenderer>();
+            Material[] materials = npc.allMaterials.Values.First();
+            if (renderer != null & materials.Length > 0 )
+            {
+                if (materials[0] != null) renderer.material = materials[0];
+
+            }
+        }
+    }
+
+ 
 }

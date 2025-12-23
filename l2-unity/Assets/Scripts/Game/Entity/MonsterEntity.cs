@@ -148,9 +148,16 @@ public class MonsterEntity : NetworkEntity
   
     public void AttachArrowToNearestBone(GameObject attach , Vector3 hitPointCollider, Transform target , Vector3 hitDirection)
     {
+        if(_gear.GetType() != typeof(MonsterGear))
+        {
+            Debug.LogWarning("MonsterEntity->AttachArrowToNearestBone: gear invalid cast !!!");
+            return;
+        }
+
         MonsterGear gear = (MonsterGear)_gear;
         Transform targetBone = gear.DetermineHitSide(hitPointCollider, target);
-        gear.SetPositionArrowRandomlyNearCenter( attach,  targetBone  , hitDirection);
+        bool isSpecialBone = (targetBone == gear.GetHeadBone() || targetBone == gear.GetTailBone());
+        gear.SetPositionArrowRandomlyNearCenter( attach,  targetBone  , hitDirection , isSpecialBone);
     }
 
 
