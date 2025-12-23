@@ -12,13 +12,14 @@ public class AbstractProjectile : MonoBehaviour
     protected const float DISTANCE_SPLIT_1 = 4f;  // First distance split point
     protected const float DISTANCE_SPLIT_2 = 8f;  // Second distance split point
     protected const float DISTANCE_SPLIT_3 = 12f; // Third distance split point
-    protected const float HIT_OFFSET = 0.3f;
+    protected float HIT_OFFSET = 0.4f;
 
     protected float CalculateFlightTime(float distance)
     {
         float speed;
         if (distance <= DISTANCE_SPLIT_1)
         {
+            HIT_OFFSET = 0.6f;
             speed = SPEED_RANGE_1;
         }
         else if (distance <= DISTANCE_SPLIT_2)

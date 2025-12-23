@@ -104,6 +104,13 @@ public class FastSinglExecuter : MonoBehaviour
 
     private void MonsterAttack(Entity attakerEntity, Attack attackPacket)
     {
+        if(attakerEntity == null)
+        {
+            Debug.LogWarning("FastSinglExecuter>MonsterAttack: attakerEntity its null");
+            return;
+        }
+
+
         if (attakerEntity.GetType() == typeof(MonsterEntity))
         {
             if (attakerEntity.IsDead() == true | attakerEntity.IsDead() == true) return;

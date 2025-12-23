@@ -10,7 +10,8 @@ public class NewAttackState : StateBase
         AnimationManager.Instance.OnAnimationFinished += CallBackAnimationFinish;
         AnimationManager.Instance.OnAnimationStartShoot += CallBackStartShoot;
         AnimationManager.Instance.OnAnimationLoadArrow += CallBackLoadArrow;
-        ProjectileManager.Instance.OnHit += OnHit;
+        ProjectileManager.Instance.OnHitMonster += OnHitBodyMonster;
+        ProjectileManager.Instance.OnHitCollider += OnHitColliderMonster;
     }
 
 
@@ -100,9 +101,14 @@ public class NewAttackState : StateBase
         PlayerEntity.Instance.EquipArrow(WOODEN_ARROW);
     }
 
-    private void OnHit(GameObject prefab, Transform target, Vector3 hitPointCollider, Vector3 hitDirection)
+    private void OnHitBodyMonster(GameObject prefab, Transform target, Vector3 hitPointCollider, Vector3 hitDirection)
     {
-        HitManager.Instance.HandleHit(prefab, target, hitPointCollider, hitDirection);
+        HitManager.Instance.HandleHitBody(prefab, target, hitPointCollider, hitDirection);
+    }
+
+    private void OnHitColliderMonster(Transform target, Vector3 hitPointCollider, Vector3 hitDirection)
+    {
+        //HitManager.Instance.HandleHitCollider(target, hitPointCollider, hitDirection);
     }
 
 

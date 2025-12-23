@@ -54,6 +54,8 @@ public static class AnimationNames
     public static readonly Animation MONSTER_WALK = new Animation("walk");
     public static readonly Animation MONSTER_RUN = new Animation("run");
     public static readonly Animation MONSTER_ATK01 = new Animation("atk01");
+    public static readonly Animation MONSTER_DamageAction = new Animation("damageaction");
+    public static readonly Animation MONSTER_DamageAction1 = new Animation("damageaction1");
 }
 
 public static class SpecialAnimationNames

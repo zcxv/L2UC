@@ -146,7 +146,7 @@ public class PlayerEntity : Entity
     public void RefreshRandomPAttack()
     {
         int randomIndex = UnityEngine.Random.Range(0, pAtkList.Length);
-        RandomName = pAtkList[1];
+        RandomName = pAtkList[randomIndex];
     }
 
 

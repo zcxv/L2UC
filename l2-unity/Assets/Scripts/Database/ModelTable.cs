@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -279,23 +280,30 @@ public class ModelTable : AbstractCache
         Debug.Log($"Successfully loaded {materialCount} armor material(s).");
     }
 
-    private void CacheNpcs() {
-        _npcs = new Dictionary<string, GameObject>();
+    private void CacheNpcs()
+    {
+        _npcs = new Dictionary<string, L2Npc>();
         int success = 0;
-        foreach (KeyValuePair<int, Npcgrp> kvp in NpcgrpTable.Instance.Npcgrps) {
-            if (_npcs.ContainsKey(kvp.Value.Mesh)) {
-                continue;
-            }
 
-            GameObject npc = LoadNpc(kvp.Value.Mesh);
-            if (npc != null) {
-                success++;
-                _npcs[kvp.Value.Mesh] = npc;
-            }
+        foreach (var kvp in NpcgrpTable.Instance.Npcgrps)
+        {
+            if (_npcs.ContainsKey(kvp.Value.Mesh)) continue;
+
+            var npc = LoadNpc(kvp.Value.Mesh);
+            if (npc == null) continue;
+
+            var materials = new Dictionary<string, Material[]>
+            {
+                [kvp.Value.Mesh] = LoadAllMaterials(kvp.Value.Materials.ToList())
+            };
+
+            _npcs[kvp.Value.Mesh] = new L2Npc(npc, materials);
+            success++;
         }
 
         Debug.Log($"Loaded {success} npc model(s).");
     }
+
 
 
 
