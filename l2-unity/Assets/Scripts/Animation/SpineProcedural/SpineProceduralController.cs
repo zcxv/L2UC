@@ -4,6 +4,8 @@ using UnityEngine;
 public class SpineProceduralController : MonoBehaviour
 {
     private Dictionary<Transform, BoneModification> _activeModifications = new Dictionary<Transform, BoneModification>();
+    private List<Transform> _bonesToRemove = new();
+    public float fadeSpeed = 10f; // Скорость затухания (чем выше, тем быстрее вернется)
 
     public static SpineProceduralController Instance { get; private set; }
 
@@ -31,11 +33,21 @@ public class SpineProceduralController : MonoBehaviour
 
     public void RemoveBoneMod(Transform bone)
     {
-        if (bone != null) _activeModifications.Remove(bone);
+        if (bone != null && _activeModifications.ContainsKey(bone))
+        {
+            if (!_bonesToRemove.Contains(bone))
+            {
+                _bonesToRemove.Add(bone);
+            }
+        }
     }
 
     void LateUpdate()
     {
+        HandleFadeOut();
+
+        if (_activeModifications.Count == 0) return;
+
         foreach (var entry in _activeModifications)
         {
             Transform bone = entry.Key;
@@ -53,12 +65,43 @@ public class SpineProceduralController : MonoBehaviour
                 if (mod.RotationOffset != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.Euler(mod.RotationOffset);
-                    // Интерполяция от "без изменений" до "целевой наклон" по весу
+        
                     Quaternion weightedRotation = Quaternion.Slerp(Quaternion.identity, targetRotation, mod.Weight);
                     Debug.Log("SpineProceduralController: -> Use Rotate ");
                     bone.localRotation *= weightedRotation;
                 }
             }
         }
+    }
+
+
+    private void HandleFadeOut()
+    {
+        if(_bonesToRemove.Count == 0) return;
+
+        for (int i = _bonesToRemove.Count - 1; i >= 0; i--)
+        {
+            Transform bone = _bonesToRemove[i];
+
+            if (_activeModifications.TryGetValue(bone, out BoneModification mod))
+            {
+
+                Debug.Log("SpineProceduralController: -> stop rotate Weight 1 " + mod.Weight);
+                mod.Weight = Mathf.MoveTowards(mod.Weight, 0f, Time.deltaTime * fadeSpeed);
+                Debug.Log("SpineProceduralController: -> stop rotate Weight 2 " + mod.Weight);
+
+                if (mod.Weight <= 0)
+                {
+                    _activeModifications.Remove(bone);
+                    _bonesToRemove.RemoveAt(i);
+                    Debug.Log("SpineProceduralController: -> stop rotate УДАЛЕНИЕ " + "size _activeModifications " + _activeModifications.Count);
+                }
+            }
+            else
+            {
+                _bonesToRemove.RemoveAt(i);
+            }
+        }
+        Debug.Log("SpineProceduralController: -> stop rotate " + "size _activeModifications " + _activeModifications.Count);
     }
 }

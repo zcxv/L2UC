@@ -13,8 +13,11 @@ public class NewAttackState : StateBase
         AnimationManager.Instance.OnAnimationFinishedHit += CallBackFinishedHit;
         AnimationManager.Instance.OnAnimationLoadArrow += CallBackLoadArrow;
         AnimationManager.Instance.OnAnimationStartHit += CallBackStartHit;
+
         ProjectileManager.Instance.OnHitMonster += OnHitBodyMonster;
         ProjectileManager.Instance.OnHitCollider += OnHitColliderMonster;
+        SwordCollisionService.Instance.OnHitCollider += OnHitColliderMonster;
+
     }
 
 
@@ -75,6 +78,7 @@ public class NewAttackState : StateBase
                 {
                     Transform[] swordBasePoints = _stateMachine.Player.GetSwordBasePoints();
                     if (swordBasePoints.Length > 1) SwordCollisionService.Instance.UnregisterSword(swordBasePoints[0]);
+
                     break;
                 }
             }
@@ -146,7 +150,6 @@ public class NewAttackState : StateBase
 
     private void OnHitColliderMonster(Transform attacker , Transform target, Vector3 hitPointCollider, Vector3 hitDirection)
     {
-     
         HitManager.Instance.HandleHitCollider(attacker , target, hitPointCollider, hitDirection);
     }
 
@@ -160,8 +163,10 @@ public class NewAttackState : StateBase
 
         if (swordBasePoints != null && swordBasePoints.Length > 1)
         {
-            // Register sword collision with the adjusted position
-            SwordCollisionService.Instance.RegisterSword(swordBasePoints[0], swordBasePoints[1], 0);
+            Transform swordBase = swordBasePoints[0];
+            Transform swordTip = swordBasePoints[1];
+            Transform target =  PlayerEntity.Instance.Target;
+            SwordCollisionService.Instance.RegisterSword(swordBase, swordTip, target ,  0);
         }
     }
 
@@ -170,7 +175,7 @@ public class NewAttackState : StateBase
         Transform monster = PlayerEntity.Instance.Target;
         if (monster == null) return;
 
-        // 1. Поворот всего тела влево-вправо
+   
         Vector3 direction = (monster.position - entity.transform.position).normalized;
         Vector3 flatDirection = new Vector3(direction.x, 0, direction.z);
 
@@ -179,11 +184,10 @@ public class NewAttackState : StateBase
             entity.transform.rotation = Quaternion.LookRotation(flatDirection);
         }
 
-        // 2. Точка головы монстра
         float monsterHeight = monster.GetComponent<Entity>().Appearance.CollisionHeight;
         Vector3 monsterFacePosition = monster.position + Vector3.up * (monsterHeight * 0.8f);
 
-        // 3. Вычисляем общий угол наклона
+
         Vector3 startPoint = entity.transform.position + Vector3.up * 1.5f;
         Vector3 lookDir = (monsterFacePosition - startPoint).normalized;
         float verticalAngle = Mathf.Asin(lookDir.y) * Mathf.Rad2Deg;
@@ -206,8 +210,8 @@ public class NewAttackState : StateBase
         playerEntity.SetProceduralSpinePose(spineRotation);
         playerEntity.SetProceduralRightUpperArmPose(armRotation);
 
-        // Визуальный контроль
-        DebugLineDraw.ShowDrawLineDebugNpc(-1, startPoint, lookDir * 3f, Color.black);
+
+        //DebugLineDraw.ShowDrawLineDebugNpc(-1, startPoint, lookDir * 3f, Color.black);
     }
 
 

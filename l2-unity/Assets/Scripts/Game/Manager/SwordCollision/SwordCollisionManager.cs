@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.ProBuilder;
 using UnityEngine.Rendering;
 
 
@@ -14,7 +15,9 @@ public class SwordCollisionService : MonoBehaviour
     private Dictionary<Transform, Vector3> lastPositions = new Dictionary<Transform, Vector3>();
     private Dictionary<Transform, HashSet<int>> hitRegistry = new Dictionary<Transform, HashSet<int>>();
 
-    public event Action<RaycastHit, Transform, Transform> OnHitDetected;
+    //public event Action<RaycastHit, Transform, Transform> OnHitCollider;
+
+    public event Action<Transform, Transform, Vector3, Vector3> OnHitCollider;
 
     private void Awake()
     {
@@ -24,15 +27,20 @@ public class SwordCollisionService : MonoBehaviour
     }
 
 
-    public void RegisterSword(Transform swordBase, Transform swordTip , float extraRange)
+    public void RegisterSword(Transform swordBase, Transform swordTip , Transform target , float extraRange)
     {
         if (swordBase == null || swordTip == null) return;
 
 
-        if (activeSwords.Exists(s => s.basePt == swordBase)) return;
+        if (activeSwords.Exists(s => s.basePt == swordBase))
+        {
+            ResetHitRegistry(swordBase);
+            return;
+        }
 
-        Debug.Log("SwordCollisionManager: RegisterSword");
-        activeSwords.Add(new TrackedSword(swordBase, swordTip , extraRange));
+
+        //Debug.Log("SwordCollisionManager: RegisterSword");
+        activeSwords.Add(new TrackedSword(swordBase, swordTip , target ,  extraRange));
         lastPositions[swordBase] = swordBase.position;
         lastPositions[swordTip] = swordTip.position;
         ResetHitRegistry(swordBase);
@@ -48,153 +56,116 @@ public class SwordCollisionService : MonoBehaviour
     public void UnregisterSword(Transform swordBase)
     {
         TrackedSword sword = activeSwords.Find(s => s.basePt == swordBase);
-        Debug.Log("SwordCollisionManager: Удаление RegisterSword");
+        //Debug.Log("SwordCollisionManager: Удаление RegisterSword");
         if (sword != null)
         {
             activeSwords.Remove(sword);
             lastPositions.Remove(sword.basePt);
             lastPositions.Remove(sword.tipPt);
+            hitRegistry.Remove(swordBase);
         }
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
+        if (activeSwords.Count == 0) return;
+
         for (int i = activeSwords.Count - 1; i >= 0; i--)
         {
             var sword = activeSwords[i];
-
             if (sword.basePt == null || sword.tipPt == null) continue;
 
-            // Берем чистые позиции БЕЗ добавок
             Vector3 currentBase = sword.basePt.position;
             Vector3 currentTip = sword.tipPt.position;
 
-            Vector3 dirBlade = (currentTip - currentBase).normalized;
-
-            float offset = 1.2f; 
-            Vector3 currentExtendedTip = currentTip + (dirBlade * offset);
-
-            if (lastPositions.ContainsKey(sword.tipPt))
+  
+            if (lastPositions.ContainsKey(sword.basePt) && lastPositions.ContainsKey(sword.tipPt))
             {
-                Vector3 lastExtendedTip = lastPositions[sword.tipPt];
+                Vector3 prevBase = lastPositions[sword.basePt];
+                Vector3 prevTip = lastPositions[sword.tipPt];
 
-                // Проверяем траекторию именно этой вынесенной вперед точки
-                CheckVolumePath(lastExtendedTip, currentExtendedTip, sword , 0.6f);
+                // ГЛАВНЫЙ МЕТОД: Проверка "полотна" взмаха
+                CheckSwordSwingPanel(prevBase, prevTip, currentBase, currentTip, sword);
             }
 
-            // Сохраняем реальные позиции
+      
             lastPositions[sword.basePt] = currentBase;
             lastPositions[sword.tipPt] = currentTip;
-
-            // А extraRange используйте ТОЛЬКО внутри CheckBlade для "укола" вперед
-            CheckBladeVolume(currentBase, currentTip, sword , 0.6f); // Здесь передаем бонус длины
         }
     }
 
 
-    private void CheckVolumePath(Vector3 start, Vector3 end, TrackedSword sword, float radius)
+    private void CheckSwordSwingPanel(Vector3 prevBase, Vector3 prevTip, Vector3 currBase, Vector3 currTip, TrackedSword sword)
     {
-        Vector3 dir = end - start;
-        float dist = dir.magnitude;
+        int rayCount = 6;
+        float swordThickness = 0.5f; // Радиус сферы (толщина лезвия)
+        float forwardReach = 0.4f;   // На сколько ПЕРЕД мечом мы ищем цель (те самые 20-30 см)
 
-        if (dist > 0.001f)
+        for (int i = 0; i <= rayCount; i++)
         {
-        
-            if (Physics.SphereCast(start, radius, dir.normalized, out RaycastHit hit, dist, _entityMask))
-            {
-                Debug.Log("Volume Hit! 1");
-                OnHitDetected?.Invoke(hit, sword.basePt.parent, sword.tipPt);
-                DebugLineDraw.ShowDrawLineDebugNpc(sword.basePt.GetInstanceID(), start, hit.point, Color.magenta);
-            }
-            else
-            {
-                DebugLineDraw.ShowDrawLineDebugNpc(sword.basePt.GetInstanceID(), start, end, Color.yellow);
-            }
-        }
-    }
+            float t = (float)i / rayCount;
 
-    private void CheckBladeVolume(Vector3 start, Vector3 end, TrackedSword sword, float radius)
-    {
-        Vector3 dir = end - start;
-        // Стреляем сферой от рукояти к кончику
-        if (Physics.SphereCast(start, radius, dir.normalized, out RaycastHit hit, dir.magnitude, _entityMask))
-        {
-            //Debug.Log("Volume Hit! 2");
-            Debug.Log("Volume Hit! 1");
-            OnHitDetected?.Invoke(hit, sword.basePt.parent, sword.tipPt);
-            DebugLineDraw.ShowDrawLineDebugNpc(sword.basePt.GetInstanceID(), start, hit.point, Color.red);
-        }
-    }
+            Vector3 start = Vector3.Lerp(prevBase, prevTip, t);
+            Vector3 end = Vector3.Lerp(currBase, currTip, t);
 
-    
-    private void CheckPointPath(Transform point)
-    {
-        Vector3 currentPos = point.position;
-        Vector3 lastPos = lastPositions[point];
-        Vector3 dir = currentPos - lastPos;
-        float dist = dir.magnitude;
+            // Направление движения этой точки меча
+            Vector3 movementDir = (end - start).normalized;
+            // Расстояние, которое прошла точка + запас вперед
+            float dist = Vector3.Distance(start, end) + forwardReach;
 
-        if (dist > 0.001f)
-        {
-            if (Physics.Raycast(lastPos, dir, out RaycastHit hit, dist, _entityMask))
+            if (dist > 0.01f)
             {
-                Debug.Log("SwordCollisionManager 1: Hit detected");
-                OnHitDetected?.Invoke(hit, point.parent, point);
+               
+                if (Physics.SphereCast(start, swordThickness, movementDir, out RaycastHit hit, dist, _entityMask))
+                {
+                    if (RegisterHit(sword.basePt, hit.collider.GetInstanceID()))
+                    {
+                        OnHit(hit, sword);
+                        //OnHitCollider?.Invoke(hit, sword.basePt.parent, sword.tipPt);
+                        Debug.Log("SwordCollisionService: HIT Monster!");
+                        //DebugLineDraw.ShowDrawLineDebugNpc(sword.basePt.GetInstanceID(), start, hit.point, Color.red);
+                    }
+                }
+                else
+                {
+                    // Рисуем желтую линию — это то, где мы искали
+                   // DebugLineDraw.ShowDrawLineDebugNpc(sword.basePt.GetInstanceID(), start, start + movementDir * dist, Color.yellow);
+                }
             }
         }
-        lastPositions[point] = currentPos;
     }
 
-    private void CheckBlade(Transform b, Transform t)
+    // Вспомогательный метод для реестра попаданий (чтобы один взмах не бил 100 раз по одной цели)
+    private bool RegisterHit(Transform swordBase, int targetID)
     {
-        Vector3 start = b.position;  // Handle position
-        Vector3 end = t.position;    // Tip position
+        if (!hitRegistry.ContainsKey(swordBase)) hitRegistry[swordBase] = new HashSet<int>();
 
-        // Calculate direction from handle to tip
-        Vector3 direction = end - start;
-        Vector3 directionNormalized = direction.normalized;
-        float baseLength = direction.magnitude;
+        if (hitRegistry[swordBase].Contains(targetID)) return false;
 
-        // Добавляем бонусную дистанцию (range) к проверке
-        float extraRange = 0.9f;
+        hitRegistry[swordBase].Add(targetID);
+        return true;
+    }
 
-        // The ray should go from handle through tip and beyond
-        // So we extend from the tip in the same direction
-        Vector3 extendedEnd = end + directionNormalized * extraRange;
-        float totalCheckDistance = baseLength + extraRange;
-        // Draw the complete raycast path from handle through tip and beyond
-        //DebugLineDraw.ShowDrawLineDebugNpc(b.GetInstanceID(), start, extendedEnd, Color.red);
 
-        // Now cast the ray from handle through tip and beyond
-        if (Physics.Raycast(start, directionNormalized, out RaycastHit hit, totalCheckDistance, _entityMask))
+
+
+  
+    private void OnHit(RaycastHit hit, TrackedSword sword)
+    {
+        GameObject gameObject = hit.transform.parent.gameObject;
+        Entity entity = gameObject.GetComponent<Entity>();
+        GameObject targetGameObject = sword.target.gameObject;
+        Entity targetEntity = targetGameObject.GetComponent<Entity>();
+
+        if (targetEntity == null || entity == null) return;
+
+        if (entity.IdentityInterlude.Id == targetEntity.IdentityInterlude.Id)
         {
-            // Log detailed information about the hit
-            //Debug.Log($"SwordCollisionManager 2: Hit detected at point: {hit.point}");
-            //Debug.Log($"Hit distance: {hit.distance}");
-            //Debug.Log($"Hit normal: {hit.normal}");
-            //Debug.Log($"Hit collider: {hit.collider.name}");
-            //Debug.Log($"Hit transform: {hit.transform.name}");
+            Vector3 startPos = sword.basePt.position;
 
-            // Draw the hit point
-           // DebugLineDraw.ShowDrawLineDebugNpc(
-            //    b.GetInstanceID(),
-            //    hit.point,
-            //    hit.point + Vector3.up * 0.2f,
-           //     Color.green
-           // );
+            var hitDirection = VectorUtils.CalcHitDirection(hit.point, startPos);
 
-            // Draw the actual raycast path
-            DebugLineDraw.ShowDrawLineDebugNpc(
-                b.GetInstanceID(),
-                start,
-                hit.point,
-                Color.red
-            );
-        }
-        else
-        {
-            //Debug.Log("SwordCollisionManager 2: No hit detected");
-            //DebugLineDraw.ShowDrawLineDebugNpc(b.GetInstanceID(), start, extendedEnd, Color.blue);
+            OnHitCollider?.Invoke(sword.basePt.parent, sword.target, hit.point, hitDirection);
         }
     }
 
