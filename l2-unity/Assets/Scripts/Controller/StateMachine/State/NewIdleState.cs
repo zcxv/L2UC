@@ -50,22 +50,30 @@ public class NewIdleState : StateBase
 
     private void HandleWaitReturn()
     {
-        PlayerEntity.Instance.RemoveProceduralPose();
+        if(PlayerEntity.Instance.Target == null)
+        {
+            //PlayerEntity.Instance.RemoveProceduralPose();
+          
+        }
+        else
+        {
+            Transform target =  PlayerEntity.Instance.Target;
+            GameObject targetGameObject = target.gameObject;
+            Entity targetEntity = targetGameObject.GetComponent<Entity>();
+
+            if(targetEntity != null && targetEntity.IsDead())
+            {
+                //PlayerEntity.Instance.RemoveProceduralPose();
+            }
+            //return;
+        }
+
+
+
         PlayAnimation(AnimationNames.ATK_WAIT);
         PlayerEntity.Instance.LastAtkAnimation = null;
     }
 
-    private void StopPreviousEquipAnimation()
-    {
-        string lastAnimName = _stateMachine.Player.GetLastAnimName();
-        Debug.Log("StopPreviousEquipAnimation>>> stop " + lastAnimName);
-        if (!string.IsNullOrEmpty(lastAnimName))
-        {
-            string paramName = AnimationNames.WAIT.Concat(lastAnimName);
-            Debug.Log("StopPreviousEquipAnimation>>> start " + paramName);
-            AnimationManager.Instance.StopCurrentAnimation(paramName);
-        }
-    }
 
     private void PlayAnimation(Animation animation)
     {
