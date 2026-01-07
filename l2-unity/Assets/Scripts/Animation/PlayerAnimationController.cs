@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class PlayerAnimationController : BaseAnimationController
 {
@@ -73,7 +74,6 @@ public class PlayerAnimationController : BaseAnimationController
             }
         }
     }
-
 
 }
 

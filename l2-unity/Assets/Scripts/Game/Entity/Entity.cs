@@ -18,7 +18,7 @@ public class Entity : MonoBehaviour {
     [SerializeField] private CharacterRace _race;
     [SerializeField] private CharacterRaceAnimation _raceId;
 
-
+    public Animator Animator { get; private set; }
     [Header("Combat")]
     [SerializeField] private int _targetId;
     [SerializeField] private Transform _target;
@@ -50,6 +50,21 @@ public class Entity : MonoBehaviour {
     public CharacterRace Race { get { return _race; } set { _race = value; } }
     public CharacterRaceAnimation RaceId { get { return _raceId; } set { _raceId = value; } }
     public bool EntityLoaded { get { return _entityLoaded; } set { _entityLoaded = value; } }
+
+    protected  void Awake() // Или Start
+    {
+        Animator = GetComponent<Animator>();
+
+        if (Animator == null)
+        {
+            // Если аниматор находится на дочернем объекте (модели)
+            Animator = GetComponentInChildren<Animator>();
+        }
+    }
+
+
+
+
 
     public void FixedUpdate() {
         LookAtTarget();

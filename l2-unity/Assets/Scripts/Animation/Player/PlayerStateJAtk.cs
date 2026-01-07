@@ -51,7 +51,7 @@ public class PlayerStateJAtk : StateMachineBehaviour
         AnimationManager.Instance.UpdateRemainingAtkTime(_remainingTime);
         float normalizedTime = timeOut / _endTime;
         float speed = _animationCurve.Evaluate(normalizedTime);
-
+        //Debug.Log($"Current attack speed: {speed:F3} (normalized time: {normalizedTime:F2})");
         if (timeOut >= _endTime) SwitchToIdle(stateInfo);
 
         PlayerAnimationController.Instance.SetPAtkSpeed(speed);
@@ -124,39 +124,42 @@ public class PlayerStateJAtk : StateMachineBehaviour
     //RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation, 1.0f, 1.2f);
 
     // Faster and slower combination
-   // RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation, 0.97f, 1.1f);
+    // RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation, 0.97f, 1.1f);
     private void RecreateAnimationCurve(AnimationCurve animationCurve, float timeAtk, float timeAnimation,
     float speedMultiplier = 1.0f, float slowDownFactor = 1.0f)
     {
-        
-        float adjustedTimeAtk = timeAtk * speedMultiplier;
 
-        float adjustedTimeAnimation = timeAnimation * slowDownFactor;
+      float adjustedTimeAtk = timeAtk * speedMultiplier;
 
-        animationCurve.keys = new Keyframe[0];
+     float adjustedTimeAnimation = timeAnimation * slowDownFactor;
 
-        Keyframe startKey = new Keyframe(0f, 0f);
-        Keyframe windupKey = new Keyframe(adjustedTimeAtk * 0.2f, adjustedTimeAnimation * 0.15f);  // Начало замаха
-        Keyframe slowDownKey = new Keyframe(adjustedTimeAtk * 0.5f, adjustedTimeAnimation * 0.4f);  // Плавное замедление
-        Keyframe powerKey = new Keyframe(adjustedTimeAtk * 0.8f, adjustedTimeAnimation * 0.8f);    // Накопление силы
-        Keyframe endKey = new Keyframe(adjustedTimeAtk, adjustedTimeAnimation);  // Завершение атаки
+     animationCurve.keys = new Keyframe[0];
 
- 
-        animationCurve.AddKey(startKey);
-        animationCurve.AddKey(windupKey);
-        animationCurve.AddKey(slowDownKey);
-        animationCurve.AddKey(powerKey);
-        animationCurve.AddKey(endKey);
+     Keyframe startKey = new Keyframe(0f, 0f);
+     Keyframe windupKey = new Keyframe(adjustedTimeAtk * 0.2f, adjustedTimeAnimation * 0.15f);  // Начало замаха
+     Keyframe slowDownKey = new Keyframe(adjustedTimeAtk * 0.5f, adjustedTimeAnimation * 0.4f);  // Плавное замедление
+     Keyframe powerKey = new Keyframe(adjustedTimeAtk * 0.8f, adjustedTimeAnimation * 0.8f);    // Накопление силы
+     Keyframe endKey = new Keyframe(adjustedTimeAtk, adjustedTimeAnimation);  // Завершение атаки
 
-    
-        animationCurve.preWrapMode = WrapMode.ClampForever;
-        animationCurve.postWrapMode = WrapMode.ClampForever;
 
-        for (int i = 1; i < animationCurve.keys.Length - 1; i++)
-        {
-            animationCurve.SmoothTangents(i, 0);
-        }
+    animationCurve.AddKey(startKey);
+    animationCurve.AddKey(windupKey);
+    animationCurve.AddKey(slowDownKey);
+    animationCurve.AddKey(powerKey);
+    animationCurve.AddKey(endKey);
+
+
+    animationCurve.preWrapMode = WrapMode.ClampForever;
+    animationCurve.postWrapMode = WrapMode.ClampForever;
+
+    for (int i = 1; i < animationCurve.keys.Length - 1; i++)
+    {
+        animationCurve.SmoothTangents(i, 0);
     }
+   }
+
+   
+
 
     private bool IsBow(string animName) => animName.IndexOf("bow") != -1;
 

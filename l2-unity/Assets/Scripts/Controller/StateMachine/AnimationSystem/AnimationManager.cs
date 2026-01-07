@@ -14,6 +14,8 @@ public class AnimationManager : IAnimationManager
     private float _remainingAtkTime = 0;
     public event Action<string> OnAnimationFinished;
     public event Action<string , float> OnAnimationStartShoot;
+    public event Action<string, float> OnAnimationFinishedHit;
+    public event Action<string, float> OnAnimationStartHit;
     public event Action<string> OnAnimationLoadArrow;
 
     public void SetAnimationManager(PlayerAnimationController controller, PlayerEntity player)
@@ -21,6 +23,8 @@ public class AnimationManager : IAnimationManager
         _player = player;
         PlayerAnimationController.Instance.OnAnimationFinished += AnimationFinishedPlayerCallback;
         PlayerAnimationController.Instance.OnAnimationStartShoot += AnimationShootPlayerCallback;
+        PlayerAnimationController.Instance.OnAnimationStartHit += AnimationHitPlayerCallback;
+        PlayerAnimationController.Instance.OnAnimationFinishedHit += AnimationFinishedHitPlayerCallback;
         PlayerAnimationController.Instance.OnAnimationStartLoadArrow += AnimationLoadArrowPlayerCallback;
     }
     public static IAnimationManager Instance
@@ -247,6 +251,16 @@ public class AnimationManager : IAnimationManager
     public void AnimationShootPlayerCallback(string animationName)
     {
         OnAnimationStartShoot?.Invoke(animationName , _remainingAtkTime);
+    }
+
+    public void AnimationHitPlayerCallback(string animationName)
+    {
+        OnAnimationStartHit?.Invoke(animationName, _remainingAtkTime);
+    }
+
+    public void AnimationFinishedHitPlayerCallback(string animationName)
+    {
+        OnAnimationFinishedHit?.Invoke(animationName, _remainingAtkTime);
     }
 
     public void AnimationLoadArrowPlayerCallback(string animationName)

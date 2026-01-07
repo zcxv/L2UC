@@ -18,8 +18,9 @@ public interface IAnimationManager
     float GetRemainingAtkTime();
 
     public event Action<string> OnAnimationFinished;
-
+    public event Action<string, float> OnAnimationFinishedHit;
     public event Action<string , float> OnAnimationStartShoot;
     public event Action<string> OnAnimationLoadArrow;
-   
+    public event Action<string, float> OnAnimationStartHit;
+
 }

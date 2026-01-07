@@ -213,7 +213,6 @@ public class UserInfo : ServerPacket
 
 
         _info.Appearance.CollisionRadius = (float)ReadD();
-        // _info.Appearance.CollisionHeight = (float)ReadD();
         float collision = (float)ReadD();
         _info.Appearance.CollisionHeight = collision;
         int hairStyle = ReadI();

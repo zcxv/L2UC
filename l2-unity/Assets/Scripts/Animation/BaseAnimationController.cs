@@ -19,6 +19,8 @@ public class BaseAnimationController : MonoBehaviour
     private bool _isProcessingQueue = false;
     public Action<string> OnAnimationFinished;
     public Action<string> OnAnimationStartShoot;
+    public Action<string> OnAnimationStartHit;
+    public Action<string> OnAnimationFinishedHit;
     public Action<string> OnAnimationStartLoadArrow;
     public virtual void Initialize()
     {
@@ -82,6 +84,16 @@ public class BaseAnimationController : MonoBehaviour
     public void OnAnimationShoot(string animationName)
     {
         OnAnimationStartShoot?.Invoke(animationName);
+    }
+
+    public void OnAnimationHit(string animationName)
+    {
+        OnAnimationStartHit?.Invoke(animationName);
+    }
+
+    public void OnAnimationAttackHitEnd(string animationName)
+    {
+        OnAnimationFinishedHit?.Invoke(animationName);
     }
 
     public void OnAnimationLoadArrow(string animationName)
