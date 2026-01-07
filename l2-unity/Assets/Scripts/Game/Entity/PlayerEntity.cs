@@ -5,7 +5,15 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerEntity : Entity
 {
+
+
     private CharacterAnimationAudioHandler _characterAnimationAudioHandler;
+
+    private const string SWORD_BASE = "Sword_Base";
+
+    private const string SWORD_TIP = "Sword_Tip";
+
+    private readonly string[] BASE_SWORD_POINT_NAME = { SWORD_BASE, SWORD_TIP };
 
     private static PlayerEntity _instance;
     public Animation RandomName { get; set; }
@@ -25,8 +33,9 @@ public class PlayerEntity : Entity
     public static PlayerEntity Instance { get => _instance; }
 
     //default combo name
-    private readonly Animation[] pAtkList = { AnimationNames.ATK01, AnimationNames.ATK02, AnimationNames.ATK03 };
-  
+    //private readonly Animation[] pAtkList = { AnimationNames.ATK01, AnimationNames.ATK02, AnimationNames.ATK03 };
+
+    private readonly Animation[] pAtkList = { AnimationNames.ATK01};
 
     private void Awake()
     {
@@ -35,6 +44,7 @@ public class PlayerEntity : Entity
             _instance = this;
             RandomName = pAtkList[0];
             CountAtk = 2;
+
         }
         else
         {
@@ -193,8 +203,6 @@ public class PlayerEntity : Entity
     public override float UpdateWalkSpeed(float speed)
     {
         float converted = base.UpdateWalkSpeed(speed);
-        //float anim = UpdateAnimRunSpeed(speed);
-        //default speed anim to human fighter
         PlayerAnimationController.Instance.SetWalkSpeed(0.45f);
         PlayerController.Instance.UpdateWalkSpeed(converted);
 
@@ -250,11 +258,39 @@ public class PlayerEntity : Entity
         return _gear.GetGoEtcItem();
     }
 
+
+    public Transform[] GetSwordBasePoints()
+    {
+        return _gear.GetAllTransformByRightHand(BASE_SWORD_POINT_NAME);
+    }
     public float TargetDistance()
     {
         Vector3 startPos = GetPositionRightHand();
         Transform target = PlayerEntity.Instance.Target;
 
         return VectorUtils.Distance2D(startPos , target.position);
+    }
+
+    public void SetProceduralSpinePose(Vector3 rotation)
+    {
+        Transform bone = _gear.GetSpineBone();
+        SpineProceduralController.Instance.SetBoneMod(bone, new BoneModification(rotation, Vector3.zero, 1.0f));
+
+        //SpineProceduralController.Instance.SetBoneMod(bone, new BoneModification(new Vector3(0, 0, -90), Vector3.zero, 1.0f));
+
+    }
+
+    public void SetProceduralRightUpperArmPose(Vector3 rotation)
+    {
+        Transform upperArm = _gear.GetRightUpperArm();
+        SpineProceduralController.Instance.SetBoneMod(upperArm, new BoneModification(rotation, Vector3.zero, 1.0f));
+    }
+
+    public void RemoveProceduralPose()
+    {
+        Transform bone = _gear.GetSpineBone();
+        Transform upperArm = _gear.GetRightUpperArm();
+        SpineProceduralController.Instance.RemoveBoneMod(bone);
+        SpineProceduralController.Instance.RemoveBoneMod(upperArm);
     }
 }

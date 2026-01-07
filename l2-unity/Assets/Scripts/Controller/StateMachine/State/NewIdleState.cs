@@ -50,6 +50,7 @@ public class NewIdleState : StateBase
 
     private void HandleWaitReturn()
     {
+        PlayerEntity.Instance.RemoveProceduralPose();
         PlayAnimation(AnimationNames.ATK_WAIT);
         PlayerEntity.Instance.LastAtkAnimation = null;
     }
