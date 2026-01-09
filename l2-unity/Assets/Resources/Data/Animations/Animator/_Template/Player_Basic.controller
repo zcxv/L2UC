@@ -44,10 +44,10 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.1
+  m_TransitionDuration: 0.3
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 0
+  m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -774,6 +774,19 @@ MonoBehaviour:
   _enabled: 1
   _weaponAnim: 
   _weaponType: 0
+--- !u!114 &-6695477852247116790
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 606ad050cef53e746a775669d3ac3bd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameterName: jatk01_1HS
 --- !u!1101 &-6590439403293335853
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -840,33 +853,28 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &-6446631781007140756
-AnimatorState:
-  serializedVersion: 6
+--- !u!1101 &-6414206865342657676
+AnimatorStateTransition:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: jatk01_1HS
-  m_Speed: 1
-  m_CycleOffset: 0
-  m_Transitions: []
-  m_StateMachineBehaviours:
-  - {fileID: 8112897225240265832}
-  m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
-  m_Mirror: 0
-  m_SpeedParameterActive: 1
-  m_MirrorParameterActive: 0
-  m_CycleOffsetParameterActive: 0
-  m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: ee3595411ff45b54babfdbcf73e50689, type: 2}
-  m_Tag: 
-  m_SpeedParameter: patkspd
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -8156064777915247692}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.86956525
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1102 &-6374972864266442709
 AnimatorState:
   serializedVersion: 6
@@ -879,7 +887,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 5028073554582750446}
+  - {fileID: 2092326738720745355}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1238,6 +1246,34 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1102 &-4625142993069226848
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: jatk01_1HS
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions:
+  - {fileID: -6414206865342657676}
+  m_StateMachineBehaviours:
+  - {fileID: -6695477852247116790}
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 1
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: ee3595411ff45b54babfdbcf73e50689, type: 2}
+  m_Tag: 
+  m_SpeedParameter: patkspd
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &-4618472828599049812
 AnimatorState:
   serializedVersion: 6
@@ -2647,7 +2683,7 @@ AnimatorStateMachine:
     m_Position: {x: 310, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8156064777915247692}
-    m_Position: {x: -130, y: 240, z: 0}
+    m_Position: {x: -160, y: 380, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7175473214889578407}
     m_Position: {x: 550, y: -120, z: 0}
@@ -2707,7 +2743,7 @@ AnimatorStateMachine:
     m_Position: {x: -360, y: 280, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3845821226329329059}
-    m_Position: {x: -130, y: 280, z: 0}
+    m_Position: {x: -140, y: 420, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8435281348558128612}
     m_Position: {x: 100, y: 290, z: 0}
@@ -2722,7 +2758,7 @@ AnimatorStateMachine:
     m_Position: {x: 100, y: 330, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2983254940387829058}
-    m_Position: {x: -130, y: 320, z: 0}
+    m_Position: {x: -140, y: 460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -258654477695935397}
     m_Position: {x: -360, y: 320, z: 0}
@@ -2776,10 +2812,10 @@ AnimatorStateMachine:
     m_Position: {x: -360, y: 400, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4449740963674483829}
-    m_Position: {x: -130, y: 360, z: 0}
+    m_Position: {x: -140, y: 500, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1999328760289581217}
-    m_Position: {x: -130, y: 400, z: 0}
+    m_Position: {x: -140, y: 540, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7043330288798479925}
     m_Position: {x: -360, y: 100, z: 0}
@@ -2823,9 +2859,6 @@ AnimatorStateMachine:
     m_State: {fileID: 8420556654411932138}
     m_Position: {x: 630, y: 470, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -6446631781007140756}
-    m_Position: {x: -660, y: -600, z: 0}
-  - serializedVersion: 1
     m_State: {fileID: -6374972864266442709}
     m_Position: {x: -660, y: -540, z: 0}
   - serializedVersion: 1
@@ -2867,6 +2900,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -8814299826567150882}
     m_Position: {x: -190, y: -680, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -4625142993069226848}
+    m_Position: {x: -660, y: -600, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -7298012389465650385}
@@ -2922,9 +2958,9 @@ AnimatorStateMachine:
   - {fileID: 9019422978263644938}
   - {fileID: -2090212580795530717}
   - {fileID: 779404511788421540}
-  - {fileID: -8820774003286248638}
+  - {fileID: 3727168358481804400}
   - {fileID: 3929121735681673617}
-  - {fileID: 7600435344507014762}
+  - {fileID: -8820774003286248638}
   - {fileID: -6954164782560447482}
   - {fileID: 4615253436981805503}
   - {fileID: -2757544815921560439}
@@ -3397,7 +3433,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: jatk01_1HS
+  - m_Name: jatk01_1HS_backup
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -3483,6 +3519,12 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: jatk03_bow
     m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: jatk01_1HS
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -4078,6 +4120,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0
+--- !u!114 &2092326738720745355
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 606ad050cef53e746a775669d3ac3bd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameterName: jatk02_1HS
 --- !u!114 &2166385319205054517
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4449,6 +4504,31 @@ MonoBehaviour:
   _enabled: 1
   _weaponAnim: 
   _weaponType: 0
+--- !u!1101 &3727168358481804400
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: jatk01_1HS
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -4625142993069226848}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.15
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 0
 --- !u!1101 &3761941451190762303
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -4949,19 +5029,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameterName: run_hand
---- !u!114 &5028073554582750446
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606ad050cef53e746a775669d3ac3bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameterName: jatk02_1HS
 --- !u!1101 &5090265770684097590
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -5944,31 +6011,6 @@ MonoBehaviour:
   _enabled: 1
   _weaponAnim: 
   _weaponType: 0
---- !u!1101 &7600435344507014762
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: jatk01_1HS
-    m_EventTreshold: 0
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: -6446631781007140756}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.75
-  m_HasExitTime: 0
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
 --- !u!1102 &7720312349417973476
 AnimatorState:
   serializedVersion: 6
@@ -6065,19 +6107,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &8112897225240265832
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606ad050cef53e746a775669d3ac3bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameterName: jatk01_1HS
 --- !u!1101 &8217562025343072822
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

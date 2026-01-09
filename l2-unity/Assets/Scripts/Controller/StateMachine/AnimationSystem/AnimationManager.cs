@@ -54,6 +54,13 @@ public class AnimationManager : IAnimationManager
         PlayerAnimationController.Instance.SetBool(finalAnimName, true , _player.name);
     }
 
+    public void PlayAnimationTrigger(string animationName)
+    {
+        string triggerName = GetFinalNameAnim(animationName);
+
+        PlayerAnimationController.Instance.StartTrigger(triggerName);
+    }
+
 
     public void PlayMonsterAnimation(int mId , NetworkAnimationController controllerAnimator , string animationName)
     {

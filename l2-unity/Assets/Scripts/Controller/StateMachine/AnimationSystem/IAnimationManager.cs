@@ -6,6 +6,7 @@ public interface IAnimationManager
 {
     void SetAnimationManager(PlayerAnimationController controller , PlayerEntity Player);
     void PlayAnimation(string animationName , bool disableTriggerAfterStart);
+    public void PlayAnimationTrigger(string triggerName);
     void PlayOriginalAnimation(string animationName);
     string GetCurrentAnimationName();
     string GetLastAnimationName();

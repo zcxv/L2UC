@@ -15,11 +15,11 @@ public class PlayerStateJAtk : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
-        AnimatorClipInfo[] clipInfos = animator.GetNextAnimatorClipInfo(0);
-
+        AnimatorClipInfo[] clipInfos = animator.GetNextAnimatorClipInfo(layerIndex);
+        //Debug.Log($"Test debug atk Layer: {layerIndex} | Global patkspd: {animator.GetFloat("patkspd")} )");
         if (clipInfos == null || clipInfos.Length == 0)
         {
-            clipInfos = animator.GetCurrentAnimatorClipInfo(0);
+            clipInfos = animator.GetCurrentAnimatorClipInfo(layerIndex);
         }
 
         _animationCurve = new AnimationCurve();
@@ -49,6 +49,8 @@ public class PlayerStateJAtk : StateMachineBehaviour
 
         _remainingTime = Mathf.Max(0, _endTime - timeOut);
         AnimationManager.Instance.UpdateRemainingAtkTime(_remainingTime);
+        //float patkMultiplier = animator.GetFloat("patkspd");
+        //Debug.Log("Speed Data " + patkMultiplier);
         float normalizedTime = timeOut / _endTime;
         float speed = _animationCurve.Evaluate(normalizedTime);
         //Debug.Log($"Current attack speed: {speed:F3} (normalized time: {normalizedTime:F2})");

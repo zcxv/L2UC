@@ -564,7 +564,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 0.019
-    rootMotionBoneName: 
+    rootMotionBoneName: bip01
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1

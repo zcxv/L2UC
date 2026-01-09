@@ -35,7 +35,7 @@ public class PlayerEntity : Entity
     //default combo name
     //private readonly Animation[] pAtkList = { AnimationNames.ATK01, AnimationNames.ATK02, AnimationNames.ATK03 };
 
-    private readonly Animation[] pAtkList = { AnimationNames.ATK01};
+    private readonly Animation[] pAtkList = {  AnimationNames.ATK01 };
 
     private void Awake()
     {
