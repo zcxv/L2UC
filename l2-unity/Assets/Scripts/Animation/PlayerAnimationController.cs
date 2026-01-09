@@ -28,7 +28,10 @@ public class PlayerAnimationController : BaseAnimationController
         _instance = null;
     }
 
-
+    public void StartTrigger(string name)
+    {
+        ToggleAnimationTrigger(name);
+    }
     public void SetBool(string name, bool value, bool share)
     {
         if (_animator.GetBool(name) != value)

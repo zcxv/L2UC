@@ -166,7 +166,10 @@ public class BaseAnimationController : MonoBehaviour
     }
 
 
-
+    public void ToggleAnimationTrigger(string name)
+    {
+        _animator.SetTrigger(name);
+    }
 
     public void SetBool(string name, bool value , string entityName = "")
     {
