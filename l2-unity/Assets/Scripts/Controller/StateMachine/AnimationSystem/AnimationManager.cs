@@ -45,10 +45,11 @@ public class AnimationManager : IAnimationManager
     {
        
         string finalAnimName = GetFinalNameAnim(animationName);
+        if (finalAnimName == "atkwait_1HS") return;
 
         DesibleLastAnimationElseTrue();
 
-        //Debug.Log($"AnimationManager> start name player  {_player.name} animation {finalAnimName}");
+        Debug.Log($"AnimationManager> start bool name player  {_player.name} animation {finalAnimName}");
         SetRecentName(finalAnimName);
         AddDebugInfo(finalAnimName);
         PlayerAnimationController.Instance.SetBool(finalAnimName, true , _player.name);
@@ -57,8 +58,9 @@ public class AnimationManager : IAnimationManager
     public void PlayAnimationTrigger(string animationName)
     {
         string triggerName = GetFinalNameAnim(animationName);
-
+        DesibleLastAnimationElseTrue();
         PlayerAnimationController.Instance.StartTrigger(triggerName);
+        Debug.Log($"AnimationManager> start trigger name player  {_player.name} animation {triggerName}");
     }
 
 
@@ -92,9 +94,10 @@ public class AnimationManager : IAnimationManager
             if (PlayerAnimationController.Instance.GetBool(currentAnimation))
             {
                 PlayerAnimationController.Instance.SetBool(currentAnimation, false);
+                Debug.Log($"AnimationManager> stop name player  {_player.name} name animation {currentAnimation}");
             }
 
-            //Debug.Log($"AnimationManager> start name player  {_player.name} name animation {currentAnimation}");
+
         }
     }
 

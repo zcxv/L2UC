@@ -1,6 +1,6 @@
 
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
+
 
 
 public class NewAttackState : StateBase
@@ -199,8 +199,8 @@ public class NewAttackState : StateBase
             PlayerEntity playerEntity = (PlayerEntity)entity;
 
             // ѕримен€ем к позвоночнику (вы уже настроили это в SetProceduralPose)
-            playerEntity.SetProceduralSpinePose(spineRotation);
-            playerEntity.SetProceduralRightUpperArmPose(armRotation);
+            //playerEntity.SetProceduralSpinePose(spineRotation);
+            //playerEntity.SetProceduralRightUpperArmPose(armRotation);
         });
 
         //DebugLineDraw.ShowDrawLineDebugNpc(-1, startPoint, lookDir * 3f, Color.black);

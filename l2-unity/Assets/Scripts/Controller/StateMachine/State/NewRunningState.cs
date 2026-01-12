@@ -19,7 +19,7 @@ public class NewRunningState : StateBase
         {
             case Event.ARRIVED:
                 ArrivedToDestination();
-                DebugLineDraw.RemoveDrawLineDebug(PlayerEntity.Instance.IdentityInterlude.Id);
+                //DebugLineDraw.RemoveDrawLineDebug(PlayerEntity.Instance.IdentityInterlude.Id);
                 break;
 
             case Event.MOVE_TO:
