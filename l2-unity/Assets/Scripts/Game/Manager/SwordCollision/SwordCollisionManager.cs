@@ -14,7 +14,7 @@ public class SwordCollisionService : MonoBehaviour
     private List<TrackedSword> activeSwords = new List<TrackedSword>();
     private Dictionary<Transform, Vector3> lastPositions = new Dictionary<Transform, Vector3>();
     private Dictionary<Transform, HashSet<int>> hitRegistry = new Dictionary<Transform, HashSet<int>>();
-
+    private TrackedSword[] _warningDetele = new TrackedSword[3] { null, null, null};
     //public event Action<RaycastHit, Transform, Transform> OnHitCollider;
 
     public event Action<Transform, Transform, Vector3, Vector3> OnHitCollider;
@@ -31,6 +31,11 @@ public class SwordCollisionService : MonoBehaviour
     {
         if (swordBase == null || swordTip == null) return;
 
+        if(target == null)
+        {
+            Debug.LogWarning("SwordCollisionManager: RegisterSword: target == null mob is Dead?");
+            return;
+        }
 
         if (activeSwords.Exists(s => s.basePt == swordBase))
         {
@@ -85,9 +90,16 @@ public class SwordCollisionService : MonoBehaviour
                 Vector3 prevTip = lastPositions[sword.tipPt];
 
                 // ГЛАВНЫЙ МЕТОД: Проверка "полотна" взмаха
-                CheckSwordSwingPanel(prevBase, prevTip, currentBase, currentTip, sword);
+                CheckSwordSwingPanel(prevBase, prevTip, currentBase, currentTip, sword , _warningDetele);
             }
 
+            if (_warningDetele[0] != null)
+            {
+                UnregisterSword(_warningDetele[0].basePt);
+                _warningDetele[0] = null;
+
+                Debug.LogWarning("SwordCollisionManager: Sword was deleted " + PlayerEntity.Instance.RandomName);
+            }
       
             lastPositions[sword.basePt] = currentBase;
             lastPositions[sword.tipPt] = currentTip;
@@ -95,7 +107,7 @@ public class SwordCollisionService : MonoBehaviour
     }
 
 
-    private void CheckSwordSwingPanel(Vector3 prevBase, Vector3 prevTip, Vector3 currBase, Vector3 currTip, TrackedSword sword)
+    private void CheckSwordSwingPanel(Vector3 prevBase, Vector3 prevTip, Vector3 currBase, Vector3 currTip, TrackedSword sword , TrackedSword[] warningDetele)
     {
         int rayCount = 6;
         float swordThickness = 0.5f; // Радиус сферы (толщина лезвия)
@@ -115,15 +127,46 @@ public class SwordCollisionService : MonoBehaviour
 
             if (dist > 0.01f)
             {
-               
+
+
+ 
+                if (start == null)
+                {
+                    Debug.LogError("SwordCollisionService: 'start' reference is null (object destroyed)");
+                    return;
+                }
+
+        
+                if (swordThickness <= 0)
+                {
+                    Debug.LogError("SwordCollisionService: 'swordThickness' is invalid (value: " + swordThickness + ")");
+                    return;
+                }
+
+           
+                if (movementDir == null || movementDir.sqrMagnitude == 0)
+                {
+                    Debug.LogError("SwordCollisionService: 'movementDir' is null or zero vector");
+                    warningDetele[0] = sword;
+                    return;
+                }
+
                 if (Physics.SphereCast(start, swordThickness, movementDir, out RaycastHit hit, dist, _entityMask))
                 {
                     if (RegisterHit(sword.basePt, hit.collider.GetInstanceID()))
                     {
-                        OnHit(hit, sword);
-                        //OnHitCollider?.Invoke(hit, sword.basePt.parent, sword.tipPt);
-                        Debug.Log("SwordCollisionService: HIT Monster!");
-                        //DebugLineDraw.ShowDrawLineDebugNpc(sword.basePt.GetInstanceID(), start, hit.point, Color.red);
+                        try
+                        {
+                            OnHit(hit, sword);
+                            //OnHitCollider?.Invoke(hit, sword.basePt.parent, sword.tipPt);
+                            Debug.Log("SwordCollisionService: HIT Monster!");
+                            //DebugLineDraw.ShowDrawLineDebugNpc(sword.basePt.GetInstanceID(), start, hit.point, Color.red);
+                        }
+                        catch (Exception e) { 
+                            Debug.LogError(e);
+                        }
+
+
                     }
                 }
                 else
@@ -149,25 +192,87 @@ public class SwordCollisionService : MonoBehaviour
 
 
 
-  
+
     private void OnHit(RaycastHit hit, TrackedSword sword)
     {
+        // Check if hit.transform is valid
+        if (hit.transform == null)
+        {
+            Debug.LogError("OnHit: hit.transform is null");
+            return;
+        }
+
+        // Check if hit.transform.parent is valid
+        if (hit.transform.parent == null)
+        {
+            Debug.LogError("OnHit: hit.transform.parent is null");
+            return;
+        }
+
         GameObject gameObject = hit.transform.parent.gameObject;
         Entity entity = gameObject.GetComponent<Entity>();
+
+        // Check if sword is valid
+        if (sword == null)
+        {
+            Debug.LogError("OnHit: sword is null");
+            return;
+        }
+
+        // Check if sword.target is valid
+        if (sword.target == null)
+        {
+            Debug.LogError("OnHit: sword.target is null");
+            return;
+        }
+
         GameObject targetGameObject = sword.target.gameObject;
         Entity targetEntity = targetGameObject.GetComponent<Entity>();
 
-        if (targetEntity == null || entity == null) return;
+        if (targetEntity == null || entity == null)
+        {
+            Debug.LogWarning("OnHit: Either targetEntity or entity is null");
+            return;
+        }
+
+        // Check if sword.basePt is valid
+        if (sword.basePt == null)
+        {
+            Debug.LogError("OnHit: sword.basePt is null");
+            return;
+        }
+
+        if (sword.basePt.parent == null)
+        {
+            Debug.LogError("OnHit: sword.basePt.parent is null");
+            return;
+        }
 
         if (entity.IdentityInterlude.Id == targetEntity.IdentityInterlude.Id)
         {
             Vector3 startPos = sword.basePt.position;
 
+            // Check if hit.point is valid
+            if (hit.point == null)
+            {
+                Debug.LogError("OnHit: hit.point is null");
+                return;
+            }
+
             var hitDirection = VectorUtils.CalcHitDirection(hit.point, startPos);
 
-            OnHitCollider?.Invoke(sword.basePt.parent, sword.target, hit.point, hitDirection);
+            // Check if OnHitCollider is valid before invoking
+            if (OnHitCollider != null)
+            {
+                OnHitCollider?.Invoke(sword.basePt.parent, sword.target, hit.point, hitDirection);
+            }
+            else
+            {
+                Debug.LogWarning("OnHit: OnHitCollider event is null");
+            }
         }
     }
+
 
 
 }
