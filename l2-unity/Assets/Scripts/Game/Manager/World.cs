@@ -401,9 +401,7 @@ public class World : MonoBehaviour {
         {
             if (entity.IsDead())
             {
-                //DeadMonster deadEvent = entity.GetComponent<DeadMonster>();
-                //deadEvent.OnDeadAntiGravity(objectId, true, this);
-                DeadManager.Instance.AddDeadAndRemove(objectId , new DeadData(true, entity));
+                //DeadManager.Instance.AddDeadAndRemove(objectId , new DeadData(true, entity));
             }
             else
             {

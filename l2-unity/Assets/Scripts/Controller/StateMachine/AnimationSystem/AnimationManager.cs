@@ -45,7 +45,6 @@ public class AnimationManager : IAnimationManager
     {
        
         string finalAnimName = GetFinalNameAnim(animationName);
-        if (finalAnimName == "atkwait_1HS") return;
 
         DesibleLastAnimationElseTrue();
 

@@ -285,14 +285,4 @@ public class FastSinglExecuter : MonoBehaviour
             monsterStatemachine.NotifyEvent(Event.DEAD);
         }
     }
-
-
-
-
-
-
-
-
-
-
 }

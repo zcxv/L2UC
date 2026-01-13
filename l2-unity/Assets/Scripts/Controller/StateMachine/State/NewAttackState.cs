@@ -1,4 +1,5 @@
 
+using System.Threading;
 using UnityEngine;
 
 
@@ -6,6 +7,7 @@ using UnityEngine;
 public class NewAttackState : StateBase
 {
     private const int WOODEN_ARROW = 17;
+  
     public NewAttackState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
         AnimationManager.Instance.OnAnimationFinished += CallBackAnimationFinish;
@@ -36,6 +38,7 @@ public class NewAttackState : StateBase
                 PlayerEntity.Instance.RefreshRandomPAttack();
                 Animation random = PlayerEntity.Instance.RandomName;
                 AnimationManager.Instance.PlayAnimationTrigger(random.ToString());
+
                 break;
             case Event.CANCEL:
                 Debug.Log("Attack Sate to Intention> ќтмена скорее всего запрос пришел из ActionFaild");
@@ -73,14 +76,40 @@ public class NewAttackState : StateBase
         {
             if (animName == special.ToString())
             {
+
                 if (special.Type == TypesAnimation.MeleeAttack)
                 {
+   
+
                     Transform[] swordBasePoints = _stateMachine.Player.GetSwordBasePoints();
                     if (swordBasePoints.Length > 1) SwordCollisionService.Instance.UnregisterSword(swordBasePoints[0]);
                     PlayerEntity.Instance.RemoveProceduralPose();
                     break;
                 }
             }
+        }
+    }
+
+    private void IfMonsterDead(Entity target)
+    {
+        if (target == null) return;
+
+
+        if (target != null & target is MonsterEntity)
+        {
+            MonsterEntity monsterEntity = (MonsterEntity)target;
+            Debug.Log("ѕопали и увидели что монстр уже должен быть мертвым hp  " + monsterEntity.Hp() + " RemainingHP " + monsterEntity.CalculateRemainingHp());
+
+            if (monsterEntity.IsDead() || monsterEntity.CalculateRemainingHp() <= 0)
+            {
+                monsterEntity.SetDead(true);
+                MonsterStateMachine stateMachine = monsterEntity.GetStateMachine();
+                stateMachine.ChangeState(MonsterState.DEAD);
+                stateMachine.NotifyEvent(Event.FORCE_DEATH);
+                Debug.Log("ѕопали и увидели что монстр уже должен быть мертвым hp запускаем анимацию смерти " + monsterEntity.IsDead());
+            }
+
+
         }
     }
 
@@ -149,7 +178,15 @@ public class NewAttackState : StateBase
 
     private void OnHitColliderMonster(Transform attacker , Transform target, Vector3 hitPointCollider, Vector3 hitDirection)
     {
-        HitManager.Instance.HandleHitCollider(attacker , target, hitPointCollider, hitDirection);
+        Entity entity = PlayerEntity.Instance.GetTargetEntity();
+
+        if(entity is MonsterEntity)
+        {
+            MonsterEntity monster = (MonsterEntity)entity;
+            HitManager.Instance.HandleHitCollider(attacker, monster.GetStateMachine(), hitPointCollider, hitDirection);
+            IfMonsterDead(PlayerEntity.Instance.GetTargetEntity());
+        }
+
     }
 
 
@@ -199,8 +236,8 @@ public class NewAttackState : StateBase
             PlayerEntity playerEntity = (PlayerEntity)entity;
 
             // ѕримен€ем к позвоночнику (вы уже настроили это в SetProceduralPose)
-            //playerEntity.SetProceduralSpinePose(spineRotation);
-            //playerEntity.SetProceduralRightUpperArmPose(armRotation);
+            playerEntity.SetProceduralSpinePose(spineRotation);
+            playerEntity.SetProceduralRightUpperArmPose(armRotation);
         });
 
         //DebugLineDraw.ShowDrawLineDebugNpc(-1, startPoint, lookDir * 3f, Color.black);
