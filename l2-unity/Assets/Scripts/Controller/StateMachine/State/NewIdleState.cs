@@ -51,8 +51,12 @@ public class NewIdleState : StateBase
 
     private void HandleWaitReturn()
     {
-        PlayAnimation(AnimationNames.ATK_WAIT);
-        Debug.Log("HandleArrival: Handle_Wait_Return ");
+        if (!_stateMachine.Player.IsAttack)
+        {
+            PlayAnimation(AnimationNames.ATK_WAIT);
+            Debug.Log("HandleArrival: Handle_Wait_Return ");
+        }
+
         PlayerEntity.Instance.LastAtkAnimation = null;
     }
 

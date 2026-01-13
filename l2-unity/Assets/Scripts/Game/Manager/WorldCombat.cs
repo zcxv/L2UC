@@ -73,9 +73,6 @@ public class WorldCombat : MonoBehaviour {
         PlayerStatusInterlude status = (PlayerStatusInterlude)entity.Status;
         PlayerInterludeStats stats = (PlayerInterludeStats) entity.Stats;
 
-        //Debug.Log("Stats sssssssssssssss+++ " + stats.Exp);
-        //Debug.Log("pis sssssssssssssss+++ " + pis.Exp);
-
         stats.Exp = pis.Exp;
         stats.Str = pis.Str;
         stats.Dex = pis.Dex;

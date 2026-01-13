@@ -89,6 +89,7 @@ public class TargetWindow : L2Window {
                 _nameLabel.style.color = targetData.GetColorName();
             }
             if(_HPBarBG != null && _HPBar != null) {
+
                 float hpRatio = (float)targetData.Status.GetHp() / targetData.Stats.MaxHp;
                 float bgWidth = _HPBarBG.resolvedStyle.width;
                 float barWidth = bgWidth * hpRatio;

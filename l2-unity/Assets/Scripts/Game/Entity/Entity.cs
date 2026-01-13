@@ -17,15 +17,17 @@ public class Entity : MonoBehaviour {
     [SerializeField] private bool _dead;
     [SerializeField] private CharacterRace _race;
     [SerializeField] private CharacterRaceAnimation _raceId;
-
     public Animator Animator { get; private set; }
     [Header("Combat")]
     [SerializeField] private int _targetId;
     [SerializeField] private Transform _target;
+    private Transform _lastTarget;
+    private Entity _cachedTargetEntity;
     [SerializeField] private Transform _attackTarget;
     [SerializeField] private long _stopAutoAttackTime;
     [SerializeField] private long _startAutoAttackTime;
 
+    private MonsterStateMachine _targetStateMachine;
 
     protected NetworkAnimationController _networkAnimationReceive;
     protected NetworkTransformReceive _networkTransformReceive;
@@ -43,7 +45,19 @@ public class Entity : MonoBehaviour {
     public NetworkIdentityInterlude IdentityInterlude { get => _identityInterlude; set => _identityInterlude = value; }
 
     public int TargetId { get => _targetId; set => _targetId = value; }
-    public Transform Target { get { return _target; } set { _target = value; } }
+
+    public Transform LastTarget { get { return _lastTarget; } set { _lastTarget = value; } }
+    public Transform Target
+    {
+        get { return _target; }
+        set
+        {
+            if (_target != value)
+            {
+                _target = value;      
+            }
+        }
+    }
     public Transform AttackTarget { get { return _attackTarget; } set { _attackTarget = value; } }
     public long StopAutoAttackTime { get { return _stopAutoAttackTime; } }
     public long StartAutoAttackTime { get { return _startAutoAttackTime; } }
@@ -51,20 +65,15 @@ public class Entity : MonoBehaviour {
     public CharacterRaceAnimation RaceId { get { return _raceId; } set { _raceId = value; } }
     public bool EntityLoaded { get { return _entityLoaded; } set { _entityLoaded = value; } }
 
-    protected  void Awake() // Или Start
+    protected  void Awake() 
     {
         Animator = GetComponent<Animator>();
 
         if (Animator == null)
         {
-            // Если аниматор находится на дочернем объекте (модели)
             Animator = GetComponentInChildren<Animator>();
         }
     }
-
-
-
-
 
     public void FixedUpdate() {
         LookAtTarget();
@@ -81,6 +90,7 @@ public class Entity : MonoBehaviour {
     public void SetDead(bool dead)
     {
        _dead = dead;
+        Status.SetHp(0);
     }
 
     public bool GetDead()
@@ -208,12 +218,6 @@ public class Entity : MonoBehaviour {
         return StatsConverter.Instance.ConvertStat(Stat.MAGIC_ATTACK_SPEED, mAtkSpd);
     }
 
-   // public void UpdateNpcPAtkSpd(int pAtackSpd)
-    //{
-     //   float speed = StatsConverter.Instance.ConvertStat(Stat.SPEED, pAtackSpd);
-     //   Stats.ScaledSpeed = speed;
-     //   Stats.PAtkSpd = (int)speed;
-   // }
 
     public void UpdateNpcPAtkSpd(int pAtkSpd)
     {
@@ -285,8 +289,17 @@ public class Entity : MonoBehaviour {
    
     public bool IsDead() {
         if (_dead) return true;
-        return Status.GetHp() <= 0;
+        return _status.GetHp() <= 0;
     }
+
+
+
+    public double Hp()
+    {
+        return _status.GetHp();
+    }
+
+    
 
     public virtual void UpdateWaitType(ChangeWaitTypePacket.WaitType moveType)
     {
@@ -429,6 +442,36 @@ public class Entity : MonoBehaviour {
        }
     }
 
-    
+    public Entity GetTargetEntity()
+    {
+        if (_cachedTargetEntity == null && _target != null)
+        {
+            _lastTarget = _target;
+            _cachedTargetEntity = _target.GetComponent<Entity>();
+        }
+
+        if (_lastTarget == null || _lastTarget != _target)
+        {
+            _lastTarget = _target;
+            _cachedTargetEntity = _target.GetComponent<Entity>();
+        }
+
+        if (_cachedTargetEntity == null) return null;
+
+
+        return _cachedTargetEntity;
+    }
+
+    public void SetDamage(int damage)
+    {
+        _status.SetDamage(damage);
+    }
+
+    public double CalculateRemainingHp()
+    {
+        return _status.GetRemainingHp();
+    }
+
+
 
 }

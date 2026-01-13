@@ -33,9 +33,9 @@ public class PlayerEntity : Entity
     public static PlayerEntity Instance { get => _instance; }
 
     //default combo name
-    //private readonly Animation[] pAtkList = { AnimationNames.ATK01, AnimationNames.ATK02, AnimationNames.ATK03 };
+    private readonly Animation[] pAtkList = { AnimationNames.ATK01, AnimationNames.ATK02, AnimationNames.ATK03 };
 
-    private readonly Animation[] pAtkList = {  AnimationNames.ATK01 };
+    //private readonly Animation[] pAtkList = {  AnimationNames.ATK01 };
 
     private void Awake()
     {

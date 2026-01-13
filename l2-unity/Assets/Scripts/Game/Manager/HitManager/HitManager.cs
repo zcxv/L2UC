@@ -43,13 +43,12 @@ public class HitManager : MonoBehaviour
 
     }
 
-    public void HandleHitCollider(Transform attacker , Transform target, Vector3 hitCollider, Vector3 hitColliderDirection)
+    public void HandleHitCollider(Transform attacker , MonsterStateMachine targetStateMachine, Vector3 hitCollider, Vector3 hitColliderDirection)
     {
-        GameObject targetGameObject = target.gameObject;
+        
 
-        if(targetGameObject != null)
+        if(targetStateMachine != null)
         {
-            MonsterStateMachine targetStateMachine = targetGameObject.GetComponent<MonsterStateMachine>();
             if (targetStateMachine != null & targetStateMachine.State == MonsterState.IDLE)
             {
                 targetStateMachine.NotifyEvent(Event.HIT_REACTION);

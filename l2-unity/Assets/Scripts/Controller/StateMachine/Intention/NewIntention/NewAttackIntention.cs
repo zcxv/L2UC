@@ -25,8 +25,13 @@ public class NewAttackIntention : IntentionBase
             Entity entity = World.Instance.GetEntityNoLockSync(targetId);
 
 
-            PlayerController.Instance.RotateToAttacker(entity.transform.position);
+            Debug.Log("Test Hp mosnter " + entity.Hp() + " damage " + myModel.Damage + " entity name " + entity.name);
+            int newHp =(int)entity.Hp() - myModel.Damage;
+            Debug.Log("Test Hp mosnter update " + newHp);
 
+
+            PlayerController.Instance.RotateToAttacker(entity.transform.position);
+            entity.SetDamage(myModel.Damage);
             PlayerEntity.Instance.IsAttack = true;
 
             _stateMachine.ChangeState(PlayerState.ATTACKING);

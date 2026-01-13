@@ -2,6 +2,7 @@ public enum Event
 {
     THINK,
     DEAD,
+    FORCE_DEATH,
     REBIRTH,
     ARRIVED,
     MOVE_TO,

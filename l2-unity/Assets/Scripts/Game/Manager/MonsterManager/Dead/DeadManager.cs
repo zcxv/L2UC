@@ -44,8 +44,7 @@ public class DeadManager : MonoBehaviour, IDead
                 data.SetCurrentPos(zeroPosition - zeroPosition * 2);
                 data.SetZeroPos(data.GetCurrentPos());
                 data.SetCurrentPos(data.GetCurrentPos() + 0.5f);
-                //float lerp = Mathf.Lerp(transform.position.y, 0.5f, speed * Time.deltaTime);
-               // _monsterRenderer = gameObject.GetComponentsInChildren<Renderer>();
+
                 data.SetRefresh(true);
                 data.SetAntiGravity(false);
     
@@ -131,12 +130,10 @@ public class DeadManager : MonoBehaviour, IDead
             Material material = monsterRenderer[0].material;
             if (material != null)
             {
-                // need change setting material manual _Surface = 1, RenderType = Transperenty
-                material.SetFloat("_Surface", 1); // 1 = Transparent, 0 = Opaque
+
+                material.SetFloat("_Surface", 1); 
                 material.SetOverrideTag("RenderType", "Transparent");
                 material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-
-                // Изменяем цвет и устанавливаем прозрачность
                 Color color = material.color;
                 color.a = opacity;
                 material.color = color;
