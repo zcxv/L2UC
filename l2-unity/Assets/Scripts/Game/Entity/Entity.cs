@@ -12,6 +12,7 @@ public class Entity : MonoBehaviour {
     [SerializeField] private Status _status;
     [SerializeField] private Stats _stats;
     [SerializeField] private Status _statusInterlude;
+    protected Hit _selfHit;
     [SerializeField] protected Appearance _appearance;
     [SerializeField] private bool _running;
     [SerializeField] private bool _dead;
@@ -90,7 +91,7 @@ public class Entity : MonoBehaviour {
     public void SetDead(bool dead)
     {
        _dead = dead;
-        Status.SetHp(0);
+        if(_dead) Status.SetHp(0);
     }
 
     public bool GetDead()
@@ -462,9 +463,19 @@ public class Entity : MonoBehaviour {
         return _cachedTargetEntity;
     }
 
-    public void SetDamage(int damage)
+    public void SetDamage(int damage) 
     {
         _status.SetDamage(damage);
+    }
+
+    public void SetSelfHit(Hit hit)
+    {
+        _selfHit = hit;
+    }
+    
+    public bool HitIsMissed()
+    {
+        return _selfHit.isMiss();
     }
 
     public double CalculateRemainingHp()

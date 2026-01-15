@@ -11,8 +11,8 @@ public class SwordSetup : MonoBehaviour
         MeshFilter meshFilter = GetComponentInChildren<MeshFilter>();
         if (meshFilter == null) return;
 
-        swordBase = CreateOrGetPoint("Sword_Base");
-        swordTip = CreateOrGetPoint("Sword_Tip");
+        swordBase = CreateOrGetPoint("Sword_Tip");
+        swordTip = CreateOrGetPoint("Sword_Base");
 
         Bounds bounds = meshFilter.sharedMesh.bounds;
 

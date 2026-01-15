@@ -52,11 +52,9 @@ public class HitManager : MonoBehaviour
             if (targetStateMachine != null & targetStateMachine.State == MonsterState.IDLE)
             {
                 targetStateMachine.NotifyEvent(Event.HIT_REACTION);
-                Debug.Log("Hit colliders on HIT_REACTION");
             }
 
             WorldCombat.Instance.InflictAttack(hitCollider, hitColliderDirection);
-
         }
 
     }

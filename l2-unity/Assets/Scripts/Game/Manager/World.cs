@@ -401,7 +401,7 @@ public class World : MonoBehaviour {
         {
             if (entity.IsDead())
             {
-                //DeadManager.Instance.AddDeadAndRemove(objectId , new DeadData(true, entity));
+                DeadManager.Instance.AddDeadAndRemove(objectId , new DeadData(true, entity));
             }
             else
             {
@@ -599,14 +599,7 @@ public class World : MonoBehaviour {
         return null;
     }
 
-    public MonsterStateMachine GetMonsterStateMachine(int id)
-    {
-        if (_msObjects.ContainsKey(id))
-        {
-            return _msObjects[id];
-        }
-        return null;
-    }
+
 
     // Wait for entity to be fully loaded
     public async Task<Entity> GetEntityAsync(int id) {

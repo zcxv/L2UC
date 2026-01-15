@@ -1,7 +1,5 @@
-using Newtonsoft.Json.Linq;
-using System;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
+
 
 public class PlayerEntity : Entity
 {
@@ -238,10 +236,7 @@ public class PlayerEntity : Entity
         }
     }
 
-    public string GetLastAnimName()
-    {
-        return _gear.LastWeaponAnim;
-    }
+  
 
     public string GetCurrentAnimName()
     {
