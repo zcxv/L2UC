@@ -35,10 +35,6 @@ public class Status {
         _remainingHp = _hp - _myDamage;
     }
 
-    public int GetDamage()
-    {
-        return _myDamage;
-    }
 
     public double GetRemainingHp()
     {

@@ -1,5 +1,6 @@
 
 using System.Threading;
+using UnityEditorInternal;
 using UnityEngine;
 
 
@@ -98,7 +99,7 @@ public class NewAttackState : StateBase
         if (target != null & target is MonsterEntity)
         {
             MonsterEntity monsterEntity = (MonsterEntity)target;
-            Debug.Log("Попали и увидели что монстр уже должен быть мертвым hp  " + monsterEntity.Hp() + " RemainingHP " + monsterEntity.CalculateRemainingHp());
+            //Debug.Log("Попали и увидели что монстр уже должен быть мертвым hp  " + monsterEntity.Hp() + " RemainingHP " + monsterEntity.CalculateRemainingHp());
 
             if (monsterEntity.IsDead() || monsterEntity.CalculateRemainingHp() <= 0)
             {
@@ -106,7 +107,7 @@ public class NewAttackState : StateBase
                 MonsterStateMachine stateMachine = monsterEntity.GetStateMachine();
                 stateMachine.ChangeState(MonsterState.DEAD);
                 stateMachine.NotifyEvent(Event.FORCE_DEATH);
-                Debug.Log("Попали и увидели что монстр уже должен быть мертвым hp запускаем анимацию смерти " + monsterEntity.IsDead());
+                //Debug.Log("Попали и увидели что монстр уже должен быть мертвым hp запускаем анимацию смерти " + monsterEntity.IsDead());
             }
 
 
@@ -183,7 +184,7 @@ public class NewAttackState : StateBase
         if(entity is MonsterEntity)
         {
             MonsterEntity monster = (MonsterEntity)entity;
-            HitManager.Instance.HandleHitCollider(attacker, monster.GetStateMachine(), hitPointCollider, hitDirection);
+            if(!_stateMachine.Player.HitIsMissed()) HitManager.Instance.HandleHitCollider(attacker, monster.GetStateMachine(), hitPointCollider, hitDirection);
             IfMonsterDead(PlayerEntity.Instance.GetTargetEntity());
         }
 

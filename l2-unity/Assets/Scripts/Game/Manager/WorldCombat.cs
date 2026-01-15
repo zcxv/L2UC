@@ -47,14 +47,6 @@ public class WorldCombat : MonoBehaviour {
 
 
 
-
-    public void ChageStateIDLE(MonsterEntity mEntity , MonsterStateMachine st)
-    {
-        if (!mEntity.IsDead())
-        {
-            st.ChangeState(MonsterState.IDLE);
-        }
-    }
     private void ParticleImpact(Vector3 hitPoint, Vector3 impactDirection)
     {
         // Use the actual impact point instead of calculating a new position

@@ -22,17 +22,15 @@ public class NewAttackIntention : IntentionBase
             Attack myModel = (Attack)arg0;
             int targetId = myModel.TargetId;
 
-            Entity entity = World.Instance.GetEntityNoLockSync(targetId);
+            Entity targetEntity = World.Instance.GetEntityNoLockSync(targetId);
 
 
-            Debug.Log("Test Hp mosnter " + entity.Hp() + " damage " + myModel.Damage + " entity name " + entity.name);
-            int newHp =(int)entity.Hp() - myModel.Damage;
-            Debug.Log("Test Hp mosnter update " + newHp);
+            PlayerController.Instance.RotateToAttacker(targetEntity.transform.position);
+            Hit playerHit = myModel.FirstHit;
 
-
-            PlayerController.Instance.RotateToAttacker(entity.transform.position);
-            entity.SetDamage(myModel.Damage);
+            targetEntity.SetDamage(playerHit.Damage);
             PlayerEntity.Instance.IsAttack = true;
+            PlayerEntity.Instance.SetSelfHit(playerHit);
 
             _stateMachine.ChangeState(PlayerState.ATTACKING);
             _stateMachine.NotifyEvent(Event.READY_TO_ACT);
