@@ -7,6 +7,7 @@ public class EventBus : MonoBehaviour
 {
     public static EventBus Instance { get; private set; }
     public event Action<ItemInstance , int> OnEquipped;
+    public event Action<ItemInstance, int> OnWeaponChanged;
     public event Action<ItemInstance , int> OnUnEquipped;
 
 
@@ -23,6 +24,10 @@ public class EventBus : MonoBehaviour
         }
     }
 
+    public void WeaponChanged(ItemInstance item, int objectId)
+    {
+
+    }
 
     public void Equipped(ItemInstance item , int objectId)
     {

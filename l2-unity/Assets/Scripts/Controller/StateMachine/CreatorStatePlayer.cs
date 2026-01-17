@@ -13,6 +13,8 @@ public class CreatorStatePlayer
                 return new NewRunningState(_stateMachine);
             case PlayerState.ATTACKING:
                 return new NewAttackState(_stateMachine);
+            case PlayerState.PHYSICAL_SKILLS:
+                return new NewPhysicalSkillsState(_stateMachine);
             case PlayerState.DEAD:
                 return new NewDeadState(_stateMachine);
             case PlayerState.REBIRTH:

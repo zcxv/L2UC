@@ -22,6 +22,8 @@ public class CreateIntentionPlayer
                 return new NewDeadIntention(_stateMachine);
             case Intention.INTENTION_MAGIC_ATTACK:
                 return new NewMagicAttackIntention(_stateMachine);
+            case Intention.INTENTION_PHYSICAL_SKILLS_ATTACK:
+                return new NewPhysicalSkillsIntention(_stateMachine);
             default:
                 Debug.LogError("CreateIntentionPlayer> Invalid Intention Request " + currentState);
                 throw new ArgumentException("Invalid Intention");

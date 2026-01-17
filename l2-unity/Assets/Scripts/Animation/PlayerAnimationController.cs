@@ -32,6 +32,10 @@ public class PlayerAnimationController : BaseAnimationController
     {
         ToggleAnimationTrigger(name);
     }
+    public void StartCrossFade(string name , float duration)
+    {
+        ToggleAnimationCrossFade(name, duration);
+    }
     public void SetBool(string name, bool value, bool share)
     {
         if (_animator.GetBool(name) != value)

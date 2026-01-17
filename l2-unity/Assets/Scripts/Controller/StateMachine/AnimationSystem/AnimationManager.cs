@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -12,6 +13,7 @@ public class AnimationManager : IAnimationManager
     private Dictionary<int, string[]> recentMonsterAnimationNames = new Dictionary<int, string[]>();
     private List<string> listTriggerAfterStart = new List<string>(10);
     private float _remainingAtkTime = 0;
+    private TaskCompletionSource<bool> _animationFinishedTcs;
     public event Action<string> OnAnimationFinished;
     public event Action<string , float> OnAnimationStartShoot;
     public event Action<string, float> OnAnimationFinishedHit;
@@ -60,6 +62,23 @@ public class AnimationManager : IAnimationManager
         DesibleLastAnimationElseTrue();
         PlayerAnimationController.Instance.StartTrigger(triggerName);
         Debug.Log($"AnimationManager> start trigger name player  {_player.name} animation {triggerName}");
+    }
+
+
+    //Async Wait End Event
+    public async Task AsyncPlayAnimationCrossFade(string animationName, float duration = 0.3f)
+    {
+        _animationFinishedTcs = new TaskCompletionSource<bool>();
+        PlayerAnimationCrossFade(animationName , duration);
+        await _animationFinishedTcs.Task;
+    }
+
+    public void PlayerAnimationCrossFade(string animationName, float duration)
+    {
+        string crossFadeName = GetFinalNameAnim(animationName);
+        DesibleLastAnimationElseTrue();
+        PlayerAnimationController.Instance.StartCrossFade(crossFadeName, duration);
+        Debug.Log($"AnimationManager> start crossFade  {_player.name} animation  {crossFadeName}");
     }
 
 
@@ -254,6 +273,7 @@ public class AnimationManager : IAnimationManager
 
     public void AnimationFinishedPlayerCallback(string animationName)
     {
+        _animationFinishedTcs?.TrySetResult(true);
         OnAnimationFinished?.Invoke(animationName);
     }
 
