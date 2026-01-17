@@ -4,6 +4,7 @@ public enum PlayerState
     MAGIC_CAST,
     MAGIC_CAST_SHOT,
     ATTACKING,
+    PHYSICAL_SKILLS,
     ANIMATION_LOCKED,
     CASTING,
     RUNNING,

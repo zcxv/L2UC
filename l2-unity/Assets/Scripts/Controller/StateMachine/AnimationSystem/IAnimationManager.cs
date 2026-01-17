@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public interface IAnimationManager
@@ -7,6 +8,8 @@ public interface IAnimationManager
     void SetAnimationManager(PlayerAnimationController controller , PlayerEntity Player);
     void PlayAnimation(string animationName , bool disableTriggerAfterStart);
     public void PlayAnimationTrigger(string triggerName);
+
+    public Task AsyncPlayAnimationCrossFade(string animationName, float duration = 0.3f);
     void PlayOriginalAnimation(string animationName);
     string GetCurrentAnimationName();
     string GetLastAnimationName();

@@ -128,11 +128,6 @@ public class Entity : MonoBehaviour {
         return _networkAnimationReceive;
     }
 
-    public float GetCollissionHeight()
-    {
-        return VectorUtils.ConvertL2jDistance(_appearance.CollisionHeight);
-    }
-
     public float GetCollissionRadius()
     {
         return VectorUtils.ConvertL2jDistance(_appearance.CollisionRadius);

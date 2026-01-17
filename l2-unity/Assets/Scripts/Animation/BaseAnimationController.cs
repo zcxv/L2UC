@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -47,6 +48,8 @@ public class BaseAnimationController : MonoBehaviour
             { "jatk01_pole", false },
             { "jatk02_pole", false },
             { "jatk03_pole", false },
+
+            { "SpAtk01_1HS", false },
         };
 
     }
@@ -169,6 +172,11 @@ public class BaseAnimationController : MonoBehaviour
     public void ToggleAnimationTrigger(string name)
     {
         _animator.SetTrigger(name);
+    }
+
+    public void ToggleAnimationCrossFade(string name , float duration)
+    {
+        _animator.CrossFade(name, duration, 0);
     }
 
     public void SetBool(string name, bool value , string entityName = "")
