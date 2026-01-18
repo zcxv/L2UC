@@ -1,5 +1,5 @@
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+
 
 
 
@@ -48,7 +48,7 @@ public class PlayerStateJAtk : StateMachineBehaviour
         float timeOut = currentTime - _startTime;
 
         _remainingTime = Mathf.Max(0, _endTime - timeOut);
-        AnimationManager.Instance.UpdateRemainingAtkTime(_remainingTime);
+        //AnimationManager.Instance.UpdateRemainingAtkTime(_remainingTime);
         //float patkMultiplier = animator.GetFloat("patkspd");
         //Debug.Log("Speed Data " + patkMultiplier);
         float normalizedTime = timeOut / _endTime;
@@ -85,7 +85,7 @@ public class PlayerStateJAtk : StateMachineBehaviour
     {
         if (animator.GetBool(parameterName) != false)
         {
-            AnimationManager.Instance.StopCurrentAnimation(parameterName , "player");
+            AnimationManager.Instance.StopCurrentAnimation(animator.GetInteger(AnimatorUtils.OBJECT_ID), parameterName, "player");
         }
 
     }

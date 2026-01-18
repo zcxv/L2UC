@@ -63,6 +63,6 @@ public class NewIdleState : StateBase
 
     private void PlayAnimation(Animation animation)
     {
-        AnimationManager.Instance.PlayAnimation(animation.ToString(), true);
+        AnimationManager.Instance.PlayAnimation(_stateMachine.GetObjectId() , animation.ToString(), true);
     }
 }

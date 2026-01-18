@@ -103,12 +103,13 @@ public class PositionValidationController : MonoBehaviour
 
         }else if (entity.GetType() == typeof(PlayerEntity))
         {
-            Dictionary<string, float> floatValues  = AnimationManager.Instance.PlayerGetAllFloat();
+            int objectId = entity.IdentityInterlude.Id;
+            Dictionary<string, float> floatValues  = AnimationManager.Instance.PlayerGetAllFloat(objectId);
             entity.HideObject();
             NewCalcGravity(PlayerController.Instance , newPosition);
             entity.ShowObject();
 
-            AnimationManager.Instance.PlayerSetAllFloat(floatValues);
+            AnimationManager.Instance.PlayerSetAllFloat(objectId , floatValues);
             ReStartAnimationPlayer(PlayerStateMachine.Instance);
 
         }else if (entity.GetType() == typeof(NpcEntity))

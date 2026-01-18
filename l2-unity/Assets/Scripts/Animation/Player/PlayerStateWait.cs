@@ -14,7 +14,7 @@ public class PlayerStateWait : StateMachineBehaviour
         //    return;
         //}
 
-        AnimationManager.Instance.StopCurrentAnimation(parameterName);
+        AnimationManager.Instance.StopCurrentAnimation(animator.GetInteger(AnimatorUtils.OBJECT_ID), parameterName);
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

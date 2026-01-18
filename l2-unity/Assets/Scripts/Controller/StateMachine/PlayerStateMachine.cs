@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerStateMachine : MonoBehaviour
 {
     private bool _enableLogs = true;
-
+ 
     private static PlayerStateMachine _instance;
     public static PlayerStateMachine Instance => _instance;
 
@@ -15,6 +15,11 @@ public class PlayerStateMachine : MonoBehaviour
     public Intention Intention { get { return _currentIntention; } }
     public Transform Follow { get; set; }
 
+    public int GetObjectId()
+    {
+        if (Player == null) return -1;
+        return Player.IdentityInterlude.Id;
+    }
     public PlayerEntity Player { get; set; }
     public bool IsMoveToPawn { get; set; }
     public PlayerState State { get { return _currentState; } }

@@ -11,9 +11,8 @@ public class NewPhysicalSkillsIntention : IntentionBase
         if (arg0.GetType() == typeof(MagicSkillUse))
         {
             MagicSkillUse useSkill = (MagicSkillUse)arg0;
-            AnimationCombo anim = SkillgrpTable.Instance.GetAnimComboBySkillId(useSkill.SkillId, useSkill.SkillLvl);
-            SkillExecutor.Instance.ExecuteSkill(useSkill.SkillGrp , anim);
-            
+            AnimationCombo animCombo = SkillgrpTable.Instance.GetAnimComboBySkillId(useSkill.SkillId, useSkill.SkillLvl);
+            SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player , useSkill.SkillGrp , animCombo);
         }
     }
 

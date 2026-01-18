@@ -11,7 +11,7 @@ public class NewRebirthState : StateBase
         switch (evt)
         {
             case Event.REBIRTH:
-                AnimationManager.Instance.PlayOriginalAnimation(AnimationNames.REBIRTH.ToString());
+                AnimationManager.Instance.PlayOriginalAnimation(_stateMachine.GetObjectId() , AnimationNames.REBIRTH.ToString());
                 _stateMachine.ChangeIntention(Intention.INTENTION_IDLE);
                 break;
 

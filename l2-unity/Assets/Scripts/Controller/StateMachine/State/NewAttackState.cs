@@ -11,16 +11,16 @@ public class NewAttackState : StateBase
   
     public NewAttackState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
-        AnimationManager.Instance.OnAnimationFinished += CallBackAnimationFinish;
-        AnimationManager.Instance.OnAnimationStartShoot += CallBackStartShoot;
-        AnimationManager.Instance.OnAnimationFinishedHit += CallBackFinishedHit;
-        AnimationManager.Instance.OnAnimationLoadArrow += CallBackLoadArrow;
-        AnimationManager.Instance.OnAnimationStartHit += CallBackStartHit;
+        AnimationEventsBase events = AnimationManager.Instance.GetAnimationEvents(_stateMachine.GetObjectId());
+        events.OnAnimationFinished += CallBackAnimationFinish;
+        events.OnAnimationStartShoot += CallBackStartShoot;
+        events.OnAnimationFinishedHit += CallBackFinishedHit;
+        events.OnAnimationStartLoadArrow += CallBackLoadArrow;
+        events.OnAnimationStartHit += CallBackStartHit;
 
         ProjectileManager.Instance.OnHitMonster += OnHitBodyMonster;
         ProjectileManager.Instance.OnHitCollider += OnHitColliderMonster;
         SwordCollisionService.Instance.OnHitCollider += OnHitColliderMonster;
-
     }
 
 
@@ -38,7 +38,7 @@ public class NewAttackState : StateBase
                 RotateFaceToMonster(_stateMachine.Player);
                 PlayerEntity.Instance.RefreshRandomPAttack();
                 Animation random = PlayerEntity.Instance.RandomName;
-                AnimationManager.Instance.PlayAnimationTrigger(random.ToString());
+                AnimationManager.Instance.PlayAnimationTrigger(_stateMachine.GetObjectId() , random.ToString());
 
                 break;
             case Event.CANCEL:
@@ -69,7 +69,7 @@ public class NewAttackState : StateBase
         }
     }
 
-    private void CallBackFinishedHit(string animName, float remainingAtkTime)
+    private void CallBackFinishedHit(string animName)
     {
         Animation[] specialsBows = SpecialAnimationNames.GetSpecialsAttackAnimations();
 
@@ -114,7 +114,7 @@ public class NewAttackState : StateBase
         }
     }
 
-    private void CallBackStartShoot(string animName , float remainingAtkTime)
+    private void CallBackStartShoot(string animName)
     {
         Animation[] specials = SpecialAnimationNames.GetSpecialsAttackAnimations();
 
@@ -159,7 +159,7 @@ public class NewAttackState : StateBase
         PlayerEntity.Instance.EquipArrow(WOODEN_ARROW);
     }
 
-    private void CallBackStartHit(string animName, float remainingAtkTime)
+    private void CallBackStartHit(string animName)
     {
         Animation[] specials = SpecialAnimationNames.GetSpecialsAttackAnimations();
         foreach (Animation special in specials)

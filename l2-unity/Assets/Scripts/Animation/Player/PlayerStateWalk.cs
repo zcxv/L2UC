@@ -15,7 +15,7 @@ public class PlayerStateWalk: StateMachineBehaviour
         //_hasStarted = true;
         //_lastNormalizedTime = 0;
         Debug.Log("Walking State STOP");
-        AnimationManager.Instance.StopCurrentAnimation(parameterName);
+        AnimationManager.Instance.StopCurrentAnimation(animator.GetInteger(AnimatorUtils.OBJECT_ID), parameterName);
 
 
     }

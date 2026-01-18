@@ -20,7 +20,7 @@ public class NewWalkingState : StateBase
                     DebugLineDraw.RemoveDrawLineDebug(PlayerEntity.Instance.IdentityInterlude.Id);
                     break;
                 case Event.MOVE_TO:
-                    AnimationManager.Instance.PlayAnimation(AnimationNames.WALK.ToString(), true);
+                    AnimationManager.Instance.PlayAnimation(_stateMachine.GetObjectId() , AnimationNames.WALK.ToString(), true);
                 break;
             }
     }
