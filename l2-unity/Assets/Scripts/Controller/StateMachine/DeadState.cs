@@ -12,7 +12,7 @@ public class DeadState : StateBase
         switch (evt)
         {
             case Event.DEAD:
-                AnimationManager.Instance.PlayAnimation(AnimationNames.RUN.ToString(), true);
+                AnimationManager.Instance.PlayAnimation(_stateMachine.Player.IdentityInterlude.Id , AnimationNames.RUN.ToString(), true);
                 break;
         }
     }

@@ -13,7 +13,7 @@ public class NewPhysicalSkillsState : StateBase
         switch (evt)
         {
             case Event.DEAD:
-                AnimationManager.Instance.PlayOriginalAnimation(AnimationNames.DEAD.ToString());
+                AnimationManager.Instance.PlayOriginalAnimation(_stateMachine.GetObjectId(), AnimationNames.DEAD.ToString());
                 break;
 
         }

@@ -23,7 +23,7 @@ public class MonsterStateDeath : MonsterStateBase
     {
         if (animator.GetBool(parameterName) != false)
         {
-            AnimationManager.Instance.StopMonsterCurrentAnimation(animator, parameterName);
+            AnimationManager.Instance.StopMonsterCurrentAnimation(animator.GetInteger(AnimatorUtils.OBJECT_ID), parameterName);
         }
 
     }

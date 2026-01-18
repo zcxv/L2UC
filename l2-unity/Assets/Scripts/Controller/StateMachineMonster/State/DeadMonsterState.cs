@@ -32,8 +32,7 @@ public class DeadMosterState : MonsterBase
     private void UseDead(MonsterEntity entity)
     {
         Debug.Log("Попали и увидели что монстр уже должен быть мертвым пришел пакет на помереть 1");
-        NetworkAnimationController nac = entity.GetAnimatorController();
-        AnimationManager.Instance.PlayMonsterAnimation(entity.IdentityInterlude.Id, nac, AnimationNames.DEAD.ToString());
+        AnimationManager.Instance.PlayMonsterAnimation(entity.IdentityInterlude.Id, AnimationNames.DEAD.ToString());
         ResetAttackIfMonsterDead();
     }
 
@@ -49,7 +48,7 @@ public class DeadMosterState : MonsterBase
     {
         MonsterEntity entity = (MonsterEntity)_stateMachine.Entity;
         NetworkAnimationController nac = entity.GetAnimatorController();
-        AnimationManager.Instance.PlayMonsterAnimation(entity.IdentityInterlude.Id, nac, AnimationNames.DEAD.ToString());
+        AnimationManager.Instance.PlayMonsterAnimation(_stateMachine.GetObjectId(), AnimationNames.DEAD.ToString());
 
     }
 }

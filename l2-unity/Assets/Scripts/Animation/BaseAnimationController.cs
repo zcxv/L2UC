@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-public class BaseAnimationController : MonoBehaviour
+public class BaseAnimationController : AnimationEventsBase, IAnimationController
 {
     [SerializeField] protected Animator _animator;
     [SerializeField] protected bool _resetStateOnReceive = false;
@@ -15,43 +15,21 @@ public class BaseAnimationController : MonoBehaviour
     private string _lastAnimationVariableName;
     private float _lastAtkClipLength;
     private float _pAtkSpd;
-    private Dictionary<string, bool> _priorityAnimations = new Dictionary<string, bool>();
-    private Queue<string> _animationQueue = new Queue<string>();
-    private bool _isProcessingQueue = false;
-    public Action<string> OnAnimationFinished;
-    public Action<string> OnAnimationStartShoot;
-    public Action<string> OnAnimationStartHit;
-    public Action<string> OnAnimationFinishedHit;
-    public Action<string> OnAnimationStartLoadArrow;
+
+
+
+
     public virtual void Initialize()
     {
         _animator = gameObject.GetComponentInChildren<Animator>(true);
         _lastAnimationVariableName = "wait_hand";
-        _priorityAnimations = new Dictionary<string, bool>
-        {
-            { "jatk01_bow", false },
-            { "jatk02_bow", false },
-            { "jatk03_bow", false },
+        InitializePriority();
 
-            { "jatk01_dual", false },
-            { "jatk02_dual", false },
-            { "jatk03_dual", false },
+    }
 
-            { "jatk01_2HS", false },
-            { "jatk02_2HS", false },
-            { "jatk03_2HS", false },
-
-            { "jatk01_1HS", false },
-            { "jatk02_1HS", false },
-            { "jatk03_1HS", false },
- 
-            { "jatk01_pole", false },
-            { "jatk02_pole", false },
-            { "jatk03_pole", false },
-
-            { "SpAtk01_1HS", false },
-        };
-
+    protected override void HandleQueueAnimation(string animationName)
+    {
+        SetBool(animationName, true, "player");
     }
 
     public void SetRunSpeed(float value)
@@ -66,43 +44,7 @@ public class BaseAnimationController : MonoBehaviour
 
     public void SetWalkSpeedLobby(float value) => _animator.SetFloat("walk_speed", value);
 
-    public void OnAnimationComplete(string animationName)
-    {
-        if (_priorityAnimations.ContainsKey(animationName)){
 
-            _priorityAnimations[animationName] = false;
-            _isProcessingQueue = false;
-            OnAnimationFinished?.Invoke(animationName);
-
-            if (_animationQueue.Count > 0)
-            {
-                var lastAnimation = _animationQueue.Last();
-                SetBool(lastAnimation, true , "player");
-            }
-
-        }
-
-    }
-
-    public void OnAnimationShoot(string animationName)
-    {
-        OnAnimationStartShoot?.Invoke(animationName);
-    }
-
-    public void OnAnimationHit(string animationName)
-    {
-        OnAnimationStartHit?.Invoke(animationName);
-    }
-
-    public void OnAnimationAttackHitEnd(string animationName)
-    {
-        OnAnimationFinishedHit?.Invoke(animationName);
-    }
-
-    public void OnAnimationLoadArrow(string animationName)
-    {
-        OnAnimationStartLoadArrow?.Invoke(animationName);
-    }
     public void SetPAtkSpd(float value)
     {
         //Debug.Log("Update Patak speed set " + value);
@@ -227,20 +169,7 @@ public class BaseAnimationController : MonoBehaviour
     }
 
 
-public void debugPrint()
-    {
-        AnimatorControllerParameter[] parameters = _animator.parameters;
 
-        // Проходим по всем параметрам и выводим только bool переменные
-        foreach (var parameter in parameters)
-        {
-            if (parameter.type == AnimatorControllerParameterType.Bool)
-            {
-                bool value = _animator.GetBool(parameter.name);
-                Debug.Log($"Параметр: {parameter.name}, Значение: {value}");
-            }
-        }
-    }
 
     public void SetBoolDisabledOther(string nameAnim  , bool value, string[] disableds)
     {
@@ -345,4 +274,23 @@ public void debugPrint()
         return 0f;
     }
 
+    public void SetFloat(string name, float value)
+    {
+        _animator.SetFloat(name, value);
+    }
+
+    public float GetFloat(string name)
+    {
+        return  _animator.GetFloat(_animator.name);
+    }
+
+    public void SetInt(string name, int value)
+    {
+        _animator.SetInteger(name, value);
+    }
+
+    public int GetInt(string name)
+    {
+        return _animator.GetInteger(_animator.name);
+    }
 }

@@ -16,12 +16,12 @@ public class SkillExecutor : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public async void ExecuteSkill(Skillgrp skill , AnimationCombo animationCombo)
+    public async void ExecuteSkill(Entity entity , Skillgrp skill , AnimationCombo animationCombo)
     {
         foreach (string animName in animationCombo.GetAnimCycle())
         {
             //"SpAtk01" need "SpAtk01_"
-            await AnimationManager.Instance.AsyncPlayAnimationCrossFade(animName+"_");
+            await AnimationManager.Instance.AsyncPlayAnimationCrossFade(entity.IdentityInterlude.Id , animName + "_");
             
         }
     }
