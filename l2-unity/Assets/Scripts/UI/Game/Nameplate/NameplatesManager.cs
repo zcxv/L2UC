@@ -147,6 +147,7 @@ public class NameplatesManager : MonoBehaviour
     }
 
     private void CreateNameplate(Entity entity) {
+        if (entity == null) return;
         if(!IsNameplateVisible(entity.transform)) {
             return;
         }

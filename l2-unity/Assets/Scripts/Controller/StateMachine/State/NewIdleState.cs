@@ -7,7 +7,7 @@ public class NewIdleState : StateBase
 
     public override void Update() { }
 
-    public override void HandleEvent(Event evt)
+    public override void HandleEvent(Event evt, object payload = null)
     {
         switch (evt)
         {

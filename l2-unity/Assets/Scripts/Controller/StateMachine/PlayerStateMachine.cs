@@ -119,10 +119,10 @@ public class PlayerStateMachine : MonoBehaviour
 
         return dict[key];
     }
-    public void NotifyEvent(Event evt)
+    public void NotifyEvent(Event evt , object payload = null)
     {
         if (_enableLogs) Debug.Log("[StateMachine][EVENT] " + evt);
-        _stateInstance?.HandleEvent(evt);
+        _stateInstance?.HandleEvent(evt , payload);
     }
 
 

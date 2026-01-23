@@ -95,22 +95,33 @@ public class World : MonoBehaviour {
 
     public void SpawnPlayerInterlude(NetworkIdentityInterlude identity, PlayerStatusInterlude status, PlayerInterludeStats stats, PlayerInterludeAppearance appearance)
     {
+        
         identity.SetPosY(GetGroundHeight(identity.Position));
+ 
         identity.EntityType = EntityType.Player;
+ 
 
         CharacterRace race = (CharacterRace)appearance.Race;
+   
         CharacterRaceAnimation raceId = CharacterRaceAnimationParser.ParseRaceInterlude(race, appearance.Sex, appearance.BaseClass);
+   
 
         GameObject go = CharacterBuilder.Instance.BuildCharacterBaseInterlude(raceId, appearance, identity.EntityType);
+     
         go.transform.SetParent(_usersContainer.transform);
+      
         //go.transform.eulerAngles = new Vector3(transform.eulerAngles.x, identity.Heading, transform.eulerAngles.z);
-       
+
         go.transform.position = identity.Position;
+       
         go.transform.rotation = identity.Heading;
+     
 
         // go.transform.name = "_Player";
         go.transform.name = identity.Name;
+   
         PlayerEntity player = go.GetComponent<PlayerEntity>();
+ 
 
         player.Status = status;
         player.IdentityInterlude = identity;
@@ -119,26 +130,36 @@ public class World : MonoBehaviour {
         player.Race = race;
         player.RaceId = raceId;
         player.Running = appearance.Running;
+  
         player.SetDead(false);
-
+ 
         go.GetComponent<NetworkTransformShare>().enabled = true;
+   
         go.GetComponent<PlayerController>().enabled = true;
+   
         go.GetComponent<PlayerController>().Initialize();
-
-        go.SetActive(true);
-
-        go.GetComponentInChildren<PlayerAnimationController>().Initialize();
-        PlayerAnimationController controller = go.GetComponentInChildren<PlayerAnimationController>();
    
 
+        go.SetActive(true);
+      
+
+        go.GetComponentInChildren<PlayerAnimationController>().Initialize();
+     
+        PlayerAnimationController controller = go.GetComponentInChildren<PlayerAnimationController>();
+
+       
         AnimationManager.Instance.RegisterController(identity.Id, controller , player);
-
+   
         go.GetComponent<Gear>().Initialize(player.IdentityInterlude.Id, player.RaceId);
+     
         var statsIntr = (PlayerInterludeStats)player.Stats;
+       
         player.Initialize();
+      
         player.UpdateRunSpeed(statsIntr.RunRealSpeed);
+      
         player.UpdateWalkSpeed(statsIntr.WalkRealSpeed);
-
+      
         // Debug.Log("PLAYER SPAWN RunSpeed " + statsIntr.RunSpeed);
         //Debug.Log("PLAYER SPAWN PAtkSpd " + statsIntr.PAtkSpd);
         // player.UpdatePAtkSpeedPlayer((int)statsIntr.BasePAtkSpeed);
@@ -146,17 +167,24 @@ public class World : MonoBehaviour {
         //416 - ���������� �����
         //554 - � ����������
         player.UpdatePAtkSpeedPlayer((int)statsIntr.BasePAtkSpeed);
+      
         player.UpdateMAtkSpeed((int)statsIntr.MAtkSpd);
+     
         //go.transform.SetParent(_usersContainer.transform);
 
         CameraController.Instance.enabled = true;
+      
         CameraController.Instance.SetTarget(go);
+      
         CameraController.Instance.SetHeading(identity.OrigHeading);
+    
 
         CharacterInfoWindow.Instance.UpdateValues();
+    
         PlayerStateMachine.Instance.Player = player;
-
+    
         _players.Add(identity.Id, player);
+      
         _objects.Add(identity.Id, player);
     }
 

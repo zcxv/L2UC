@@ -23,7 +23,7 @@ public class VectorUtils : MonoBehaviour {
 
     public static float ConvertL2jDistance(float distance)
     {
-        return distance * 0.0190f;
+        return distance * 0.0165f;
     }
 
     public static float ConvertL2jDataOffset(float height)

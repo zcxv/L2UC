@@ -4,7 +4,7 @@ public class WalkingState : StateBase
 {
     public WalkingState(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
-    public override void HandleEvent(Event evt)
+    public override void HandleEvent(Event evt, object payload = null)
     {
         switch (evt)
         {

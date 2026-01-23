@@ -6,7 +6,7 @@ public class NewDeadState : StateBase
     {
         if(PlayerController.Instance.RunningToDestination) PlayerController.Instance.StopMove();
     }
-    public override void HandleEvent(Event evt)
+    public override void HandleEvent(Event evt, object payload = null)
     {
         switch (evt)
         {
