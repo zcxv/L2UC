@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
@@ -9,12 +10,13 @@ public abstract class BaseAnimationManager
     protected Dictionary<int, AnimationModel> _animationControllers;
     protected Dictionary<int, string[]> _recentAnimationNames;
     protected Dictionary<int, string[]> _recentMonsterAnimationNames;
-
+    protected Dictionary<int, TaskCompletionSource<bool>> _tcsMap;
     protected BaseAnimationManager()
     {
         _animationControllers = new Dictionary<int, AnimationModel>();
         _recentAnimationNames = new Dictionary<int, string[]>();
         _recentMonsterAnimationNames = new Dictionary<int, string[]>();
+        _tcsMap = new();
     }
     public void RegisterController(int objectId, IAnimationController controller , Entity entity)
     {
@@ -53,6 +55,14 @@ public abstract class BaseAnimationManager
         }
         return null;
     }
+
+    public AnimationModel GetModel(int objectId)
+    {
+        return  _animationControllers[objectId];
+    }
+
+
+
     public Entity GetEntity(int objectId)
     {
         return _animationControllers[objectId].GetEntity();

@@ -153,10 +153,12 @@ public class SwordCollisionService : MonoBehaviour
 
                 if (Physics.SphereCast(start, swordThickness, movementDir, out RaycastHit hit, dist, _entityMask))
                 {
+                    Debug.Log("ON HIT! 1");
                     if (RegisterHit(sword.basePt, hit.collider.GetInstanceID()))
                     {
                         try
                         {
+                            Debug.Log("ON HIT! 2");
                             OnHit(hit, sword);
                             //OnHitCollider?.Invoke(hit, sword.basePt.parent, sword.tipPt);
                             Debug.Log("SwordCollisionService: HIT Monster!");
@@ -196,6 +198,7 @@ public class SwordCollisionService : MonoBehaviour
     private void OnHit(RaycastHit hit, TrackedSword sword)
     {
         // Check if hit.transform is valid
+        Debug.Log("ON HIT! 3");
         if (hit.transform == null)
         {
             Debug.LogError("OnHit: hit.transform is null");
@@ -203,71 +206,90 @@ public class SwordCollisionService : MonoBehaviour
         }
 
         // Check if hit.transform.parent is valid
+        Debug.Log("ON HIT! 4");
         if (hit.transform.parent == null)
         {
             Debug.LogError("OnHit: hit.transform.parent is null");
             return;
         }
 
+        Debug.Log("ON HIT! 5");
         GameObject gameObject = hit.transform.parent.gameObject;
+        Debug.Log("ON HIT! 6");
         Entity entity = gameObject.GetComponent<Entity>();
-
+        Debug.Log("ON HIT! 7");
         // Check if sword is valid
         if (sword == null)
         {
+            Debug.Log("ON HIT! 8");
             Debug.LogError("OnHit: sword is null");
             return;
         }
 
+        Debug.Log("ON HIT! 9");
         // Check if sword.target is valid
         if (sword.target == null)
         {
+            Debug.Log("ON HIT! 10");
             Debug.LogError("OnHit: sword.target is null");
             return;
         }
 
+        Debug.Log("ON HIT! 11");
         GameObject targetGameObject = sword.target.gameObject;
+        Debug.Log("ON HIT! 12");
         Entity targetEntity = targetGameObject.GetComponent<Entity>();
 
+        Debug.Log("ON HIT! 13");
         if (targetEntity == null || entity == null)
         {
+            Debug.Log("ON HIT! 14");
             Debug.LogWarning("OnHit: Either targetEntity or entity is null");
             return;
         }
 
+        Debug.Log("ON HIT! 15");
         // Check if sword.basePt is valid
         if (sword.basePt == null)
         {
+            Debug.Log("ON HIT! 16");
             Debug.LogError("OnHit: sword.basePt is null");
             return;
         }
 
+        Debug.Log("ON HIT! 17");
         if (sword.basePt.parent == null)
         {
             Debug.LogError("OnHit: sword.basePt.parent is null");
             return;
         }
 
+        Debug.Log("ON HIT! 18");
         if (entity.IdentityInterlude.Id == targetEntity.IdentityInterlude.Id)
         {
+            Debug.Log("ON HIT! 19");
             Vector3 startPos = sword.basePt.position;
 
             // Check if hit.point is valid
             if (hit.point == null)
             {
+                Debug.Log("ON HIT! 20");
                 Debug.LogError("OnHit: hit.point is null");
                 return;
             }
 
+            Debug.Log("ON HIT! 21");
             var hitDirection = VectorUtils.CalcHitDirection(hit.point, startPos);
 
             // Check if OnHitCollider is valid before invoking
             if (OnHitCollider != null)
             {
+                Debug.Log("ON HIT! 22");
                 OnHitCollider?.Invoke(sword.basePt.parent, sword.target, hit.point, hitDirection);
             }
             else
             {
+                Debug.Log("ON HIT! 23");
                 Debug.LogWarning("OnHit: OnHitCollider event is null");
             }
         }

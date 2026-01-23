@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditorInternal;
 using UnityEngine;
 
 
@@ -8,13 +9,6 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
 {
    
     private static AnimationManager _instance;
-    private List<string> listTriggerAfterStart = new List<string>(10);
-    private float _remainingAtkTime = 0;
-
-    private TaskCompletionSource<bool> _animationFinishedTcs;
-
-
-
     public static IAnimationManager Instance
     {
         get
@@ -58,9 +52,51 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
     //Async Wait End Event
     public async Task AsyncPlayAnimationCrossFade(int objectId, string animationName, float duration = 0.3f)
     {
-        _animationFinishedTcs = new TaskCompletionSource<bool>();
-        PlayerAnimationCrossFade(objectId,  animationName , duration);
-        await _animationFinishedTcs.Task;
+
+      
+        if (_tcsMap.TryGetValue(objectId, out var oldTcs))
+        {
+            oldTcs.TrySetResult(false);
+        }
+
+    
+        var tcs = new TaskCompletionSource<bool>();
+        _tcsMap[objectId] = tcs;
+
+        AnimationModel model = GetModel(objectId);
+
+        ReturnAwait(model);
+
+        PlayerAnimationCrossFade(objectId, animationName, duration);
+
+  
+        await tcs.Task;
+
+    }
+
+    private void ReturnAwait(AnimationModel model)
+    {
+        model.SubscribeToInternalEvents();
+        model.OnAnimationFinishedWithId += OnAnimationFinished;
+    }
+    public void OnAnimationFinished(string name, int objectId)
+    {
+     
+      
+        if (_tcsMap.TryGetValue(objectId, out var tcs))
+        {
+
+            AnimationModel model = GetModel(objectId);
+            if (model != null)
+            {
+                model.OnAnimationFinishedWithId -= OnAnimationFinished;
+            }
+
+
+            _tcsMap.Remove(objectId);
+
+            tcs.TrySetResult(true);
+        }
     }
 
     public void PlayerAnimationCrossFade(int objectId , string animationName, float duration)
@@ -70,7 +106,6 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
         Entity entity = GetEntity(objectId);
         DesableLastPlayerAnimationElseTrue(objectId , controller);
         controller.ToggleAnimationCrossFade(crossFadeName , duration);
-        //PlayerAnimationController.Instance.StartCrossFade(crossFadeName, duration);
 
         Debug.Log($"AnimationManager> start crossFade  {entity} animation  {crossFadeName}");
     }

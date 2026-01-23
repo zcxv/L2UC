@@ -1,9 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SkillExecutor : MonoBehaviour
 {
+    private SkillAnimationRunner _animRunner;
+    private SkillFXEmitter _emitter;
+    public event Action OnSkillSequenceFinished;
     public static SkillExecutor Instance { get; private set; }
 
+
+    public SkillExecutor()
+    {
+        _animRunner = new SkillAnimationRunner();
+        _emitter = new SkillFXEmitter();
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -16,13 +29,22 @@ public class SkillExecutor : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public async void ExecuteSkill(Entity entity , Skillgrp skill , AnimationCombo animationCombo)
+    public async Task ExecuteSkill(Entity entity , Skillgrp skill , AnimationCombo animationCombo , AnimationEventsBase actions)
     {
-        foreach (string animName in animationCombo.GetAnimCycle())
-        {
-            //"SpAtk01" need "SpAtk01_"
-            await AnimationManager.Instance.AsyncPlayAnimationCrossFade(entity.IdentityInterlude.Id , animName + "_");
-            
-        }
+        if (entity == null || animationCombo == null) return;
+        int objectId = entity.IdentityInterlude.Id;
+
+        _emitter.SetupActions(actions);
+
+        string[] cycle = animationCombo.GetAnimCycle();
+        _animRunner.StartRun(cycle, objectId , AnimationManager.Instance , () => OnAllAnimationFinish(actions));
     }
+
+  
+    private void OnAllAnimationFinish(AnimationEventsBase actions)
+    {
+        _emitter.CleanupActions(actions);
+    }
+
+
 }

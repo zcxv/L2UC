@@ -470,6 +470,7 @@ public class Entity : MonoBehaviour {
     
     public bool HitIsMissed()
     {
+        if (_selfHit == null) return false;
         return _selfHit.isMiss();
     }
 
