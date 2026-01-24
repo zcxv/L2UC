@@ -42,6 +42,7 @@ public abstract class AnimationEventsBase : MonoBehaviour
             { "jatk03_pole", false },
 
             { "SpAtk01_1HS", false },
+            { "SpAtk01_2HS", false },
         };
     }
     public void OnAnimationComplete(string animationName)

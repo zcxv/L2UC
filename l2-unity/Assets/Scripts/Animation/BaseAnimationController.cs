@@ -123,6 +123,7 @@ public class BaseAnimationController : AnimationEventsBase, IAnimationController
 
     public void SetBool(string name, bool value , string entityName = "")
     {
+        
         if(_isProcessingQueue && value == true)
         {
             IfAnimationNeedsWait( _priorityAnimations, name);
