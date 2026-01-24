@@ -137,11 +137,15 @@ public class GsInterludeCombatHandler : ServerPacketHandler
         if (magicSkill == null) return;
 
         EventProcessor.Instance.QueueEvent(() =>
+        {
+            SkillbarWindow.Instance.ShowCooldown(magicSkill.SkillId, Shortcut.TYPE_SKILL , magicSkill.Reusedelay);
             PlayerStateMachine.Instance.ChangeIntention(
                 magicSkill.SkillGrp.IsMagic == 1 ?
                     Intention.INTENTION_MAGIC_ATTACK :
                     Intention.INTENTION_PHYSICAL_SKILLS_ATTACK,
-                magicSkill));
+                magicSkill);
+        });
+
     }
 
     private void SetupGauge(byte[] data)

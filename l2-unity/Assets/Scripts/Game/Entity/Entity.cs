@@ -18,6 +18,7 @@ public class Entity : MonoBehaviour {
     [SerializeField] private bool _dead;
     [SerializeField] private CharacterRace _race;
     [SerializeField] private CharacterRaceAnimation _raceId;
+    
     public Animator Animator { get; private set; }
     [Header("Combat")]
     [SerializeField] private int _targetId;
