@@ -1,3 +1,4 @@
+using UnityEditorInternal;
 using UnityEngine;
 
 public class NewPhysicalSkillsIntention : IntentionBase
@@ -12,7 +13,10 @@ public class NewPhysicalSkillsIntention : IntentionBase
         {
             MagicSkillUse useSkill = (MagicSkillUse)arg0;
 
-
+            int objectId = _stateMachine.Player.IdentityInterlude.Id;
+            AnimationManager.Instance.SetSpTimeAtk(objectId , useSkill.HitTime);
+            Entity targetEntity = World.Instance.GetEntityNoLockSync(useSkill.TargetId);
+            PlayerController.Instance.RotateToAttacker(targetEntity.transform.position);
             _stateMachine.ChangeState(PlayerState.PHYSICAL_SKILLS);
             _stateMachine.NotifyEvent(Event.READY_TO_ACT , useSkill);
         }

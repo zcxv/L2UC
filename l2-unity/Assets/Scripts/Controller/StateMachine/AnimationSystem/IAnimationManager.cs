@@ -21,5 +21,7 @@ public interface IAnimationManager
     Dictionary<string, float> PlayerGetAllFloat(int objectId);
     void PlayerSetAllFloat(int objectId , Dictionary<string, float> floatValues);
     public AnimationEventsBase  GetAnimationEvents(int objectId);
+    public void SetSpTimeAtk(int objectId , int timeAtk);
+
 
 }

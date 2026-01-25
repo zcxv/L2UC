@@ -74,10 +74,11 @@ public static class SpecialAnimationNames
     public static readonly Animation ATK01_1HS = new Animation("jatk01_1HS", TypesAnimation.MeleeAttack);
 
     public static readonly Animation SpAtk_01 = new Animation("SpAtk01_1HS", TypesAnimation.MeleeAttack);
+    public static readonly Animation SpAtk_01_bow = new Animation("SpAtk01_bow", TypesAnimation.BowAttack);
 
     public static readonly Animation[]  arrayAtkSpecials = new Animation[]{ ATK_BOW_ATK1 , ATK_BOW_ATK2 , ATK_BOW_ATK3 , ATK01_1HS };
 
-    public static readonly Animation[] arrayPhisicalAtkSpecials = new Animation[] { SpAtk_01 };
+    public static readonly Animation[] arrayPhisicalAtkSpecials = new Animation[] { SpAtk_01 , SpAtk_01_bow };
     public static Animation[] GetSpecialsAttackAnimations()
     {
             return arrayAtkSpecials;
