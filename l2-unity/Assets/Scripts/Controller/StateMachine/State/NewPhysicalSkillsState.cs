@@ -23,8 +23,8 @@ public class NewPhysicalSkillsState : AbstractAttackEvents
                 {
                    
                     Debug.Log("NewPhysicalSkillsState Use Sate> обнаружили что идет запуск физического скила");
-                    RotateFaceToMonster(_stateMachine.Player);
                     AnimationCombo animCombo = SkillgrpTable.Instance.GetAnimComboBySkillId(useSkill.SkillId, useSkill.SkillLvl);
+                    RotateFaceToMonster(_stateMachine.Player);
                     SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, useSkill.SkillGrp, animCombo , _events);
                     Debug.Log("NewPhysicalSkillsState Use Sate> обнаружили завершили физического скила");
                 }

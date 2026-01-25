@@ -82,8 +82,6 @@ public abstract class AbstractAttackEvents : StateBase
 
     private void CallBackStartShoot(string animName)
     {
-
-
         foreach (Animation special in _specialsBows)
         {
             if (animName == special.ToString())

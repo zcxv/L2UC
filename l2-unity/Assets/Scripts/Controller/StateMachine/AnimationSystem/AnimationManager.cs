@@ -9,6 +9,7 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
 {
    
     private static AnimationManager _instance;
+    private const string SP_TIME_ATK = "sptimeatk";
     public static IAnimationManager Instance
     {
         get
@@ -142,5 +143,8 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
         }
     }
 
-
+    public void SetSpTimeAtk(int objectId, int timeAtk)
+    {
+       GetPlayerController(objectId)?.SetInt(SP_TIME_ATK , timeAtk);
+    }
 }
