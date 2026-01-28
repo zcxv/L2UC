@@ -31,14 +31,14 @@ public class ProjectileManager : AbstractProjectile, IProjectileManager
     }
     #endregion
 
-    public int LaunchProjectile(GameObject readyProjectile, Vector3 startPos, Transform target, ProjectileData settings = null)
+    public int LaunchProjectile(GameObject readyProjectile, Vector3 startPos, Transform target, ProjectileData settings = null, float offset = 0.3f)
     {
         if (readyProjectile == null)
         {
             Debug.LogError("Ready projectile cannot be null!");
             return -1;
         }
-
+        HIT_OFFSET = offset;
         ClearParentObject(readyProjectile);
 
         Vector3 adjustedTarget = VectorUtils.GetCollision(startPos, target);
@@ -49,6 +49,8 @@ public class ProjectileManager : AbstractProjectile, IProjectileManager
         float requiredSpeed = distance / flightTime;
         _lastPosition = Vector3.zero;
         int projectileId = nextId++;
+
+        Debug.Log($"CalculateAttackAndFlightTimes: LaunchProjectile dist={distance}, speed={speed}, fly={flightTime}");
 
         ProjectileData projectileData = CreateData(projectileId, distance, readyProjectile, startPos, target,
             adjustedTarget, requiredSpeed, settings, defaultSettings);

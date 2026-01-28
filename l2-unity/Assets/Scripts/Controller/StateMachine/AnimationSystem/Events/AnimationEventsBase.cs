@@ -57,7 +57,15 @@ public abstract class AnimationEventsBase : MonoBehaviour
             if (_animationQueue.Count > 0)
             {
                 var lastAnimation = _animationQueue.Last();
+
+                foreach(string animName in _animationQueue)
+                {
+                    Debug.Log($"AnimationManager> start name убираем в листе ожиданий iteration animName " +animName+ " _animationQueue  " + _animationQueue.Count);
+                }
+                
+
                 HandleQueueAnimation(lastAnimation);
+                _animationQueue.Clear();
             }
 
         }

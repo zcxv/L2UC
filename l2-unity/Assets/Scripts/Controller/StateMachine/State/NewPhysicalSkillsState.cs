@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 
 
@@ -24,8 +25,10 @@ public class NewPhysicalSkillsState : AbstractAttackEvents
                    
                     Debug.Log("NewPhysicalSkillsState Use Sate> обнаружили что идет запуск физического скила");
                     AnimationCombo animCombo = SkillgrpTable.Instance.GetAnimComboBySkillId(useSkill.SkillId, useSkill.SkillLvl);
-                    RotateFaceToMonster(_stateMachine.Player);
-                    SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, useSkill.SkillGrp, animCombo , _events);
+                    Debug.Log($"[SyncCheck] useSkill время от сервера " + useSkill.HitTime);
+                   //not use bow atk
+                   //RotateFaceToMonster(_stateMachine.Player);
+                   SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, useSkill.SkillGrp, animCombo , _events);
                     Debug.Log("NewPhysicalSkillsState Use Sate> обнаружили завершили физического скила");
                 }
                 break;

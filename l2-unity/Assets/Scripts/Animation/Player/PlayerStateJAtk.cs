@@ -1,8 +1,5 @@
 using UnityEngine;
 
-
-
-
 public class PlayerStateJAtk : StateMachineBehaviour
 {
     private float _startTime = -1;
@@ -16,7 +13,7 @@ public class PlayerStateJAtk : StateMachineBehaviour
     {
 
         AnimatorClipInfo[] clipInfos = animator.GetNextAnimatorClipInfo(layerIndex);
-        //Debug.Log($"Test debug atk Layer: {layerIndex} | Global patkspd: {animator.GetFloat("patkspd")} )");
+
         if (clipInfos == null || clipInfos.Length == 0)
         {
             clipInfos = animator.GetCurrentAnimatorClipInfo(layerIndex);
@@ -41,19 +38,15 @@ public class PlayerStateJAtk : StateMachineBehaviour
 
         StopAnimationTrigger(animator, parameterName);
     }
-     
+
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         float currentTime = Time.time;
         float timeOut = currentTime - _startTime;
 
         _remainingTime = Mathf.Max(0, _endTime - timeOut);
-        //AnimationManager.Instance.UpdateRemainingAtkTime(_remainingTime);
-        //float patkMultiplier = animator.GetFloat("patkspd");
-        //Debug.Log("Speed Data " + patkMultiplier);
         float normalizedTime = timeOut / _endTime;
         float speed = _animationCurve.Evaluate(normalizedTime);
-        //Debug.Log($"Current attack speed: {speed:F3} (normalized time: {normalizedTime:F2})");
         if (timeOut >= _endTime) SwitchToIdle(stateInfo);
 
         PlayerAnimationController.Instance.SetPAtkSpeed(speed);
@@ -61,17 +54,15 @@ public class PlayerStateJAtk : StateMachineBehaviour
 
     private void SwitchToIdle(AnimatorStateInfo stateInfo)
     {
-     
+
         float currentNormalizedTime = stateInfo.normalizedTime;
 
-        if (!_isSwitchIdle & currentNormalizedTime > 0.9f & IsDieTarget() | !_isSwitchIdle & currentNormalizedTime > 0.9f & !PlayerEntity.Instance.IsAttack )
+        if (!_isSwitchIdle & currentNormalizedTime > 0.9f & IsDieTarget() | !_isSwitchIdle & currentNormalizedTime > 0.9f & !PlayerEntity.Instance.IsAttack)
         {
             PlayerEntity.Instance.IsAttack = false;
             _isSwitchIdle = true;
             PlayerStateMachine.Instance.ChangeIntention(Intention.INTENTION_IDLE);
             PlayerStateMachine.Instance.NotifyEvent(Event.WAIT_RETURN);
-            Debug.Log("Attack Sate to Intention> конец атаки IDLE");
-
         }
     }
 
@@ -81,7 +72,7 @@ public class PlayerStateJAtk : StateMachineBehaviour
         if (entity != null) return entity.IsDead();
         return false;
     }
-    private void StopAnimationTrigger(Animator animator , string parameterName)
+    private void StopAnimationTrigger(Animator animator, string parameterName)
     {
         if (animator.GetBool(parameterName) != false)
         {
@@ -92,29 +83,12 @@ public class PlayerStateJAtk : StateMachineBehaviour
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log("Attack Sate to Intention> конец атаки OnStateExit");
+       
         PlayerEntity.Instance.IsAttack = false;
     }
 
 
-    private void RecreateAnimationCurveDefault(AnimationCurve animationCurve , float timeAtk , float timeAnimation)
-    {
-        Keyframe startKey = new Keyframe(0f, 0f); 
-        Keyframe endKey = new Keyframe(timeAtk, timeAnimation);
-        //float speedAtk = (float)0.362 / timeAtk;
-        //float speedAtk = (float)0.3585 / timeAtk;
-        float speedAtk = (float)0.1585 / timeAtk; //default
-        //default to sword slow down
-        //test 0,603 для стандартной атакие или 0.36293652 0.1 на еденицу времени
-         //Keyframe slowDownAttackKey = new Keyframe(0.07511136f, speedAtk); //default
-        Keyframe slowDownAttackKey = new Keyframe(0.09011136f, speedAtk); 
-        // Keyframe slowDownAttackKey = new Keyframe(0.07511136f, 0.4373413f);
-        //Keyframe slowDownAttackKey = new Keyframe(0.07511136f, 0.9073413f);
 
-        animationCurve.AddKey(startKey);
-        animationCurve.AddKey(slowDownAttackKey);
-        animationCurve.AddKey(endKey);
-    }
 
     // Normal speed
     //RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation);
@@ -131,36 +105,36 @@ public class PlayerStateJAtk : StateMachineBehaviour
     float speedMultiplier = 1.0f, float slowDownFactor = 1.0f)
     {
 
-      float adjustedTimeAtk = timeAtk * speedMultiplier;
+        float adjustedTimeAtk = timeAtk * speedMultiplier;
 
-     float adjustedTimeAnimation = timeAnimation * slowDownFactor;
+        float adjustedTimeAnimation = timeAnimation * slowDownFactor;
 
-     animationCurve.keys = new Keyframe[0];
+        animationCurve.keys = new Keyframe[0];
 
-     Keyframe startKey = new Keyframe(0f, 0f);
-     Keyframe windupKey = new Keyframe(adjustedTimeAtk * 0.2f, adjustedTimeAnimation * 0.15f);  // Начало замаха
-     Keyframe slowDownKey = new Keyframe(adjustedTimeAtk * 0.5f, adjustedTimeAnimation * 0.4f);  // Плавное замедление
-     Keyframe powerKey = new Keyframe(adjustedTimeAtk * 0.8f, adjustedTimeAnimation * 0.8f);    // Накопление силы
-     Keyframe endKey = new Keyframe(adjustedTimeAtk, adjustedTimeAnimation);  // Завершение атаки
-
-
-    animationCurve.AddKey(startKey);
-    animationCurve.AddKey(windupKey);
-    animationCurve.AddKey(slowDownKey);
-    animationCurve.AddKey(powerKey);
-    animationCurve.AddKey(endKey);
+        Keyframe startKey = new Keyframe(0f, 0f);
+        Keyframe windupKey = new Keyframe(adjustedTimeAtk * 0.2f, adjustedTimeAnimation * 0.15f); 
+        Keyframe slowDownKey = new Keyframe(adjustedTimeAtk * 0.5f, adjustedTimeAnimation * 0.4f); 
+        Keyframe powerKey = new Keyframe(adjustedTimeAtk * 0.8f, adjustedTimeAnimation * 0.8f);  
+        Keyframe endKey = new Keyframe(adjustedTimeAtk, adjustedTimeAnimation); 
 
 
-    animationCurve.preWrapMode = WrapMode.ClampForever;
-    animationCurve.postWrapMode = WrapMode.ClampForever;
+        animationCurve.AddKey(startKey);
+        animationCurve.AddKey(windupKey);
+        animationCurve.AddKey(slowDownKey);
+        animationCurve.AddKey(powerKey);
+        animationCurve.AddKey(endKey);
 
-    for (int i = 1; i < animationCurve.keys.Length - 1; i++)
-    {
-        animationCurve.SmoothTangents(i, 0);
+
+        animationCurve.preWrapMode = WrapMode.ClampForever;
+        animationCurve.postWrapMode = WrapMode.ClampForever;
+
+        for (int i = 1; i < animationCurve.keys.Length - 1; i++)
+        {
+            animationCurve.SmoothTangents(i, 0);
+        }
     }
-   }
 
-   
+
 
 
     private bool IsBow(string animName) => animName.IndexOf("bow") != -1;
@@ -172,7 +146,7 @@ public class PlayerStateJAtk : StateMachineBehaviour
             //return CalcBaseParam.CalculateTimeL2j(PlayerEntity.Instance.Stats.BasePAtkSpeed);
             float baseAttackTime = CalcBaseParam.CalculateTimeL2j(PlayerEntity.Instance.Stats.BasePAtkSpeed);
             float targetDistance = PlayerEntity.Instance.TargetDistance();
-            float[] timeAndFlye =  CalcBaseParam.CalculateAttackAndFlightTimes(targetDistance, baseAttackTime);
+            float[] timeAndFlye = CalcBaseParam.CalculateAttackAndFlightTimes(targetDistance, baseAttackTime);
 
 
             return timeAndFlye[0];

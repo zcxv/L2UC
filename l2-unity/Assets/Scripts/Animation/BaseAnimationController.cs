@@ -27,8 +27,11 @@ public class BaseAnimationController : AnimationEventsBase, IAnimationController
 
     }
 
+  
+
     protected override void HandleQueueAnimation(string animationName)
     {
+        Debug.Log($"AnimationManager> start name убираем из ожидания и запускаем {animationName}");
         SetBool(animationName, true, "player");
     }
 
@@ -113,11 +116,13 @@ public class BaseAnimationController : AnimationEventsBase, IAnimationController
 
     public void ToggleAnimationTrigger(string name)
     {
+        IfSpecialAnimationsCreateProcessQueue(name, ref _isProcessingQueue, _priorityAnimations, true);
         _animator.SetTrigger(name);
     }
 
     public void ToggleAnimationCrossFade(string name , float duration)
     {
+        IfSpecialAnimationsCreateProcessQueue(name, ref _isProcessingQueue, _priorityAnimations, true);
         _animator.CrossFade(name, duration, 0);
     }
 

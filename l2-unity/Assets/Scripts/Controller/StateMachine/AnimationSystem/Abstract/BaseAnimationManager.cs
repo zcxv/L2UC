@@ -22,6 +22,7 @@ public abstract class BaseAnimationManager
     {
         _animationControllers[objectId] = new AnimationModel(controller , entity);
         controller.SetInt(AnimatorUtils.OBJECT_ID, objectId);
+
     }
 
 

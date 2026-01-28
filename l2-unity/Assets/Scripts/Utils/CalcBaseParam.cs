@@ -52,12 +52,12 @@ public class CalcBaseParam
             speed = SPEED_RANGE_3_MAX;
         }
 
-        // Рассчитываем время полета
+
         float flightTime = TimeUtils.ConvertSecToMs(distance / speed);
         float attackTimeBase = baseAttackTimeMs - flightTime;
         float attackTime = Mathf.Clamp(attackTimeBase, 0, MAX_ATTACK_TIME);
 
-        Debug.Log($"CalculateAttackAndFlightTimes: dist={distance}, speed={speed}, fly={flightTime}, atk={attackTime}, baseatk={attackTimeBase}");
+        Debug.Log($"CalculateAttackAndFlightTimes: dist={distance}, speed={speed}, fly={flightTime}, atk={attackTime}, baseatk={attackTimeBase} baseAttackTimeMs={baseAttackTimeMs}");
 
         return new float[2] { attackTime, flightTime  };
    
