@@ -14,7 +14,7 @@ public class AbstractProjectile : MonoBehaviour
     protected const float DISTANCE_SPLIT_1 = 4f;  // First distance split point
     protected const float DISTANCE_SPLIT_2 = 8f;  // Second distance split point
     protected const float DISTANCE_SPLIT_3 = 12f; // Third distance split point
-    protected float HIT_OFFSET = 0.3f;
+    protected float HIT_OFFSET = 0f;//default 0.3f
 
 
     public event Action<Transform, Transform, Vector3, Vector3> OnHitCollider;

@@ -242,9 +242,9 @@ public class SkillgrpTable
 
                   if (!_animationsCombo.ContainsKey(tag))
                     {
-                        string anim_name1 = clearCombo(ids[1]);
-                        string anim_name2 = clearCombo(ids[2]);
-                        string anim_name3 = clearCombo(ids[3]);
+                        string anim_name1 = ÑlearCombo(ids[1]);
+                        string anim_name2 = ÑlearCombo(ids[2]);
+                        string anim_name3 = ÑlearCombo(ids[3]);
                         var arr = new string[3] { anim_name1  , anim_name2 , anim_name3 };
                         string unk0 = ids[4];
                         var combo  = new AnimationCombo(tag, arr , unk0);
@@ -260,7 +260,7 @@ public class SkillgrpTable
  
     }
 
-    private string clearCombo(string anim_name)
+    private string ÑlearCombo(string anim_name)
     {
         string anim_name1 = anim_name.Replace("a," , "");
         string anim_name2 = anim_name1.Replace("\\0", "");

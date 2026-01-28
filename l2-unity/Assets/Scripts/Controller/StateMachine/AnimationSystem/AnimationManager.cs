@@ -106,7 +106,7 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
         IAnimationController controller = GetPlayerController(objectId);
         Entity entity = GetEntity(objectId);
         DesableLastPlayerAnimationElseTrue(objectId , controller);
-        controller.ToggleAnimationCrossFade(crossFadeName , duration);
+        controller.ToggleAnimationTrigger(crossFadeName);
 
         Debug.Log($"AnimationManager> start crossFade  {entity} animation  {crossFadeName}");
     }

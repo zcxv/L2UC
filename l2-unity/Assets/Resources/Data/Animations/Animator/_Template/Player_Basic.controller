@@ -89,7 +89,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -8471857179834514405}
+  - {fileID: -143632422393492990}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -234,19 +234,6 @@ MonoBehaviour:
   _enabled: 1
   _weaponAnim: 
   _weaponType: 1
---- !u!114 &-8471857179834514405
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606ad050cef53e746a775669d3ac3bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameterName: jatk03_bow
 --- !u!1101 &-8451134137542940837
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -345,6 +332,22 @@ MonoBehaviour:
   _enabled: 1
   _weaponAnim: 
   _weaponType: 1
+--- !u!114 &-8316326150802630405
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba33dbd423646cd44b616a0185f53095, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  motionName: FDarkElf_m000_b.ao_SpAtk002_1HS_FDarkElf
+  eventStartHitName: OnAnimationHit
+  eventEndHitName: OnAnimationAttackHitEnd
+  postHitSpeed: 1.2
 --- !u!1102 &-8236203108892079393
 AnimatorState:
   serializedVersion: 6
@@ -461,19 +464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bca337e702c39da4eaf5e1f4235b126e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-7906763646403606046
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8056f51871dcec41902d002db0303f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameterName: SpAtk01_2HS
 --- !u!114 &-7780567674310768879
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -667,7 +657,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 2905394910865337053}
+  - {fileID: 6057043392503043381}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -757,28 +747,6 @@ MonoBehaviour:
   _enabled: 1
   _weaponAnim: 
   _weaponType: 1
---- !u!1101 &-6822676624302564719
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions: []
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 6199757452118442105}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0.3
-  m_TransitionOffset: 0
-  m_ExitTime: 0.75
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
 --- !u!114 &-6747588116655581788
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1182,19 +1150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameterName: jatk02_dual
---- !u!114 &-5394437830658741752
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8056f51871dcec41902d002db0303f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameterName: SpAtk01_1HS
 --- !u!1101 &-5181229671484627022
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1293,17 +1248,16 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SpAtk01_bow
-  m_Speed: 1.2
+  m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: -3368670967218924062}
+  m_Transitions: []
   m_StateMachineBehaviours:
   - {fileID: 2374718413531431331}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
   m_Mirror: 0
-  m_SpeedParameterActive: 0
+  m_SpeedParameterActive: 1
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
@@ -1346,12 +1300,11 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SpAtk01_2HS
-  m_Speed: 1.2
+  m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: 5317023940659601085}
+  m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -7906763646403606046}
+  - {fileID: 53112153405869629}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1772,19 +1725,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameterName: run_1HS
---- !u!114 &-3638118721203541934
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8056f51871dcec41902d002db0303f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameterName: SpAtk02_1HS
 --- !u!1102 &-3592469238315095503
 AnimatorState:
   serializedVersion: 6
@@ -1813,6 +1753,31 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &-3421073969748493740
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: SpAtk02_1HS
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -1649378471896870064}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1102 &-3376109356299537123
 AnimatorState:
   serializedVersion: 6
@@ -1841,28 +1806,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1101 &-3368670967218924062
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions: []
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: -6189002630565563857}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0.3
-  m_TransitionOffset: 0
-  m_ExitTime: 0.75
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
 --- !u!114 &-3317504088701206380
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1979,6 +1922,31 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &-2982139700873592812
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: SpAtk01_bow
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -4813029324556837242}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1101 &-2933098219291519807
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -2507,12 +2475,11 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SpAtk02_1HS
-  m_Speed: 1.2
+  m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: 1875790686896544420}
+  m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -3638118721203541934}
+  - {fileID: -8316326150802630405}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -2523,7 +2490,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 6e9b7d1f69b372f41b07f4b798a0c211, type: 2}
   m_Tag: 
-  m_SpeedParameter: 
+  m_SpeedParameter: patkspd
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -2634,6 +2601,31 @@ AnimatorStateTransition:
   m_TransitionOffset: 0
   m_ExitTime: 0.75
   m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!1101 &-1320908719290112570
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: SpAtk01_2HS
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -4721383336706978659}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -3247,7 +3239,7 @@ AnimatorStateMachine:
     m_Position: {x: -330, y: -990, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6189002630565563857}
-    m_Position: {x: -330, y: -740, z: 0}
+    m_Position: {x: -200, y: -880, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -7298012389465650385}
@@ -3318,6 +3310,10 @@ AnimatorStateMachine:
   - {fileID: -4198115263624617335}
   - {fileID: 5255462911937554272}
   - {fileID: 5897717333473990368}
+  - {fileID: -1320908719290112570}
+  - {fileID: 6957666491937818176}
+  - {fileID: -3421073969748493740}
+  - {fileID: -2982139700873592812}
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
@@ -3377,6 +3373,21 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-143632422393492990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac4003c27faeb944a1767c335790991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameterName: jatk03_bow
+  motionName: FDarkElf_m000_b.ao_Atk01_Bow_FDarkElf
+  eventShootName: OnAnimationShoot
 --- !u!114 &-108391550435238101
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3898,6 +3909,30 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+  - m_Name: SpAtk01_2HS
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: SpAtk02_1HS
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: SpAtk01_1HS
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: SpAtk01_bow
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -3936,7 +3971,7 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0
---- !u!114 &104342680536365814
+--- !u!114 &53112153405869629
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3945,10 +3980,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606ad050cef53e746a775669d3ac3bd4, type: 3}
+  m_Script: {fileID: 11500000, guid: ba33dbd423646cd44b616a0185f53095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parameterName: jatk02_bow
+  motionName: FDarkElf_m000_b.ao_SpAtk001_2HS_FDarkElf
+  eventStartHitName: OnAnimationHit
+  eventEndHitName: OnAnimationAttackHitEnd
+  postHitSpeed: 1.2
 --- !u!1102 &259051011057014534
 AnimatorState:
   serializedVersion: 6
@@ -4430,28 +4468,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0
---- !u!1101 &1875790686896544420
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions: []
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 6199757452118442105}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0.3
-  m_TransitionOffset: 0
-  m_ExitTime: 0.75
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
 --- !u!114 &1980010328117803259
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4531,6 +4547,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameterName: jatk02_1HS
+--- !u!114 &2095278183769916839
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac4003c27faeb944a1767c335790991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameterName: jatk02_bow
+  motionName: FDarkElf_m000_b.ao_Atk01_Bow_FDarkElf
+  eventShootName: OnAnimationShoot
 --- !u!114 &2166385319205054517
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4615,6 +4646,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameterName: SpAtk01_bow
+  motionName: FDarkElf_m000_b.ao_SpAtk001_Bow_FDarkElf
+  eventShootName: OnAnimationShoot
 --- !u!1102 &2510179967240300559
 AnimatorState:
   serializedVersion: 6
@@ -4744,19 +4777,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0
---- !u!114 &2905394910865337053
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606ad050cef53e746a775669d3ac3bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameterName: jatk01_bow
 --- !u!114 &2912289285433029031
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5350,7 +5370,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 104342680536365814}
+  - {fileID: 2095278183769916839}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -5592,28 +5612,6 @@ MonoBehaviour:
   _enabled: 1
   _weaponAnim: 
   _weaponType: 1
---- !u!1101 &5317023940659601085
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions: []
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 2510179967240300559}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0.3
-  m_TransitionOffset: 0
-  m_ExitTime: 0.75
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
 --- !u!114 &5338917707580932369
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5815,12 +5813,11 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SpAtk01_1HS
-  m_Speed: 1.2
+  m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: -6822676624302564719}
+  m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -5394437830658741752}
+  - {fileID: 9064745190548707589}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -6062,6 +6059,21 @@ MonoBehaviour:
   _enabled: 1
   _weaponAnim: 
   _weaponType: 1
+--- !u!114 &6057043392503043381
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac4003c27faeb944a1767c335790991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameterName: jatk01_bow
+  motionName: FDarkElf_m000_b.ao_Atk01_Bow_FDarkElf
+  eventShootName: OnAnimationShoot
 --- !u!114 &6133884865208761683
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6400,6 +6412,31 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &6957666491937818176
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: SpAtk01_1HS
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 5845791370784807353}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1102 &7025136937938068380
 AnimatorState:
   serializedVersion: 6
@@ -7061,6 +7098,22 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &9064745190548707589
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba33dbd423646cd44b616a0185f53095, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  motionName: FDarkElf_m000_b.ao_spatk001_1hs_FDarkElf
+  eventStartHitName: OnAnimationHit
+  eventEndHitName: OnAnimationAttackHitEnd
+  postHitSpeed: 1.2
 --- !u!114 &9119761524943647771
 MonoBehaviour:
   m_ObjectHideFlags: 1

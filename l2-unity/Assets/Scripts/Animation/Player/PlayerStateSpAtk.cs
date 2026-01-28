@@ -2,183 +2,106 @@ using UnityEngine;
 
 public class PlayerStateSpAtk : StateMachineBehaviour
 {
-    private float _startTime = -1;
-    private float _endTime = -1;
+    private float _startTime;
+    private float _clipLength;
+    private float _eventHitTimeInClip;
+    private float _serverHitTime;
+    private bool _isSwitchIdle;
+    private bool _hitExecuted;
+    private float _calculatedPostSpeed; // Скорость, которую мы вычислим для выхода
 
-    private const string SP_TIME_ATK = "sptimeatk";
-    public string parameterName;
-    private AnimationCurve _animationCurve;
-    private bool _isSwitchIdle = false;
+    public string motionName;
+    public string eventStartHitName; // "hit_start"
+    public string eventEndHitName;   // "hit_end"
+
+    [Header("Настройка выхода")]
+    public float postHitSpeed = 2.0f; // Просто фиксированная скорость после удара
+    private float _lastDebugTime; // Для интервала дебага
+    private const float DEBUG_INTERVAL = 0.02f; // 20мс
+    private float networkCompensation = 0.1f;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
-        AnimatorClipInfo[] clipInfos = animator.GetNextAnimatorClipInfo(layerIndex);
-
-        if (clipInfos == null || clipInfos.Length == 0)
-        {
-            clipInfos = animator.GetCurrentAnimatorClipInfo(layerIndex);
-        }
-
-        _animationCurve = new AnimationCurve();
         _isSwitchIdle = false;
-
-
-        int timeAtk = GetTimeAtk(animator , parameterName);
-
-
-
+        _hitExecuted = false;
         _startTime = Time.time;
-        _endTime = TimeUtils.ConvertMsToSec(timeAtk);
 
-        float timeAnimation = clipInfos[0].clip.length;
-        //default
-        //RecreateAnimationCurve(_animationCurve, _endTime, timeAnimation , 1.0f, 1.3f);
-        RecreateAnimationCurve(_animationCurve, _endTime, timeAnimation, 1.0f, 1.1f);
+        _clipLength = AnimationDataCache.GetOverrideLength(animator, motionName);
 
-        PlayerAnimationController.Instance.UpdateAnimatorAtkSpeedL2j(timeAtk, timeAnimation);
+        // 1. Получаем границы окна удара
+        float startHit = AnimationDataCache.GetEventTimeByName(animator, motionName, eventStartHitName);
+        float endHit = AnimationDataCache.GetEventTimeByName(animator, motionName, eventEndHitName);
 
-        StopAnimationTrigger(animator, parameterName);
+        // 2. Вычисляем "Золотую середину" — когда меч должен быть внутри монстра
+        _eventHitTimeInClip = (startHit + endHit) / 2f;
+
+        int serverTimeMs = animator.GetInteger("sptimeatk");
+
+        // 3. Применяем компенсацию (учитываем пинг и переход)
+        float compensation = 0.08f;
+        _serverHitTime = (serverTimeMs / 1000f) - compensation;
+
+        if (_serverHitTime < 0.1f) _serverHitTime = 0.1f;
+
+        // 4. Скорость: Путь до середины удара / Время до хита от сервера
+        float startSpeed = _eventHitTimeInClip / _serverHitTime;
+
+        animator.speed = startSpeed;
+        animator.Update(0);
+
+        Debug.Log($"<color=cyan>[Sync]</color> Окно хита: {startHit:F2}-{endHit:F2} (Центр: {_eventHitTimeInClip:F2}). " +
+                  $"Скорость: {startSpeed:F2}");
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        float currentTime = Time.time;
-        float timeOut = currentTime - _startTime;
-        float normalizedTime = timeOut / _endTime;
-        float speed = _animationCurve.Evaluate(normalizedTime);
+        float elapsed = Time.time - _startTime;
 
-        if (timeOut >= _endTime) SwitchToIdle(stateInfo);
-
-        PlayerAnimationController.Instance.SetPAtkSpeed(speed);
-    }
-
-    private void SwitchToIdle(AnimatorStateInfo stateInfo)
-    {
-
-        float currentNormalizedTime = stateInfo.normalizedTime;
-
-        if (!_isSwitchIdle & currentNormalizedTime > 0.9f & IsDieTarget() | !_isSwitchIdle & currentNormalizedTime > 0.9f & !PlayerEntity.Instance.IsAttack)
+        if (Time.time - _lastDebugTime >= DEBUG_INTERVAL)
         {
-            PlayerEntity.Instance.IsAttack = false;
-            _isSwitchIdle = true;
-            PlayerStateMachine.Instance.ChangeIntention(Intention.INTENTION_IDLE);
-            PlayerStateMachine.Instance.NotifyEvent(Event.WAIT_RETURN);
+            _lastDebugTime = Time.time;
+            Debug.Log($"<color=grey>[Monitor]</color> Time: {elapsed:F3}s | NormTime: {stateInfo.normalizedTime:F3} | AnimSpeed: {animator.speed:F2}");
+        }
+
+        if (elapsed < _serverHitTime)
+        {
+            // Фаза замаха (скорость уже задана в OnStateEnter)
+        }
+        else
+        {
+            if (!_hitExecuted)
+            {
+                _hitExecuted = true;
+
+                // Устанавливаем ЖЕСТКУЮ скорость без вычислений времени
+                // PlayerAnimationController.Instance.SetPAtkSpeed(postHitSpeed);
+                animator.speed = postHitSpeed; // Меняем системную скорость напрямую
+                float diff = (elapsed - _serverHitTime) * 1000f;
+                Debug.Log($"<color=yellow>[HIT]</color> Diff: {diff:F1}ms | Switch Speed to: {postHitSpeed}");
+            }
+
+            // Выход в Idle, когда анимация в стейте дошла до конца (normalizedTime >= 1)
+            // stateInfo.normalizedTime показывает прогресс текущей анимации от 0 до 1
+            if (stateInfo.normalizedTime >= 0.95f)
+            {
+                SwitchToIdle(animator);
+            }
         }
     }
 
-    private bool IsDieTarget()
+    private void SwitchToIdle(Animator animator)
     {
-        Entity entity = World.Instance.GetEntityNoLockSync(PlayerEntity.Instance.TargetId);
-        if (entity != null) return entity.IsDead();
-        return false;
-    }
-    private void StopAnimationTrigger(Animator animator, string parameterName)
-    {
-        if (animator.GetBool(parameterName) != false)
-        {
-            AnimationManager.Instance.StopCurrentAnimation(animator.GetInteger(AnimatorUtils.OBJECT_ID), parameterName, "player");
-        }
+        if (_isSwitchIdle) return;
+        _isSwitchIdle = true;
 
+        animator.speed = 1f; // Меняем системную скорость напрямую
+        PlayerEntity.Instance.IsAttack = false;
+        PlayerStateMachine.Instance.ChangeIntention(Intention.INTENTION_IDLE);
+        PlayerStateMachine.Instance.NotifyEvent(Event.WAIT_RETURN);
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log("Attack Sate to Intention> конец атаки OnStateExit");
-        PlayerEntity.Instance.IsAttack = false;
+        animator.speed = 1f; // Меняем системную скорость напрямую
     }
-
-
-    private void RecreateAnimationCurveDefault(AnimationCurve animationCurve, float timeAtk, float timeAnimation)
-    {
-        Keyframe startKey = new Keyframe(0f, 0f);
-        Keyframe endKey = new Keyframe(timeAtk, timeAnimation);
-        //float speedAtk = (float)0.362 / timeAtk;
-        //float speedAtk = (float)0.3585 / timeAtk;
-        float speedAtk = (float)0.1585 / timeAtk; //default
-                                                  //default to sword slow down
-                                                  //test 0,603 для стандартной атакие или 0.36293652 0.1 на еденицу времени
-                                                  //Keyframe slowDownAttackKey = new Keyframe(0.07511136f, speedAtk); //default
-        Keyframe slowDownAttackKey = new Keyframe(0.09011136f, speedAtk);
-        // Keyframe slowDownAttackKey = new Keyframe(0.07511136f, 0.4373413f);
-        //Keyframe slowDownAttackKey = new Keyframe(0.07511136f, 0.9073413f);
-
-        animationCurve.AddKey(startKey);
-        animationCurve.AddKey(slowDownAttackKey);
-        animationCurve.AddKey(endKey);
-    }
-
-    // Normal speed
-    //RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation);
-
-    // 2-5% faster attack (speedMultiplier = 0.95-0.98)
-    //RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation, 0.96f, 1.0f);
-
-    // Slower attack (if needed)
-    //RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation, 1.0f, 1.2f);
-
-    // Faster and slower combination
-    // RecreateAnimationCurve(myCurve, baseTimeAtk, baseTimeAnimation, 0.97f, 1.1f);
-    private void RecreateAnimationCurve(AnimationCurve animationCurve, float timeAtk, float timeAnimation,
- float speedMultiplier = 1.0f, float slowDownFactor = 1.0f)
-    {
-        float adjustedTimeAtk = timeAtk * speedMultiplier;
-        float adjustedTimeAnimation = timeAnimation * slowDownFactor;
-
-        animationCurve.keys = new Keyframe[0];
-
-        // 1. Старт
-        Keyframe startKey = new Keyframe(0f, 0f);
-
-        // 2. БЫСТРЫЙ ПОДЪЕМ: за 20% времени проходим 45% анимации
-        // Это убирает медлительность в начале (те самые 500мс станут бодрее)
-        Keyframe fastWindup = new Keyframe(adjustedTimeAtk * 0.2f, adjustedTimeAnimation * 0.45f);
-
-        // 3. ПЕРЕХОД: точка, где замах закончен и начинается падение меча
-        // Смещаем на 45% времени, чтобы удар не был слишком коротким
-        Keyframe midPoint = new Keyframe(adjustedTimeAtk * 0.45f, adjustedTimeAnimation * 0.65f);
-
-        // 4. УДАР: распределяем оставшееся движение более плавно
-        // Вместо резкого скачка делаем промежуточную точку на 75% времени
-        Keyframe strikeKey = new Keyframe(adjustedTimeAtk * 0.75f, adjustedTimeAnimation * 0.85f);
-
-        // 5. ЗАВЕРШЕНИЕ (End)
-        Keyframe endKey = new Keyframe(adjustedTimeAtk, adjustedTimeAnimation);
-
-        animationCurve.AddKey(startKey);
-        animationCurve.AddKey(fastWindup);
-        animationCurve.AddKey(midPoint);
-        animationCurve.AddKey(strikeKey);
-        animationCurve.AddKey(endKey);
-
-        animationCurve.preWrapMode = WrapMode.ClampForever;
-        animationCurve.postWrapMode = WrapMode.ClampForever;
-
-        // Сглаживание
-        for (int i = 0; i < animationCurve.keys.Length; i++)
-        {
-            // Используем SmoothTangents, чтобы переходы были не ломаными, а дугообразными
-            animationCurve.SmoothTangents(i, 0);
-        }
-    }
-
-
-
-    private bool IsBow(string animName) => animName.IndexOf("bow") != -1;
-
-    private int GetTimeAtk(Animator animator , string animName)
-    {
-        if (IsBow(animName))
-        {
-            //return CalcBaseParam.CalculateTimeL2j(PlayerEntity.Instance.Stats.BasePAtkSpeed);
-            float baseAttackTime = animator.GetInteger(SP_TIME_ATK);
-            float targetDistance = PlayerEntity.Instance.TargetDistance();
-            float[] timeAndFlye = CalcBaseParam.CalculateAttackAndFlightTimes(targetDistance, baseAttackTime);
-
-
-            return (int)timeAndFlye[0];
-        }
-        return animator.GetInteger(SP_TIME_ATK);
-    }
-
-
 }
