@@ -39,13 +39,20 @@ public class NpcSay : ServerPacket
 
     private void CreateMessage(int chatType , string text , string senderName)
     {
-        if (chatType == (int)ChatType.GENERAL)
+        ChatTypeData data = ChatTypes.GetById(chatType);
+
+        if (data != null)
         {
-            message = new CreatureMessage(senderName, text, "#dcd9dc");
-        }
-        else if (chatType == (int)ChatType.ANNOUNCEMENT | chatType == (int)ChatType.CRITICAL_ANNOUNCE)
-        {
-            message = new CreatureMessage("Announcements", text, "#80fbff");
+            int dataType = data.Type;
+
+            if (dataType == 10 || dataType == 18)
+            {
+                message = new CreatureMessage("Announcements", text , data);
+            }
+            else
+            {
+                message = new CreatureMessage(senderName, text , data);
+            }
         }
     }
 }

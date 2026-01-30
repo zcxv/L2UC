@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 
@@ -268,17 +269,31 @@ public class PlayerEntity : Entity
 
     public void SetProceduralSpinePose(Vector3 rotation)
     {
-        Transform bone = _gear.GetSpineBone();
-        SpineProceduralController.Instance.SetBoneMod(bone, new BoneModification(rotation, Vector3.zero, 1.0f));
+        try
+        {
+            Transform bone = _gear.GetSpineBone();
+            SpineProceduralController.Instance.SetBoneMod(bone, new BoneModification(rotation, Vector3.zero, 1.0f));
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError("");
+        }
 
-        //SpineProceduralController.Instance.SetBoneMod(bone, new BoneModification(new Vector3(0, 0, -90), Vector3.zero, 1.0f));
 
     }
 
     public void SetProceduralRightUpperArmPose(Vector3 rotation)
     {
-        Transform upperArm = _gear.GetRightUpperArm();
-        SpineProceduralController.Instance.SetBoneMod(upperArm, new BoneModification(rotation, Vector3.zero, 1.0f));
+        try
+        {
+            Transform upperArm = _gear.GetRightUpperArm();
+            SpineProceduralController.Instance.SetBoneMod(upperArm, new BoneModification(rotation, Vector3.zero, 1.0f));
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("");
+        }
+
     }
 
     public void RemoveProceduralPose()

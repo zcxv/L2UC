@@ -33,6 +33,13 @@ public class SpineProceduralController : MonoBehaviour
 
     public void RemoveBoneMod(Transform bone)
     {
+        if (bone == null)
+        {
+            Debug.LogWarning("SpineProceduralController>RemoveBoneMod не найдена кость ");
+            return;
+        }
+
+
         if (bone != null && _activeModifications.ContainsKey(bone))
         {
             if (!_bonesToRemove.Contains(bone))

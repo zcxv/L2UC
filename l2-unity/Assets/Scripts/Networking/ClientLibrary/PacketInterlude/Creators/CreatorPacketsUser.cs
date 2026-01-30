@@ -224,4 +224,14 @@ public class CreatorPacketsUser
         return new RequestBypassToServer(bypasscommand);
     }
 
+    public static RequestSay2 CreateSendMessage(ChatTypeData data, string message)
+    {
+        return new RequestSay2(data,message, "");
+    }
+
+    public static RequestSay2 CreateSendWhisperMessage(ChatTypeData data,string message,string name)
+    {
+        return new RequestSay2(data, message,name);
+    }
+
 }
