@@ -8,6 +8,10 @@ using UnityEngine.UIElements;
 public class ChatTab
 {
     [SerializeField] string _tabName = "Tab";
+    [SerializeField] private ChatType _chatType;
+
+    public ChatType ChatType => _chatType;
+    public int TabId => (int)_chatType;
 
     private bool _autoscroll = true;
     private ScrollView _scrollView;

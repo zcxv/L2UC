@@ -70,22 +70,28 @@ public class GSInterludeMessageHandler : ServerPacketHandler
 
     private void OnCreatureSay(byte[] data)
     {
-        //SystemMessageInterlude packet = new SystemMessageInterlude(data);
-        //Debug.Log("������ ��������� �� ����������� � ����� ������ !!!! " + 1);
-        CreatureSay packet = new CreatureSay(data);
-        if(packet.Message != null)
-        {
-            if (InitPacketsLoadWord.getInstance().IsInit)
-            {
-                InitPacketsLoadWord.getInstance().AddPacketsInit(packet);
-            }
-            else
-            {
-                SendShowClient(packet.Message);
-            }
-        }
-       
 
+        CreatureSay packet = new CreatureSay(data);
+
+        CreatureMessage message = packet.Message;
+
+        if (message != null)
+        {
+
+            EventProcessor.Instance.QueueEvent(() =>
+            {
+                try
+                {
+                    ChatWindow.Instance.ReceiveChatMessage(message);
+                }
+                catch (Exception)
+                {
+                    Debug.LogError("CreatureSay: Critical error now show SystemMessage");
+                    SendShowClient(message);
+                }
+
+            });
+        }
     }
 
     private void OnNpcSay(byte[] data)
@@ -167,63 +173,6 @@ public class GSInterludeMessageHandler : ServerPacketHandler
     }
 
    
-
-    //public void WaitDelayMessage()
-   // {
-
-      //  Task.Run(() =>
-      //  {
-          //  int exit = 0;
-          //  while (true)
-          //  {
-              //  _ewh.WaitOne();
-              //  Debug.Log("DELAAAAAAAAAY MESSSSSSSSSSAAAAAAAAGEEEEEEE ");
-              //  if (_token.IsCancellationRequested)
-              //  {
-              //  }
-
-              //  if(exit == 300)
-              //  {
-               //     Block();
-               // }
-               // Thread.Sleep(10);
-               // if (_delayMessage.Count > 0)
-              //  {
-                    //int messageId = StorageVariable.getInstance().GetMessageIdResume();
-
-                    //SystemMessage messageDelay;
-                    //SystemMessage messageDelay = _delayMessage[messageId];
-                    //if (messageDelay != null)
-                    //{
-                        //SystemMessageDat newText = SystemMessageTable.Instance.GetSystemMessage(messageDelay.MessageDat.Id);
-                       // SystemMessage newMessage = new SystemMessage(messageDelay.Params, newText);
-                        //EventProcessor.Instance.QueueEvent(() => ChatWindow.Instance.ReceiveSystemMessage(newMessage));
-                        //_delayMessage.Remove(messageId , out messageDelay);
-                        //Debug.Log("�������� �� ����� � �������!" + messageId);
-                       // exit = 0;
-                       // Block();
-                   // }
-                   // else
-                   // {
-                    //    Debug.Log("GSInterludeMessageHandler DelayMessage: ���� ��������� ��� ������ �� �����!!! ");
-                  //  }
-               // }
-              //  else
-              //  {
-                  //  Block();
-              //  }
-
-             //   exit++;
-          //  }
-      //  });
-   // }
-
- 
-    private void Block()
-    {
-        _ewh.Reset();
-       // _refreshMessageId = -1;
-    }
 
     private void SendShowClient(SystemMessage message)
     {

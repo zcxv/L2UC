@@ -8,11 +8,19 @@ public class AttackAction : L2Action
     // Local action
     public override void UseAction()
     {
-        // If has a target and attack key pressed
+        Debug.LogWarning("Use attack action.");
+
         if (TargetManager.Instance.HasTarget())
         {
-            Debug.LogWarning("Use attack action.");
-            //PlayerStateMachine.Instance.ChangeIntention(Intention.INTENTION_ATTACK, AttackIntentionType.AttackInput);
+            if (!PlayerEntity.Instance.IsAttack && PlayerStateMachine.Instance.State != PlayerState.DEAD)
+             {
+                 var target = PlayerEntity.Instance.GetTargetEntity();
+                 if (target != null && !target.IsDead())
+                {
+                     Debug.LogWarning("Trying To Attack");
+                     ClickManager.Instance.OnClickOnEntity();
+                }
+            }
         }
     }
 }

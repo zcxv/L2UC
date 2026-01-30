@@ -278,7 +278,7 @@ public class L2GameUI : L2UI
         {
             if (InventoryWindow.Instance != null)
             {
-                //InventoryWindow.Instance.ToggleHideWindowManual();
+                InventoryWindow.Instance.ToggleHideWindowManual();
             }
         }
 
