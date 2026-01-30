@@ -11,6 +11,7 @@ public enum Event
     ATTACKED,
     FORGET_OBJECT,
     READY_TO_ACT,
+    APPLY_SELF_SKILL,
     CANCEL,
     WAIT_RETURN,
     MY_TARGET_SELECT,

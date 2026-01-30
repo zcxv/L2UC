@@ -105,6 +105,10 @@ public abstract class BaseAnimationManager
 
     public string GetFinalNameAnim(int objectId , string animationName)
     {
+        if(animationName.IndexOf("sit") > -1)
+        {
+            return "sit";
+        }
         return animationName + GetEquipAnimName(objectId);
     }
 

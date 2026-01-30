@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Project
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 282
+  controlID: 101
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 42
+  controlID: 108
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 43
+  controlID: 165
   draggingID: 0
 --- !u!114 &8
 MonoBehaviour:
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: GameView
+  m_Name: AnimatorControllerTool
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -218,15 +218,15 @@ MonoBehaviour:
     y: 0
     width: 1145
     height: 636
-  m_MinSize: {x: 202, y: 226}
+  m_MinSize: {x: 52, y: 76}
   m_MaxSize: {x: 4002, y: 4026}
-  m_ActualView: {fileID: 16}
+  m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 15}
   - {fileID: 13}
   - {fileID: 16}
-  m_Selected: 2
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 2
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -246,15 +246,15 @@ MonoBehaviour:
     y: 636
     width: 1385
     height: 297
-  m_MinSize: {x: 101, y: 126}
-  m_MaxSize: {x: 4001, y: 4026}
-  m_ActualView: {fileID: 18}
+  m_MinSize: {x: 231, y: 276}
+  m_MaxSize: {x: 10001, y: 10026}
+  m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
   - {fileID: 18}
   - {fileID: 12}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 2
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -319,7 +319,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 48022
+  m_LastSelectedObjectID: 48060
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -341,8 +341,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Animator\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 240
-    y: 79
+    x: 241
+    y: 24
     width: 1143
     height: 610
   m_SerializedDataModeController:
@@ -362,14 +362,14 @@ MonoBehaviour:
     - {fileID: -323563886131513667, guid: 90471f566f40c1641875d2f74c5e9132, type: 2}
     - {fileID: -323563886131513667, guid: beee0371f3bb0254182a5d365db23803, type: 2}
     m_ValueSerializationHelper:
-    - e00: 1.0857279
+    - e00: 1.274888
       e01: 0
       e02: 0
-      e03: 785.38727
+      e03: 908.50836
       e10: 0
-      e11: 1.0857279
+      e11: 1.274888
       e12: 0
-      e13: 1234.2134
+      e13: 1369.0015
       e20: 0
       e21: 0
       e22: 1
@@ -1149,8 +1149,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 241
-    y: 24
+    x: 240
+    y: 79
     width: 1143
     height: 610
   m_SerializedDataModeController:
@@ -1252,7 +1252,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 715
+    y: 660
     width: 1384
     height: 271
   m_SerializedDataModeController:
@@ -1277,7 +1277,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Data/Animations/DarkElf/FDarkElf/Clips
+    - Assets/Resources/Data/UI/_Elements
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1287,16 +1287,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Resources/Data/Animations/DarkElf/FDarkElf/Clips
+  - Assets/Resources/Data/UI/_Elements
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\unity\l2 client\l2-git-interlude\Unity-Client-for-L2J\l2-unity
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 319}
-    m_SelectedIDs: 762f1700
-    m_LastClickedID: 1519478
-    m_ExpandedIDs: 00000000b6560200b8560200ba560200bc560200be560200c0560200c2560200c4560200c6560200c8560200ca560200cc560200ce560200d0560200d2560200d4560200d6560200d8560200da560200dc560200de560200e0560200e2560200e4560200e6560200e8560200ea560200ec560200ee560200f0560200f2560200f4560200f6560200f8560200fa560200fc560200fe56020000570200025702000457020006570200085702000a5702000c5702000e57020010570200125702001457020016570200185702001a5702001c5702001e57020020570200225702002457020026570200285702002a570200
+    scrollPos: {x: 0, y: 221}
+    m_SelectedIDs: bc560200
+    m_LastClickedID: 153276
+    m_ExpandedIDs: 00000000ba560200bc560200be560200c0560200c2560200c4560200c6560200c8560200ca560200cc560200ce560200d0560200d2560200d4560200d6560200d8560200da560200dc560200de560200e0560200e2560200e4560200e6560200e8560200ea560200ec560200ee560200f0560200f2560200f4560200f6560200f8560200fa560200fc560200fe56020000570200025702000457020006570200085702000a5702000c5702000e57020010570200125702001457020016570200185702001a5702001c5702001e57020020570200225702002457020026570200285702002a5702002c5702002e5702003057020032570200
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1325,7 +1325,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000b6560200b8560200ba560200bc560200be560200c0560200c2560200c4560200c6560200c8560200ca560200cc560200ce560200d0560200d2560200d4560200d6560200d8560200da560200dc560200de560200e0560200e2560200e4560200e6560200e8560200ea560200ec560200ee560200f0560200f2560200f4560200f6560200f8560200fa560200fc560200fe56020000570200025702000457020006570200085702000a5702000c5702000e57020010570200125702001457020016570200185702001a5702001c5702001e57020020570200225702002457020026570200285702002a570200
+    m_ExpandedIDs: 00000000ba560200bc560200be560200c0560200c2560200c4560200c6560200c8560200ca560200cc560200ce560200d0560200d2560200d4560200d6560200d8560200da560200dc560200de560200e0560200e2560200e4560200e6560200e8560200ea560200ec560200ee560200f0560200f2560200f4560200f6560200f8560200fa560200fc560200fe56020000570200025702000457020006570200085702000a5702000c5702000e57020010570200125702001457020016570200185702001a5702001c5702001e57020020570200225702002457020026570200285702002a5702002c5702002e5702003057020032570200
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1351,9 +1351,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: d0540200
-    m_LastClickedInstanceID: 152784
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000d4cc00006ac40000daf20000702a020036420200f0b8020028551600383a0100483a0100f4821c00503a0100d8180100e608010082c80000963101009e3c01004a190100ce2613007829010034170100261c2f00763b0200b8ed00003045020076280100eced00001a1301005042020050dc0000c0410200f2020000b041010094e600000000000034be0000d6d50000a6bc0000301e0100401e0100561e0100621e010066350100dc5b0100de5b0100d01e0100d81e0100863c0100101f0100181f0100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1379,7 +1379,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 608}
+    m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 323
@@ -1405,7 +1405,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 660
+    y: 715
     width: 1384
     height: 271
   m_SerializedDataModeController:

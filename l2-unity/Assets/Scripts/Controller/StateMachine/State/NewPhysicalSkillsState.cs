@@ -15,31 +15,40 @@ public class NewPhysicalSkillsState : AbstractAttackEvents
     }
     public override void HandleEvent(Event evt , object payload = null)
     {
+        MagicSkillUse useSkill = GetPayload(payload);
         switch (evt)
         {
             case Event.READY_TO_ACT:
-                Debug.Log("NewPhysicalSkillsState Sate> начало новой atk пришел запрос от сервера");
 
-                if(payload is MagicSkillUse useSkill)
-                {
-                   
-                    Debug.Log("NewPhysicalSkillsState Use Sate> обнаружили что идет запуск физического скила");
-                    AnimationCombo animCombo = SkillgrpTable.Instance.GetAnimComboBySkillId(useSkill.SkillId, useSkill.SkillLvl);
-                    Debug.Log($"[SyncCheck] useSkill время от сервера " + useSkill.HitTime);
-                   //not use bow atk
-                   //RotateFaceToMonster(_stateMachine.Player);
-                   SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, useSkill.SkillGrp, animCombo , _events);
-                    Debug.Log("NewPhysicalSkillsState Use Sate> обнаружили завершили физического скила");
-                }
+                AnimationCombo animComboAct = SkillgrpTable.Instance.GetAnimComboBySkillId(useSkill.SkillId, useSkill.SkillLvl);
+                //not use bow atk
+                //RotateFaceToMonster(_stateMachine.Player);
+                SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, useSkill.SkillGrp, animComboAct, _events);
                 break;
             case Event.CANCEL:
                 Debug.Log("NewPhysicalSkillsState Use Sate> Отмена скорее всего запрос пришел из ActionFaild");
-    
+
+                break;
+            case Event.APPLY_SELF_SKILL:
+                Skillgrp skillgrp = useSkill.SkillGrp;
+                AnimationCombo combo = new AnimationCombo("-1", new string[1] { skillgrp.GetAnimOperationType3() }, "");
+                SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, useSkill.SkillGrp, combo , _events);
                 break;
 
         }
     }
 
+
+    private MagicSkillUse GetPayload(object payload)
+    {
+
+        if (payload is MagicSkillUse useSkill)
+        {
+            return useSkill;
+        }
+
+        return null;
+    }
     private void RotateFaceToMonster(Entity entity)
     {
         Transform monster = PlayerEntity.Instance.Target;
