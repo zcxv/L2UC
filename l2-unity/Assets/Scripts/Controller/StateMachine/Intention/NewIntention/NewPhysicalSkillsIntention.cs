@@ -1,3 +1,4 @@
+using System;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -17,8 +18,22 @@ public class NewPhysicalSkillsIntention : IntentionBase
             AnimationManager.Instance.SetSpTimeAtk(objectId , useSkill.HitTime);
             Entity targetEntity = World.Instance.GetEntityNoLockSync(useSkill.TargetId);
             PlayerController.Instance.RotateToAttacker(targetEntity.transform.position);
+            IfUseSelf(objectId, useSkill);
+
+        }
+    }
+
+    private void IfUseSelf(int objectId , MagicSkillUse useSkill)
+    {
+        if (objectId != useSkill.AttackerObjId)
+        {
             _stateMachine.ChangeState(PlayerState.PHYSICAL_SKILLS);
-            _stateMachine.NotifyEvent(Event.READY_TO_ACT , useSkill);
+            _stateMachine.NotifyEvent(Event.READY_TO_ACT, useSkill);
+        }
+        else
+        {
+            _stateMachine.ChangeState(PlayerState.PHYSICAL_SKILLS);
+            _stateMachine.NotifyEvent(Event.APPLY_SELF_SKILL, useSkill);
         }
     }
 

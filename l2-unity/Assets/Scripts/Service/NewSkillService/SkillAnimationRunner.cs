@@ -13,6 +13,7 @@ public class SkillAnimationRunner
             if(animName != "none")
             {
                 //"SpAtk01" need "SpAtk01_"
+                Debug.Log("SkillAnimationRunner>StartRun: animName " + animName);
                 await animationManager.AsyncPlayAnimationCrossFade(objectId, animName + "_");
             }
 
