@@ -146,7 +146,7 @@ public static class PlayerCommands
         if (string.IsNullOrEmpty(text) || text[0] != '/')
             return null;
 
-        for (int i = 1; i <= MAX_ID; i++)
+        for (int i = 0; i <= MAX_ID; i++)
         {
             var cmd = _byId[i];
             if (cmd != null && text.StartsWith(cmd.Command, StringComparison.Ordinal))
