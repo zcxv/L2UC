@@ -282,13 +282,33 @@ public class ChatWindow : L2Window
         if (data != null)
         {
             bool enable = GameClient.Instance.IsCryptEnabled();
-            SendGameDataQueue.Instance().AddItem(CreatorPacketsUser.CreateSendMessage(data, text), enable, enable);
+            bool whisper = text[0] == '"';
+
+            if (whisper)
+            {
+                text = text.Substring(1);
+
+                int spaceIndex = text.IndexOf(' ');
+                if (spaceIndex <= 0)
+                    return;
+
+                string targetName = text.Substring(0, spaceIndex);
+                string message = text.Substring(spaceIndex + 1);
+
+                SendGameDataQueue.Instance().AddItem(CreatorPacketsUser.CreateSendWhisperMessage(ChatTypes.GetById(2), message, targetName), enable, enable);
+                Debug.Log("whisper chat: sending to :" + targetName + " message: " + message);
+            }
+            else
+            {
+                SendGameDataQueue.Instance().AddItem(CreatorPacketsUser.CreateSendMessage(data, text), enable, enable);
+            }
         }
         else
         {
             Debug.Log("SendChatMessage : Incorrect data for tab :" + tab.TabId);
         }
     }
+
 
     public void ReceiveChatMessage(CreatureMessage data)
     {
