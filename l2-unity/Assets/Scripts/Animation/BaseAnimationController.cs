@@ -37,11 +37,13 @@ public class BaseAnimationController : AnimationEventsBase, IAnimationController
 
     public void SetRunSpeed(float value)
     {
+        Debug.Log("SetRun speed test " + value);
         _animator.SetFloat("run_speed", value);
     }
 
     public void SetWalkSpeed(float value)
     {
+        Debug.Log("SetWalk speed test " + value);
         _animator.SetFloat("walk_speed", value);
     }
 

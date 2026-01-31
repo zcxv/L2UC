@@ -155,7 +155,9 @@ public class World : MonoBehaviour {
         var statsIntr = (PlayerInterludeStats)player.Stats;
        
         player.Initialize();
-      
+
+
+
         player.UpdateRunSpeed(statsIntr.RunRealSpeed);
       
         player.UpdateWalkSpeed(statsIntr.WalkRealSpeed);

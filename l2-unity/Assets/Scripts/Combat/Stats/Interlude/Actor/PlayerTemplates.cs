@@ -18,7 +18,7 @@ public class PlayerTemplates
     public void SetClassId(int classId)
     {
         _templateClassId = MapClassId.GetClassId(classId);
-        this._classId = classId;
+        _classId = classId;
     }
     public ClassIdTemplate GetTemplateClassId() {
         return _templateClassId; 

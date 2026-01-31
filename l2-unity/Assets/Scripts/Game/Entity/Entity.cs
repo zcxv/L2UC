@@ -234,6 +234,7 @@ public class Entity : MonoBehaviour {
         Stats.UnitySpeedWalking = scaled;
     }
 
+
     public void UpdateNpcRunningSpd(float runSpeed)
     {
         float scaled = StatsConverter.Instance.ConvertStat(Stat.SPEED, runSpeed);
@@ -241,7 +242,10 @@ public class Entity : MonoBehaviour {
         if (_networkAnimationReceive != null) _networkAnimationReceive.SetRunSpeed(anim_converted);
         //Debug.Log("Scaled speed NPC Run " + anim_converted + " name walk speed " + name);
         Stats.UnitySpeedRun = scaled;
+
     } 
+
+
 
     public virtual float UpdateSpeed(int speed) {
         float scaled = StatsConverter.Instance.ConvertStat(Stat.SPEED, speed);
@@ -424,9 +428,10 @@ public class Entity : MonoBehaviour {
         {
             if(this.GetType() == typeof(PlayerEntity))
             {
-               
+                PlayerEntity playerEntity = (PlayerEntity)this;
+                playerEntity.RefreshRunSpeed();
                 PlayerStateMachine.Instance.NotifyEvent(Event.CHANGE_EQUIP);
-
+                
             }
         }
     }

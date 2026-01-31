@@ -10,7 +10,7 @@ public class UserInfo : ServerPacket
 
     public UserInfo(byte[] d , PlayerInfoInterlude info) : base(d)
     {
-        this._info = info;
+        _info = info;
         Parse();
     }
 
@@ -32,7 +32,6 @@ public class UserInfo : ServerPacket
         int female = ReadI();
         _info.Appearance.Sex = female;
         _info.Appearance.Race = (int)MapClassId.GetRace(reace);
-        //int baseClass = ReadI();
         _info.Appearance.BaseClass = ReadI();
         _info.Stats.Level = ReadI();
          long exp =  ReadOtherL();
