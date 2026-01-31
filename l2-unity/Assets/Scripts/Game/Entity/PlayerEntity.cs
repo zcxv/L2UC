@@ -123,7 +123,6 @@ public class PlayerEntity : Entity
     protected override void OnDeath()
     {
         base.OnDeath();
-        //Debug.Log("Player on death _networkAnimationReceive:" + _networkAnimationReceive);
         PlayerStateMachine.Instance.NotifyEvent(Event.DEAD);
     }
 
@@ -167,37 +166,29 @@ public class PlayerEntity : Entity
          PlayerAnimationController.Instance.SetPAtkSpeed(speedAnim);
     }
 
-  
 
-    public override float UpdateRunSpeed(float speed)
+    private float _lastServerRunSpeed = 0;
+    public override float UpdateRunSpeed(float serverValue)
     {
-        float converted = base.UpdateRunSpeed(speed);
-        float anim_converted = GetAnimSpeed(_appearance, speed);
+        float converted = base.UpdateRunSpeed(serverValue);
+        PlayerInterludeAppearance playerApperance = (PlayerInterludeAppearance)_appearance;
+        float anim_converted = CharTemplateRegistry.GetRunSpeed(playerApperance.BaseClass, playerApperance.Sex, serverValue, _gear.IsTwoHandedEquipped());
         PlayerAnimationController.Instance.SetRunSpeed(anim_converted);
         PlayerController.Instance.UpdateRunSpeed(converted);
-
+        _lastServerRunSpeed = serverValue;
         return converted;
     }
 
-
-    private float GetAnimSpeed(Appearance appearance , float speed)
+    public void RefreshRunSpeed()
     {
-        if (appearance.GetType() == typeof(PlayerInterludeAppearance))
-        {
-            PlayerInterludeAppearance pia = (PlayerInterludeAppearance)appearance;
-            if (pia.BaseClass == (int)BaseClass.MMagic)
-            {
-                return UpdateAnimRunMagicSpeed(speed);
-            }
-            else
-            {
-               return  UpdateAnimRunSpeed(speed);
-
-            }
-        }
-
-        return UpdateAnimRunSpeed(speed);
+        PlayerInterludeAppearance playerApperance = (PlayerInterludeAppearance)_appearance;
+        float anim_converted = CharTemplateRegistry.GetRunSpeed(playerApperance.BaseClass, playerApperance.Sex, _lastServerRunSpeed, _gear.IsTwoHandedEquipped());
+        PlayerAnimationController.Instance.SetRunSpeed(anim_converted);
     }
+
+
+
+  
 
     public override float UpdateWalkSpeed(float speed)
     {

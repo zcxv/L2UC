@@ -294,10 +294,8 @@ public class Gear : AbstractMeshManager
         return VectorUtils.ConvertL2jDistance(_weaponRange);
     }
 
-    private Transform[] destroy = new Transform[2];
     public  void UnequipWeapon(bool leftSlot , int weaponId, bool lrDestroy = false)
     {
-
         string weapondNameId = weaponName + weaponId;
 
         if (lrDestroy)
@@ -521,6 +519,14 @@ public class Gear : AbstractMeshManager
         }
 
         return transfroms;
+    }
+
+    public bool IsTwoHandedEquipped()
+    {
+        return _rightHandType == WeaponType.bigword || 
+               _rightHandType == WeaponType.pole ||    
+               _rightHandType == WeaponType.staff ||  
+               _rightHandType == WeaponType.bigblunt;  
     }
 
 }

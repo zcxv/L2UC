@@ -25,9 +25,11 @@ public class NumberUtils {
         return value / 68f;
     }
 
-    public static float ScaleAnimSpeedMagicToUnity(float value)
+    public static float ScaleAnimSpeedMagicToUnity(float serverValue)
     {
-        return value / 68f - 0.55f;
+   
+        float calculatedMultiplier = serverValue * 0.0033f;
+        return Mathf.Clamp(calculatedMultiplier, 0.25f, 0.8f);
     }
 
     public static float ScaleAnimSpeedL2jToUnity(float value)
