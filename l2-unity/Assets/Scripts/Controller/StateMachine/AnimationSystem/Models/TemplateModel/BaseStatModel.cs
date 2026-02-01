@@ -14,5 +14,5 @@ public class BaseStatModel
         _genderData[1] = female;
     }
 
-    public GenderStats GetData(int sex) => (sex == 1) ? _genderData[1] : _genderData[0];
+    public GenderStats GetData(int sex) => (sex == 0) ? _genderData[0]: _genderData[1];
 }
