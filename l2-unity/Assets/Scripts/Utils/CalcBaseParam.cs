@@ -63,15 +63,4 @@ public class CalcBaseParam
    
     }
 
-
-
-
-
-    public static float CalculateTimeReuseL2j(float reuse , float pAtkSpd)
-    {
-        if (reuse != 0)
-            reuse = (reuse * 345) / pAtkSpd;
-
-        return reuse;
-    }
 }

@@ -25,7 +25,7 @@ public class NewPhysicalSkillsIntention : IntentionBase
 
     private void IfUseSelf(int objectId , MagicSkillUse useSkill)
     {
-        if (objectId != useSkill.AttackerObjId)
+        if (objectId != useSkill.TargetId)
         {
             _stateMachine.ChangeState(PlayerState.PHYSICAL_SKILLS);
             _stateMachine.NotifyEvent(Event.READY_TO_ACT, useSkill);

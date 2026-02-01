@@ -265,6 +265,7 @@ public class UserInfo : ServerPacket
         int colorName = ReadI();
         byte isRunning = ReadB();// changes the Speed display on Status Window
         _info.Appearance.Running = isRunning == 1;
+        
         int pledgeClass = ReadI();
         int PledgeType = ReadI();   
         int titleColor = ReadI();

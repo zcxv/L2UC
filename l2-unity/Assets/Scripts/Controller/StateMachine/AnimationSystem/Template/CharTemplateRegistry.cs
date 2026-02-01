@@ -11,14 +11,14 @@ public static class CharTemplateRegistry
         {
             (int)ClassId.FIGHTER,
             new BaseStatModel(
-                new GenderStats(0.0047f, 0, 1f), // Male
+                new GenderStats(0.0047f, 0.0047f, 1f), // Male
                 new GenderStats(0, 0, 0)  // Female
             )
         },
         {
             (int)ClassId.MAGE,
             new BaseStatModel(
-                new GenderStats(0.0033f, 0, 1.8f), // Male (с бонусом 2H)
+                new GenderStats(0.0033f, 0.0047f, 1.8f), // Male (с бонусом 2H)
                 new GenderStats(0.0035f, 0, 0) // Female
             )
         }
@@ -42,7 +42,7 @@ public static class CharTemplateRegistry
         return 0.5f;
     }
 
-    public static float GetWalkSpeed(int classId, int sex, float serverValue)
+    public static float GetWalkSpeed(int classId, int sex, float serverValue, bool isTwoHanded)
     {
         if (Classes.TryGetValue(classId, out var model))
         {
