@@ -37,7 +37,7 @@ public class NewMoveToIntention : IntentionBase
 
             
             //PlayerController.Instance.MoveToPoint((Vector3)arg0, 0.1f);
-            PlayerController.Instance.MoveToPoint(new MovementTarget(newPosition, 0.1f));
+            PlayerController.Instance.MoveToPoint(new MovementTarget(newPosition, 0.1f , PlayerEntity.Instance.Running));
             StartAnimMoveTo();
         }
     }

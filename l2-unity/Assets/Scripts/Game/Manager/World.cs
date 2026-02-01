@@ -162,9 +162,6 @@ public class World : MonoBehaviour {
       
         player.UpdateWalkSpeed(statsIntr.WalkRealSpeed);
       
-        // Debug.Log("PLAYER SPAWN RunSpeed " + statsIntr.RunSpeed);
-        //Debug.Log("PLAYER SPAWN PAtkSpd " + statsIntr.PAtkSpd);
-        // player.UpdatePAtkSpeedPlayer((int)statsIntr.BasePAtkSpeed);
 
         //416 - ���������� �����
         //554 - � ����������

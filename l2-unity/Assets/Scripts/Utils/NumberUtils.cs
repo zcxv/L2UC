@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class NumberUtils {
 
-    
-    private static float defaultMetrUnit = 0.0190f;
+
+    //private static float defaultMetrUnit = 0.0190f;
+    private static float defaultMetrUnit = 0.0189f;
     public static float ScaleToUnity(float value) {
         return (float) value * defaultMetrUnit;
     }
