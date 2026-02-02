@@ -60,6 +60,7 @@ public class L2LoginUI : L2UI
         LicenseWindow.Instance.HideWindow();
         ServerSelectWindow.Instance.AddWindow(_rootVisualContainer);
         ServerSelectWindow.Instance.HideWindow();
+        SkillAnimationDatabase.Initialize();
     }
 
     public void ShowServerSelectWindow() {

@@ -16,14 +16,35 @@ public class BaseAnimationController : AnimationEventsBase, IAnimationController
     private float _lastAtkClipLength;
     private float _pAtkSpd;
 
+    private readonly Dictionary<string, string> _base_motion = new Dictionary<string, string>(3);
 
+    private const string BASE_MOTION_CAST_MID = "FDarkElf_m001_b.ao_CastMid_FDarkElf";
+    private const string BASE_MOTION_END = "FDarkElf_m001_b.ao_CastEnd_FDarkElf";
+    private const string BASE_MOTION_MAGIC_SHOOT = "FDarkElf_m001_b.ao_MagicShot_A_FDarkElf";
 
+    private AnimatorOverrideController _overrideController;
 
     public virtual void Initialize()
     {
         _animator = gameObject.GetComponentInChildren<Animator>(true);
         _lastAnimationVariableName = "wait_hand";
         InitializePriority();
+        SkillAnimationDatabase.LoadRaceAnimations(_animator?.runtimeAnimatorController.name);
+
+        _base_motion.Add("CastMid" , BASE_MOTION_CAST_MID);
+        _base_motion.Add("CastEnd", BASE_MOTION_END);
+        _base_motion.Add("MagicShoot", BASE_MOTION_MAGIC_SHOOT);
+
+        // Создаем экземпляр оверрайда на основе текущего контроллера
+        if (_animator.runtimeAnimatorController is not AnimatorOverrideController)
+        {
+            _overrideController = new AnimatorOverrideController(_animator.runtimeAnimatorController);
+            _animator.runtimeAnimatorController = _overrideController;
+        }
+        else
+        {
+            _overrideController = (AnimatorOverrideController)_animator.runtimeAnimatorController;
+        }
 
     }
 
@@ -301,4 +322,32 @@ public class BaseAnimationController : AnimationEventsBase, IAnimationController
     {
         return _animator.GetInteger(_animator.name);
     }
+
+    public string GetAnimatorName()
+    {
+       return _animator?.runtimeAnimatorController.name;
+    }
+
+    public void ReplaceAnimClip(string animName , string overrideAnimName)
+    {
+        string raceName = _animator?.runtimeAnimatorController.name;
+        AnimationClip clip = SkillAnimationDatabase.GetOverrideClip(overrideAnimName , raceName);
+        if (HasClip(animName))
+        {
+            _overrideController[animName] = clip;
+            Debug.Log("BaseAnimationController>ReplaceAnimClip clip orig   " + animName + " replace name " + clip.name);
+        }
+        else
+        {
+            Debug.LogWarning("BaseAnimationController>ReplaceAnimClip not found replace anim  " + animName);
+        }
+
+    }
+
+    public bool HasClip(string originalClipName)
+    {
+        // Проверяем, есть ли вообще такой "слот" для замены
+        return _overrideController[originalClipName] != null;
+    }
+
 }

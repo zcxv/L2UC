@@ -18,7 +18,7 @@ public class PlayerStateSpAtk : StateMachineBehaviour
     public float postHitSpeed = 2.0f; // Просто фиксированная скорость после удара
     private float _lastDebugTime; // Для интервала дебага
     private const float DEBUG_INTERVAL = 0.02f; // 20мс
-    private float networkCompensation = 0.1f;
+   
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

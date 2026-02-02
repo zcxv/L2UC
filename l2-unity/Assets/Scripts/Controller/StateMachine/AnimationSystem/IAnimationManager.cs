@@ -7,11 +7,12 @@ using UnityEngine;
 public interface IAnimationManager
 {
     public void RegisterController(int objectId, IAnimationController controller, Entity entity);
-    //void SetAnimationManager(PlayerAnimationController controller , PlayerEntity Player);
+
     void PlayAnimation(int objectId , string animationName , bool disableTriggerAfterStart);
     public void PlayAnimationTrigger(int objectId , string triggerName);
 
-    public Task AsyncPlayAnimationCrossFade(int objectId , string animationName, float duration = 0.3f);
+    Task AsyncPlayAnimationTrigger(int objectId, string animationName);
+    Task AsyncPlayAnimationRaceOverrides(int objectId, string tiggerName , string overrideAnimationName);
     void PlayOriginalAnimation(int objectId , string animationName);
     string GetCurrentAnimationName(int objectId);
     string GetLastAnimationName(int objectId);

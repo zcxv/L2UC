@@ -23,7 +23,7 @@ public class NewPhysicalSkillsState : AbstractAttackEvents
                 AnimationCombo animComboAct = SkillgrpTable.Instance.GetAnimComboBySkillId(useSkill.SkillId, useSkill.SkillLvl);
                 //not use bow atk
                 //RotateFaceToMonster(_stateMachine.Player);
-                SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, useSkill.SkillGrp, animComboAct, _events);
+                SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, animComboAct, _events);
                 break;
             case Event.CANCEL:
                 Debug.Log("NewPhysicalSkillsState Use Sate> Отмена скорее всего запрос пришел из ActionFaild");
@@ -32,7 +32,7 @@ public class NewPhysicalSkillsState : AbstractAttackEvents
             case Event.APPLY_SELF_SKILL:
                 Skillgrp skillgrp = useSkill.SkillGrp;
                 AnimationCombo combo = new AnimationCombo("-1", new string[1] { skillgrp.GetAnimOperationType3() }, "");
-                SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, useSkill.SkillGrp, combo , _events);
+                SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, combo , _events);
                 break;
 
         }

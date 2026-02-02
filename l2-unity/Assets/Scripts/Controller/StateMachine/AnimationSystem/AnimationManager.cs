@@ -24,9 +24,9 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
 
     public void PlayAnimation(int objectId , string animationName, bool disableTriggerAfterStart)
     {
-       
-        string finalAnimName = GetFinalNameAnim(objectId , animationName);
         IAnimationController controller = GetPlayerController(objectId);
+        string finalAnimName = GetFinalNameAnim(objectId , animationName );
+
         Entity entity = GetEntity(objectId);
         DesableLastPlayerAnimationElseTrue(objectId, controller);
 
@@ -39,9 +39,8 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
 
     public void PlayAnimationTrigger(int objectId, string animationName)
     {
-        string triggerName = GetFinalNameAnim(objectId , animationName);
-
         IAnimationController controller = GetPlayerController(objectId);
+        string triggerName = GetFinalNameAnim(objectId , animationName);
         Entity entity = GetEntity(objectId);
         DesableLastPlayerAnimationElseTrue(objectId, controller);
         controller.ToggleAnimationTrigger(triggerName);
@@ -51,7 +50,7 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
 
 
     //Async Wait End Event
-    public async Task AsyncPlayAnimationCrossFade(int objectId, string animationName, float duration = 0.3f)
+    public async Task AsyncPlayAnimationTrigger(int objectId, string triggerName)
     {
 
       
@@ -68,12 +67,37 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
 
         ReturnAwait(model);
 
-        PlayerAnimationCrossFade(objectId, animationName, duration);
+        PlayerAnimationTrigger(objectId, triggerName);
 
   
         await tcs.Task;
-
     }
+
+    public async Task AsyncPlayAnimationRaceOverrides(int objectId, string triggerName , string overrideAnimationName)
+    {
+        if (_tcsMap.TryGetValue(objectId, out var oldTcs))
+        {
+            oldTcs.TrySetResult(false);
+        }
+
+        var tcs = new TaskCompletionSource<bool>();
+        _tcsMap[objectId] = tcs;
+        AnimationModel model = GetModel(objectId);
+        //Root Animator FDarkElf
+        string animName = SkillAnimationDatabase.GetAnimationClipName(triggerName, "FDarkElf");
+
+        model.GetController().ReplaceAnimClip(animName , overrideAnimationName);
+
+        ReturnAwait(model);
+
+
+        PlayerAnimationTrigger(objectId, triggerName , false);
+
+
+
+        await tcs.Task;
+    }
+
 
     private void ReturnAwait(AnimationModel model)
     {
@@ -82,8 +106,6 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
     }
     public void OnAnimationFinished(string name, int objectId)
     {
-     
-      
         if (_tcsMap.TryGetValue(objectId, out var tcs))
         {
 
@@ -100,15 +122,16 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
         }
     }
 
-    public void PlayerAnimationCrossFade(int objectId , string animationName, float duration)
+    public void PlayerAnimationTrigger(int objectId , string animationName , bool useFinalName = true)
     {
-        string crossFadeName = GetFinalNameAnim(objectId , animationName);
         IAnimationController controller = GetPlayerController(objectId);
+        if(useFinalName) animationName = GetFinalNameAnim(objectId, animationName);
+
         Entity entity = GetEntity(objectId);
         DesableLastPlayerAnimationElseTrue(objectId , controller);
-        controller.ToggleAnimationTrigger(crossFadeName);
+        controller.ToggleAnimationTrigger(animationName);
 
-        Debug.Log($"AnimationManager> start crossFade  {entity} animation  {crossFadeName}");
+        Debug.Log($"AnimationManager> start Async AnimationTrigger(  {entity} animation  {animationName}");
     }
 
 
@@ -125,11 +148,6 @@ public class AnimationManager : BaseAnimationManager , IAnimationManager
         PlayerAnimationController controller = GetPlayerController(objectId);
         return controller.GetParametrs();
     }
-
-
-
-
-
 
     public void StopMonsterCurrentAnimation(int objectId, string animationName)
     {

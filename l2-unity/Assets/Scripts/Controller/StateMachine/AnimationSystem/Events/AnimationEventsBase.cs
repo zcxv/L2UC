@@ -21,6 +21,11 @@ public abstract class AnimationEventsBase : MonoBehaviour
     {
         _priorityAnimations = new Dictionary<string, bool>
         {
+            //magic atk
+            { "MagicShot", false },
+            { "CastMid", false },
+            { "CastEnd", false },
+             //magic end
             { "jatk01_bow", false },
             { "jatk02_bow", false },
             { "jatk03_bow", false },

@@ -29,7 +29,7 @@ public class SkillExecutor : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public async Task ExecuteSkill(Entity entity , Skillgrp skill , AnimationCombo animationCombo , AnimationEventsBase actions)
+    public async Task ExecuteSkill(Entity entity , AnimationCombo animationCombo , AnimationEventsBase actions)
     {
         if (entity == null || animationCombo == null) return;
         int objectId = entity.IdentityInterlude.Id;
@@ -37,10 +37,21 @@ public class SkillExecutor : MonoBehaviour
         _emitter.SetupActions(actions);
 
         string[] cycle = animationCombo.GetAnimCycle();
-        _animRunner.StartRun(cycle, objectId , AnimationManager.Instance , () => OnAllAnimationFinish(actions));
+        _animRunner.StartRun(cycle, objectId , AnimationManager.Instance  , () => OnAllAnimationFinish(actions));
     }
 
-  
+    public async Task ExecuteSkillOverride(Entity entity, AnimationCombo animationCombo, AnimationEventsBase actions)
+    {
+        if (entity == null || animationCombo == null) return;
+        int objectId = entity.IdentityInterlude.Id;
+
+        _emitter.SetupActions(actions);
+
+        string[] cycle = animationCombo.GetAnimCycle();
+        _animRunner.StartRunOverride(cycle, objectId, AnimationManager.Instance, () => OnAllAnimationFinish(actions));
+    }
+
+
     private void OnAllAnimationFinish(AnimationEventsBase actions)
     {
         _emitter.CleanupActions(actions);

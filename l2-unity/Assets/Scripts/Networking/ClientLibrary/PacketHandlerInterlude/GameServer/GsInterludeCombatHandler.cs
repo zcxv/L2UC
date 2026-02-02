@@ -139,6 +139,7 @@ public class GsInterludeCombatHandler : ServerPacketHandler
         EventProcessor.Instance.QueueEvent(() =>
         {
             SkillbarWindow.Instance.ShowCooldown(magicSkill.SkillId, Shortcut.TYPE_SKILL , magicSkill.Reusedelay);
+
             PlayerStateMachine.Instance.ChangeIntention(
                 magicSkill.SkillGrp.IsMagic == 1 ?
                     Intention.INTENTION_MAGIC_ATTACK :
