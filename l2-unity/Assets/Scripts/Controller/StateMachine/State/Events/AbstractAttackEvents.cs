@@ -25,9 +25,14 @@ public abstract class AbstractAttackEvents : StateBase
     {
         foreach (Animation special in _specialsBows)
         {
-
+            
             if (animName == special.ToString())
             {
+                if(special.Type == TypesAnimation.MagicAttack && special.Phase != MagicPhase.End)
+                {
+                    return;
+                }
+
                 PlayerStateMachine.Instance.ChangeIntention(Intention.INTENTION_IDLE);
                 PlayerStateMachine.Instance.NotifyEvent(Event.WAIT_RETURN);
                 break;
@@ -37,8 +42,6 @@ public abstract class AbstractAttackEvents : StateBase
 
     private void CallBackFinishedHit(string animName)
     {
-   
-
         foreach (Animation special in _specialsBows)
         {
             if (animName == special.ToString())
@@ -46,8 +49,6 @@ public abstract class AbstractAttackEvents : StateBase
 
                 if (special.Type == TypesAnimation.MeleeAttack)
                 {
-
-
                     Transform[] swordBasePoints = _stateMachine.Player.GetSwordBasePoints();
                     if (swordBasePoints.Length > 1) SwordCollisionService.Instance.UnregisterSword(swordBasePoints[0]);
                     PlayerEntity.Instance.RemoveProceduralPose();
@@ -159,14 +160,14 @@ public abstract class AbstractAttackEvents : StateBase
     private void OnHitColliderMonster(Transform attacker, Transform target, Vector3 hitPointCollider, Vector3 hitDirection)
     {
         Entity entity = PlayerEntity.Instance.GetTargetEntity();
-        //Debug.Log("ON HIT! 24");
+       
         if (entity is MonsterEntity)
         {
             MonsterEntity monster = (MonsterEntity)entity;
-            //Debug.Log("ON HIT! 25 " + _stateMachine.Player.HitIsMissed());
+         
             if (!_stateMachine.Player.HitIsMissed())
             {
-                //Debug.Log("ON HIT! 26");
+                
                 HitManager.Instance.HandleHitCollider(attacker, monster.GetStateMachine(), hitPointCollider, hitDirection);
             }
 

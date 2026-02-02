@@ -5,10 +5,12 @@ public class Animation
 {
     public string Value { get; set; }
     public TypesAnimation Type { get; set; }
-    public Animation(string value , TypesAnimation type)
+    public MagicPhase Phase { get; set; }
+    public Animation(string value , TypesAnimation type , MagicPhase phase = MagicPhase.None)
     {
         Value = value;
         Type = type;
+        Phase = phase;
     }
 
     public string Concat(string name)
@@ -63,7 +65,16 @@ public enum TypesAnimation
 {
     MeleeAttack,
     BowAttack,
+    MagicAttack,
     OtherType
+}
+
+public enum MagicPhase
+{
+    Start,
+    Shot,
+    End,
+    None,
 }
 
 public static class SpecialAnimationNames
@@ -76,9 +87,15 @@ public static class SpecialAnimationNames
     public static readonly Animation SpAtk_01 = new Animation("SpAtk01_1HS", TypesAnimation.MeleeAttack);
     public static readonly Animation SpAtk_01_bow = new Animation("SpAtk01_bow", TypesAnimation.BowAttack);
 
+    public static readonly Animation MagicShot = new Animation("MagicShot", TypesAnimation.MagicAttack , MagicPhase.End);
+    public static readonly Animation CastMid = new Animation("CastMid", TypesAnimation.MagicAttack , MagicPhase.Start);
+    public static readonly Animation CastEnd = new Animation("CastEnd", TypesAnimation.MagicAttack, MagicPhase.Shot);
+
     public static readonly Animation[]  arrayAtkSpecials = new Animation[]{ ATK_BOW_ATK1 , ATK_BOW_ATK2 , ATK_BOW_ATK3 , ATK01_1HS };
 
     public static readonly Animation[] arrayPhisicalAtkSpecials = new Animation[] { SpAtk_01 , SpAtk_01_bow };
+
+    public static readonly Animation[] arrayMagicAtkSpecials = new Animation[] { CastMid , CastEnd , MagicShot };
     public static Animation[] GetSpecialsAttackAnimations()
     {
             return arrayAtkSpecials;
@@ -87,6 +104,11 @@ public static class SpecialAnimationNames
     public static Animation[] GetPhisicalSkillsAnimations()
     {
         return arrayPhisicalAtkSpecials;
+    }
+
+    public static Animation[] GetMagicSkillsAnimations()
+    {
+        return arrayMagicAtkSpecials;
     }
 
 }

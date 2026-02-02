@@ -15,6 +15,8 @@ public class CreatorStatePlayer
                 return new NewAttackState(_stateMachine);
             case PlayerState.PHYSICAL_SKILLS:
                 return new NewPhysicalSkillsState(_stateMachine);
+            case PlayerState.MAGIC_SKILLS:
+                return new NewMagicSkillsState(_stateMachine);
             case PlayerState.DEAD:
                 return new NewDeadState(_stateMachine);
             case PlayerState.REBIRTH:

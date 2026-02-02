@@ -7,6 +7,8 @@ public abstract class StateBase
         _stateMachine = stateMachine;
     }
 
+    protected MagicSkillUse GetPayload(object payload) => payload is MagicSkillUse useSkill ? useSkill : null;
+
 
 
     public virtual void Enter() { }

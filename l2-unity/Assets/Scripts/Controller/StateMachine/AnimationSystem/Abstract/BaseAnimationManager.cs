@@ -11,6 +11,8 @@ public abstract class BaseAnimationManager
     protected Dictionary<int, string[]> _recentAnimationNames;
     protected Dictionary<int, string[]> _recentMonsterAnimationNames;
     protected Dictionary<int, TaskCompletionSource<bool>> _tcsMap;
+
+
     protected BaseAnimationManager()
     {
         _animationControllers = new Dictionary<int, AnimationModel>();
@@ -109,6 +111,7 @@ public abstract class BaseAnimationManager
         {
             return "sit";
         }
+
         return animationName + GetEquipAnimName(objectId);
     }
 
