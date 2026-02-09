@@ -2,6 +2,7 @@ class el_wind_strike_ta extends Emitter;
 
 defaultproperties
 {
+	//Выстрел орбс
      Begin Object Class=SpriteEmitter Name=SpriteEmitter8
          UseColorScale=True
          ColorScale(0)=(Color=(B=255,G=255,R=255,A=255))
@@ -26,6 +27,7 @@ defaultproperties
          LifetimeRange=(Min=0.300000,Max=0.300000)
          RelativeWarmupTime=0.200000
      End Object
+	 //Это скорее всего orbs внутри
      Emitters(0)=SpriteEmitter'SpriteEmitter8'
      Begin Object Class=MeshEmitter Name=MeshEmitter5
          StaticMesh=StaticMesh'LineageEffectsStaticmeshes.Wind.windblowin01'
@@ -68,6 +70,7 @@ defaultproperties
          RelativeWarmupTime=0.550000
      End Object
      Emitters(1)=MeshEmitter'MeshEmitter5'
+	 //Кольцо при попадании по монстру
      Begin Object Class=SpriteEmitter Name=SpriteEmitter9
          UseDirectionAs=PTDU_Normal
          ProjectionNormal=(X=1.000000,Z=0.000000)

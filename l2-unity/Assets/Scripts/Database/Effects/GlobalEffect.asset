@@ -14,26 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effects:
   - id: 1177
-    prefab: {fileID: 5001561415001021530, guid: 87a0d43ba0915b447a8370030fc8eedc, type: 3}
-    settings:
-      lifeTime: 3
-      showTime: 1
-      hideTime: 1
-      maxAlpha: 0.3
-      stopAlphaShow: 0.3
-      speedRotateMin: 18
-      speedRotateMax: 23
-      useRandomPosition: 1
-      minZ: 0
-      maxZ: -0.02
-      minY: 0
-      maxY: -0.04
-      footerYOffset: 0.2
-      bodyYOffset: 0.15
-      defaultFooterSize: 23
-      defaultBodySize: 10
-      auraDefaultSize: 0.1
-      auraYOffset: 0.019
-      flyJumpHeight: 0.03
-      flyJumpSpeed: 0.05
-      flyAlphaThreshold: 0.3
+    prefab: {fileID: 6218837199439611435, guid: 87a0d43ba0915b447a8370030fc8eedc, type: 3}
+    settings: {fileID: 11400000, guid: c02f996917eecba46986a49309d210d1, type: 2}

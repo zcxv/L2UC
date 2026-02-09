@@ -11,6 +11,6 @@ public abstract class BaseEffect : MonoBehaviour
         targetRenderer = GetComponent<Renderer>();
     }
 
-    public abstract void SetProgress(float normalizedTime); // 0..1 для анимации
+    public abstract void SetProgress(float normalizedTime); 
     public abstract void Play();
 }

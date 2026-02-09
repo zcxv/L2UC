@@ -14,34 +14,35 @@ public class FlyWindStrikePart : EffectPart
     private float _shotTime = 0;
     public override void Setup(EffectSettings settings , MagicCastData castData)
     {
+        if (settings is Effect1177Settings flyWind1177Settings)
+        {
+            base.Initialize(settings, flyWind1177Settings.defaultBodySize);
+            _castData = castData;
+            _shotTime = castData.GetShotTimeNormalize();
 
-        base.Initialize(settings, settings.defaultBodySize);
-        _castData = castData;
-        _shotTime = castData.GetShotTimeNormalize();
+
+            float rZ = Random.Range(0.048f, 0.072f);
+            float rY = Random.Range(0.19f, 0.2f);
+            transform.localPosition = new Vector3(0, flyWind1177Settings.footerYOffset, rZ);
+            transform.localPosition = new Vector3(0, rY, rZ);
+            _startPosition = transform.position;
+            _targetJumpPosition = _startPosition + Vector3.up * 1;
 
 
-        float rZ = Random.Range(0.048f, 0.072f);
-        float rY = Random.Range(0.19f, 0.2f);
-        //transform.localPosition = new Vector3(0, settings.footerYOffset, rZ);
-        transform.localPosition = new Vector3(0, rY, rZ);
-        _startPosition = transform.position;
-        _targetJumpPosition = _startPosition + Vector3.up * 1;
+            float randSpeed = Random.Range(19f, 22f);
+            UpdateShaderFloat(SHADER_PARAMETR_SPEED, randSpeed);
+            UpdateShaderFloat(SHADER_PARAMETR_MAX_ALPHA, settings.maxAlphaFooter);
 
-       
-        float randSpeed = Random.Range(19f, 22f);
-        UpdateShaderFloat(SHADER_PARAMETR_SPEED, randSpeed);
-        UpdateShaderFloat(SHADER_PARAMETR_MAX_ALPHA, settings.maxAlphaFooter);
+            UpdateShaderFloat(SHADER_PARAMETR_SCALE_START_SIZE, flyWind1177Settings.scaleSizeStart);
+            UpdateShaderFloat(SHADER_PARAMETR_SCALE_END_SIZE, flyWind1177Settings.scaleSizeEnd);
+            UpdateShaderFloat(SHADER_PARAMETR_SCALE_START_TIME, flyWind1177Settings.startTimeScale);
+            UpdateShaderFloat(SHADER_PARAMETR_SCALE_END_TIME, flyWind1177Settings.endTimeScale);
 
-        UpdateShaderFloat(SHADER_PARAMETR_SCALE_START_SIZE, settings.scaleSizeStart);
-        UpdateShaderFloat(SHADER_PARAMETR_SCALE_END_SIZE, settings.scaleSizeEnd);
-        UpdateShaderFloat(SHADER_PARAMETR_SCALE_START_TIME, settings.startTimeScale);
-        UpdateShaderFloat(SHADER_PARAMETR_SCALE_END_TIME, settings.endTimeScale);
-
-        UpdateShaderFloat(SHADER_PARAMETR_START_ALPHA_TIMEV1, settings.startAlphaTimeV1);
-        UpdateShaderFloat(SHADER_PARAMETR_END_ALPHA_TIMEV1, settings.endAlphaTimeV1);
-        UpdateShaderFloat(SHADER_PARAMETR_START_ALPHA_TIMEV0, settings.startAlphaTimeV0);
-        UpdateShaderFloat(SHADER_PARAMETR_END_ALPHA_TIMEV0, settings.endAlphaTimeV0);
-
+            UpdateShaderFloat(SHADER_PARAMETR_START_ALPHA_TIMEV1, settings.startAlphaTimeV1);
+            UpdateShaderFloat(SHADER_PARAMETR_END_ALPHA_TIMEV1, settings.endAlphaTimeV1);
+            UpdateShaderFloat(SHADER_PARAMETR_START_ALPHA_TIMEV0, settings.startAlphaTimeV0);
+            UpdateShaderFloat(SHADER_PARAMETR_END_ALPHA_TIMEV0, settings.endAlphaTimeV0);
+        }
     }
 
     public override void PlayPart()
@@ -68,7 +69,7 @@ public class FlyWindStrikePart : EffectPart
 
         if (progress >= _shotTime)
         {
-            transform.position = Vector3.Lerp(transform.position, _targetJumpPosition, settings.flyJumpSpeed * Time.deltaTime);
+            //transform.position = Vector3.Lerp(transform.position, _targetJumpPosition, settings.flyJumpSpeed * Time.deltaTime);
         }
 
         if (progress >= 1f)

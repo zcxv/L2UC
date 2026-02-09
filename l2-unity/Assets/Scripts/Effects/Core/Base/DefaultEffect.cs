@@ -14,7 +14,7 @@ public class DefaultEffect : BaseEffect
 
     public override void Play()
     {
-        if (_settings == null) _settings = new EffectSettings();
+        //if (_settings == null) _settings = new EffectSettings();
 
         Initialize();
 
