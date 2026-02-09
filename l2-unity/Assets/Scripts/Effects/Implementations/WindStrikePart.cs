@@ -14,38 +14,42 @@ public class WindStrikePart : EffectPart
 
     public override void Setup(EffectSettings settings, MagicCastData castData)
     {
-        // Базовая инициализация из родительского класса EffectPart
-        // (Определяем рендерер и создаем PropertyBlock)
-        float baseSize = (partType == EffectPartType.Body) ? settings.defaultBodySize : settings.defaultFooterSize;
-        base.Initialize(settings, baseSize);
-
-        // Присваиваем список шагов анимации
-        //_scaleSteps = (partType == EffectPartType.Body) ? settings.bodyScales : settings.footerScales;
-
-        // 1. Позиционирование (твои офсеты)
-        float yOffset = (partType == EffectPartType.Body) ? settings.bodyYOffset : settings.footerYOffset;
-        transform.localPosition = new Vector3(0, yOffset, 0);
-
-        // 2. Рандомные смещения (как в твоем старом коде)
-        if (settings.useRandomPosition)
+        if (settings is Effect1177Settings wind1177Settings)
         {
-            float rZ = Random.Range(settings.minZ, settings.maxZ);
-            float rY = Random.Range(settings.minY, settings.maxY);
-            transform.localPosition += new Vector3(0, rY, rZ);
+
+            // Базовая инициализация из родительского класса EffectPart
+            // (Определяем рендерер и создаем PropertyBlock)
+            float baseSize = (partType == EffectPartType.Body) ? wind1177Settings.defaultBodySize : wind1177Settings.defaultFooterSize;
+            base.Initialize(settings, baseSize);
+
+            // Присваиваем список шагов анимации
+            //_scaleSteps = (partType == EffectPartType.Body) ? wind1177Settings.bodyScales : wind1177Settings.footerScales;
+
+            // 1. Позиционирование (твои офсеты)
+            float yOffset = (partType == EffectPartType.Body) ? wind1177Settings.bodyYOffset : wind1177Settings.footerYOffset;
+            transform.localPosition = new Vector3(0, yOffset, 0);
+
+            // 2. Рандомные смещения (как в твоем старом коде)
+            if (wind1177Settings.useRandomPosition)
+            {
+                float rZ = Random.Range(wind1177Settings.minZ, wind1177Settings.maxZ);
+                float rY = Random.Range(wind1177Settings.minY, wind1177Settings.maxY);
+                transform.localPosition += new Vector3(0, rY, rZ);
+            }
+
+            // 3. Настройка шейдера (скорость вращения)
+            float randSpeed = Random.Range(settings.speedRotateMin, settings.speedRotateMax);
+            UpdateShaderFloat(SHADER_PARAMETR_SPEED, randSpeed);
+            UpdateShaderFloat(SHADER_PARAMETR_ALPHA, 1); // Начинаем с прозрачного
+
+            // 4. Установка начального масштаба
+            transform.localScale = Vector3.one * baseSize;
+
+            _elapsedTime = 0;
+            _currentAlpha = 0;
+            _isActive = false;
+            _isHiding = false;
         }
-
-        // 3. Настройка шейдера (скорость вращения)
-        float randSpeed = Random.Range(settings.speedRotateMin, settings.speedRotateMax);
-        UpdateShaderFloat(SHADER_PARAMETR_SPEED, randSpeed);
-        UpdateShaderFloat(SHADER_PARAMETR_ALPHA, 1); // Начинаем с прозрачного
-
-        // 4. Установка начального масштаба
-        transform.localScale = Vector3.one * baseSize;
-
-        _elapsedTime = 0;
-        _currentAlpha = 0;
-        _isActive = false;
-        _isHiding = false;
     }
 
     public override void PlayPart()

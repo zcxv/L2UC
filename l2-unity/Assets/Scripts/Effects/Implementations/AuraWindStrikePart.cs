@@ -11,19 +11,22 @@ public class AuraWindStrikePart : EffectPart
 
     public override void Setup(EffectSettings settings, MagicCastData castData)
     {
-        // Инициализируем базу (рендерер, пропблок)
-        base.Initialize(settings, settings.auraDefaultSize);
+        if (settings is Effect1177Settings auraSettings)
+        {
+                    // Инициализируем базу (рендерер, пропблок)
+           base.Initialize(settings, auraSettings.auraDefaultSize);
 
-        // 1. Установка позиции (Твоя логика GetGround)
-        // В L2 аура чуть выше футера, чтобы не мерцать
-        transform.localPosition = new Vector3(0, settings.auraYOffset, 0);
+            // 1. Установка позиции (Твоя логика GetGround)
+            // В L2 аура чуть выше футера, чтобы не мерцать
+            transform.localPosition = new Vector3(0, auraSettings.auraYOffset, 0);
 
-        // 2. Начальный масштаб и прозрачность
-        transform.localScale = Vector3.one * settings.auraDefaultSize;
-        UpdateShaderFloat(SHADER_PARAMETR_ALPHA, 0);
+            // 2. Начальный масштаб и прозрачность
+            transform.localScale = Vector3.one * auraSettings.auraDefaultSize;
+            UpdateShaderFloat(SHADER_PARAMETR_ALPHA, 0);
 
-        _elapsedTime = 0;
-        _currentAlpha = 0;
+            _elapsedTime = 0;
+            _currentAlpha = 0;
+        }
     }
 
     public override void PlayPart()
