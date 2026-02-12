@@ -34,6 +34,10 @@ public class NewPhysicalSkillsState : AbstractAttackEvents
                 AnimationCombo combo = new AnimationCombo("-1", new string[1] { skillgrp.GetAnimOperationType3() }, "");
                 SkillExecutor.Instance.ExecuteSkill(_stateMachine.Player, combo , _events);
                 break;
+            case Event.APPLY_SOULSHOT_CHARGED:
+                Transform transform = _stateMachine.Player.GetWeaponTransform();
+                EffectManager.Instance.PlayEffect(useSkill.SkillId , transform);
+                break;
 
         }
     }

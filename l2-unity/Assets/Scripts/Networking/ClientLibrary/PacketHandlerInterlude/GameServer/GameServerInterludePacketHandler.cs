@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 
 public class GameServerInterludePacketHandler : ServerPacketHandler
@@ -759,11 +760,18 @@ public class GameServerInterludePacketHandler : ServerPacketHandler
         ShortCutDel shortCutDel = new ShortCutDel(data);
         EventProcessor.Instance.QueueEvent(() => PlayerShortcuts.Instance.RemoveShotcutLocally(shortCutDel.Slot));
     }
-
+    //ID 15 LevelUp
     private void OnSocialAction(byte[] data)
     {
         SocialAction socialAction = new SocialAction(data);
-        //Debug.Log("������ ����� �� ������������ Social Action ObjectId +++" + socialAction.ObjectId + " ID +++" + socialAction.ActionId);
+        if(socialAction != null && socialAction.ActionId == 15)
+        {
+            EventProcessor.Instance.QueueEvent(() => {
+                Entity entity = World.Instance.GetEntityNoLockSync(socialAction.ObjectId);
+                EventBus.Instance.LevelUp(entity, socialAction.ObjectId);
+            });
+        }
+        //Debug.Log("Social Action ObjectId +++" + socialAction.ObjectId + " ID +++ " + socialAction.ActionId);
     }
 
     private void OnTeleportToLocation(byte[] data)

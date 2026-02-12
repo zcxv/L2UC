@@ -11,10 +11,12 @@ public class ScaleStep
 
 [System.Serializable] 
 public abstract class EffectSettings: ScriptableObject 
-{ 
+{
     [Header("Общие настройки")]
-    [HideInInspector]
-    public float lifeTime = 3.0f; 
+    public float defaultLifeTime = 3.0f;
+
+    [Tooltip("Если включено, эффект будет перемещаться вместе с персонажем")]
+    public bool isFollowCaster = false;
 
     [Header("Настройки появления (Fade)")]
     public float showTime = 1.0f;
@@ -32,7 +34,5 @@ public abstract class EffectSettings: ScriptableObject
     [Header("Вращение и Шейдер")]
     public float speedRotateMin = 23f;
     public float speedRotateMax = 27f;
-
-
 
 }

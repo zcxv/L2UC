@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 
@@ -241,6 +242,10 @@ public class PlayerEntity : Entity
         return _gear.WeaponAnim;
     }
 
+    public Transform GetWeaponTransform()
+    {
+        return _gear.GetAllTransformByRightHand(new string[1] { "weapon_" }).FirstOrDefault();
+    }
     public Vector3 GetPositionRightHand()
     {
         return _gear.GetPositionRightHand();

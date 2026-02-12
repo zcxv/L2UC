@@ -317,26 +317,45 @@ public class SkillbarWindow : L2PopupWindow
         //return null;
     }
 
-  
-    private SkillbarSlot GetSlotBySkillId(List<AbstractSkillbar> skillbars , int skilId , int type)
+    private SkillbarSlot GetSlotBySkillId(List<AbstractSkillbar> skillbars, int skillId, int type)
     {
-       for(int i =0; i < skillbars.Count; i++)
-       {
-            AbstractSkillbar skillBar = skillbars[0];
-
-            for (int b = 0; b < skillBar.BarSlots.Count; b++)
+        foreach (var skillbar in skillbars)
+        {
+            foreach (var slot in skillbar.BarSlots)
             {
-                SkillbarSlot slot = skillBar.BarSlots[b];
-
-                if(slot.Shortcut.Type == type && slot.Shortcut.Id == skilId)
+                if (slot.Shortcut?.Type == type && slot.Shortcut?.Id == skillId)
                 {
                     return slot;
                 }
             }
-       }
-
+        }
         return null;
     }
+
+    //backup
+    //private SkillbarSlot GetSlotBySkillId(List<AbstractSkillbar> skillbars , int skilId , int type)
+    //{
+    //for(int i =0; i < skillbars.Count; i++)
+    //{
+    // AbstractSkillbar skillBar = skillbars[0];
+
+    //for (int b = 0; b < skillBar.BarSlots.Count; b++)
+    //{
+    // SkillbarSlot slot = skillBar.BarSlots[b];
+
+    //if(slot.Shortcut != null)
+    // {
+    // if (slot.Shortcut.Type == type && slot.Shortcut.Id == skilId)
+    //{
+    //   return slot;
+    //}
+    //}
+
+    //}
+    // }
+
+    //return null;
+    // }
 
     private SkillbarSlot GetSlotByPosition(AbstractSkillbar skillbar, int slotPosition)
     {

@@ -462,7 +462,7 @@ public class PlayerInventory : MonoBehaviour
             return false;
         }
 
-        SetVariableInfoS1(item);
+
 
         if (IsRecipeItem(item))
         {
@@ -552,19 +552,6 @@ public class PlayerInventory : MonoBehaviour
 
 
 
-    private async void SetVariableInfoS1(ItemInstance item)
-    {
-       // if (item.Category == ItemCategory.Item)
-       // {
-           // StorageVariable.getInstance().AddS1Items(new VariableItem(item.ItemData.ItemName.Name, item.ObjectId));
-           // StorageVariable.getInstance().AddS2Items(new VariableItem(item.Count.ToString(), item.ObjectId));
-       // }
-       // else
-       // {
-            //StorageVariable.getInstance().AddS1Items(new VariableItem(item.ItemData.ItemName.Name, item.ObjectId));
-       // }
-
-    }
 
     public void DestroyItem(int objectId, int quantity)
     {

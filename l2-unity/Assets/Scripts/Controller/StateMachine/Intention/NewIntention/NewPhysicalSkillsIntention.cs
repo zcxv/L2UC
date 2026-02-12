@@ -13,6 +13,15 @@ public class NewPhysicalSkillsIntention : IntentionBase
         {
             MagicSkillUse useSkill = (MagicSkillUse)arg0;
 
+            if (IsSpecialSkill(useSkill.SkillId))
+            {
+                _stateMachine.ChangeState(PlayerState.PHYSICAL_SKILLS);
+                _stateMachine.NotifyEvent(Event.APPLY_SOULSHOT_CHARGED, useSkill);
+                return; 
+            }
+
+
+            Debug.Log("NewPhysicalSkillsIntention > use " + useSkill.SkillId);
             int objectId = _stateMachine.Player.IdentityInterlude.Id;
             AnimationManager.Instance.SetSpTimeAtk(objectId , useSkill.HitTime);
             Entity targetEntity = World.Instance.GetEntityNoLockSync(useSkill.TargetId);
@@ -36,6 +45,12 @@ public class NewPhysicalSkillsIntention : IntentionBase
         }
     }
 
+ 
+    private bool IsSpecialSkill(int skillId)
+    {
+        return skillId == (int)SpecialSkillType.SoulshotNg ||
+               skillId == (int)SpecialSkillType.SpiritshotNg;
+    }
     public override void Exit() { }
     public override void Update()
     {
