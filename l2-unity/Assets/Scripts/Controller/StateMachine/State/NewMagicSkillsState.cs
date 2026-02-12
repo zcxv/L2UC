@@ -27,15 +27,15 @@ public class NewMagicSkillsState  : AbstractAttackEvents
                 float[] durations = AnimationManager.Instance.GetOverrideClipsDurations(objectId, readyCombo.GetAnimCycle());
                 float shotEventTime = AnimationManager.Instance.GetOverrideEventTimeByName(objectId, readyCombo.GetAnimCycle(), "OnAnimationShoot");
                 entity.StupTotalCastDuration(useSkill.HitTime, 1000f, durations, shotEventTime);
-
-                SkillExecutor.Instance.ExecuteSkillOverride(entity, readyCombo, _events);
+                
+                SkillExecutor.Instance.ExecuteSkillOverride(useSkill.SkillGrp , entity, readyCombo, _events);
                 break;
             case Event.CANCEL:
                 Debug.Log("NewMagicSkillsState Use Sate> Отмена скорее всего запрос пришел из ActionFaild");
                 break;
             case Event.APPLY_SELF_SKILL:
                 AnimationCombo selfCombo = SkillgrpTable.Instance.GetAnimComboBySkillId(useSkill.SkillId, useSkill.SkillLvl);
-                SkillExecutor.Instance.ExecuteSkillOverride(entity, selfCombo, _events);
+                SkillExecutor.Instance.ExecuteSkillOverride(useSkill.SkillGrp , entity, selfCombo, _events);
                 break;
 
         }

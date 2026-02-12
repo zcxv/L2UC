@@ -11,7 +11,7 @@ public class NewMagicAttackIntention : IntentionBase
         if (arg0.GetType() == typeof(MagicSkillUse))
         {
             MagicSkillUse useSkill = (MagicSkillUse)arg0;
-
+            Debug.Log("NewMagicAttackIntention > use " + useSkill.SkillId);
             int objectId = _stateMachine.Player.IdentityInterlude.Id;
             AnimationManager.Instance.SetSpTimeAtk(objectId, useSkill.HitTime);
             Entity targetEntity = World.Instance.GetEntityNoLockSync(useSkill.TargetId);

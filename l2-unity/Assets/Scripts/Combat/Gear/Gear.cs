@@ -271,6 +271,11 @@ public class Gear : AbstractMeshManager
         return _rightUpperArm;
     }
 
+    public Transform GetTransformRightHandBone()
+    {
+        return GetRightHandBone();
+    }
+
     protected virtual Transform GetRightHandBone() {
         if (_rightHandBone == null) {
             _rightHandBone = transform.FindRecursive("Sword Bone");

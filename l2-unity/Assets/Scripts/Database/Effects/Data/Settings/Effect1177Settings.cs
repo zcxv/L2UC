@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Effect1177Settings", menuName = "VFX/Settings/1177")]
 public class Effect1177Settings : EffectSettings
 {
+
     [Header("Случайные смещения (Random)")]
     public bool useRandomPosition = true;
     public float minZ = 0f, maxZ = -0.02f;

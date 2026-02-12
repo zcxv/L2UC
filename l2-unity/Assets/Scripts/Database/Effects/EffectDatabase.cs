@@ -15,7 +15,9 @@ public class EffectDatabase : ScriptableObject
     {
         public int id;
         public BaseEffect prefab;
+        public string comment = "";
         public EffectSettings settings;
+
     }
 
     public BaseEffect GetPrefab(int id)

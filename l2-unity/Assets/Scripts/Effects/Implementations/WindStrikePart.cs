@@ -99,7 +99,7 @@ public class WindStrikePart : EffectPart
 
         // Вычисляем текущий процент времени жизни эффекта
         // (Для простоты берем время от старта, деленное на общую длительность)
-        float lifePercent = (_elapsedTime / settings.lifeTime) * 100f;
+        float lifePercent = (_elapsedTime / settings.defaultLifeTime) * 100f;
 
         foreach (var step in _scaleSteps)
         {

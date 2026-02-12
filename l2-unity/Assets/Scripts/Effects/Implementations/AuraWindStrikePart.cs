@@ -13,14 +13,9 @@ public class AuraWindStrikePart : EffectPart
     {
         if (settings is Effect1177Settings auraSettings)
         {
-                    // Инициализируем базу (рендерер, пропблок)
            base.Initialize(settings, auraSettings.auraDefaultSize);
 
-            // 1. Установка позиции (Твоя логика GetGround)
-            // В L2 аура чуть выше футера, чтобы не мерцать
             transform.localPosition = new Vector3(0, auraSettings.auraYOffset, 0);
-
-            // 2. Начальный масштаб и прозрачность
             transform.localScale = Vector3.one * auraSettings.auraDefaultSize;
             UpdateShaderFloat(SHADER_PARAMETR_ALPHA, 0);
 
