@@ -71,16 +71,16 @@ public class WindStrikePart : EffectPart
         _elapsedTime += Time.deltaTime;
 
         // --- ЛОГИКА ПРОЯВЛЕНИЯ (Show/Hide) ---
-        if (!_isHiding && _currentAlpha < settings.stopAlphaShow)
+        if (!_isHiding && _currentAlpha < _settings.stopAlphaShow)
         {
             // Плавное появление до stopAlphaShow
-            _currentAlpha = Mathf.MoveTowards(_currentAlpha, settings.stopAlphaShow, Time.deltaTime / settings.showTime);
+            _currentAlpha = Mathf.MoveTowards(_currentAlpha, _settings.stopAlphaShow, Time.deltaTime / _settings.showTime);
             UpdateShaderFloat("_Alpha", _currentAlpha);
         }
         else if (_isHiding)
         {
             // Плавное исчезновение до 0
-            _currentAlpha = Mathf.MoveTowards(_currentAlpha, 0, Time.deltaTime / settings.hideTime);
+            _currentAlpha = Mathf.MoveTowards(_currentAlpha, 0, Time.deltaTime / _settings.hideTime);
             UpdateShaderFloat("_Alpha", _currentAlpha);
             if (_currentAlpha <= 0)
             {
@@ -99,14 +99,14 @@ public class WindStrikePart : EffectPart
 
         // Вычисляем текущий процент времени жизни эффекта
         // (Для простоты берем время от старта, деленное на общую длительность)
-        float lifePercent = (_elapsedTime / settings.defaultLifeTime) * 100f;
+        float lifePercent = (_elapsedTime / _settings.defaultLifeTime) * 100f;
 
         foreach (var step in _scaleSteps)
         {
             // Если мы подошли к временной отметке шага
             if (lifePercent >= step.timePercent)
             {
-                float targetSize = baseSize * (step.scalePercent / 100f);
+                float targetSize = _baseSize * (step.scalePercent / 100f);
                 Vector3 targetScale = Vector3.one * targetSize;
 
                 // Используем Lerp для плавности, как в твоем коде

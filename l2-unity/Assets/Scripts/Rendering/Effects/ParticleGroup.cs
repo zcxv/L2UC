@@ -177,17 +177,6 @@ public class ParticleGroup : EffectPart
             m.SetFloat("_Seed", seed);
             if (SurfaceNormal != Vector3.zero)
                 m.SetVector("_SurfaceNormals", SurfaceNormal);
-
-            // --- НОВЫЙ КОД (Синхронизация времени жизни) ---
-            // Получаем задержку из материала (если она есть)
-            float initialDelay = m.GetVector("_InitialDelayRange").y;
-
-            // Устанавливаем время жизни равным нашему duration (например, 0.4 для даггера)
-            // Это заставит шейдер проиграть анимацию быстрее
-            m.SetVector("_LifetimeRange", new Vector4(_duration + initialDelay, _duration + initialDelay, 0, 0));
-
-            // Настраиваем плавное исчезновение (Fadeout) на 90% пути
-            m.SetFloat("_FadeoutStartTime", (_duration + initialDelay) * 0.90f);
         }
 
         _particleIndex++;

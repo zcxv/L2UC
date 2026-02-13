@@ -117,12 +117,12 @@ Material:
     - _SizeScale1: {r: 0.07, g: 1.8, b: 0, a: 0}
     - _SizeScale2: {r: 0.08, g: 1, b: 0, a: 0}
     - _SizeScale3: {r: 0.56, g: 1, b: 0, a: 0}
-    - _SizeScale4: {r: 1, g: 0.01, b: 0, a: 0}
-    - _SizeScale5: {r: 1, g: 0.01, b: 0, a: 0}
-    - _SizeScale6: {r: 1, g: 0.01, b: 0, a: 0}
-    - _SizeScale7: {r: 1, g: 0.01, b: 0, a: 0}
-    - _SizeScale8: {r: 1, g: 0.01, b: 0, a: 0}
-    - _SizeScale9: {r: 1, g: 0.01, b: 0, a: 0}
+    - _SizeScale4: {r: 1, g: 1, b: 0, a: 0}
+    - _SizeScale5: {r: 1, g: 1, b: 0, a: 0}
+    - _SizeScale6: {r: 1, g: 1, b: 0, a: 0}
+    - _SizeScale7: {r: 1, g: 1, b: 0, a: 0}
+    - _SizeScale8: {r: 1, g: 1, b: 0, a: 0}
+    - _SizeScale9: {r: 1, g: 1, b: 0, a: 0}
     - _SphereRadiusRange: {r: 0, g: 0, b: 0, a: 0}
     - _SpinsPerSecondRangeX: {r: 1, g: 2, b: 0, a: 0}
     - _SpinsPerSecondRangeY: {r: 0.05, g: 0.05, b: 0, a: 0}
@@ -137,7 +137,7 @@ Material:
     - _StartSpinRangeX: {r: 0, g: 1, b: 0, a: 0}
     - _StartSpinRangeY: {r: 0, g: 0, b: 0, a: 0}
     - _StartSpinRangeZ: {r: 0, g: 0, b: 0, a: 0}
-    - _StartVelocityRangeX: {r: -0.5714286, g: -0.5714286, b: 0, a: 0}
+    - _StartVelocityRangeX: {r: -0.25, g: -0.25, b: 0, a: 0}
     - _StartVelocityRangeY: {r: 0, g: 0, b: 0, a: 0}
     - _StartVelocityRangeZ: {r: 0, g: 0, b: 0, a: 0}
     - _SurfaceNormals: {r: 0, g: 0, b: 0, a: 0}

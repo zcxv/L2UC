@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum EffectPartType { Body, Footer, Aura , Fly , FlySub }
 
-[RequireComponent(typeof(Renderer))]
+//[RequireComponent(typeof(Renderer))]
 public abstract class EffectPart : MonoBehaviour
 {
     [Header("Настройки части")]
@@ -10,9 +10,9 @@ public abstract class EffectPart : MonoBehaviour
 
     protected Renderer targetRenderer;
     protected MaterialPropertyBlock propBlock;
-    protected EffectSettings settings;
+    protected EffectSettings _settings;
     protected MagicCastData _castData;
-    protected float baseSize;
+    protected float _baseSize;
     protected const string SHADER_PARAMETR_ALPHA = "_Alpha";
     protected const string SHADER_PARAMETR_MAX_ALPHA = "_MaxAlpha";
     protected const string SHADER_PARAMETR_SPEED = "_Speed";
@@ -31,8 +31,8 @@ public abstract class EffectPart : MonoBehaviour
 
     public virtual void Initialize(EffectSettings settings, float baseSize)
     {
-        this.settings = settings;
-        this.baseSize = baseSize;
+        _settings = settings;
+        _baseSize = baseSize;
 
         targetRenderer = GetComponent<Renderer>();
         propBlock = new MaterialPropertyBlock();
@@ -59,7 +59,21 @@ public abstract class EffectPart : MonoBehaviour
 
     }
 
+
     public abstract void Setup(EffectSettings settings , MagicCastData castData);
     public abstract void PlayPart();
     public abstract void StopPart();
+
+
+    protected float Now()
+    {
+#if UNITY_EDITOR
+        float now = Application.isPlaying ? Time.time : Time.realtimeSinceStartup;
+#else
+        float now = Time.time;
+#endif
+        return now;
+    }
+
+
 }

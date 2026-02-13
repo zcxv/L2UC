@@ -28,7 +28,7 @@ public abstract class BaseEffect : MonoBehaviour
         Destroy(gameObject, settings.defaultLifeTime);
     }
 
-    private void BeginFadeOut()
+    protected void BeginFadeOut()
     {
         EffectPart[] parts = GetComponentsInChildren<EffectPart>(true);
 
