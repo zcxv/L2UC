@@ -58,7 +58,7 @@ public class AuraWindStrikePart : EffectPart
 
             // Твоя специфическая логика скейла при скрытии ауры
             // UpdateScale(elapsedTime, new Scale(50, 30))
-            float targetSize = baseSize * 0.3f; // 30% от размера
+            float targetSize = _baseSize * 0.3f; // 30% от размера
             transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * targetSize, Time.deltaTime);
 
             if (_currentAlpha <= 0)

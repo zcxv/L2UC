@@ -743,7 +743,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4017549085049835808}
-  - component: {fileID: 5270346441218664706}
+  - component: {fileID: 562392202250582017}
   m_Layer: 20
   m_Name: Spirits
   m_TagString: Untagged
@@ -771,7 +771,7 @@ Transform:
   - {fileID: 502033276148136016}
   m_Father: {fileID: 6279848696465789959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5270346441218664706
+--- !u!114 &562392202250582017
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -780,28 +780,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 2895925633107034220}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d6d14ae56a466245bff1789fbd03a5b, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d88f0c419b64342b8ea4b59fa3d0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 0
-  _owner: {fileID: 2890127023760463620}
   _particles:
   - {fileID: 1496918807502246845}
   - {fileID: 6558635980722866256}
   - {fileID: 176754623889340466}
   - {fileID: 600155514575424423}
   - {fileID: 14327687501819930}
-  _warmup: 0
-  _warmupTimeSec: 0
-  _warmupTimeTickPerSec: 0
   _countPerSecond: 400
   _maxCount: 5
-  _hasCastDuration: 1
-  _castDurationAffectsLifetime: 0
-  _hasFixedDuration: 0
   _duration: 5
-  _instantKillAtCastEnd: 1
-  _fitToBounds: 0
 --- !u!1 &3503987303337432418
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,7 +911,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6279848696465789959}
-  - component: {fileID: 2890127023760463620}
+  - component: {fileID: -3189580720888355194}
   m_Layer: 20
   m_Name: soul_N_stick
   m_TagString: Untagged
@@ -947,7 +938,7 @@ Transform:
   - {fileID: 2812283484208956137}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2890127023760463620
+--- !u!114 &-3189580720888355194
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -956,30 +947,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3540588911874585435}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 242fa2b9291ecca4c9f8f123c8a3d4e5, type: 3}
+  m_Script: {fileID: 11500000, guid: 141f830ea87307042a62b872bedacffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _owner: {fileID: 0}
-  _surfaceNormal: {x: 0, y: 0, z: 0}
-  _pooledEffect:
-    _effectClass: 
-    _effectDurationSec: 15
-    _maximumInactiveTimeSec: 60
-    _startTime: 0
-    _gameObject: {fileID: 0}
-    _hitEffectIndex: 0
-    _caster: {fileID: 0}
-    _target: {fileID: 0}
-    _startingPosition: {x: 0, y: 0, z: 0}
-    _endPosition: {x: 0, y: 0, z: 0}
-    _hitTime: 0
-    _hitSuccess: 0
-    _isArrow: 0
   _particleGroups:
-  - {fileID: 7415292493283818115}
-  - {fileID: 5270346441218664706}
-  - {fileID: 874134710668372216}
-  - {fileID: 2394593431292111015}
+  - {fileID: 5852650102395590685}
+  - {fileID: 562392202250582017}
+  - {fileID: 2884654235230686938}
+  - {fileID: 2462637293784526818}
 --- !u!1 &3573775833034083336
 GameObject:
   m_ObjectHideFlags: 0
@@ -1207,7 +1183,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8032505581739609176}
-  - component: {fileID: 7415292493283818115}
+  - component: {fileID: 5852650102395590685}
   m_Layer: 20
   m_Name: glow
   m_TagString: Untagged
@@ -1242,7 +1218,7 @@ Transform:
   - {fileID: 3910204057054228491}
   m_Father: {fileID: 6279848696465789959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7415292493283818115
+--- !u!114 &5852650102395590685
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1251,35 +1227,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 5598693091433055017}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d6d14ae56a466245bff1789fbd03a5b, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d88f0c419b64342b8ea4b59fa3d0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 0
-  _owner: {fileID: 2890127023760463620}
   _particles:
   - {fileID: 5962001713871181880}
   - {fileID: 7919227188298111735}
   - {fileID: 2879858654575736371}
   - {fileID: 3990446802115053610}
   - {fileID: 1898559860575477542}
-  - {fileID: 8202788845550632796}
   - {fileID: 7995993694937683137}
+  - {fileID: 6489874568445448684}
   - {fileID: 6489874568445448684}
   - {fileID: 2812078939926426885}
   - {fileID: 3647985325026462093}
   - {fileID: 1074188796105643564}
   - {fileID: 6582604478512753389}
-  _warmup: 0
-  _warmupTimeSec: 0
-  _warmupTimeTickPerSec: 0
   _countPerSecond: 400
   _maxCount: 12
-  _hasCastDuration: 1
-  _castDurationAffectsLifetime: 0
-  _hasFixedDuration: 0
   _duration: 5
-  _instantKillAtCastEnd: 1
-  _fitToBounds: 0
 --- !u!1 &5741550227584836121
 GameObject:
   m_ObjectHideFlags: 0
@@ -2178,7 +2145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1214092446915911620}
-  - component: {fileID: 874134710668372216}
+  - component: {fileID: 2884654235230686938}
   m_Layer: 20
   m_Name: Ignition
   m_TagString: Untagged
@@ -2206,7 +2173,7 @@ Transform:
   - {fileID: 2772935637158563746}
   m_Father: {fileID: 6279848696465789959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &874134710668372216
+--- !u!114 &2884654235230686938
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2215,28 +2182,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7081377879028335086}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d6d14ae56a466245bff1789fbd03a5b, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d88f0c419b64342b8ea4b59fa3d0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 0
-  _owner: {fileID: 2890127023760463620}
   _particles:
   - {fileID: 5192280664516478786}
   - {fileID: 4328873811362436522}
   - {fileID: 5455993403294378809}
   - {fileID: 5624514688086727266}
   - {fileID: 7877680112170959044}
-  _warmup: 0
-  _warmupTimeSec: 0
-  _warmupTimeTickPerSec: 0
   _countPerSecond: 10000
   _maxCount: 5
-  _hasCastDuration: 1
-  _castDurationAffectsLifetime: 0
-  _hasFixedDuration: 0
   _duration: 5
-  _instantKillAtCastEnd: 1
-  _fitToBounds: 0
 --- !u!1 &7318513629380064613
 GameObject:
   m_ObjectHideFlags: 0
@@ -2573,7 +2531,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2812283484208956137}
-  - component: {fileID: 2394593431292111015}
+  - component: {fileID: 2462637293784526818}
   m_Layer: 20
   m_Name: Ring
   m_TagString: Untagged
@@ -2597,7 +2555,7 @@ Transform:
   - {fileID: 832366012156906236}
   m_Father: {fileID: 6279848696465789959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2394593431292111015
+--- !u!114 &2462637293784526818
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2606,21 +2564,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 9206391640229608290}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d6d14ae56a466245bff1789fbd03a5b, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d88f0c419b64342b8ea4b59fa3d0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 0
-  _owner: {fileID: 2890127023760463620}
   _particles:
   - {fileID: 1840130106073276978}
-  _warmup: 0
-  _warmupTimeSec: 0
-  _warmupTimeTickPerSec: 0
   _countPerSecond: 1000
   _maxCount: 1
-  _hasCastDuration: 1
-  _castDurationAffectsLifetime: 0
-  _hasFixedDuration: 0
   _duration: 5
-  _instantKillAtCastEnd: 1
-  _fitToBounds: 0

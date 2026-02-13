@@ -78,9 +78,6 @@ public class L2Particle : BaseEffect
             {
                 _particleGroups[i].ResetTimer(1f, null);
             }
-
-
-
         }
     }
 
