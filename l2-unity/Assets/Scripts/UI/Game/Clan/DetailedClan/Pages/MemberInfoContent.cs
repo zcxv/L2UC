@@ -114,13 +114,13 @@ public class MemberInfoContent : AbstractClanContent
 
     private void SetLeader(PledgeReceiveMemberInfo memberInfo, PledgeShowMemberListAll packetAll)
     {
-        _isLeader = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name == packetAll.SubPledgeLeaderName;
+        _isLeader = StorageNpc.getInstance().GetFirstUser().PlayerInfo.Identity.Name == packetAll.SubPledgeLeaderName;
     }
 
 
     private EventCallback<ClickEvent> GetSubscribeOnRank(string selectName, Button rankButton, VisualElement centerBox, VisualElement detailedInfoElement)
     {
-        string selfName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
+        string selfName = StorageNpc.getInstance().GetFirstUser().PlayerInfo.Identity.Name;
 
         return _isLeader && selectName != selfName && rankButton != null && !GetStatusCallBack(0)
             ? new EventCallback<ClickEvent>(evt => OnRankButtonClick(centerBox))
@@ -137,7 +137,7 @@ public class MemberInfoContent : AbstractClanContent
 
     private EventCallback<ClickEvent> GetSubscribeOnDismiss(string selectName, Button rankButton, VisualElement centerBox, VisualElement detailedInfoElement)
     {
-        string selfName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
+        string selfName = StorageNpc.getInstance().GetFirstUser().PlayerInfo.Identity.Name;
 
         return _isLeader && selectName != selfName && rankButton != null && !GetStatusCallBack(2)
             ? new EventCallback<ClickEvent>(evt => OnDismissButtonClick(centerBox))
@@ -264,7 +264,7 @@ UnityEngine.UIElements.Label titleLabel, UnityEngine.UIElements.Label dismisslab
     private void ApplySelfRestrictions(string selectName, UnityEngine.UIElements.Label rankLabel,
     UnityEngine.UIElements.Label dismisslabel)
     {
-        string selfName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
+        string selfName = StorageNpc.getInstance().GetFirstUser().PlayerInfo.Identity.Name;
 
         if (selectName == selfName)
         {

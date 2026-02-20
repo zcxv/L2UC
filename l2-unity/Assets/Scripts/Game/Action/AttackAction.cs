@@ -40,7 +40,7 @@ public class AttackAction : L2Action
                     Debug.Log("Trying To Attack");
 
                     var l2jpos = target.Identity.GetL2jPos();
-                    ClickAction sendPaket = CreatorPacketsUser.CreateActiont(target.Identity.Id, (int)l2jpos.x, (int)l2jpos.y, (int)l2jpos.z, 0);
+                    ClickAction sendPaket = UserPacketFactory.CreateActiont(target.Identity.Id, (int)l2jpos.x, (int)l2jpos.y, (int)l2jpos.z, 0);
                     bool enable = GameClient.Instance.IsCryptEnabled();
                     SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
                 }

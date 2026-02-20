@@ -10,11 +10,8 @@ public class PlayerAnimationController : BaseAnimationController
 {
     private static PlayerAnimationController _instance;
     public static PlayerAnimationController Instance { get { return _instance; } }
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
+    
+    private void Awake() {
         if (_instance == null)
         {
             _instance = this;
@@ -25,8 +22,7 @@ public class PlayerAnimationController : BaseAnimationController
         }
     }
 
-    void OnDestroy()
-    {
+    private void OnDestroy() {
         _instance = null;
     }
 

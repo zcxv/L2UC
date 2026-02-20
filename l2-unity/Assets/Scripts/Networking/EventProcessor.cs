@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Diagnostics;
-
+using Debug = UnityEngine.Debug;
 
 public class EventProcessor : MonoBehaviour {
 
@@ -47,7 +47,7 @@ public class EventProcessor : MonoBehaviour {
         }
         catch (Exception ex)
         {
-            UnityEngine.Debug.Log("Критическая ошибка EventProcessor: " + ex.ToString());
+            Debug.LogError("Критическая ошибка EventProcessor: " + ex.ToString());
         }
 
     }
@@ -55,7 +55,7 @@ public class EventProcessor : MonoBehaviour {
     private void DebugInfo(Action e , Stopwatch stopwatch)
     { 
         stopwatch.Stop();
-        UnityEngine.Debug.Log(" Event processor class " + e.Method.Name + " TimeLeft " + stopwatch.ElapsedMilliseconds + " ms ");
+        Debug.Log(" Event processor class " + e.Method.Name + " TimeLeft " + stopwatch.ElapsedMilliseconds + " ms ");
     }
 
     private void MoveQueuedEventsToExecuting() {

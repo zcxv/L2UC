@@ -12,7 +12,7 @@ public class NewMagicAttackIntention : IntentionBase
         {
             MagicSkillUse useSkill = (MagicSkillUse)arg0;
             Debug.Log("NewMagicAttackIntention > use " + useSkill.SkillId);
-            int objectId = _stateMachine.Player.IdentityInterlude.Id;
+            int objectId = _stateMachine.Player.Identity.Id;
             AnimationManager.Instance.SetSpTimeAtk(objectId, useSkill.HitTime);
             Entity targetEntity = World.Instance.GetEntityNoLockSync(useSkill.TargetId);
             PlayerController.Instance.RotateToAttacker(targetEntity.transform.position);

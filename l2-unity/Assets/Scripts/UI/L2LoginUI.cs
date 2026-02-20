@@ -106,6 +106,6 @@ public class L2LoginUI : L2UI
 
     public void ShowCharCreationError(string text)
     {
-        CharCreationWindow.Instance.SetlabelError(text);
+        CharCreationWindow.Instance.SetErrorLabel(text);
     }
 }

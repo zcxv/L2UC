@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static ChangeWaitTypePacket;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -76,7 +75,7 @@ public class SceneLoader : MonoBehaviour
 
                 LoadScene(map, (AsyncOperation operation) =>
                 {
-                    OnInitialWorldload(operation, map);
+                    OnInitialWorldLoad(operation, map);
                 });
             }
         }));
@@ -118,7 +117,7 @@ public class SceneLoader : MonoBehaviour
 
     private void UnloadScene(string sceneName)
     {
-        Debug.Log("Unoading scene " + sceneName);
+        Debug.Log("Unloading scene " + sceneName);
 
         if (!SceneManager.GetSceneByName(sceneName).IsValid())
         {
@@ -130,7 +129,7 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    private void OnInitialWorldload(AsyncOperation operation, string sceneName)
+    private void OnInitialWorldLoad(AsyncOperation operation, string sceneName)
     {
         Debug.Log("Initial scene " + sceneName + " loaded. " + "Load count: " + ++_totalLoadedScenes);
 

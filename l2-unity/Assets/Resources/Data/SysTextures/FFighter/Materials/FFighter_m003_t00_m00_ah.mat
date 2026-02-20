@@ -14,7 +14,6 @@ Material:
   m_ValidKeywords:
   - _ALPHATEST_ON
   - _ENVIRONMENTREFLECTIONS_OFF
-  - _SPECULARHIGHLIGHTS_OFF
   m_InvalidKeywords:
   - BACKFACE_NORMAL_MODE_MIRROR
   - _WINDQUALITY_BEST
@@ -129,7 +128,7 @@ Material:
     - _ReceiveShadows: 1
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 0
+    - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _SubsurfaceIndirect: 0.25

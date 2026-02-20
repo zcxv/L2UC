@@ -255,7 +255,7 @@ public class HtmlWindow : L2PopupWindow
 
     public async Task SendSenver(string command )
     {
-        RequestBypassToServer sendPaket = CreatorPacketsUser.CreateByPassPacket(command);
+        RequestBypassToServer sendPaket = UserPacketFactory.CreateByPassPacket(command);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
     }

@@ -17,6 +17,7 @@ TagManager:
   - Music
   - DebugMove
   - Body_Spine
+  - Trigger
   layers:
   - Default
   - TransparentFX

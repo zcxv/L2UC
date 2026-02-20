@@ -3,9 +3,9 @@ using UnityEngine;
 using static ServerListPacket;
 
 public class GameManager : MonoBehaviour {
-    //[SerializeField] private int _protocolVersion = 1;
-    //interlude client
-    private int _protocolVersion = 746;
+    
+    public int ProtocolVersion = 746;
+    
     [SerializeField] private GameState _gameState = GameState.LOGIN_SCREEN;
     private bool _gameReady = false;
     [SerializeField] private Camera _loadingCamera;
@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour {
         }
     }
     public bool GameReady { get { return _gameReady; } set { _gameReady = value; } }
-    public int ProtocolVersion { get { return _protocolVersion; } }
 
     private static GameManager _instance;
     public static GameManager Instance { get { return _instance; } }
@@ -56,7 +55,6 @@ public class GameManager : MonoBehaviour {
         SkillNameTable.Instance.Initialize();
         SkillgrpTable.Instance.Initialize();
         ModelTable.Instance.Initialize();
-        LogongrpTable.Instance.Initialize();
         SystemMessageTable.Instance.Initialize();
         IconManager.Instance.Initialize();
         IconManager.Instance.CacheIcons();
@@ -75,8 +73,8 @@ public class GameManager : MonoBehaviour {
     public void OnWorldSceneLoaded() {
 
         GameObject.Destroy(L2LoginUI.Instance.gameObject);
-        PlayerInfoInterlude playerInfo = GameClient.Instance.PlayerInfo;
-        World.Instance.SpawnPlayerInterlude(playerInfo.Identity, playerInfo.Status, playerInfo.Stats, playerInfo.Appearance);
+        PlayerInfo playerInfo = GameClient.Instance.PlayerInfo;
+        World.Instance.SpawnPlayer(playerInfo.Identity, playerInfo.Status, playerInfo.Stats, playerInfo.Appearance);
         L2GameUI.Instance.StopLoading();
         PlayerStateMachine.Instance.enabled = true;
         GameClient.Instance.ClientPacketHandler.EndLoadWorld();
@@ -192,8 +190,6 @@ public class GameManager : MonoBehaviour {
             {
                 //Debug.Log("GameManager: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ !!!! OnGameLaunched L2LoginUI NULLL");
             }
-
-            CharacterCreator.Instance.SpawnAllPawns();
         }
         
     }
