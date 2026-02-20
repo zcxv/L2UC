@@ -71,7 +71,7 @@ public class SkillLearnWindow : L2PopupWindow
        if(model != null)
        {
             //base.OnlyHideWindow();
-            RequestAcquireSkillInfo sendPaket = CreatorPacketsUser.CreateRequestAcquireSkillInfo(model.GetId(), model.GetValue1(), model.GetAcqType());
+            RequestAcquireSkillInfo sendPaket = UserPacketFactory.CreateRequestAcquireSkillInfo(model.GetId(), model.GetValue1(), model.GetAcqType());
             SendGameDataQueue.Instance().AddItem(sendPaket, GameClient.Instance.IsCryptEnabled(), GameClient.Instance.IsCryptEnabled());
         }
 
@@ -92,7 +92,7 @@ public class SkillLearnWindow : L2PopupWindow
     public void ShowWindow()
     {
         UserInfo user = StorageNpc.getInstance().GetFirstUser();
-        _spLabel.text = user.PlayerInfoInterlude.Stats.Sp.ToString();
+        _spLabel.text = user.PlayerInfo.Stats.Sp.ToString();
         base.ShowWindow();
     }
 }

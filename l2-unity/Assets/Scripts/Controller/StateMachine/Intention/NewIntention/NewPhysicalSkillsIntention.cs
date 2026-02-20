@@ -22,7 +22,7 @@ public class NewPhysicalSkillsIntention : IntentionBase
 
 
             Debug.Log("NewPhysicalSkillsIntention > use " + useSkill.SkillId);
-            int objectId = _stateMachine.Player.IdentityInterlude.Id;
+            int objectId = _stateMachine.Player.Identity.Id;
             AnimationManager.Instance.SetSpTimeAtk(objectId , useSkill.HitTime);
             Entity targetEntity = World.Instance.GetEntityNoLockSync(useSkill.TargetId);
             PlayerController.Instance.RotateToAttacker(targetEntity.transform.position);

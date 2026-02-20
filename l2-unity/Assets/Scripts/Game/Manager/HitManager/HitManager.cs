@@ -1,7 +1,6 @@
 ﻿using Org.BouncyCastle.Security;
 using UnityEngine;
 using UnityEngine.ProBuilder;
-using static ChangeWaitTypePacket;
 
 public class HitManager : MonoBehaviour
 {

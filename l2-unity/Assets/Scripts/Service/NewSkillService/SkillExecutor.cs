@@ -32,7 +32,7 @@ public class SkillExecutor : MonoBehaviour
     public async Task ExecuteSkill(Entity entity , AnimationCombo animationCombo , AnimationEventsBase actions)
     {
         if (entity == null || animationCombo == null) return;
-        int objectId = entity.IdentityInterlude.Id;
+        int objectId = entity.Identity.Id;
 
 
         // _emitter.SetupActions(actions);
@@ -46,7 +46,7 @@ public class SkillExecutor : MonoBehaviour
         //EffectManager.Instance.PlayEffect((int)SpecialSkillType.LevelUp, entity.transform);
 
         if (entity == null || animationCombo == null) return;
-        int objectId = entity.IdentityInterlude.Id;
+        int objectId = entity.Identity.Id;
 
         EffectManager.Instance.PlayEffect(skill.Id, entity.transform , entity.GetMagicCastData());
         //_emitter.SetupActions(actions);

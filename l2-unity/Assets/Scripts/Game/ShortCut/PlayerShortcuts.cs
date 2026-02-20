@@ -173,7 +173,7 @@ public class PlayerShortcuts : MonoBehaviour
         }
         
         //GameClient.Instance.ClientPacketHandler.RequestAddShortcut(type, id, slot);
-        var sendPaket = CreatorPacketsUser.CreateRegShortCut(type , slot , id , level);
+        var sendPaket = UserPacketFactory.CreateRegShortCut(type , slot , id , level);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
     }
@@ -194,14 +194,14 @@ public class PlayerShortcuts : MonoBehaviour
 
 
         Debug.Log("Event Reuqets Add ShrtCut 2 ");
-        var sendPaket = CreatorPacketsUser.CreateRegShortCut(oldShortcut.Type, newSlot , oldShortcut.Id, 0);
+        var sendPaket = UserPacketFactory.CreateRegShortCut(oldShortcut.Type, newSlot , oldShortcut.Id, 0);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
 
         // Swap slots
         if (newShortcut != null)
         {
-            var sendPaket1 = CreatorPacketsUser.CreateRegShortCut(newShortcut.Type, oldSlot, newShortcut.Id, 0);
+            var sendPaket1 = UserPacketFactory.CreateRegShortCut(newShortcut.Type, oldSlot, newShortcut.Id, 0);
             bool enable1 = GameClient.Instance.IsCryptEnabled();
             SendGameDataQueue.Instance().AddItem(sendPaket1, enable1, enable1);
         }
@@ -220,7 +220,7 @@ public class PlayerShortcuts : MonoBehaviour
 
         Debug.Log("Нужно реализовать удаление shortcut");
         //GameClient.Instance.ClientPacketHandler.RequestRemoveShortcut(oldSlot);
-        var sendPaket = CreatorPacketsUser.CreateDestroyShortCut(oldSlot);
+        var sendPaket = UserPacketFactory.CreateDestroyShortCut(oldSlot);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
     }

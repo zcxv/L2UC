@@ -80,7 +80,7 @@ public class CraftingItemWindow : L2PopupWindow
         if (_packet != null)
         {
             SendGameDataQueue.Instance().AddItem(
-                CreatorPacketsUser.CreateRequestRecipeItemMakeSelf(_packet.RecipeId),
+                UserPacketFactory.CreateRequestRecipeItemMakeSelf(_packet.RecipeId),
                 GameClient.Instance.IsCryptEnabled(),
                 GameClient.Instance.IsCryptEnabled());
         }
@@ -92,7 +92,7 @@ public class CraftingItemWindow : L2PopupWindow
         if (_packet != null)
         {
             SendGameDataQueue.Instance().AddItem(
-                CreatorPacketsUser.CreateRequestRecipeBookOpen(_packet.IsDwarvenRecipe),
+                UserPacketFactory.CreateRequestRecipeBookOpen(_packet.IsDwarvenRecipe),
                 GameClient.Instance.IsCryptEnabled(),
                 GameClient.Instance.IsCryptEnabled());
         }

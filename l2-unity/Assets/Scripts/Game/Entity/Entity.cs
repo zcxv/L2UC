@@ -5,8 +5,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 [System.Serializable]
 public class Entity : MonoBehaviour {
     [SerializeField] private bool _entityLoaded;
-    [SerializeField] private NetworkIdentity _identity;
-    [SerializeField] private NetworkIdentityInterlude _identityInterlude;
+    [SerializeField] private NetworkIdentity identity;
     [SerializeField] private Status _status;
     [SerializeField] private Stats _stats;
     [SerializeField] private Status _statusInterlude;
@@ -15,7 +14,7 @@ public class Entity : MonoBehaviour {
     [SerializeField] private bool _running;
     [SerializeField] private bool _dead;
     [SerializeField] private CharacterRace _race;
-    [SerializeField] private CharacterRaceAnimation _raceId;
+    [SerializeField] private PlayerModel _raceId;
     
     public Animator Animator { get; private set; }
     [Header("Combat")]
@@ -41,9 +40,8 @@ public class Entity : MonoBehaviour {
     public Status Status { get => _status; set => _status = value; }
     public Stats Stats { get => _stats; set => _stats = value; }
     public Appearance Appearance { get => _appearance; set { _appearance = value; } }
-    public NetworkIdentity Identity { get => _identity; set => _identity = value; }
 
-    public NetworkIdentityInterlude IdentityInterlude { get => _identityInterlude; set => _identityInterlude = value; }
+    public NetworkIdentity Identity { get => identity; set => identity = value; }
 
     public int TargetId { get => _targetId; set => _targetId = value; }
 
@@ -63,7 +61,7 @@ public class Entity : MonoBehaviour {
     public long StopAutoAttackTime { get { return _stopAutoAttackTime; } }
     public long StartAutoAttackTime { get { return _startAutoAttackTime; } }
     public CharacterRace Race { get { return _race; } set { _race = value; } }
-    public CharacterRaceAnimation RaceId { get { return _raceId; } set { _raceId = value; } }
+    public PlayerModel RaceId { get { return _raceId; } set { _raceId = value; } }
     public bool EntityLoaded { get { return _entityLoaded; } set { _entityLoaded = value; } }
 
     protected  void Awake() 
@@ -181,7 +179,7 @@ public class Entity : MonoBehaviour {
 
     /* Notify server that entity got attacked */
     public void InflictAttack(AttackType attackType) {
-        GameClient.Instance.ClientPacketHandler.InflictAttack(_identity.Id, attackType);
+        GameClient.Instance.ClientPacketHandler.InflictAttack(identity.Id, attackType);
     }
 
     protected virtual void OnDeath() {
@@ -303,7 +301,7 @@ public class Entity : MonoBehaviour {
 
     
 
-    public virtual void UpdateWaitType(ChangeWaitTypePacket.WaitType moveType)
+    public virtual void UpdateWaitType(WaitType moveType)
     {
 
     }

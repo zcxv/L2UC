@@ -30,7 +30,7 @@ public class NetworkCharacterControllerReceive : MonoBehaviour
 
         //adjust movespeed for player entities
         //TODO: Should not need this for players to be synced...
-        if (_entity.IdentityInterlude.EntityType == EntityType.User) {
+        if (_entity.Identity.EntityType == EntityType.User) {
             _moveSpeedMultiplier = 1.1f;
         }
 

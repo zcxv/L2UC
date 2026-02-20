@@ -206,7 +206,7 @@ public class EnchantWindow : L2PopupWindow
     {
         //if (_selectItem != null)
         //{
-            var sendPaket = CreatorPacketsUser.CreateEnchantItem(objectId);
+            var sendPaket = UserPacketFactory.CreateEnchantItem(objectId);
             bool enable = GameClient.Instance.IsCryptEnabled();
             SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
         //}

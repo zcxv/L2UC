@@ -7,8 +7,8 @@ public class CharacterArmorDresser : AbstractArmorDresser
 {
     private readonly Transform _containerTransform;
     public Action<GameObject> OnDestroyGameObject;
-    public Action<int> OnSyncMash;
-    public Action<GameObject> OnAddSyncMash;
+    public Action<int> OnSyncMesh;
+    public Action<GameObject> OnAddSyncMesh;
     public Action<int, ItemSlot> OnEquipArmor;
 
     public CharacterArmorDresser(Transform containerTransform)
@@ -59,7 +59,7 @@ public class CharacterArmorDresser : AbstractArmorDresser
 
 
         EquipNewArmor(slot, armor, armorPiece);
-        OnSyncMash?.Invoke(1);
+        OnSyncMesh?.Invoke(1);
         armorPiece.SetActive(true);
     }
 
@@ -79,7 +79,7 @@ public class CharacterArmorDresser : AbstractArmorDresser
 
         EquipNewArmorFullPlate(armor, armorPiece, fullPlate, slotInFullArmor);
 
-        if(refresh) OnSyncMash?.Invoke(1);
+        if(refresh) OnSyncMesh?.Invoke(1);
         armorPiece.SetActive(true);
     }
 
@@ -100,7 +100,7 @@ public class CharacterArmorDresser : AbstractArmorDresser
                         var defaultPiece = armorPiece[0];
                         var defaultArmor = baseArmor[0];
                         EquipNewArmor(slotArmor, defaultArmor, defaultPiece);
-                        OnSyncMash?.Invoke(1);
+                        OnSyncMesh?.Invoke(1);
                         defaultPiece.SetActive(true);
                         isUseDefault = true;
                     }
@@ -165,7 +165,7 @@ public class CharacterArmorDresser : AbstractArmorDresser
         EquipNewArmor(ItemSlot.chest, defaltArmorChest, pieceChest);
         EquipNewArmor(ItemSlot.legs, defaltArmorLegs, pieceLegs);
 
-        OnSyncMash?.Invoke(1);
+        OnSyncMesh?.Invoke(1);
         pieceChest.SetActive(true);
         pieceLegs.SetActive(true);
     }

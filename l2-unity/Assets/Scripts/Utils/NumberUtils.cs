@@ -48,7 +48,7 @@ public class NumberUtils {
         return step * Mathf.Floor(value / step);
     }
 
-    public static float FromIntToFLoat(int value) {
+    public static float FromIntToFloat(int value) {
         // Convert integer to byte array
         byte[] byteArray = BitConverter.GetBytes(value);
 

@@ -20,7 +20,7 @@ public class UserGear : Gear
     
     private CharacterArmorDresser _armorDresser;
     
-    public override void Initialize(int ownderId, CharacterRaceAnimation raceId) {
+    public override void Initialize(int ownderId, PlayerModel raceId) {
         base.Initialize(ownderId, raceId);
 
         if(this is PlayerGear) {
@@ -31,8 +31,8 @@ public class UserGear : Gear
 
         _armorDresser = new CharacterArmorDresser(_container.transform);
         _armorDresser.OnDestroyGameObject += OnDestroyGameObject;
-        _armorDresser.OnSyncMash += OnSyncMesh;
-        _armorDresser.OnAddSyncMash += OnAddSyncMesh;
+        _armorDresser.OnSyncMesh += OnSyncMesh;
+        _armorDresser.OnAddSyncMesh += OnAddSyncMesh;
         _armorDresser.OnEquipArmor += OnEquipArmor;
         _skinnedMeshSync = _container.GetComponentInChildren<SkinnedMeshSync>();
     }
@@ -98,7 +98,7 @@ public class UserGear : Gear
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"UserGear-> EquipFullArmor: Error equipping armor {itemId}: {e.Message}");
+            Debug.LogError($"UserGear-> EquipFullArmor: Error equipping armor {itemId}: {e}");
         }
     }
 
@@ -128,7 +128,7 @@ public class UserGear : Gear
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"UserGear-> Error equipping armor {itemId}: {e.Message}");
+            Debug.LogError($"UserGear-> Error equipping armor {itemId}: {e}");
         }
     }
 
