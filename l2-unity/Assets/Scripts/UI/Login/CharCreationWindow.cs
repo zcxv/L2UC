@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 public class CharCreationWindow : L2Window {
     private VisualTreeAsset _arrowInputTemplate;
-    private ArrowInputManipulator hairstyleManipulator;
+    private ArrowInputManipulator hairStyleManipulator;
     private ArrowInputManipulator hairColorManipulator;
     private ArrowInputManipulator faceManipulator;
     private ArrowInputManipulator genderManipulator;
@@ -16,7 +16,7 @@ public class CharCreationWindow : L2Window {
     private ArrowInputManipulator raceManipulator;
     private TextField userInputField;
     private VisualElement pawnRotateWindow;
-    private Label labelError;
+    private Label errorLabel;
     private Button pawnZoominButton;
     private List<PlayerTemplates> _playerTemplates;
     private bool isInit = false;
@@ -71,7 +71,7 @@ public class CharCreationWindow : L2Window {
 
         pawnRotateWindow = GetElementById("CharacterRotateWindow");
         HideRotatePawnWindow();
-        labelError = (Label)GetElementById("LabelError");
+        errorLabel = (Label)GetElementById("LabelError");
 
         Button pawnRotateLeftButton = pawnRotateWindow.Q<Button>("TurnLeftButton");
         Button pawnRotateRightButton = pawnRotateWindow.Q<Button>("TurnRightButton");
@@ -82,26 +82,26 @@ public class CharCreationWindow : L2Window {
         pawnZoominButton.AddManipulator(new ButtonClickSoundManipulator(pawnZoominButton));
 
         pawnRotateLeftButton.RegisterCallback<PointerDownEvent>((evt) => {
-            CharacterCreator.Instance.RotatePawn(true);
+            CreatorController.Instance.Rotate(Vector3.up);
         }, TrickleDown.TrickleDown);
 
         pawnRotateRightButton.RegisterCallback<PointerDownEvent>((evt) => {
-            CharacterCreator.Instance.RotatePawn(false);
+            CreatorController.Instance.Rotate(Vector3.down);
         }, TrickleDown.TrickleDown);
 
         pawnRotateLeftButton.RegisterCallback<PointerUpEvent>((evt) => {
-            CharacterCreator.Instance.StopRotatingPawn();
+            CreatorController.Instance.Rotate(Vector3.zero);
         });
 
         pawnRotateRightButton.RegisterCallback<PointerUpEvent>((evt) => {
-            CharacterCreator.Instance.StopRotatingPawn();
+            CreatorController.Instance.Rotate(Vector3.zero);
         });
 
         pawnZoominButton.RegisterCallback<ClickEvent>((evt) => {
             ToggleZoomin(false);
         });
 
-        labelError.text = string.Empty;
+        errorLabel.text = string.Empty;
         VisualElement raceInput = _arrowInputTemplate.Instantiate()[0];
         VisualElement classInput = _arrowInputTemplate.Instantiate()[0];
         VisualElement genderInput = _arrowInputTemplate.Instantiate()[0];
@@ -110,35 +110,33 @@ public class CharCreationWindow : L2Window {
         VisualElement faceInput = _arrowInputTemplate.Instantiate()[0];
 
 
-        hairstyleManipulator = new ArrowInputManipulator(hairstyleInput, "Hairstyle", new string[] { "Type A", "Type B", "Type C", "Type D", "Type E" }, -1, (index, value) => {
-            if (CharacterCreator.Instance.PawnIndex == -1) {
-                hairstyleManipulator.ClearInput();
+        hairStyleManipulator = new ArrowInputManipulator(hairstyleInput, "Hairstyle", new string[] { "Type A", "Type B", "Type C", "Type D", "Type E" }, -1, (index, value) => {
+            if (!CreatorController.Instance.IsSelected) {
+                hairStyleManipulator.ClearInput();
                 return;
             }
-            CharacterRaceAnimation race = CharacterCreator.Instance.GetRaceAnimator(CharacterCreator.Instance.PawnIndex);
-            RefreshHair(race, hairColorManipulator.Value, hairstyleManipulator.Value);
-            //RefreshFace(CharacterRaceAnimation.FFighter, faceManipulator.Value, hairColorManipulator.Value, hairstyleManipulator.Value);
+            
+            CreatorController.Instance.SetAppearance(faceManipulator.Index, hairColorManipulator.Index, index);
         });
-        hairstyleInput.AddManipulator(hairstyleManipulator);
+        hairstyleInput.AddManipulator(hairStyleManipulator);
 
         hairColorManipulator = new ArrowInputManipulator(hairColorInput, "Hair Color", new string[] { "Type A", "Type B", "Type C", "Type D" }, -1, (index, value) => {
-            if (CharacterCreator.Instance.PawnIndex == -1) {
+            if (!CreatorController.Instance.IsSelected) {
                 hairColorManipulator.ClearInput();
                 return;
             }
-            CharacterRaceAnimation race = CharacterCreator.Instance.GetRaceAnimator(CharacterCreator.Instance.PawnIndex);
-            RefreshHair(race, hairColorManipulator.Value, hairstyleManipulator.Value);
+            
+            CreatorController.Instance.SetAppearance(faceManipulator.Index, index, hairStyleManipulator.Index);
         });
         hairColorInput.AddManipulator(hairColorManipulator);
 
         faceManipulator = new ArrowInputManipulator(faceInput, "Face", new string[] { "Type A", "Type B", "Type C" }, -1, (index, value) => {
-            if(CharacterCreator.Instance.PawnIndex == -1) {
+            if (!CreatorController.Instance.IsSelected) {
                 faceManipulator.ClearInput();
                 return;
             }
-            CharacterRaceAnimation race = CharacterCreator.Instance.GetRaceAnimator(CharacterCreator.Instance.PawnIndex);
-            RefreshFace(race, faceManipulator.Value);
-            //Debug.Log("Face Change");
+            
+            CreatorController.Instance.SetAppearance(index, hairColorManipulator.Index, hairStyleManipulator.Index);
         });
         faceInput.AddManipulator(faceManipulator);
 
@@ -153,13 +151,12 @@ public class CharCreationWindow : L2Window {
                 LoginCameraManager.Instance.SwitchCamera(cam);
             }
 
-            hairstyleManipulator.ResetInput();
+            hairStyleManipulator.ResetInput();
             hairColorManipulator.ResetInput();
             faceManipulator.ResetInput();
 
             ShowRotatePawnWindow();
-            CharacterCreator.Instance.ResetPawnSelection();
-            CharacterCreator.Instance.SelectPawn(raceManipulator.Value, classManipulator.Value, value);
+            CreatorController.Instance.Select(raceManipulator.Index, classManipulator.Index, index);
             
         });
         genderInput.AddManipulator(genderManipulator);
@@ -181,13 +178,12 @@ public class CharCreationWindow : L2Window {
             }
 
             genderManipulator.ClearInput();
-            hairstyleManipulator.ClearInput();
+            hairStyleManipulator.ClearInput();
             hairColorManipulator.ClearInput();
             faceManipulator.ClearInput();
 
             HideRotatePawnWindow();
-            CharacterCreator.Instance.ResetPawnSelection();
-            //CharacterCreator.Instance.SpawnPawnWithId(currentPawnIndex);
+            CreatorController.Instance.ResetSelection();
         });
         classInput.AddManipulator(classManipulator);
 
@@ -195,12 +191,12 @@ public class CharCreationWindow : L2Window {
             LoginCameraManager.Instance.SwitchCamera(value);
             classManipulator.ClearInput();
             genderManipulator.ClearInput();
-            hairstyleManipulator.ClearInput();
+            hairStyleManipulator.ClearInput();
             hairColorManipulator.ClearInput();
             faceManipulator.ClearInput();
 
             HideRotatePawnWindow();
-            CharacterCreator.Instance.ResetPawnSelection();
+            CreatorController.Instance.ResetSelection();
  
         });
         raceInput.AddManipulator(raceManipulator);
@@ -215,52 +211,43 @@ public class CharCreationWindow : L2Window {
         charDetailWindow.Add(faceInput);
     }
 
-    private void RefreshFace(CharacterRaceAnimation raceId , string face)
-    {
-        byte iFace = ConvertType.ConvertTypeToByte(face);
-   
-
-        CharacterCreator.Instance.ReBuildFace(raceId, iFace);
-    }
-
-    private void RefreshHair(CharacterRaceAnimation raceId,  string hairColor, string hairStyle)
-    {
-        //byte iFace = ConvertType.ConvertTypeToByte(face);
-        byte typeHairColor = ConvertType.ConvertTypeToByte(hairColor);
-        byte typeHairStyle = ConvertType.ConvertTypeToByte(hairStyle);
-
-        CharacterCreator.Instance.ReBuildHair(raceId,  typeHairColor , typeHairStyle);
-    }
-
     public void Init()
     {
         if (!isInit)
         {
             isInit = true;
-            CharacterCreator.Instance.SpawnAllCharCreatePawns();
+            CreatorController.Instance.Init();
         }
     }
 
-    public void SetlabelError(string error)
-    {
-        labelError.text = error;
+    public void SetErrorLabel(string error) {
+        errorLabel.text = error;
     }
+    
     private void CreateButtonPressed()
     {
-
         Debug.Log("event create button");
 
-        string class1 = classManipulator.Value;
-        string sex = genderManipulator.Value;
-        string hairStyle = hairstyleManipulator.Value;
-        string hairColor = hairColorManipulator.Value;
-        string face = faceManipulator.Value;
+        string classType = classManipulator.Value;
+        int sex = genderManipulator.Index;
+        int hairStyle = hairStyleManipulator.Index;
+        int hairColor = hairColorManipulator.Index;
+        int face = faceManipulator.Index;
         string race = raceManipulator.Value;
         string name = userInputField.value;
 
-        var sendPaket = CreatorPacketsGameLobby.CreateCharacter(_playerTemplates , class1, sex , hairColor , hairStyle , face , race , name);
+        var packet = GameLobbyPacketFactory.CreateCharacter(
+            _playerTemplates,
+            classType,
+            sex,
+            hairColor,
+            hairStyle,
+            face,
+            race,
+            name
+        );
         bool enable = GameClient.Instance.IsCryptEnabled();
-        SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
+        SendGameDataQueue.Instance().AddItem(packet, enable, enable);
         //Debug.Log("Button click ButtonPressed");
         //Debug.Log("");
     }
@@ -269,23 +256,23 @@ public class CharCreationWindow : L2Window {
     {
         classManipulator.ClearInput();
         genderManipulator.ClearInput();
-        hairstyleManipulator.ClearInput();
+        hairStyleManipulator.ClearInput();
         hairColorManipulator.ClearInput();
         faceManipulator.ClearInput();
         raceManipulator.ClearInput();
         userInputField.value = "";
-        SetlabelError("");
+        SetErrorLabel("");
     }
 
     private void PreviousButtonPressed() {
         classManipulator.ClearInput();
         genderManipulator.ClearInput();
-        hairstyleManipulator.ClearInput();
+        hairStyleManipulator.ClearInput();
         hairColorManipulator.ClearInput();
         faceManipulator.ClearInput();
         raceManipulator.ClearInput();
         userInputField.value = "";
-        SetlabelError("");
+        SetErrorLabel("");
         GameManager.Instance.OnAuthAllowed();
     }
 

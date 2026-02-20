@@ -278,7 +278,7 @@ public class MultiSellWindow : L2PopupWindow
     private void OkExchange()
     {
         string value = ToolTipsUtils.ConvertPriceToNormal(_userInput.value);
-        var sendPaket = CreatorPacketsUser.CreateMultiSellChoose(_listId, _entryId, int.Parse(value));
+        var sendPaket = UserPacketFactory.CreateMultiSellChoose(_listId, _entryId, int.Parse(value));
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
         CancelEvent();

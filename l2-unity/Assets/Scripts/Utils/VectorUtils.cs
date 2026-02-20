@@ -7,7 +7,7 @@ public class VectorUtils : MonoBehaviour {
 
     public static Vector3 ConvertPosUnityToL2j(Vector3 ueVector)
     {
-        Vector3 convert =   new Vector3(ueVector.y, ueVector.x, ueVector.z) / (1f / 52.5f);
+        Vector3 convert = new Vector3(ueVector.y, ueVector.x, ueVector.z) / (1f / 52.5f);
         return new Vector3(convert.z, convert.y, convert.x);
     }
 

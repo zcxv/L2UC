@@ -50,7 +50,7 @@ public class MonsterEntity : NetworkEntity
             {
                 var _entity = entity.transform.parent.GetComponent<Entity>();
 
-                if (_entity != null & _entity.IdentityInterlude.Id == id)
+                if (_entity != null & _entity.Identity.Id == id)
                 {
                     return new ObjectData(entity.transform.parent.gameObject);
                 }

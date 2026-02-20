@@ -445,7 +445,7 @@ public class DealerWindow : L2PopupWindow
             switch (_productType)
             {
                 case ProductType.BUY:
-                    var packetBuy = CreatorPacketsUser.CreateRequestBuyItem(_listId, _listSell);
+                    var packetBuy = UserPacketFactory.CreateRequestBuyItem(_listId, _listSell);
                     SendServer(packetBuy);
                     break;
 
@@ -464,20 +464,20 @@ public class DealerWindow : L2PopupWindow
             switch (_productType)
             {
                 case ProductType.SELL:
-                    var packetSell = CreatorPacketsUser.CreateRequestSellItem(_listId, _listSell);
+                    var packetSell = UserPacketFactory.CreateRequestSellItem(_listId, _listSell);
                     SendServer(packetSell);
                     break;
                 case ProductType.WHDepositList:
-                    var packetWhDp = CreatorPacketsUser.CreateWHDepositList(_listSell);
+                    var packetWhDp = UserPacketFactory.CreateWHDepositList(_listSell);
                     SendServer(packetWhDp);
                     break;
                 case ProductType.WHWithdrawList:
-                    var packetWhWd = CreatorPacketsUser.CreateWHWithdrawList(_listSell);
+                    var packetWhWd = UserPacketFactory.CreateWHWithdrawList(_listSell);
                     SendServer(packetWhWd);
                     break;
                 case ProductType.PackageSendableList:
                     int playerObjectId = _listId;
-                    var packetSendable = CreatorPacketsUser.RequestPackageSend(playerObjectId , _listSell);
+                    var packetSendable = UserPacketFactory.RequestPackageSend(playerObjectId , _listSell);
                     SendServer(packetSendable);
                     break;
                 case ProductType.BUY_SEED:
@@ -495,7 +495,7 @@ public class DealerWindow : L2PopupWindow
 
     private void OkWear()
     {
-        var packet = CreatorPacketsUser.CreateRequestPreviewList(_listId, _listSell);
+        var packet = UserPacketFactory.CreateRequestPreviewList(_listId, _listSell);
         SendServer(packet);
         CancelEvent();
     }

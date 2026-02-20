@@ -44,7 +44,7 @@ public class MonsterStateMachine : MonoBehaviour
     public int GetObjectId()
     {
         if (_entity == null) return -1;
-        return _entity.IdentityInterlude.Id;
+        return _entity.Identity.Id;
     }
 
     public virtual void Initialize(int mosterId, 
@@ -62,7 +62,7 @@ public class MonsterStateMachine : MonoBehaviour
         ChangeIntention(MonsterIntention.INTENTION_IDLE);
         ChangeState(MonsterState.IDLE);
         NotifyEvent(Event.ENTER_WORLD);
-        GravityNpc.Instance.AddGravity(entity.IdentityInterlude.Id, new GravityData(entity));
+        GravityNpc.Instance.AddGravity(entity.Identity.Id, new GravityData(entity));
         // _gravityMonster.Sync();
     }
 

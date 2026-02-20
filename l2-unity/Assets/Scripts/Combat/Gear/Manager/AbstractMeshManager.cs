@@ -20,14 +20,14 @@ public class AbstractMeshManager : MonoBehaviour
                     int aramorId = itemIds[0];
                     int raceId = itemIds[1];
                     Armor armor = ItemTable.Instance.GetArmor(aramorId);
-                    ModelTable.L2ArmorPiece goArmor = LoadArmor(armor, CharacterRaceAnimationParser.SafeConvertToRace(raceId));
+                    L2ArmorPiece goArmor = LoadArmor(armor, (PlayerModel) raceId);
                     if (armor != null) ObjectPoolManager.Instance?.AddPrefabToPool(ObjectType.Armor, goArmor.baseArmorModel);
                     return goArmor;
                 case EquipmentCategory.FullArmor:
                     int fullArmorId = itemIds[0];
                     int fullArmorRaceId = itemIds[1];
                     Armor armorModel = ItemTable.Instance.GetArmor(fullArmorId);
-                    ModelTable.L2ArmorPiece fullGoArmor = LoadArmor(armorModel, CharacterRaceAnimationParser.SafeConvertToRace(fullArmorRaceId));
+                    L2ArmorPiece fullGoArmor = LoadArmor(armorModel, (PlayerModel) fullArmorRaceId);
                     if (armorModel != null) AddPrefabToList(ObjectType.Armor, fullGoArmor.baseAllModels);
                     return fullGoArmor;
                 case EquipmentCategory.EtcItem:
@@ -122,7 +122,7 @@ public class AbstractMeshManager : MonoBehaviour
         return weaponPrefab;
     }
 
-    private L2ArmorPiece LoadArmor(Armor armor, CharacterRaceAnimation raceId)
+    private L2ArmorPiece LoadArmor(Armor armor, PlayerModel raceId)
     {
         if (armor == null ) return null;
 

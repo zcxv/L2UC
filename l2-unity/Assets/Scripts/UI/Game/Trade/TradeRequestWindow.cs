@@ -146,7 +146,7 @@ public class TradeRequestWindow : L2PopupWindow
     private void SendAcceptResponse()
     {
         // Отправляем пакет подтверждения торговли
-        var sendPacket = CreatorPacketsUser.CreateAnswerTradeRequest(1);
+        var sendPacket = UserPacketFactory.CreateAnswerTradeRequest(1);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPacket, enable, enable);
 
@@ -156,7 +156,7 @@ public class TradeRequestWindow : L2PopupWindow
     private void SendDeclineResponse()
     {
         // Отправляем пакет отклонения торговли
-        var sendPacket = CreatorPacketsUser.CreateAnswerTradeRequest(0);
+        var sendPacket = UserPacketFactory.CreateAnswerTradeRequest(0);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPacket, enable, enable);
 

@@ -19,7 +19,7 @@ public class MoveToMonsterIntention : MonsterIntentionBase
             {
                 // _stateMachine.MoveMonster.MoveToTargetPosition(new MovementTarget(_targetPos , 0.1f));
                 MovementTarget movementTarget = new MovementTarget(_targetPos, 0.1f , monsterEntity.Running);
-                MoveAllCharacters.Instance.AddMoveData(_stateMachine.Entity.IdentityInterlude.Id, new MovementData(monsterEntity, movementTarget));
+                MoveAllCharacters.Instance.AddMoveData(_stateMachine.Entity.Identity.Id, new MovementData(monsterEntity, movementTarget));
 
                 if (monsterEntity.Running)
                 {

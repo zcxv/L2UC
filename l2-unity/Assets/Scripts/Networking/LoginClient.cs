@@ -8,22 +8,22 @@ using L2_login;
 public class LoginClient : DefaultClient {
     // Crypt
     public static byte[] STATIC_BLOWFISH_KEY = {
-        (byte) 0x6b,
-        (byte) 0x60,
-        (byte) 0xcb,
-        (byte) 0x5b,
-        (byte) 0x82,
-        (byte) 0xce,
-        (byte) 0x90,
-        (byte) 0xb1,
-        (byte) 0xcc,
-        (byte) 0x2b,
-        (byte) 0x6c,
-        (byte) 0x55,
-        (byte) 0x6c,
-        (byte) 0x6c,
-        (byte) 0x6c,
-        (byte) 0x6c
+        0x6b,
+        0x60,
+        0xcb,
+        0x5b,
+        0x82,
+        0xce,
+        0x90,
+        0xb1,
+        0xcc,
+        0x2b,
+        0x6c,
+        0x55,
+        0x6c,
+        0x6c,
+        0x6c,
+        0x6c
     };
 
 
@@ -44,10 +44,10 @@ public class LoginClient : DefaultClient {
     public string Account { get { return _account; } set { _account = value; } }
     public string Password { get { return _password; } set { _password = value; } }
 
-    private LoginClientInterludePacketHandler clientPacketHandler;
+    private LoginClientPacketHandler clientPacketHandler;
     private LoginServerPacketHandler serverPacketHandler;
 
-    public LoginClientInterludePacketHandler ClientPacketHandler { get { return clientPacketHandler; } }
+    public LoginClientPacketHandler ClientPacketHandler { get { return clientPacketHandler; } }
     public LoginServerPacketHandler ServerPacketHandler { get { return serverPacketHandler; } }
 
 
@@ -94,8 +94,7 @@ public class LoginClient : DefaultClient {
     protected override void CreateAsyncClient() {
         if (_client == null)
         {
-            // clientPacketHandler = new LoginClientPacketHandler();
-            clientPacketHandler = new LoginClientInterludePacketHandler();
+            clientPacketHandler = new LoginClientPacketHandler();
             serverPacketHandler = new LoginServerPacketHandler();
 
 
@@ -127,13 +126,12 @@ public class LoginClient : DefaultClient {
     }
 
     public void OnServerListReceived(byte lastServer, List<ServerData> serverData, Dictionary<int, int> charsOnServers) {
-
         GameManager.Instance.OnReceivedServerList(lastServer, serverData, charsOnServers);
     }
 
     public void OnServerSelected(int serverId) {
         // clientPacketHandler.SendRequestServerLogin(serverId);
-        RequestServerLogin packet = CreatorPackets.CreateServerLoginPacket(serverId, LoginClient.Instance.SessionKey1, LoginClient.Instance.SessionKey2);
+        RequestServerLogin packet = PacketFactory.CreateServerLoginPacket(serverId, SessionKey1, SessionKey2);
         SendLoginDataQueue.Instance().AddItem(packet, true , true);
     }
 

@@ -203,7 +203,7 @@ public class ChatWindow : L2Window
                         string gmCommand = text.Substring(2);
                         string command = prefix + gmCommand;
                         bool enable = GameClient.Instance.IsCryptEnabled();
-                        SendGameDataQueue.Instance().AddItem(CreatorPacketsUser.CreateByPassPacket(command), enable, enable);
+                        SendGameDataQueue.Instance().AddItem(UserPacketFactory.CreateByPassPacket(command), enable, enable);
                         Debug.Log("ChatWindow: requested admin command :" + command);
                     }
                     else
@@ -212,7 +212,7 @@ public class ChatWindow : L2Window
                         if (commands != null)
                         {
                             bool enable = GameClient.Instance.IsCryptEnabled();
-                            SendGameDataQueue.Instance().AddItem(CreatorPacketsUser.CreateRequestUserCommand(commands.Id), enable, enable);
+                            SendGameDataQueue.Instance().AddItem(UserPacketFactory.CreateRequestUserCommand(commands.Id), enable, enable);
                             Debug.Log("ChatWindow: requested player command :" + commands  + " id: " + commands.Id);
                         }
                         else
@@ -295,12 +295,12 @@ public class ChatWindow : L2Window
                 string targetName = text.Substring(0, spaceIndex);
                 string message = text.Substring(spaceIndex + 1);
 
-                SendGameDataQueue.Instance().AddItem(CreatorPacketsUser.CreateSendWhisperMessage(ChatTypes.GetById(2), message, targetName), enable, enable);
+                SendGameDataQueue.Instance().AddItem(UserPacketFactory.CreateSendWhisperMessage(ChatTypes.GetById(2), message, targetName), enable, enable);
                 Debug.Log("whisper chat: sending to :" + targetName + " message: " + message);
             }
             else
             {
-                SendGameDataQueue.Instance().AddItem(CreatorPacketsUser.CreateSendMessage(data, text), enable, enable);
+                SendGameDataQueue.Instance().AddItem(UserPacketFactory.CreateSendMessage(data, text), enable, enable);
             }
         }
         else

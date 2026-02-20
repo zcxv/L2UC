@@ -12,6 +12,8 @@ public class BaseAnimationController : AnimationEventsBase, IAnimationController
     [SerializeField] protected bool _resetStateOnReceive = false;
     [SerializeField] protected float _spAtk01ClipLength = 1000;
     [SerializeField] protected Dictionary<string, float> _atkClipLengths;
+    protected bool isInitialized = false;
+    
     private string _lastAnimationVariableName;
     private float _lastAtkClipLength;
     private float _pAtkSpd;
@@ -23,9 +25,12 @@ public class BaseAnimationController : AnimationEventsBase, IAnimationController
     private const string BASE_MOTION_MAGIC_SHOOT = "FDarkElf_m001_b.ao_MagicShot_A_FDarkElf";
 
     private AnimatorOverrideController _overrideController;
-
-    public virtual void Initialize()
-    {
+    
+    public virtual void Initialize() {
+        if (isInitialized) {
+            return;
+        }
+        
         _animator = gameObject.GetComponentInChildren<Animator>(true);
         _lastAnimationVariableName = "wait_hand";
         InitializePriority();
@@ -45,10 +50,13 @@ public class BaseAnimationController : AnimationEventsBase, IAnimationController
         {
             _overrideController = (AnimatorOverrideController)_animator.runtimeAnimatorController;
         }
-
+        
+        isInitialized = true;
     }
 
-  
+    protected virtual void OnEnable() {
+        Initialize();
+    }
 
     protected override void HandleQueueAnimation(string animationName)
     {

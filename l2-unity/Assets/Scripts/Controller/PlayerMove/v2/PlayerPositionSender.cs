@@ -24,7 +24,7 @@ public class PlayerPositionSender
 
     public void SendData(Vector3 playerPosition)
     {
-        ValidatePosition sendPaket = CreatorPacketsUser.CreateValidatePosition(playerPosition.x, playerPosition.y, playerPosition.z);
+        ValidatePosition sendPaket = UserPacketFactory.CreateValidatePosition(playerPosition.x, playerPosition.y, playerPosition.z);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
         //Debug.Log("ValidatePosition  отправили данные для синхронизации с сервером");

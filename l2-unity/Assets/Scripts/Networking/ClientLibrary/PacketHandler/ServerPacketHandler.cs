@@ -38,7 +38,7 @@ public abstract class ServerPacketHandler
 
     public bool IsExPacket(ItemServer item)
     {
-        return GameInterludeServerPacketType.ExTypePacket == item.PaketType();
+        return GameServerPacketType.ExTypePacket == item.PaketType();
     }
     //public byte ParceExPacket(byte[] exPacket)
     //{
