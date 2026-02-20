@@ -122,7 +122,7 @@ public class AbstractMeshManager : MonoBehaviour
         return weaponPrefab;
     }
 
-    private L2ArmorPiece LoadArmor(Armor armor, CharacterRaceAnimation raceId)
+    private L2ArmorPiece LoadArmor(Armor armor, PlayerModel raceId)
     {
         if (armor == null ) return null;
 

@@ -77,7 +77,7 @@ public class PlayerEntity : Entity
 
     private void EquipAllArmors()
     {
-        PlayerInterludeAppearance appearance = (PlayerInterludeAppearance)_appearance;
+        PlayerAppearance appearance = (PlayerAppearance)_appearance;
         if (appearance.Chest != 0)
         {
             ((PlayerGear)_gear).EquipArmor(appearance.Chest, ItemSlot.chest);
@@ -174,7 +174,7 @@ public class PlayerEntity : Entity
     public override float UpdateRunSpeed(float serverValue)
     {
         float converted = base.UpdateRunSpeed(serverValue);
-        PlayerInterludeAppearance playerApperance = (PlayerInterludeAppearance)_appearance;
+        PlayerAppearance playerApperance = (PlayerAppearance)_appearance;
 
         float anim_converted = CharTemplateRegistry.GetRunSpeed(playerApperance.BaseClass,
             playerApperance.Sex, 
@@ -189,7 +189,7 @@ public class PlayerEntity : Entity
 
     public void RefreshRunSpeed()
     {
-        PlayerInterludeAppearance playerApperance = (PlayerInterludeAppearance)_appearance;
+        PlayerAppearance playerApperance = (PlayerAppearance)_appearance;
         float anim_converted = CharTemplateRegistry.GetRunSpeed(playerApperance.BaseClass, playerApperance.Sex, _lastServerRunSpeed, _gear.IsTwoHandedEquipped());
         PlayerAnimationController.Instance.SetRunSpeed(anim_converted);
     }
@@ -197,7 +197,7 @@ public class PlayerEntity : Entity
     public override float UpdateWalkSpeed(float serverValue)
     {
         float converted = base.UpdateWalkSpeed(serverValue);
-        PlayerInterludeAppearance playerApperance = (PlayerInterludeAppearance)_appearance;
+        PlayerAppearance playerApperance = (PlayerAppearance)_appearance;
         float anim_converted = CharTemplateRegistry.GetWalkSpeed(playerApperance.BaseClass, playerApperance.Sex, serverValue, _gear.IsTwoHandedEquipped());
         PlayerAnimationController.Instance.SetWalkSpeed(anim_converted);
         //PlayerAnimationController.Instance.SetWalkSpeed(0.45f);
@@ -210,7 +210,7 @@ public class PlayerEntity : Entity
 
 
 
-    public override void UpdateWaitType(ChangeWaitTypePacket.WaitType moveType)
+    public override void UpdateWaitType(WaitType moveType)
     {
         base.UpdateWaitType(moveType);
     }

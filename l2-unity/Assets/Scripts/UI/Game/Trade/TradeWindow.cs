@@ -167,7 +167,7 @@ public class TradeWindow : L2PopupWindow
             _exchangeItems.Add(item);
 
             // Отправляем пакет добавления предмета в обмен
-            var sendPacket = CreatorPacketsUser.CreateAddTradeItem(0, item.ObjectId, item.Count);
+            var sendPacket = UserPacketFactory.CreateAddTradeItem(0, item.ObjectId, item.Count);
             bool enable = GameClient.Instance.IsCryptEnabled();
             SendGameDataQueue.Instance().AddItem(sendPacket, enable, enable);
         }
@@ -212,7 +212,7 @@ public class TradeWindow : L2PopupWindow
     private void SendOkResponse()
     {
         // Отправляем пакет подтверждения обмена
-        var sendPacket = CreatorPacketsUser.CreateTradeDone(1);
+        var sendPacket = UserPacketFactory.CreateTradeDone(1);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPacket, enable, enable);
 
@@ -222,7 +222,7 @@ public class TradeWindow : L2PopupWindow
     private void SendCancelResponse()
     {
         // Отправляем пакет отмены обмена
-        var sendPacket = CreatorPacketsUser.CreateTradeDone(0);
+        var sendPacket = UserPacketFactory.CreateTradeDone(0);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPacket, enable, enable);
 

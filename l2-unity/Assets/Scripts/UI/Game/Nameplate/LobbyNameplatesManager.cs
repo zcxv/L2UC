@@ -82,9 +82,9 @@ public class LobbyNameplatesManager : MonoBehaviour {
 
     private void CreateNameplateForEntities() {
         foreach (RaycastHit hit in _entitiesInRange) {
-            SelectableCharacterEntity objectEntity = hit.transform.GetComponent<SelectableCharacterEntity>();
+            SelectableAvatarEntity objectEntity = hit.transform.GetComponent<SelectableAvatarEntity>();
             if (objectEntity != null) {
-                int objectId = objectEntity.CharacterInfo.Id;
+                int objectId = objectEntity.CharacterInfo.ObjId;
 
                 if (!_nameplates.ContainsKey(objectId)) {
                     CreateNameplate(objectEntity);
@@ -93,11 +93,11 @@ public class LobbyNameplatesManager : MonoBehaviour {
         }
     }
 
-    private void CreateNameplate(SelectableCharacterEntity entity) {
+    private void CreateNameplate(SelectableAvatarEntity entity) {
         if (!IsNameplateVisible(entity.transform)) {
             return;
         }
-        var height = CharacterHeight.GetHeight(entity.CharacterInfoInterlude.CharacterRaceAnimation);
+        var height = CharacterHeight.GetHeight(entity.CharacterInfo.PlayerModel);
         VisualElement visualElement = _nameplateTemplate.Instantiate()[0];
 
         Nameplate nameplate = new Nameplate(
@@ -109,13 +109,13 @@ public class LobbyNameplatesManager : MonoBehaviour {
             "9CE8A9FF",
             // 0.92f, //height
             height, 
-            entity.CharacterInfoInterlude.Name,
-            entity.CharacterInfoInterlude.ObjId,
+            entity.CharacterInfo.Name,
+            entity.CharacterInfo.ObjId,
             true
             );
-        if (!_nameplates.ContainsKey(entity.CharacterInfoInterlude.ObjId))
+        if (!_nameplates.ContainsKey(entity.CharacterInfo.ObjId))
         {
-            _nameplates.Add(entity.CharacterInfoInterlude.ObjId, nameplate);
+            _nameplates.Add(entity.CharacterInfo.ObjId, nameplate);
             _rootElement.Add(visualElement);
         }
   

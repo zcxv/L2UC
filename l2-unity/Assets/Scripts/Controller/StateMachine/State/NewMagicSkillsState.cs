@@ -17,7 +17,7 @@ public class NewMagicSkillsState  : AbstractAttackEvents
     {
         MagicSkillUse useSkill = GetPayload(payload);
         PlayerEntity entity = _stateMachine.Player;
-        int objectId = entity.IdentityInterlude.Id;
+        int objectId = entity.Identity.Id;
 
         switch (evt)
         {

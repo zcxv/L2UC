@@ -265,7 +265,7 @@ public class SwordCollisionService : MonoBehaviour
         }
 
         Debug.Log("ON HIT! 18");
-        if (entity.IdentityInterlude.Id == targetEntity.IdentityInterlude.Id)
+        if (entity.Identity.Id == targetEntity.Identity.Id)
         {
             Debug.Log("ON HIT! 19");
             Vector3 startPos = sword.basePt.position;

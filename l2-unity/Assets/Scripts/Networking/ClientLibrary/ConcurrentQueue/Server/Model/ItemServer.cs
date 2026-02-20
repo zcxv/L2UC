@@ -8,7 +8,7 @@ using UnityEngine;
 public class ItemServer :  IData
 {
     private byte[] _data;
-    private GameInterludeServerPacketType packetType;
+    private GameServerPacketType packetType;
     private byte _byteType;
     private int _exByteType;
  
@@ -16,7 +16,7 @@ public class ItemServer :  IData
     {
 
         Decrypt(data, cryptEnbled, init);
-        packetType = (GameInterludeServerPacketType)data[0];
+        packetType = (GameServerPacketType)data[0];
         _byteType = data[0];
         _data = data;
     }
@@ -27,7 +27,7 @@ public class ItemServer :  IData
         return Delete2And3Byte(_data);
     }
     public byte ByteType() { return _byteType; }
-    public GameInterludeServerPacketType PaketType() { return packetType; }
+    public GameServerPacketType PaketType() { return packetType; }
 
     public int ExPacketType() {
 

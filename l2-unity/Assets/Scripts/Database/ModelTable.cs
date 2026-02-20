@@ -66,7 +66,7 @@ public class ModelTable : AbstractCache
 
         // Player Containers
         for (int r = 0; r < RACE_COUNT; r++) {
-            CharacterRaceAnimation raceId = (CharacterRaceAnimation)r;
+            PlayerModel raceId = (PlayerModel)r;
             CharacterRace race = CharacterRaceParser.ParseRace(raceId);
 
             string path = $"Data/Animations/{race}/{raceId}/Player_{raceId}";
@@ -76,7 +76,7 @@ public class ModelTable : AbstractCache
 
         // User Containers
         for (int r = 0; r < RACE_COUNT; r++) {
-            CharacterRaceAnimation raceId = (CharacterRaceAnimation)r;
+            PlayerModel raceId = (PlayerModel)r;
             CharacterRace race = CharacterRaceParser.ParseRace(raceId);
 
             string path = $"Data/Animations/{race}/{raceId}/User_{raceId}";
@@ -86,7 +86,7 @@ public class ModelTable : AbstractCache
 
         // Pawn Containers
         for (int r = 0; r < RACE_COUNT; r++) {
-            CharacterRaceAnimation raceId = (CharacterRaceAnimation)r;
+            PlayerModel raceId = (PlayerModel)r;
             CharacterRace race = CharacterRaceParser.ParseRace(raceId);
 
             string path = $"Data/Animations/{race}/{raceId}/Pawn_{raceId}";
@@ -100,7 +100,7 @@ public class ModelTable : AbstractCache
 
         // Faces
         for (int r = 0; r < RACE_COUNT; r++) {
-            CharacterRaceAnimation raceId = (CharacterRaceAnimation)r;
+            PlayerModel raceId = (PlayerModel)r;
             CharacterRace race = CharacterRaceParser.ParseRace(raceId);
             for (int f = 0; f < FACE_COUNT; f++) {
                 string path = $"Data/Animations/{race}/{raceId}/Faces/{raceId}_f_{f}";
@@ -115,7 +115,7 @@ public class ModelTable : AbstractCache
 
         // Hair
         for (int r = 0; r < RACE_COUNT; r++) {
-            CharacterRaceAnimation raceId = (CharacterRaceAnimation)r;
+            PlayerModel raceId = (PlayerModel)r;
             CharacterRace race = CharacterRaceParser.ParseRace(raceId);
 
             for (int hs = 0; hs < HAIR_STYLE_COUNT; hs++) {
@@ -198,7 +198,7 @@ public class ModelTable : AbstractCache
                 string model = armorgrp.FirstModel[i];
                 if (string.IsNullOrEmpty(model))
                 {
-                    Debug.LogWarning($"Model string is null for race {(CharacterRaceAnimation)i} in armor {kvp.Key}");
+                    Debug.LogWarning($"Model string is null for race {(PlayerModel)i} in armor {kvp.Key}");
                     continue;
                 }
 

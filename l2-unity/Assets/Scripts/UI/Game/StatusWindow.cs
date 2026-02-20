@@ -116,20 +116,20 @@ public class StatusWindow : L2Window
             return; 
         }
 
-        if(!(PlayerEntity.Instance.Status is PlayerStatusInterlude)) {
+        if(!(PlayerEntity.Instance.Status is PlayerStatus)) {
             Debug.LogWarning("Player status is not of type playerstatus");
             return;
         }
 
-        PlayerStatusInterlude status = (PlayerStatusInterlude)PlayerEntity.Instance.Status;
-        PlayerInterludeStats stats = (PlayerInterludeStats)PlayerEntity.Instance.Stats;
+        PlayerStatus status = (PlayerStatus)PlayerEntity.Instance.Status;
+        PlayerStats stats = (PlayerStats)PlayerEntity.Instance.Stats;
 
         if (_levelLabel != null) {
             _levelLabel.text = stats.Level.ToString();
         }
 
         if(_nameLabel != null) {
-            _nameLabel.text = PlayerEntity.Instance.IdentityInterlude.Name;
+            _nameLabel.text = PlayerEntity.Instance.Identity.Name;
         }
 
         if(_CPTextLabel != null) {

@@ -175,7 +175,7 @@ public class TargetManager : MonoBehaviour
             {
                 var _entity = entity.transform.parent.GetComponent<Entity>();
 
-                if(_entity != null & _entity.IdentityInterlude.Id == id)
+                if(_entity != null & _entity.Identity.Id == id)
                 {
                     var _targetData = new ObjectData(entity.transform.parent.gameObject);
                     SetTarget(_targetData , hexColor);
@@ -194,7 +194,7 @@ public class TargetManager : MonoBehaviour
             {
                 var _entity = entity.transform.parent.GetComponent<Entity>();
 
-                if (_entity != null & _entity.IdentityInterlude.Id == id)
+                if (_entity != null & _entity.Identity.Id == id)
                 {
                     return  new ObjectData(entity.transform.parent.gameObject);
                 }
@@ -256,7 +256,7 @@ public class TargetManager : MonoBehaviour
             if (PlayerEntity.Instance.TargetId != -1)
             {
                 bool enable = GameClient.Instance.IsCryptEnabled();
-                SendGameDataQueue.Instance().AddItem(CreatorPacketsUser.CreateRequestTargetCanceld(), enable, enable);
+                SendGameDataQueue.Instance().AddItem(UserPacketFactory.CreateRequestTargetCanceld(), enable, enable);
                 PlayerEntity.Instance.TargetId = -1;
                 PlayerEntity.Instance.Target = null;
             }

@@ -142,7 +142,7 @@ public class NpcStateMachine : MonoBehaviour
     {
         if (entity.name.Equals("Leandro") | entity.name.Equals("Remy"))
         {
-            GravityNpc.Instance.AddGravity(entity.IdentityInterlude.Id, new GravityData(entity));
+            GravityNpc.Instance.AddGravity(entity.Identity.Id, new GravityData(entity));
         }
     }
 

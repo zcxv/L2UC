@@ -67,7 +67,7 @@ public class SendGameDataQueue
                     {
                         if (_queue.TryDequeue(out ItemSendServer item))
                         {
-                            var sender = (GameClientInterludePacketHandler)_clientPacketHandler;
+                            var sender = (GameClientPacketHandler)_clientPacketHandler;
                             sender.SendPacket(item.GetPacket());
                         }
                     }

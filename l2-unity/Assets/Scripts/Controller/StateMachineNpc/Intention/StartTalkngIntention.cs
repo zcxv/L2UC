@@ -19,9 +19,9 @@
 
     private void StartRotate(Entity entity , Entity player)
     {
-        if (!MoveAllCharacters.Instance.IsMoving(entity.IdentityInterlude.Id))
+        if (!MoveAllCharacters.Instance.IsMoving(entity.Identity.Id))
         {
-            MoveAllCharacters.Instance.AddRotate(entity.IdentityInterlude.Id, new RotateData(player, entity));
+            MoveAllCharacters.Instance.AddRotate(entity.Identity.Id, new RotateData(player, entity));
         }
     }
    

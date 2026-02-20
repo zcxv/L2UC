@@ -78,7 +78,7 @@ public class RankingPrivelege : AbstractClanContent
         {
 
             SendGameDataQueue.Instance().AddItem(
-                CreatorPacketsUser.CreateRequestPledgePower(_selectRank.GetRank(), 1, _selectRank.GetPower()),
+                UserPacketFactory.CreateRequestPledgePower(_selectRank.GetRank(), 1, _selectRank.GetPower()),
                 GameClient.Instance.IsCryptEnabled(),
                 GameClient.Instance.IsCryptEnabled());
 

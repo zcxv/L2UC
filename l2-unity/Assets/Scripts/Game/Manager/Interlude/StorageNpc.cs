@@ -45,14 +45,14 @@ public class StorageNpc
     {
         lock (_sync)
         {
-            if (!users.ContainsKey(user.PlayerInfoInterlude.Identity.Id))
+            if (!users.ContainsKey(user.PlayerInfo.Identity.Id))
             {
-                users.Add(user.PlayerInfoInterlude.Identity.Id, user);
+                users.Add(user.PlayerInfo.Identity.Id, user);
             }
             else
             {
-                users.Remove(user.PlayerInfoInterlude.Identity.Id);
-                users.Add(user.PlayerInfoInterlude.Identity.Id, user);
+                users.Remove(user.PlayerInfo.Identity.Id);
+                users.Add(user.PlayerInfo.Identity.Id, user);
             }
 
         }

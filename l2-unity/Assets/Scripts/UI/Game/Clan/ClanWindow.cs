@@ -272,7 +272,7 @@ public class ClanWindow : L2TwoPanels
 
     private bool IsLeader(string leaderName)
     {
-        string userName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
+        string userName = StorageNpc.getInstance().GetFirstUser().PlayerInfo.Identity.Name;
         return leaderName == userName;
     }
 
@@ -280,7 +280,7 @@ public class ClanWindow : L2TwoPanels
     {
 
             SendGameDataQueue.Instance().AddItem(
-                CreatorPacketsUser.CreateRequestUserCommand(100),
+                UserPacketFactory.CreateRequestUserCommand(100),
                 GameClient.Instance.IsCryptEnabled(),
                 GameClient.Instance.IsCryptEnabled());
         
@@ -321,7 +321,7 @@ public class ClanWindow : L2TwoPanels
     private const string USS_STYLE_DISABLED = "button-label-disabled";
     private void SetDisabledButton(string leaderName, List<ClanMember> Members)
     {
-        string userName = StorageNpc.getInstance().GetFirstUser().PlayerInfoInterlude.Identity.Name;
+        string userName = StorageNpc.getInstance().GetFirstUser().PlayerInfo.Identity.Name;
         ResetAllButtons();
 
         if (IsLeader(leaderName))
@@ -399,7 +399,7 @@ public class ClanWindow : L2TwoPanels
     private void OkLeave()
     {
         SendGameDataQueue.Instance().AddItem(
-               CreatorPacketsUser.CreateRequestWithdrawPledge(),
+               UserPacketFactory.CreateRequestWithdrawPledge(),
                GameClient.Instance.IsCryptEnabled(),
                GameClient.Instance.IsCryptEnabled());
         CancelEvent();
@@ -409,10 +409,10 @@ public class ClanWindow : L2TwoPanels
     {
         if (TargetManager.Instance.HasTarget() && TargetManager.Instance.Target.GetEntity() != null)
         {
-            int id = TargetManager.Instance.Target != null ? TargetManager.Instance.Target.GetEntity().IdentityInterlude.Id : 0;
+            int id = TargetManager.Instance.Target != null ? TargetManager.Instance.Target.GetEntity().Identity.Id : 0;
 
             SendGameDataQueue.Instance().AddItem(
-                   CreatorPacketsUser.CreateRequestJoinPledge(id),
+                   UserPacketFactory.CreateRequestJoinPledge(id),
                    GameClient.Instance.IsCryptEnabled(),
                    GameClient.Instance.IsCryptEnabled());
         }

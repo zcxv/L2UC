@@ -134,7 +134,7 @@ public class ClickManager : MonoBehaviour
 
     private void SendPacketMoveToLocation(Vector3 _lastClickPosition)
     {
-        MoveBackwardToLocation sendPaket = CreatorPacketsUser.CreateMoveToLocation(PlayerEntity.Instance.transform.position, _lastClickPosition);
+        MoveBackwardToLocation sendPaket = UserPacketFactory.CreateMoveToLocation(PlayerEntity.Instance.transform.position, _lastClickPosition);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
     }
@@ -146,7 +146,7 @@ public class ClickManager : MonoBehaviour
         if (_target != null)
         {
             var l2jpos = _target.Identity.GetL2jPos();
-            ClickAction sendPaket = CreatorPacketsUser.CreateActiont(_target.Identity.Id, (int)l2jpos.x, (int)l2jpos.y, (int)l2jpos.z, 0);
+            ClickAction sendPaket = UserPacketFactory.CreateActiont(_target.Identity.Id, (int)l2jpos.x, (int)l2jpos.y, (int)l2jpos.z, 0);
             bool enable = GameClient.Instance.IsCryptEnabled();
 
             SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);

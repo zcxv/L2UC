@@ -63,7 +63,7 @@ public class DescriptionSkillWindow : L2PopupWindow
     public void ShowWindow()
     {
         UserInfo user = StorageNpc.getInstance().GetFirstUser();
-        _spLabel.text = user.PlayerInfoInterlude.Stats.Sp.ToString();
+        _spLabel.text = user.PlayerInfo.Stats.Sp.ToString();
         base.ShowWindow();
     }
 
@@ -80,7 +80,7 @@ public class DescriptionSkillWindow : L2PopupWindow
         // 2 - Pledge skills
         if (_packet != null)
         {
-            RequestAcquireSkill sendPaket = CreatorPacketsUser.CreateRequestAcquireSkill(_packet.GetId(), _packet.GetLevel(), 0);
+            RequestAcquireSkill sendPaket = UserPacketFactory.CreateRequestAcquireSkill(_packet.GetId(), _packet.GetLevel(), 0);
             SendGameDataQueue.Instance().AddItem(sendPaket, GameClient.Instance.IsCryptEnabled(), GameClient.Instance.IsCryptEnabled());
         }
         base.HideWindow();

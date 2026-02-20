@@ -1,4 +1,4 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(SwordSetup))]
@@ -6,21 +6,21 @@ public class SwordEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        // Отрисовка стандартных полей (чтобы видеть ссылки на точки)
+        // РћС‚СЂРёСЃРѕРІРєР° СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РїРѕР»РµР№ (С‡С‚РѕР±С‹ РІРёРґРµС‚СЊ СЃСЃС‹Р»РєРё РЅР° С‚РѕС‡РєРё)
         DrawDefaultInspector();
 
         SwordSetup script = (SwordSetup)target;
 
-        GUILayout.Space(10); // Отступ
+        GUILayout.Space(10); // РћС‚СЃС‚СѓРї
 
-        if (GUILayout.Button("Добавить/Обновить точки меча", GUILayout.Height(30)))
+        if (GUILayout.Button("Р”РѕР±Р°РІРёС‚СЊ/РћР±РЅРѕРІРёС‚СЊ С‚РѕС‡РєРё РјРµС‡Р°", GUILayout.Height(30)))
         {
-            // Позволяет отменить действие через Ctrl+Z
+            // РџРѕР·РІРѕР»СЏРµС‚ РѕС‚РјРµРЅРёС‚СЊ РґРµР№СЃС‚РІРёРµ С‡РµСЂРµР· Ctrl+Z
             Undo.RegisterCreatedObjectUndo(script.gameObject, "Setup Sword Points");
 
             script.SetupPoints();
 
-            // Помечаем объект как "измененный", чтобы изменения сохранились в сцене/префабе
+            // РџРѕРјРµС‡Р°РµРј РѕР±СЉРµРєС‚ РєР°Рє "РёР·РјРµРЅРµРЅРЅС‹Р№", С‡С‚РѕР±С‹ РёР·РјРµРЅРµРЅРёСЏ СЃРѕС…СЂР°РЅРёР»РёСЃСЊ РІ СЃС†РµРЅРµ/РїСЂРµС„Р°Р±Рµ
             EditorUtility.SetDirty(script);
         }
     }

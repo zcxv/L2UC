@@ -92,7 +92,7 @@ public class RecipeBookWindow : L2PopupWindow
     private void SendRequestOpenCraftWindow(int recipeId)
     {
         SendGameDataQueue.Instance().AddItem(
-            CreatorPacketsUser.CreateRequestRecipeItemMakeInfo(recipeId),
+            UserPacketFactory.CreateRequestRecipeItemMakeInfo(recipeId),
             GameClient.Instance.IsCryptEnabled(),
             GameClient.Instance.IsCryptEnabled()
         );

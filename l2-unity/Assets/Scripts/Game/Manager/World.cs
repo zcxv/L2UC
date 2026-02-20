@@ -93,7 +93,7 @@ public class World : MonoBehaviour {
         }
     }
 
-    public void SpawnPlayerInterlude(NetworkIdentityInterlude identity, PlayerStatusInterlude status, PlayerInterludeStats stats, PlayerInterludeAppearance appearance)
+    public void SpawnPlayer(NetworkIdentity identity, PlayerStatus status, PlayerStats stats, PlayerAppearance appearance)
     {
         
         identity.SetPosY(GetGroundHeight(identity.Position));
@@ -103,10 +103,10 @@ public class World : MonoBehaviour {
 
         CharacterRace race = (CharacterRace)appearance.Race;
    
-        CharacterRaceAnimation raceId = CharacterRaceAnimationParser.ParseRaceInterlude(race, appearance.Sex, appearance.BaseClass);
+        PlayerModel raceId = CharacterRaceAnimationParser.ParseRaceInterlude(race, appearance.Sex, appearance.BaseClass);
    
 
-        GameObject go = CharacterBuilder.Instance.BuildCharacterBaseInterlude(raceId, appearance, identity.EntityType);
+        GameObject go = CharacterFactory.Create(raceId, appearance, identity.EntityType);
      
         go.transform.SetParent(_usersContainer.transform);
       
@@ -124,7 +124,7 @@ public class World : MonoBehaviour {
  
 
         player.Status = status;
-        player.IdentityInterlude = identity;
+        player.Identity = identity;
         player.Stats = stats;
         player.Appearance = appearance;
         player.Race = race;
@@ -150,9 +150,9 @@ public class World : MonoBehaviour {
        
         AnimationManager.Instance.RegisterController(identity.Id, controller , player);
    
-        go.GetComponent<Gear>().Initialize(player.IdentityInterlude.Id, player.RaceId);
+        go.GetComponent<Gear>().Initialize(player.Identity.Id, player.RaceId);
      
-        var statsIntr = (PlayerInterludeStats)player.Stats;
+        var statsIntr = (PlayerStats)player.Stats;
        
         player.Initialize();
 
@@ -190,7 +190,7 @@ public class World : MonoBehaviour {
 
     bool isSinglSpawn = false;
 
-    public void SpawnNpcInterlude(NetworkIdentityInterlude identity, NpcStatusInterlude status, Stats stats)
+    public void SpawnNpcInterlude(NetworkIdentity identity, NpcStatus status, Stats stats)
     {
 
 
@@ -260,7 +260,7 @@ public class World : MonoBehaviour {
             {
                 npcGo.transform.SetParent(_monstersContainer.transform);
                 npc = npcGo.GetComponent<MonsterEntity>();
-                npc.Running = npc.IdentityInterlude.IsRunning;
+                npc.Running = npc.Identity.IsRunning;
                 ((MonsterEntity)npc).NpcData = npcData;
             }
 
@@ -278,19 +278,19 @@ public class World : MonoBehaviour {
 
             npc.Stats = stats;
 
-            npc.IdentityInterlude = identity;
-            npc.IdentityInterlude.NpcClass = npcgrp.ClassName;
-            npc.IdentityInterlude.Name = npcName.Name;
-            npc.IdentityInterlude.Title = npcName.Title;
+            npc.Identity = identity;
+            npc.Identity.NpcClass = npcgrp.ClassName;
+            npc.Identity.Name = npcName.Name;
+            npc.Identity.Title = npcName.Title;
 
-            if (npc.IdentityInterlude.Title == null || npc.IdentityInterlude.Title.Length == 0)
+            if (npc.Identity.Title == null || npc.Identity.Title.Length == 0)
             {
                 if (identity.EntityType == EntityType.Monster)
                 {
-                    npc.IdentityInterlude.Title = " Lvl: " + npc.Stats.Level;
+                    npc.Identity.Title = " Lvl: " + npc.Stats.Level;
                 }
             }
-            npc.IdentityInterlude.TitleColor = npcName.TitleColor;
+            npc.Identity.TitleColor = npcName.TitleColor;
 
             npc.Appearance = appearance;
 
@@ -314,7 +314,7 @@ public class World : MonoBehaviour {
             RespawnPositionElseLoadingGame(identity, npcGo);
 
 
-            if (msm != null) _msObjects.Add(npc.IdentityInterlude.Id, msm);
+            if (msm != null) _msObjects.Add(npc.Identity.Id, msm);
             _npcs.Add(identity.Id, npc);
             _objects.Add(identity.Id, npc);
             Debug.Log("NPC NEW SPAWN !!!!!!!!!! " + identity.Id);
@@ -325,7 +325,7 @@ public class World : MonoBehaviour {
         }
     }
 
-    private void ChangeEntityType(NetworkIdentityInterlude identity)
+    private void ChangeEntityType(NetworkIdentity identity)
     {
         //Cat Npc
         if (identity.NpcId == 31760)
@@ -337,7 +337,7 @@ public class World : MonoBehaviour {
     //The only npcs that move in the game
     //Leandro
     //Remy
-    private void RespawnPositionElseLoadingGame(NetworkIdentityInterlude identity , GameObject npcGo)
+    private void RespawnPositionElseLoadingGame(NetworkIdentity identity , GameObject npcGo)
     {
         if (identity.Name.Equals("Leandro") | identity.Name.Equals("Remy"))
         {
@@ -373,7 +373,7 @@ public class World : MonoBehaviour {
         {
             PlayerEntity p_entity = (PlayerEntity)entity;
 
-            var statsIntr = userInfo.PlayerInfoInterlude.Stats;
+            var statsIntr = userInfo.PlayerInfo.Stats;
 
             p_entity.UpdateRunSpeed(statsIntr.RunRealSpeed);
             p_entity.UpdateWalkSpeed(statsIntr.WalkRealSpeed);
@@ -389,18 +389,18 @@ public class World : MonoBehaviour {
     {
         var animationController = npc.GetComponent<NetworkAnimationController>();
         animationController.Initialize();
-        npcGo.GetComponent<Gear>().Initialize(npc.IdentityInterlude.Id, npc.RaceId);
+        npcGo.GetComponent<Gear>().Initialize(npc.Identity.Id, npc.RaceId);
         npc.Initialize();
         var msm = npcGo.GetComponent<MonsterStateMachine>();
 
         if (msm != null)
         {
-            AnimationManager.Instance.RegisterController(npc.IdentityInterlude.Id, animationController, npc);
+            AnimationManager.Instance.RegisterController(npc.Identity.Id, animationController, npc);
             npc.UpdateNpcPAtkSpd((int)npc.Stats.PAtkRealSpeed);
             npc.UpdateNpcRunningSpd(npc.Stats.RunRealSpeed);
             npc.UpdateNpcWalkSpd(npc.Stats.WalkRealSpeed);
-            npc.Running = npc.IdentityInterlude.IsRunning;
-            msm.Initialize(npc.IdentityInterlude.Id, npc.IdentityInterlude.NpcId, npcGo, npc);
+            npc.Running = npc.Identity.IsRunning;
+            msm.Initialize(npc.Identity.Id, npc.Identity.NpcId, npcGo, npc);
         }
 
         return msm;
@@ -413,17 +413,17 @@ public class World : MonoBehaviour {
         MoveNpc moveNpc = npcGo.GetComponent<MoveNpc>();
 
 
-        npcGo.GetComponent<Gear>().Initialize(npc.IdentityInterlude.Id, npc.RaceId);
+        npcGo.GetComponent<Gear>().Initialize(npc.Identity.Id, npc.RaceId);
         npc.Initialize();
         var nsm = npcGo.GetComponent<NpcStateMachine>();
         if (nsm != null)
         {
-            AnimationManager.Instance.RegisterController(npc.IdentityInterlude.Id, animationController, npc);
+            AnimationManager.Instance.RegisterController(npc.Identity.Id, animationController, npc);
             npc.UpdateNpcPAtkSpd((int)npc.Stats.PAtkSpd);
             npc.UpdateNpcRunningSpd(npc.Stats.RunRealSpeed);
             npc.UpdateNpcWalkSpd(npc.Stats.WalkRealSpeed);
-            npc.Running = npc.IdentityInterlude.IsRunning;
-            nsm.Initialize(npc.IdentityInterlude.Id, npc.IdentityInterlude.NpcId, npcGo, moveNpc, npc);
+            npc.Running = npc.Identity.IsRunning;
+            nsm.Initialize(npc.Identity.Id, npc.Identity.NpcId, npcGo, moveNpc, npc);
         }
     }
 
@@ -503,7 +503,7 @@ public class World : MonoBehaviour {
 
     private void SendValidatePosition(Vector3 position)
     {
-        ValidatePosition sendPaket = CreatorPacketsUser.CreateValidatePosition(position.x, position.y, position.z);
+        ValidatePosition sendPaket = UserPacketFactory.CreateValidatePosition(position.x, position.y, position.z);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
     }
@@ -562,7 +562,7 @@ public class World : MonoBehaviour {
     }
 
 
-    public Task StatusUpdate(int id, List<StatusUpdatePacket.Attribute> attributes) {
+    public Task StatusUpdate(int id, List<StatusUpdate.Attribute> attributes) {
         return ExecuteWithEntityAsync(id, e => {
             if(WorldCombat.Instance != null)
             {
@@ -582,11 +582,11 @@ public class World : MonoBehaviour {
 
     public Task UserInfoUpdateCharacter(UserInfo user)
     {
-        return ExecuteWithEntityAsync(user.PlayerInfoInterlude.Identity.Id, e => {
-            WorldCombat.Instance.StatusUpdate(e, user.PlayerInfoInterlude.Stats, user.PlayerInfoInterlude.Status , user.PlayerInfoInterlude.Identity.Id);
+        return ExecuteWithEntityAsync(user.PlayerInfo.Identity.Id, e => {
+            WorldCombat.Instance.StatusUpdate(e, user.PlayerInfo.Stats, user.PlayerInfo.Status , user.PlayerInfo.Identity.Id);
             if (e == PlayerEntity.Instance)
             {
-                PlayerEntity.Instance.Running = user.PlayerInfoInterlude.Appearance.Running;
+                PlayerEntity.Instance.Running = user.PlayerInfo.Appearance.Running;
                 CharacterInfoWindow.Instance.UpdateValues();
             }
         });

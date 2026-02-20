@@ -11,7 +11,7 @@ public class Gear : AbstractMeshManager
 {
     protected NetworkAnimationController _networkAnimationReceive;
     protected int _ownerId;
-    protected CharacterRaceAnimation _raceId;
+    protected PlayerModel _raceId;
     public const string etcName = "etc_";
     public const string weaponName = "weapon_";
     public const string shieldName = "shield_";
@@ -49,7 +49,7 @@ public class Gear : AbstractMeshManager
     public string WeaponAnim { get { return _weaponAnim; } }
     public string LastWeaponAnim { get { return _lastWeaponAnim; } }
 
-    public virtual void Initialize(int ownderId, CharacterRaceAnimation raceId) {
+    public virtual void Initialize(int ownderId, PlayerModel raceId) {
         TryGetComponent(out _networkAnimationReceive);
         _ownerId = ownderId;
         _raceId = raceId;

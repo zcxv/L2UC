@@ -133,7 +133,7 @@ public class MasterClan
         for (int i=0; i < members.Count; i++)
         {
             ClanMember member = members[i];
-            if(usrInfo.PlayerInfoInterlude.Identity.Name != member.MemberName)
+            if(usrInfo.PlayerInfo.Identity.Name != member.MemberName)
             {
                  columns[0].SetColor(i + member.MemberName, DEFAULT_OFFLINE_COLOR);
                  columns[1].SetColor(i + member.Level.ToString(), DEFAULT_OFFLINE_COLOR);

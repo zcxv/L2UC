@@ -25,7 +25,7 @@ public class NewMoveToIntention : IntentionBase
             //PlayerController.Instance.transform.position = oldVector;
             //float distTest2 = VectorUtils.Distance2D(PlayerController.Instance.transform.position, oldVector);
 
-            DebugLineDraw.ShowDrawLineDebug(PlayerEntity.Instance.IdentityInterlude.Id, oldPosition, newPosition, Color.red);
+            DebugLineDraw.ShowDrawLineDebug(PlayerEntity.Instance.Identity.Id, oldPosition, newPosition, Color.red);
 
             float dist = VectorUtils.Distance2D(PlayerController.Instance.transform.position, newPosition);
 

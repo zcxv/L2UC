@@ -57,7 +57,7 @@ public class LicenseWindow : L2Window
 
     private void AgreeButtonPressed() {
         //LoginClient.Instance.ClientPacketHandler.SendPacket()
-        SendLoginDataQueue.Instance().AddItem(CreatorPackets.CreateServerListPacket(LoginClient.Instance.SessionKey1 , LoginClient.Instance.SessionKey2) , true , true);
+        SendLoginDataQueue.Instance().AddItem(PacketFactory.CreateServerListPacket(LoginClient.Instance.SessionKey1 , LoginClient.Instance.SessionKey2) , true , true);
     }
 
     private void DisagreeButtonPressed() {

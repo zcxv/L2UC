@@ -11,23 +11,23 @@ public class LoginServerPacketHandler : ServerPacketHandler
     public override void HandlePacket(IData itemQueue) {
         ItemLogin item = (ItemLogin)itemQueue;
         switch (item.PaketType()) {
-            case LoginInterludeServerPacketType.Init:
+            case LoginServerPacketType.Init:
                 OnInitReceive(item.DecodeData());
                 break;
 
-            case LoginInterludeServerPacketType.GGAuth:
+            case LoginServerPacketType.GGAuth:
                 OnGGAuth(item.DecodeData());
                 break;
-            case LoginInterludeServerPacketType.LoginFail:
+            case LoginServerPacketType.LoginFail:
                 LoginFail(item.DecodeData());
                 break;
-            case LoginInterludeServerPacketType.LoginOk:
+            case LoginServerPacketType.LoginOk:
                 LoginOk(item.DecodeData());
                 break;
-            case LoginInterludeServerPacketType.ServerList:
+            case LoginServerPacketType.ServerList:
                 ServerList(item.DecodeData());
                 break;
-            case LoginInterludeServerPacketType.PlayOk:
+            case LoginServerPacketType.PlayOk:
                 PlayOk(item.DecodeData());
                 break;
 
@@ -58,7 +58,7 @@ public class LoginServerPacketHandler : ServerPacketHandler
         LoginClient.Instance.SetBlowFishKey(blowfishKey);
         LoginClient.Instance.SetSessionId(packet.SessionId);
         _client.InitPacket = false;
-        SendLoginDataQueue.Instance().AddItem(CreatorPackets.CreateGGPacket(packet) , true , true);
+        SendLoginDataQueue.Instance().AddItem(PacketFactory.CreateGGPacket(packet) , true , true);
     }
 
     private void OnGGAuth(byte[] data)
@@ -66,7 +66,7 @@ public class LoginServerPacketHandler : ServerPacketHandler
         GGAuth packet = new GGAuth(data);
         //Debug.Log("GGAuth session id server " + packet.SessionId + " | use session id client " + LoginClient.Instance.GetGessionId());
        // Debug.Log("Send AuthPacket account " + LoginClient.Instance.Account + "passwd  " + LoginClient.Instance.Password);
-        SendLoginDataQueue.Instance().AddItem(CreatorPackets.CreateAuthPacket(LoginClient.Instance.Account , LoginClient.Instance.Password , packet.Response), true, true);
+        SendLoginDataQueue.Instance().AddItem(PacketFactory.CreateAuthPacket(LoginClient.Instance.Account , LoginClient.Instance.Password , packet.Response), true, true);
     }
 
 

@@ -6,7 +6,7 @@ using static ModelTable;
 
 public abstract class AbstractGetCache
 {
-    public static int RACE_COUNT = Enum.GetValues(typeof(CharacterRaceAnimation)).Length;
+    public static int RACE_COUNT = Enum.GetValues(typeof(PlayerModel)).Length;
     protected static int FACE_COUNT = 6;
     protected static int HAIR_STYLE_COUNT = 6;
     protected static int HAIR_COLOR_COUNT = 4;
@@ -45,7 +45,7 @@ public abstract class AbstractGetCache
     // Getters
     // -------
 
-    public L2ArmorPiece GetArmorPiece(Armor armor, CharacterRaceAnimation raceId)
+    public L2ArmorPiece GetArmorPiece(Armor armor, PlayerModel raceId)
     {
         
         if (armor == null)
@@ -55,7 +55,7 @@ public abstract class AbstractGetCache
         }
 
   
-        string model = armor.Armorgrp.FirstModel[(byte)raceId];
+        string model = armor.Armorgrp.FirstModel[(int)raceId];
         if (!_armors.TryGetValue(model, out var l2Armor))
         {
             Debug.LogWarning($"Can't find armor model {model} in ModelTable");
@@ -83,15 +83,15 @@ public abstract class AbstractGetCache
         return new L2ArmorPiece(l2Armor.baseModel, firstMaterial, l2Armor.allModels, allMaterials);
     }
 
-    private string GetValidTextureName(Armor armor, CharacterRaceAnimation raceId)
+    private string GetValidTextureName(Armor armor, PlayerModel raceId)
     {
         var textureArray = armor.Armorgrp.FirstTexture;
-        if (textureArray == null || textureArray.Length < RACE_COUNT || textureArray[(byte)raceId] == null)
+        if (textureArray == null || textureArray.Length < RACE_COUNT || textureArray[(int)raceId] == null)
         {
             Debug.LogWarning($"Can't find armor texture for {raceId} in ModelTable");
             return null;
         }
-        return textureArray[(byte)raceId];
+        return textureArray[(int)raceId];
     }
 
     private bool TryGetMaterials(L2Armor l2Armor, string textureName, out Material firstMaterial, out Material[] allMaterials)
@@ -176,20 +176,20 @@ public abstract class AbstractGetCache
         return go;
     }
 
-    public GameObject GetContainer(CharacterRaceAnimation raceId, EntityType entityType)
+    public GameObject GetContainer(PlayerModel raceId, EntityType entityType)
     {
         GameObject go = null;
 
         switch (entityType)
         {
             case EntityType.User:
-                go = _userContainers[(byte)raceId];
+                go = _userContainers[(int)raceId];
                 break;
             case EntityType.Player:
-                go = _playerContainers[(byte)raceId];
+                go = _playerContainers[(int)raceId];
                 break;
             case EntityType.Pawn:
-                go = _pawnContainers[(byte)raceId];
+                go = _pawnContainers[(int)raceId];
                 break;
         }
 
@@ -201,8 +201,8 @@ public abstract class AbstractGetCache
         return go;
     }
 
-    public GameObject GetFace(CharacterRaceAnimation raceId, byte face) {
-        GameObject go = _faces[(byte)raceId, face];
+    public GameObject GetFace(PlayerModel raceId, int face) {
+        GameObject go = _faces[(int)raceId, face];
         if (go == null) {
             Debug.LogError($"Can't find face {face} for race {raceId} at index {raceId},{face}");
         }
@@ -210,8 +210,8 @@ public abstract class AbstractGetCache
         return go;
     }
 
-    public GameObject GetHair(CharacterRaceAnimation raceId, byte hairStyle, byte hairColor, bool bh) {
-        byte index = (byte)(hairStyle * 8 + hairColor * 2);
+    public GameObject GetHair(PlayerModel raceId, int hairStyle, int hairColor, bool bh) {
+        int index = hairStyle * 8 + hairColor * 2;
         index = GetRemappedIndex(raceId, index);
         if (bh) {
             index += 1;
@@ -219,7 +219,7 @@ public abstract class AbstractGetCache
 
         //Debug.Log($"Loading hair[{index}] Race:{raceId} Model:{hairStyle}_{hairColor}_{(bh ? "bh" : "ah")}");
 
-        GameObject go = _hair[(byte)raceId, index];
+        GameObject go = _hair[(int)raceId, index];
         if (go == null) {
             Debug.LogError($"Can't find hairstyle {hairStyle} haircolor {hairColor} for race {raceId} at index {raceId},{index}");
         }
@@ -227,8 +227,8 @@ public abstract class AbstractGetCache
         return go;
     }
 
-    private byte GetRemappedIndex(CharacterRaceAnimation raceId, byte index) {
-        if (CharacterRaceAnimation.FFighter == raceId) {
+    private int GetRemappedIndex(PlayerModel raceId, int index) {
+        if (PlayerModel.FFighter == raceId) {
             return index switch {
                 8 => 6,
                 10 => 8,

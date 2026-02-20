@@ -4,16 +4,16 @@ using UnityEngine;
 public class ItemLogin : IData
 {
     private byte[] _data;
-    private LoginInterludeServerPacketType packetType;
+    private LoginServerPacketType packetType;
     public ItemLogin(byte[] data, bool init, bool cryptEnbled)
     {
         Decrypt(data, cryptEnbled, init);
-        packetType = (LoginInterludeServerPacketType)data[0];
+        packetType = (LoginServerPacketType)data[0];
         this._data = data;
     }
 
     public byte[] DecodeData() { return _data; }
-    public LoginInterludeServerPacketType PaketType() { return packetType; }
+    public LoginServerPacketType PaketType() { return packetType; }
 
     private void Decrypt(byte[] data , bool cryptEnbled , bool init)
     {

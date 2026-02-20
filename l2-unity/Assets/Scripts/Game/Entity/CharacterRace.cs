@@ -12,26 +12,26 @@ public enum CharacterRace : byte {
 }
 
 public static class CharacterRaceParser {
-    public static CharacterRace ParseRace(CharacterRaceAnimation race) {
+    public static CharacterRace ParseRace(PlayerModel race) {
         switch (race) {
-            case CharacterRaceAnimation.MDwarf:
-            case CharacterRaceAnimation.FDwarf:
+            case PlayerModel.MDwarf:
+            case PlayerModel.FDwarf:
                 return CharacterRace.Dwarf;
-            case CharacterRaceAnimation.FDarkElf:
-            case CharacterRaceAnimation.MDarkElf:
+            case PlayerModel.FDarkElf:
+            case PlayerModel.MDarkElf:
                 return CharacterRace.DarkElf;
-            case CharacterRaceAnimation.MElf:
-            case CharacterRaceAnimation.FElf:
+            case PlayerModel.MElf:
+            case PlayerModel.FElf:
                 return CharacterRace.Elf;
-            case CharacterRaceAnimation.MShaman:
-            case CharacterRaceAnimation.FShaman:
-            case CharacterRaceAnimation.MOrc:
-            case CharacterRaceAnimation.FOrc:
+            case PlayerModel.MShaman:
+            case PlayerModel.FShaman:
+            case PlayerModel.MOrc:
+            case PlayerModel.FOrc:
                 return CharacterRace.Orc;
-            case CharacterRaceAnimation.MFighter:
-            case CharacterRaceAnimation.FFighter:
-            case CharacterRaceAnimation.MMagic:
-            case CharacterRaceAnimation.FMagic:
+            case PlayerModel.MFighter:
+            case PlayerModel.FFighter:
+            case PlayerModel.MMagic:
+            case PlayerModel.FMagic:
                 return CharacterRace.Human;
             default:
                 return CharacterRace.Dwarf;
