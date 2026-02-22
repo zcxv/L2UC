@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 4177309194634512238}
   - component: {fileID: 6272648789642559141}
   - component: {fileID: 2602161096141269746}
-  - component: {fileID: 6272749618403167321}
-  - component: {fileID: 191508881264027878}
+  - component: {fileID: 5478318839173799980}
+  - component: {fileID: 363023410685643414}
   m_Layer: 0
   m_Name: Input
   m_TagString: Untagged
@@ -78,6 +78,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276d2bd066b40f942bca360f382d8bfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maximumTargetDistance: 15
+  _entityMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _visibleEntities: []
+  _nextTargetIndex: 0
 --- !u!114 &2602161096141269746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,7 +111,13 @@ MonoBehaviour:
     _objectScene: 
     _objectEntity: {fileID: 0}
     _objectTransform: {fileID: 0}
---- !u!114 &6272749618403167321
+  _entityMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _clickThroughMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &5478318839173799980
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,7 +126,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4875879077497951606}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c9181601ffd73f4ea42e97be3615453, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d5189d13d1181449a4afdc7ed030ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <LeftClickDown>k__BackingField: 0
@@ -139,7 +151,7 @@ MonoBehaviour:
   <OpenActions>k__BackingField: 0
   <CloseWindow>k__BackingField: 0
   <Validate>k__BackingField: 0
---- !u!114 &191508881264027878
+--- !u!114 &363023410685643414
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,6 +160,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4875879077497951606}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 675288a14a68dc54f875a1c7aa89c846, type: 3}
+  m_Script: {fileID: 11500000, guid: 96579d11227401d419609710e98ccd7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
