@@ -2,8 +2,7 @@
 
 [System.Serializable]
 public class Status {
-
-
+    
      private double _hp;
      private double _mp;
      private int _myDamage;

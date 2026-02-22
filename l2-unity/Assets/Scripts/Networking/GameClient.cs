@@ -6,7 +6,7 @@ using L2_login;
 
 
 public class GameClient : DefaultClient {
-    [SerializeField] protected PlayerInfoInterlude _playerInfo;
+    [SerializeField] protected PlayerInfo _playerInfo;
     [SerializeField] protected int _serverId;
     [SerializeField] private int _playKey1;
     [SerializeField] private int _playKey2;
@@ -14,18 +14,18 @@ public class GameClient : DefaultClient {
     private readonly object syncLock = new object();
     private bool _isLoadComplete { get; set; }
 
-    public PlayerInfoInterlude PlayerInfo { get { return _playerInfo; } set { _playerInfo = value; } }
+    public PlayerInfo PlayerInfo { get { return _playerInfo; } set { _playerInfo = value; } }
     public string CurrentPlayer { get { return _playerInfo.Identity.Name; } }
     public int ServerId { get { return _serverId; } set { _serverId = value; } }
     public int PlayKey1 { get { return _playKey1; } set { _playKey1 = value; } }
     public int PlayKey2 { get { return _playKey2; } set { _playKey2 = value; } }
     public GameCrypt GameCrypt { get { return _gameCrypt; } }   
 
-    private GameClientInterludePacketHandler clientPacketHandler;
-    private GameServerInterludePacketHandler serverPacketHandler;
+    private GameClientPacketHandler clientPacketHandler;
+    private GameServerPacketHandler serverPacketHandler;
 
-    public GameClientInterludePacketHandler ClientPacketHandler { get { return clientPacketHandler; } }
-    public GameServerInterludePacketHandler ServerPacketHandler { get { return serverPacketHandler; } }
+    public GameClientPacketHandler ClientPacketHandler { get { return clientPacketHandler; } }
+    public GameServerPacketHandler ServerPacketHandler { get { return serverPacketHandler; } }
 
     private static GameClient _instance;
     public static GameClient Instance { get { return _instance; } }
@@ -39,8 +39,8 @@ public class GameClient : DefaultClient {
     }
 
     protected override void CreateAsyncClient() {
-        clientPacketHandler = new GameClientInterludePacketHandler();
-        serverPacketHandler = new GameServerInterludePacketHandler();
+        clientPacketHandler = new GameClientPacketHandler();
+        serverPacketHandler = new GameServerPacketHandler();
 
         _client = new AsynchronousClient(_serverIp, _serverPort, this, clientPacketHandler, serverPacketHandler, false);
     }
@@ -68,7 +68,7 @@ public class GameClient : DefaultClient {
 
         Debug.Log("Connected to GameServer");
         //746 interlude protocol
-        SendGameDataQueue.Instance().AddItem(CreatorPacketsGameLobby.CreateProtocolVersion(GameManager.Instance.ProtocolVersion) , false , false);
+        SendGameDataQueue.Instance().AddItem(GameLobbyPacketFactory.CreateProtocolVersion(GameManager.Instance.ProtocolVersion) , false , false);
         //clientPacketHandler.SendProtocolVersion();
     }
 

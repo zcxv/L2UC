@@ -121,7 +121,7 @@ public class ClanDetailedInfo
     private void OnClickOkTitle(string memberName, string title)
     {
         SendGameDataQueue.Instance().AddItem(
-            CreatorPacketsUser.CreateRequestGiveNickName(memberName, title),
+            UserPacketFactory.CreateRequestGiveNickName(memberName, title),
             GameClient.Instance.IsCryptEnabled(),
             GameClient.Instance.IsCryptEnabled());
 
@@ -131,7 +131,7 @@ public class ClanDetailedInfo
     private void OnDeleteTitle(string memberName)
     {
         SendGameDataQueue.Instance().AddItem(
-            CreatorPacketsUser.CreateRequestGiveNickName(memberName, ""),
+            UserPacketFactory.CreateRequestGiveNickName(memberName, ""),
             GameClient.Instance.IsCryptEnabled(),
             GameClient.Instance.IsCryptEnabled());
     }
@@ -147,7 +147,7 @@ public class ClanDetailedInfo
     private void SystemMessageClickOkDismiss()
     {
         SendGameDataQueue.Instance().AddItem(
-            CreatorPacketsUser.CreateRequestOustPledgeMember(_selectDismiss),
+            UserPacketFactory.CreateRequestOustPledgeMember(_selectDismiss),
             GameClient.Instance.IsCryptEnabled(),
             GameClient.Instance.IsCryptEnabled());
         CancelEvent();
@@ -177,7 +177,7 @@ public class ClanDetailedInfo
         if(newPrivileges != -1)
         {
             SendGameDataQueue.Instance().AddItem(
-                CreatorPacketsUser.CreateRequestPledgePower(useRank, 2, newPrivileges),
+                UserPacketFactory.CreateRequestPledgePower(useRank, 2, newPrivileges),
                 GameClient.Instance.IsCryptEnabled(),
                 GameClient.Instance.IsCryptEnabled());
 

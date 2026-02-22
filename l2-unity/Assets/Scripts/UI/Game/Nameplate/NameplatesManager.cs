@@ -97,7 +97,7 @@ public class NameplatesManager : MonoBehaviour
                     Entity e = hoverObjectData.ObjectTransform.GetComponent<Entity>();
                     if (e != null)
                     {
-                        if (!_nameplates.ContainsKey(e.IdentityInterlude.Id))
+                        if (!_nameplates.ContainsKey(e.Identity.Id))
                         {
                             CreateNameplate(e);
                         }
@@ -114,7 +114,7 @@ public class NameplatesManager : MonoBehaviour
 
         Entity e = TargetManager.Instance.Target.Data.ObjectTransform.GetComponent<Entity>();
         if(e != null) {
-            if(!_nameplates.ContainsKey(e.IdentityInterlude.Id)) {
+            if(!_nameplates.ContainsKey(e.Identity.Id)) {
                 CreateNameplate(e);
             }
         }
@@ -131,7 +131,7 @@ public class NameplatesManager : MonoBehaviour
                 if (objectEntity != null)
                 {
 
-                    int objectId = objectEntity.IdentityInterlude.Id;
+                    int objectId = objectEntity.Identity.Id;
                     if(objectId != _removeObjId)
                     {
                         if (!_nameplates.ContainsKey(objectId))
@@ -159,17 +159,17 @@ public class NameplatesManager : MonoBehaviour
             visualElement.Q<Label>("EntityName"),
             visualElement.Q<Label>("EntityTitle"),
             entity.transform,
-            entity.IdentityInterlude.Title,
-            entity.IdentityInterlude.TitleColor,
+            entity.Identity.Title,
+            entity.Identity.TitleColor,
             GetHeight(entity),
-            entity.IdentityInterlude.Name,
-            entity.IdentityInterlude.Id,
+            entity.Identity.Name,
+            entity.Identity.Id,
             true
             );
 
-        if (!_nameplates.ContainsKey(entity.IdentityInterlude.Id))
+        if (!_nameplates.ContainsKey(entity.Identity.Id))
         {
-            _nameplates.Add(entity.IdentityInterlude.Id, nameplate);
+            _nameplates.Add(entity.Identity.Id, nameplate);
             _rootElement.Add(visualElement);
         }
 

@@ -140,7 +140,7 @@ public class PartyInvitationWindow : L2PopupWindow
 
     private void SendAcceptResponse()
     {
-        var sendPacket = CreatorPacketsUser.CreateRequestAnswerJoinParty(1);
+        var sendPacket = UserPacketFactory.CreateRequestAnswerJoinParty(1);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPacket, enable, enable);
 
@@ -149,7 +149,7 @@ public class PartyInvitationWindow : L2PopupWindow
 
     private void SendDeclineResponse()
     {
-        var sendPacket = CreatorPacketsUser.CreateRequestAnswerJoinParty(0);
+        var sendPacket = UserPacketFactory.CreateRequestAnswerJoinParty(0);
         bool enable = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(sendPacket, enable, enable);
 

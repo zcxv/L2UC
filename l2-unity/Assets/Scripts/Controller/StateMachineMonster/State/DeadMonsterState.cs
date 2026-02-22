@@ -31,7 +31,7 @@ public class DeadMosterState : MonsterBase
     private void UseDead(MonsterEntity entity)
     {
         Debug.Log("Попали и увидели что монстр уже должен быть мертвым пришел пакет на помереть 1");
-        AnimationManager.Instance.PlayMonsterAnimation(entity.IdentityInterlude.Id, AnimationNames.DEAD.ToString());
+        AnimationManager.Instance.PlayMonsterAnimation(entity.Identity.Id, AnimationNames.DEAD.ToString());
         ResetAttackIfMonsterDead();
     }
 

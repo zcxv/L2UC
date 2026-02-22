@@ -99,11 +99,11 @@ public class PositionValidationController : MonoBehaviour
             monsterEntity.ShowObject();
             
             var stateMachine = monsterEntity.GetStateMachine();
-            if (stateMachine != null) ReStartAnimation(monsterEntity.IdentityInterlude.Id , stateMachine);
+            if (stateMachine != null) ReStartAnimation(monsterEntity.Identity.Id , stateMachine);
 
         }else if (entity.GetType() == typeof(PlayerEntity))
         {
-            int objectId = entity.IdentityInterlude.Id;
+            int objectId = entity.Identity.Id;
             Dictionary<string, float> floatValues  = AnimationManager.Instance.PlayerGetAllFloat(objectId);
             entity.HideObject();
             NewCalcGravity(PlayerController.Instance , newPosition);
@@ -120,7 +120,7 @@ public class PositionValidationController : MonoBehaviour
             npcEntity.ShowObject();
 
             var stateMachine = npcEntity.GetStateMachine();
-            if (stateMachine != null) ReStartAnimationNpc(npcEntity.IdentityInterlude.Id, stateMachine);
+            if (stateMachine != null) ReStartAnimationNpc(npcEntity.Identity.Id, stateMachine);
         }
     }
 

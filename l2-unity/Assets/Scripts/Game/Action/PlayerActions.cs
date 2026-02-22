@@ -68,7 +68,7 @@ public class PlayerActions : MonoBehaviour
 
     public void UseSkill(int skillId)
     {
-        RequestMagicSkillUse sendPaket = CreatorPacketsUser.CreateMagicSkilluse(skillId);
+        RequestMagicSkillUse sendPaket = UserPacketFactory.CreateMagicSkilluse(skillId);
         bool enable = GameClient.Instance.IsCryptEnabled();
 
         SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);

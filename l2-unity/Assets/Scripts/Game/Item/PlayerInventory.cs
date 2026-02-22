@@ -148,7 +148,7 @@ public class PlayerInventory : MonoBehaviour
         //    equip_collect = _playerEquipInventory.Values.ToList();
         // }
         if (_currentUser == null) _currentUser = StorageNpc.getInstance().GetFirstUser();
-        int userId1 = _currentUser.PlayerInfoInterlude.Identity.Id;
+        int userId1 = _currentUser.PlayerInfo.Identity.Id;
 
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
@@ -188,7 +188,7 @@ public class PlayerInventory : MonoBehaviour
                 int useSlot = _playerInventory.Count + _playerEquipInventory.Count;
 
                 if(_currentUser == null) _currentUser =  StorageNpc.getInstance().GetFirstUser();
-                int userId = _currentUser.PlayerInfoInterlude.Identity.Id;
+                int userId = _currentUser.PlayerInfo.Identity.Id;
                 UnityMainThreadDispatcher.Instance().Enqueue(() => {
                     InventoryWindow.Instance.UpdateItemList(_tempForRemoveAndAdd, _tempForModified, listEquip, adenaCount, useSlot, _changeInventoryData, userId);
                     InventoryWindow.Instance.RemoveOldEquipItemOrNoQuipItem(_changeInventoryData , userId);
@@ -507,7 +507,7 @@ public class PlayerInventory : MonoBehaviour
     {
         bool isCryptEnabled = GameClient.Instance.IsCryptEnabled();
         SendGameDataQueue.Instance().AddItem(
-            CreatorPacketsUser.CreateUseItem(objectId, 0),
+            UserPacketFactory.CreateUseItem(objectId, 0),
             isCryptEnabled,
             isCryptEnabled
         );
@@ -564,7 +564,7 @@ public class PlayerInventory : MonoBehaviour
             ItemInstance item = _playerInventory[objectId];
             //getInstance().AddS1Items(new VariableItem(item.ItemData.ItemName.Name, objectId));
             //AudioManager.Instance.PlayEquipSound("trash_basket");
-            var sendPaket = CreatorPacketsUser.CreateDestroyItem(objectId, quantity);
+            var sendPaket = UserPacketFactory.CreateDestroyItem(objectId, quantity);
             bool enable = GameClient.Instance.IsCryptEnabled();
             SendGameDataQueue.Instance().AddItem(sendPaket, enable, enable);
         }

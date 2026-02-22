@@ -20,7 +20,7 @@ public class UserGear : Gear
     
     private CharacterArmorDresser _armorDresser;
     
-    public override void Initialize(int ownderId, CharacterRaceAnimation raceId) {
+    public override void Initialize(int ownderId, PlayerModel raceId) {
         base.Initialize(ownderId, raceId);
 
         if(this is PlayerGear) {

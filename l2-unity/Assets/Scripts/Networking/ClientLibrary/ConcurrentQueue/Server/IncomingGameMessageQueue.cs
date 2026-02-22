@@ -12,7 +12,7 @@ public class IncomingGameMessageQueue: IQueue
 
     private ConcurrentQueue<ItemServer> _queue;
     private static IncomingGameMessageQueue _instance;
-    private GSInterludeMessageHandler _serverPacketHandler;
+    private GSMessageHandler _serverPacketHandler;
     private static CancellationTokenSource _cancelTokenSource;
     private static CancellationToken _token;
     private bool _isRunning = false;
@@ -34,7 +34,7 @@ public class IncomingGameMessageQueue: IQueue
 
     public void SetPacketHandler(ServerPacketHandler serverPacketHandler)
     {
-        this._serverPacketHandler = (GSInterludeMessageHandler) serverPacketHandler;
+        this._serverPacketHandler = (GSMessageHandler) serverPacketHandler;
     }
 
     public ServerPacketHandler GetPacketHandler()

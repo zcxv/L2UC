@@ -13,7 +13,7 @@ public class StopMoveMonsterIntention : MonsterIntentionBase
 
             Debug.Log("Move Monstr посылаем запрос на остановку!   ");
             //_stateMachine.MoveMonster.CancelMove();
-            MoveAllCharacters.Instance.CancelMove(_stateMachine.Entity.IdentityInterlude.Id);
+            MoveAllCharacters.Instance.CancelMove(_stateMachine.Entity.Identity.Id);
             _stateMachine.ChangeState(MonsterState.IDLE);
             _stateMachine.NotifyEvent(Event.ARRIVED);
         }

@@ -56,7 +56,7 @@ public class SendLoginDataQueue : IDisposable
                     ItemSendLogin item = _queue.Take();
                     if (item != null)
                     {
-                        var sender = (LoginClientInterludePacketHandler)_clientPacketHandler;
+                        var sender = (LoginClientPacketHandler)_clientPacketHandler;
                         sender.SendPacket(item.GetPacket());
                     }
                     

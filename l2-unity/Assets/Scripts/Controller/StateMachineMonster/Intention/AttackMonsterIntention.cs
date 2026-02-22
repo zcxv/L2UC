@@ -28,7 +28,7 @@ public class AttackMonsterIntention : MonsterIntentionBase
                 {
                     _stateMachine.SetTarget((PlayerEntity)entity);
 
-                    MoveAllCharacters.Instance.AddRotate(monster.IdentityInterlude.Id, new RotateData(entity, monster));
+                    MoveAllCharacters.Instance.AddRotate(monster.Identity.Id, new RotateData(entity, monster));
 
                     _stateMachine.ChangeState(MonsterState.ATTACKING);
                     _stateMachine.NotifyEvent(Event.READY_TO_ACT);

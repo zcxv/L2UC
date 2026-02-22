@@ -25,22 +25,22 @@ public class FastSinglExecuter : MonoBehaviour
     public  void Execute(IData itemQueue)
     {
         ItemServer item = (ItemServer)itemQueue;
-        GSInterludeCombatPacketType type = (GSInterludeCombatPacketType)item.ByteType();
+        GSCombatPacketType type = (GSCombatPacketType)item.ByteType();
         switch (type)
         {
-            case GSInterludeCombatPacketType.MoveToPawn:
+            case GSCombatPacketType.MoveToPawn:
                 MoveToPawn(itemQueue.DecodeData());
                 break;
-            case GSInterludeCombatPacketType.DIE:
+            case GSCombatPacketType.DIE:
                 Die(itemQueue.DecodeData());
                 break;
-            case GSInterludeCombatPacketType.STOP_MOVE:
+            case GSCombatPacketType.STOP_MOVE:
                 StopMove(itemQueue.DecodeData());
                 break;
-            case GSInterludeCombatPacketType.ATTACK:
+            case GSCombatPacketType.ATTACK:
                 Attack(itemQueue.DecodeData());
                 break;
-            case GSInterludeCombatPacketType.ActionFailed:
+            case GSCombatPacketType.ActionFailed:
                 ActionFailed(itemQueue.DecodeData());
                 break;
 

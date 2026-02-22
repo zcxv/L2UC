@@ -2,13 +2,13 @@
 
 public class CharacterHeight
 {
-    public static float GetHeight(CharacterRaceAnimation race)
+    public static float GetHeight(PlayerModel race)
     {
-        if (CharacterRaceAnimation.FDwarf.Equals(race) | CharacterRaceAnimation.MDwarf.Equals(race))
+        if (PlayerModel.FDwarf.Equals(race) | PlayerModel.MDwarf.Equals(race))
         {
             return 0.7f;
         }
-        else if (CharacterRaceAnimation.FDarkElf.Equals(race))
+        else if (PlayerModel.FDarkElf.Equals(race))
         {
             return 0.92f;
         }
