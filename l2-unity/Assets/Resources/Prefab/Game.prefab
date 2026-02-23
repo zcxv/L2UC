@@ -128,8 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c28e3cf9dc9693438b6eb036f0c18ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  focusedFrameRate: 165
-  unfocusedFrameRate: 165
+  focusedFrameRate: 144
+  unfocusedFrameRate: 30
 --- !u!114 &2700236288831831438
 MonoBehaviour:
   m_ObjectHideFlags: 0

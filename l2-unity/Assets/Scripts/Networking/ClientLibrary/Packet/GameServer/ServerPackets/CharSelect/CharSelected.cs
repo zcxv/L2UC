@@ -102,7 +102,5 @@ public class CharSelected : ServerPacket
         int empty12 = ReadI();
         int empty13 = ReadI();
         int empty14 = ReadI();
-
-        Debug.Log("");
     }
 }

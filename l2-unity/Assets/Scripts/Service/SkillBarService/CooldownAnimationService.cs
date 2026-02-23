@@ -2,8 +2,10 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CooldownAnimationService : MonoBehaviour
-{
+public class CooldownAnimationService {
+    
+    public static CooldownAnimationService Instance { get; } = new();
+
     public IEnumerator CooldownCoroutine(VisualElement _reuseElement , VisualElement _rechargeMaskBg,  float durationMs)
     {
 
@@ -14,8 +16,7 @@ public class CooldownAnimationService : MonoBehaviour
 
         float timePerImage = duration / silzeCooltime;
         float elapsed = 0f;
-
-
+        
         for (int i = 1; i < silzeCooltime; i++)
         {
             var icon = IconManager.Instance.GetOtherIconByType(i, 0);

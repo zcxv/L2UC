@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class InputManager : MonoBehaviourSingleton<InputManager>
 {
     #region InputActions
     // Mouse
@@ -29,63 +30,47 @@ public class InputManager : MonoBehaviour
     #endregion
 
     #region InputValues
-    [field: Header("Mouse")]
     // Mouse
-    [field: SerializeField] public bool LeftClickDown { get; private set; }
-    [field: SerializeField] public bool RightClickDown { get; private set; }
-    [field: SerializeField] public bool RightClickUp { get; private set; }
-    [field: SerializeField] public bool LeftClickHeld { get; private set; }
-    [field: SerializeField] public bool RightClickHeld { get; private set; }
+    public bool LeftClickDown { get; private set; }
+    public bool RightClickDown { get; private set; }
+    public bool RightClickUp { get; private set; }
+    public bool LeftClickHeld { get; private set; }
+    public bool RightClickHeld { get; private set; }
 
     // Camera
-    [field: Header("Camera")]
-    [field: SerializeField] public Vector2 CameraAxis { get; private set; }
-    [field: SerializeField] public bool CameraMoving { get; private set; }
-    [field: SerializeField] public bool TurnCamera { get; private set; }
-    [field: SerializeField] public float ZoomAxis { get; private set; }
+    public Vector2 CameraAxis { get; private set; }
+    public bool CameraMoving { get; private set; }
+    public bool TurnCamera { get; private set; }
+    public float ZoomAxis { get; private set; }
 
     // Movements
-    [field: Header("Movements")]
-    [field: SerializeField] public Vector2 MoveInput { get; private set; }
-    [field: SerializeField] public bool Move { get; private set; }
-    [field: SerializeField] public bool MoveForward { get; private set; }
-    [field: SerializeField] public bool Jump { get; private set; }
-    [field: SerializeField] public bool Attack { get; private set; }
-    [field: SerializeField] public bool NextTarget { get; private set; }
-    [field: SerializeField] public bool Sit { get; private set; }
+    public Vector2 MoveInput { get; private set; }
+    public bool Move { get; private set; }
+    public bool MoveForward { get; private set; }
+    public bool Jump { get; private set; }
+    public bool Attack { get; private set; }
+    public bool NextTarget { get; private set; }
+    public bool Sit { get; private set; }
 
     // UI
-    [field: Header("UI")]
-    [field: SerializeField] public bool OpenInventory { get; private set; }
-    [field: SerializeField] public bool OpenCharacerStatus { get; private set; }
-    [field: SerializeField] public bool OpenSystemMenu { get; private set; }
-    [field: SerializeField] public bool OpenActions { get; private set; }
-    [field: SerializeField] public bool CloseWindow { get; private set; }
-    [field: SerializeField] public bool Validate { get; private set; }
-
-    public InputAction[,] SkillbarActions { get; private set; }
-    public bool[,] SkillbarInputs { get; private set; }
+    public bool OpenInventory { get; private set; }
+    public bool OpenCharacerStatus { get; private set; }
+    public bool OpenSystemMenu { get; private set; }
+    public bool OpenActions { get; private set; }
+    public bool CloseWindow { get; private set; }
+    public bool Validate { get; private set; }
+    
+    public InputAction[,] SkillbarActions { get; private set; } // TODO m0nster: broke encapsulation
+    
+    // TODO m0nster: do not produce public access to arrays: anyone can change value inside array
+    public bool[,] SkillbarInputs { get; private set; } = new bool[5, 12]; 
 
     #endregion
 
     private PlayerInput _playerInput;
 
-    private static InputManager _instance;
-    public static InputManager Instance { get { return _instance; } }
-
-    private void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-
+    private void Start() {
         _playerInput = GetComponent<PlayerInput>();
-
         SetupInputActions();
     }
 
@@ -123,7 +108,7 @@ public class InputManager : MonoBehaviour
         SkillbarInputs = new bool[5, 12];
     }
 
-    void Update()
+    private void Update()
     {
         UpdateInputs();
     }
@@ -189,9 +174,4 @@ public class InputManager : MonoBehaviour
         }
     }
 
-
-    void OnDestroy()
-    {
-        _instance = null;
-    }
 }
