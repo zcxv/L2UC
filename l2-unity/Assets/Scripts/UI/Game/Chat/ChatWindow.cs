@@ -41,11 +41,6 @@ public class ChatWindow : L2Window
         }
     }
 
-    private void OnDestroy()
-    {
-        _instance = null;
-    }
-
     protected override void LoadAssets()
     {
         _windowTemplate = LoadAsset("Data/UI/_Elements/Game/Chat/ChatWindow");

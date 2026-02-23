@@ -21,7 +21,6 @@ public class SkillbarWindow : L2PopupWindow
     private VisualTreeAsset _barSlotTemplate;
     private List<AbstractSkillbar> _skillbars;
     private static SkillbarWindow _instance;
-    private CooldownAnimationService _cooldownAnimationService;
     public bool Locked { get { return _locked; } set { _locked = value; } }
     public bool Vertical { get { return _vertical; } set { _vertical = value; } }
     public bool TooltipDisabled { get { return _tooltipDisabled; } set { _tooltipDisabled = value; } }
@@ -33,7 +32,6 @@ public class SkillbarWindow : L2PopupWindow
         if (_instance == null)
         {
             _instance = this;
-            _cooldownAnimationService = new CooldownAnimationService();
         }
         else
         {
@@ -375,7 +373,7 @@ public class SkillbarWindow : L2PopupWindow
 
         if(skillbarSlot != null)
         {
-            StartCoroutine(_cooldownAnimationService.CooldownCoroutine(skillbarSlot.GetReuseElement(), skillbarSlot.GetRechargeMaskElement(), reuseDelay));
+            StartCoroutine(CooldownAnimationService.Instance.CooldownCoroutine(skillbarSlot.GetReuseElement(), skillbarSlot.GetRechargeMaskElement(), reuseDelay));
         }
 
 

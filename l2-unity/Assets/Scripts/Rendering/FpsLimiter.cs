@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 public class FpsLimiter : MonoBehaviour {
-    [SerializeField] private int focusedFrameRate = 60;
-    [SerializeField] private int unfocusedFrameRate = 5;
+    
+    [SerializeField] private int focusedFrameRate = 144;
+    [SerializeField] private int unfocusedFrameRate = 30;
 
+#if !UNITY_EDITOR
     private void Start() {
-#if UNITY_EDITOR
-        this.enabled = false;
-#endif
         QualitySettings.vSyncCount = 0;
 
         // Set the initial frame rate
@@ -21,9 +21,19 @@ public class FpsLimiter : MonoBehaviour {
         int targetFrameRate = isFocused ? focusedFrameRate : unfocusedFrameRate;
         SetFrameRate(targetFrameRate);
     }
-
+#endif
+    
     private void SetFrameRate(int frameRate) {
         // Set the target frame rate
         Application.targetFrameRate = frameRate;
     }
+
+#if UNITY_EDITOR
+    private void Reset() {
+        focusedFrameRate = 144;
+        unfocusedFrameRate = 30;
+    }
+#endif
+
+    
 }
