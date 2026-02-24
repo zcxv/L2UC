@@ -1874,8 +1874,8 @@
         "y": 0.5
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 0.5,
+        "y": 0.5
     },
     "m_Labels": []
 }
@@ -2147,8 +2147,8 @@
     "m_ObjectId": "2da710db5c304e96aa9c3bd081a50e84",
     "m_Title": "Loop",
     "m_Position": {
-        "x": -3258.000244140625,
-        "y": 1861.0001220703125
+        "x": -3273.0,
+        "y": 1775.0
     }
 }
 
@@ -2836,8 +2836,8 @@
         "y": 1.100000023841858
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -3115,17 +3115,20 @@
     "m_ObjectId": "54a8213c4ee5426eb56d2ae09de4040d",
     "m_Datas": [],
     "m_ActiveSubTarget": {
-        "m_Id": "e4b75ac7de6c4c088372a63c838294cc"
+        "m_Id": "c4c71dcda7194adb89531ff7b9494620"
     },
     "m_AllowMaterialOverride": false,
-    "m_SurfaceType": 0,
+    "m_SurfaceType": 1,
     "m_ZTestMode": 4,
     "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
-    "m_RenderFace": 2,
+    "m_RenderFace": 0,
     "m_AlphaClip": false,
-    "m_CastShadows": true,
+    "m_CastShadows": false,
     "m_ReceiveShadows": true,
+    "m_DisableTint": false,
+    "m_AdditionalMotionVectorMode": 0,
+    "m_AlembicMotionVectors": false,
     "m_SupportsLODCrossFade": false,
     "m_CustomEditorGUI": "",
     "m_SupportVFX": false
@@ -5003,8 +5006,8 @@
     "m_ObjectId": "a14615bc91df495a9eae0032ab09271c",
     "m_Title": "Grow + Transparent",
     "m_Position": {
-        "x": -849.0000610351563,
-        "y": 1581.0
+        "x": -849.0,
+        "y": 1598.0
     }
 }
 
@@ -5689,10 +5692,16 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
+}
+
+{
+    "m_SGVersion": 2,
+    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalUnlitSubTarget",
+    "m_ObjectId": "c4c71dcda7194adb89531ff7b9494620"
 }
 
 {
@@ -6402,12 +6411,6 @@
     "m_Property": {
         "m_Id": "7d7bd3b554eb45a499ece1aeea679b37"
     }
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalSpriteUnlitSubTarget",
-    "m_ObjectId": "e4b75ac7de6c4c088372a63c838294cc"
 }
 
 {
