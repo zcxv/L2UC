@@ -577,21 +577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entityLoaded: 0
-  _identity:
-    _entityType: 0
-    _id: 0
-    _name: 
-    _title: 
-    _titleColor: 9CE8A9FF
-    _resetTick: 0
-    _npcId: 0
-    _npcClass: 
-    _playerClass: 0
-    _isMage: 0
-    _position: {x: 0, y: 0, z: 0}
-    _heading: 0
-    _owned: 0
-  _identityInterlude:
+  identity:
     _entityType: 0
     _id: 0
     _name: 
@@ -617,11 +603,6 @@ MonoBehaviour:
     _scaledRunSpeed: 0
     _scaledWalkSpeed: 0
     _basePAtkSpeed: 0
-  _appearance:
-    CollisionHeight: 0
-    CollisionRadius: 0
-    LHand: 0
-    RHand: 0
   _running: 0
   _dead: 0
   _race: 0
