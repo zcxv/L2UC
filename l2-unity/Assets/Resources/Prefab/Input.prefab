@@ -129,28 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d5189d13d1181449a4afdc7ed030ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <LeftClickDown>k__BackingField: 0
-  <RightClickDown>k__BackingField: 0
-  <RightClickUp>k__BackingField: 0
-  <LeftClickHeld>k__BackingField: 0
-  <RightClickHeld>k__BackingField: 0
-  <CameraAxis>k__BackingField: {x: 0, y: 0}
-  <CameraMoving>k__BackingField: 0
-  <TurnCamera>k__BackingField: 0
-  <ZoomAxis>k__BackingField: 0
-  <MoveInput>k__BackingField: {x: 0, y: 0}
-  <Move>k__BackingField: 0
-  <MoveForward>k__BackingField: 0
-  <Jump>k__BackingField: 0
-  <Attack>k__BackingField: 0
-  <NextTarget>k__BackingField: 0
-  <Sit>k__BackingField: 0
-  <OpenInventory>k__BackingField: 0
-  <OpenCharacerStatus>k__BackingField: 0
-  <OpenSystemMenu>k__BackingField: 0
-  <OpenActions>k__BackingField: 0
-  <CloseWindow>k__BackingField: 0
-  <Validate>k__BackingField: 0
 --- !u!114 &363023410685643414
 MonoBehaviour:
   m_ObjectHideFlags: 0

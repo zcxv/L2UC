@@ -82,7 +82,13 @@ public class ServerSelectWindow : L2Window
         for (int i = 0; i < serverData.Count; i++) {
             charsOnServers.TryGetValue(serverData[i].serverId, out int charCount);
 
-            AddServerRow(i, ParseServerName(serverData[i].serverId), ParseServerPing(serverData[i].status), ParseServerStatus(serverData[i].status), charCount);
+            AddServerRow(
+                i, 
+                ServerNameTable.Instance[serverData[i].serverId].Name, 
+                ParseServerPing(serverData[i].status), 
+                ParseServerStatus(serverData[i].status), 
+                charCount
+            );
 
             if (serverData[i].serverId == lastServer) {
                 SelectServer(i);
@@ -121,10 +127,6 @@ public class ServerSelectWindow : L2Window
 
         GameClient.Instance.ServerIp = StringUtils.ByteArrayToIpAddress(_serverData[rowId].ip);
         GameClient.Instance.ServerPort = _serverData[rowId].port;
-    }
-
-    private string ParseServerName(int serverId) {
-        return ServerNameDAO.GetServer(serverId);
     }
 
     private string ParseServerPing(int status) {

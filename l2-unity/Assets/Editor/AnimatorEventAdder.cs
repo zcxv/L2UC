@@ -575,7 +575,7 @@ public class AnimatorEventAdder : EditorWindow
                 List<KeyValuePair<AnimationClip, AnimationClip>> overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
                 overrideController.GetOverrides(overrides); 
 
-                Debug.Log($"Найдено {overrides.Count} переопределений:");
+                Debug.Log($"РќР°Р№РґРµРЅРѕ {overrides.Count} РїРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёР№:");
                 string selectStateNameOriginal = selectedStateName.Replace("j", "");
                 foreach (var pair in overrides)
                 {
@@ -592,7 +592,7 @@ public class AnimatorEventAdder : EditorWindow
                             overrideClips[originalClip] = pair.Value;
                         }
 
-                        Debug.Log($"Оригинал: {originalClip.name} -> Переопределение: {(newClip != null ? newClip.name : "null (удалено)")}");
+                        Debug.Log($"РћСЂРёРіРёРЅР°Р»: {originalClip.name} -> РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёРµ: {(newClip != null ? newClip.name : "null (СѓРґР°Р»РµРЅРѕ)")}");
                     }
                 }
 
