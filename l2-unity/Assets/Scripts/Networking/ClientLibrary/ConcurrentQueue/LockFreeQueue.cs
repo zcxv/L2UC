@@ -54,7 +54,7 @@ public class LockFreeQueue<T> {
         private T value;
         private volatile int visited;
 
-        public Node(T value) {
+        internal Node(T value) {
             this.value = value;
         }
 

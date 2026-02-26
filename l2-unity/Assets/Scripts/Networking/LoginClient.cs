@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Collections;
 using static ServerListPacket;
 using L2_login;
+using Unity.Logging;
 
 public class LoginClient : DefaultClient {
+
     // Crypt
     public static byte[] STATIC_BLOWFISH_KEY = {
         0x6b,

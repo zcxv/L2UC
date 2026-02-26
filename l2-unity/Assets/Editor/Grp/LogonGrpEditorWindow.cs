@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -10,7 +9,7 @@ using UnityEngine;
 /// <summary>
 /// A utility that transforms LogonGRP into CreatorEntity and SelectorSlotEntity triggers on the active scene.
 /// </summary>
-public class LogonGrpConverter : EditorWindow {
+public class LogonGrpEditorWindow : EditorWindow {
 
     private struct Logongrp {
         public Vector3 position;
@@ -24,32 +23,32 @@ public class LogonGrpConverter : EditorWindow {
     
     [MenuItem("Database/LogonGRP Converter")]
     private static void ShowWindow() {
-        var window = GetWindow<LogonGrpConverter>();
+        var window = GetWindow<LogonGrpEditorWindow>();
         window.titleContent = new GUIContent("LogonGRP Converter");
         window.Show();
     }
 
     private const int CHARACTER_SELECT_SLOTS = 8;
 
-    private static readonly List<dynamic> MODELS = new() {
-        new { model = PlayerModel.MFighter },
-        new { model = PlayerModel.FFighter },
-        new { model = PlayerModel.MMagic },
-        new { model = PlayerModel.FMagic },
-        new { model = PlayerModel.MElf },
-        new { model = PlayerModel.FElf },
-        new { model = PlayerModel.MElf },
-        new { model = PlayerModel.FElf },
-        new { model = PlayerModel.MDarkElf },
-        new { model = PlayerModel.FDarkElf },
-        new { model = PlayerModel.MDarkElf },
-        new { model = PlayerModel.FDarkElf },
-        new { model = PlayerModel.MOrc },
-        new { model = PlayerModel.FOrc },
-        new { model = PlayerModel.MShaman },
-        new { model = PlayerModel.FShaman },
-        new { model = PlayerModel.MDwarf },
-        new { model = PlayerModel.FDwarf }
+    private static readonly List<PlayerModel> Models = new() {
+        PlayerModel.MFighter,
+        PlayerModel.FFighter,
+        PlayerModel.MMagic,
+        PlayerModel.FMagic,
+        PlayerModel.MElf,
+        PlayerModel.FElf,
+        PlayerModel.MElf,
+        PlayerModel.FElf,
+        PlayerModel.MDarkElf,
+        PlayerModel.FDarkElf,
+        PlayerModel.MDarkElf,
+        PlayerModel.FDarkElf,
+        PlayerModel.MOrc,
+        PlayerModel.FOrc,
+        PlayerModel.MShaman,
+        PlayerModel.FShaman,
+        PlayerModel.MDwarf,
+        PlayerModel.FDwarf
     };
 
     private string path = "";
@@ -114,7 +113,10 @@ public class LogonGrpConverter : EditorWindow {
         using (StreamReader reader = new StreamReader(path)) {
             string line;
             while ((line = reader.ReadLine()) != null) {
-                dynamic raw = new ExpandoObject();
+                float x = 0f;
+                float y = 0f;
+                float z = 0f;
+                float yaw = 0f;
                 
                 string[] keyvals = line.Split('\t');
                 
@@ -129,22 +131,22 @@ public class LogonGrpConverter : EditorWindow {
 
                     switch (key) {
                         case "x":
-                            raw.x = NumberUtils.FromIntToFloat(int.Parse(value));
+                            x = NumberUtils.FromIntToFloat(int.Parse(value));
                             break;
                         case "y":
-                            raw.y = NumberUtils.FromIntToFloat(int.Parse(value));
+                            y = NumberUtils.FromIntToFloat(int.Parse(value));
                             break;
                         case "z":
-                            raw.z = NumberUtils.FromIntToFloat(int.Parse(value));
+                            z = NumberUtils.FromIntToFloat(int.Parse(value));
                             break;
                         case "yaw":
-                            raw.yaw = NumberUtils.FromIntToFloat(int.Parse(value));
+                            yaw = NumberUtils.FromIntToFloat(int.Parse(value));
                             break;
                     }
                 }
 
-                Vector3 position = VectorUtils.ConvertPosToUnity(new Vector3(raw.x, raw.y, raw.z));
-                logongrps.Add(new Logongrp(position, new Vector3(0, 360.00f * raw.yaw / 65536f, 0)));
+                Vector3 position = VectorUtils.ConvertPosToUnity(new Vector3(x, y, z));
+                logongrps.Add(new Logongrp(position, new Vector3(0, 360.00f * yaw / 65536f, 0)));
             }
         }
         
@@ -194,7 +196,7 @@ public class LogonGrpConverter : EditorWindow {
             gameObject.tag = Tags.TRIGGER;
             CreatorEntity component = gameObject.AddComponent<CreatorEntity>();
             if (setDefaultModels) {
-                component.Model = MODELS[j].model;
+                component.Model = Models[j];
             }
         }
 

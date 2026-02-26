@@ -1,0 +1,286 @@
+﻿[
+  {
+    "Id": 1,
+    "Name": "Bartz"
+  },
+  {
+    "Id": 2,
+    "Name": "Sieghardt"
+  },
+  {
+    "Id": 3,
+    "Name": "Kain"
+  },
+  {
+    "Id": 4,
+    "Name": "Lionna"
+  },
+  {
+    "Id": 5,
+    "Name": "Erica"
+  },
+  {
+    "Id": 6,
+    "Name": "Gustin"
+  },
+  {
+    "Id": 7,
+    "Name": "Devianne"
+  },
+  {
+    "Id": 8,
+    "Name": "Hindemith"
+  },
+  {
+    "Id": 9,
+    "Name": "Teon (EURO)"
+  },
+  {
+    "Id": 10,
+    "Name": "Franz (EURO)"
+  },
+  {
+    "Id": 11,
+    "Name": "Luna (EURO)"
+  },
+  {
+    "Id": 12,
+    "Name": "Sayha"
+  },
+  {
+    "Id": 13,
+    "Name": "Aria"
+  },
+  {
+    "Id": 14,
+    "Name": "Phoenix"
+  },
+  {
+    "Id": 15,
+    "Name": "Chronos"
+  },
+  {
+    "Id": 16,
+    "Name": "Naia (EURO)"
+  },
+  {
+    "Id": 17,
+    "Name": "Elhwynna"
+  },
+  {
+    "Id": 18,
+    "Name": "Ellikia"
+  },
+  {
+    "Id": 19,
+    "Name": "Shikken"
+  },
+  {
+    "Id": 20,
+    "Name": "Scryde"
+  },
+  {
+    "Id": 21,
+    "Name": "Frikios"
+  },
+  {
+    "Id": 22,
+    "Name": "Ophylia"
+  },
+  {
+    "Id": 23,
+    "Name": "Shakdun"
+  },
+  {
+    "Id": 24,
+    "Name": "Tarziph"
+  },
+  {
+    "Id": 25,
+    "Name": "Aria"
+  },
+  {
+    "Id": 26,
+    "Name": "Esenn"
+  },
+  {
+    "Id": 27,
+    "Name": "Elcardia"
+  },
+  {
+    "Id": 28,
+    "Name": "Yiana"
+  },
+  {
+    "Id": 29,
+    "Name": "Seresin"
+  },
+  {
+    "Id": 30,
+    "Name": "Tarkai"
+  },
+  {
+    "Id": 31,
+    "Name": "Khadia"
+  },
+  {
+    "Id": 32,
+    "Name": "Roien"
+  },
+  {
+    "Id": 33,
+    "Name": "Kallint (Non-PvP)"
+  },
+  {
+    "Id": 34,
+    "Name": "Baium"
+  },
+  {
+    "Id": 35,
+    "Name": "Kamael"
+  },
+  {
+    "Id": 36,
+    "Name": "Beleth"
+  },
+  {
+    "Id": 37,
+    "Name": "Anakim"
+  },
+  {
+    "Id": 38,
+    "Name": "Lilith"
+  },
+  {
+    "Id": 39,
+    "Name": "Thifiel"
+  },
+  {
+    "Id": 40,
+    "Name": "Lithra"
+  },
+  {
+    "Id": 41,
+    "Name": "Lockirin"
+  },
+  {
+    "Id": 42,
+    "Name": "Kakai"
+  },
+  {
+    "Id": 43,
+    "Name": "Cadmus"
+  },
+  {
+    "Id": 44,
+    "Name": "Athebaldt"
+  },
+  {
+    "Id": 45,
+    "Name": "Blackbird"
+  },
+  {
+    "Id": 46,
+    "Name": "Ramsheart"
+  },
+  {
+    "Id": 47,
+    "Name": "Esthus"
+  },
+  {
+    "Id": 48,
+    "Name": "Vasper"
+  },
+  {
+    "Id": 49,
+    "Name": "Lancer"
+  },
+  {
+    "Id": 50,
+    "Name": "Ashton"
+  },
+  {
+    "Id": 51,
+    "Name": "Waytrel"
+  },
+  {
+    "Id": 52,
+    "Name": "Waltner"
+  },
+  {
+    "Id": 53,
+    "Name": "Tahnford"
+  },
+  {
+    "Id": 54,
+    "Name": "Hunter"
+  },
+  {
+    "Id": 55,
+    "Name": "Dewell"
+  },
+  {
+    "Id": 56,
+    "Name": "Rodemaye"
+  },
+  {
+    "Id": 57,
+    "Name": "Ken Rauhel"
+  },
+  {
+    "Id": 58,
+    "Name": "Ken Abigail"
+  },
+  {
+    "Id": 59,
+    "Name": "Ken Orwen"
+  },
+  {
+    "Id": 60,
+    "Name": "Van Holter"
+  },
+  {
+    "Id": 61,
+    "Name": "Desperion"
+  },
+  {
+    "Id": 62,
+    "Name": "Einhovant"
+  },
+  {
+    "Id": 63,
+    "Name": "Shunaiman"
+  },
+  {
+    "Id": 64,
+    "Name": "Faris"
+  },
+  {
+    "Id": 65,
+    "Name": "Tor"
+  },
+  {
+    "Id": 66,
+    "Name": "Carneiar"
+  },
+  {
+    "Id": 67,
+    "Name": "Dwyllios"
+  },
+  {
+    "Id": 68,
+    "Name": "Baium"
+  },
+  {
+    "Id": 69,
+    "Name": "Hallate"
+  },
+  {
+    "Id": 70,
+    "Name": "Zaken"
+  },
+  {
+    "Id": 71,
+    "Name": "Core"
+  }
+]
