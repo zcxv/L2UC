@@ -171,13 +171,13 @@ public class CreatorTableWindows : ICreatorTables
    }
 
     private void ResetCursorOnMouseDown(MouseDownEvent evt) =>
-    UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
+        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, CursorMode.Auto);
     private void ResetCursorOnMouseUp(MouseUpEvent evt) =>
-        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
+        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, CursorMode.Auto);
     private void ResetCursorOnPointerMove(PointerMoveEvent evt) =>
-        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
+        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, CursorMode.Auto);
     private void ResetCursorOnPointerDown(PointerDownEvent evt) =>
-        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, UnityEngine.CursorMode.Auto);
+        UnityEngine.Cursor.SetCursor(_defaultCursor, Vector2.zero, CursorMode.Auto);
 
     private void UnregisterRowCallbacks(VisualElement listRows)
     {
@@ -633,9 +633,9 @@ public class CreatorTableWindows : ICreatorTables
 
     private void CleapText(Label rowLabel)
     {
-        //rowLabel.style.width = 200;                   // ôèêñ. øèðèíà
-        rowLabel.style.whiteSpace = WhiteSpace.NoWrap; // çàïðåòèòü ïåðåíîñ
-        rowLabel.style.textOverflow = TextOverflow.Clip; // îáðåçàòü
+        //rowLabel.style.width = 200;
+        rowLabel.style.whiteSpace = WhiteSpace.NoWrap;
+        rowLabel.style.textOverflow = TextOverflow.Clip;
     }
 
     private VisualElement GetNewRow()

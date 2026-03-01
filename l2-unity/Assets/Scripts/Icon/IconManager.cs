@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class IconManager
 {
-    private const string _iconFolder = "Data\\SysTextures\\Icon";
-    private const string _cursorFolder = "Data\\UI\\Assets\\Cursor";
+    private const string _iconFolder = "Data/SysTextures/Icon";
+    private const string _cursorFolder = "Data/UI/Assets/Cursor";
     private const string _defaultNameIconBackground = "ItemWindow_DF_SlotBox_Default";
     private const string _checkedCheckBoxTexture = "Data/UI/Quest/CheckBox_checked";
     private const string _uncheckedCheckBoxTexture = "Data/UI/Quest/CheckBox_uncheked";
@@ -160,7 +160,7 @@ public class IconManager
     {
         var folder = (iconFolder == null) ? _iconFolder : iconFolder;
 
-        string icon = folder + "\\" + CleanIconName(name);
+        string icon = folder + "/" + CleanIconName(name);
 
         var result = Resources.Load<Texture2D>(icon);
 
@@ -209,8 +209,11 @@ public class IconManager
 
     public Texture2D LoadCursorByName(string name)
     {
-        string icon = _cursorFolder + "\\" + name;
+        string icon = $"{_cursorFolder}/{name}";
         var result = Resources.Load<Texture2D>(icon);
+        if (result == null) {
+            Debug.LogWarning($"Cursor '{name}' not found.");
+        }
         return result;
     }
 
@@ -258,7 +261,7 @@ public class IconManager
 
     private Texture2D GetNoImageIcon()
     {
-        return Resources.Load<Texture2D>(_iconFolder + "\\" + "NOIMAGE");
+        return Resources.Load<Texture2D>(_iconFolder + "/" + "NOIMAGE");
     }
 
     private string CleanIconName(string name) => name?.Replace("icon.", "") ?? "";

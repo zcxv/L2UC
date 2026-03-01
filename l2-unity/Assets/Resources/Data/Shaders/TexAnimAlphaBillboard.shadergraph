@@ -418,7 +418,7 @@
     "m_Group": {
         "m_Id": ""
     },
-    "m_Name": "TexAnim",
+    "m_Name": "Tex Anim",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -957,8 +957,8 @@
     "m_ObjectId": "9f57c8aa105643f4ad2fde9586dfb229",
     "m_Title": "Billboard",
     "m_Position": {
-        "x": 175.0,
-        "y": -161.00010681152345
+        "x": 174.99996948242188,
+        "y": -161.0
     }
 }
 
