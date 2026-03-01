@@ -6,10 +6,10 @@ using static ServerListPacket;
 using L2_login;
 using Unity.Logging;
 
-public class LoginClient : DefaultClient {
+public class LoginClient : AbstractSession {
 
     // Crypt
-    public static byte[] STATIC_BLOWFISH_KEY = {
+    private static readonly byte[] STATIC_BLOWFISH_KEY = {
         0x6b,
         0x60,
         0xcb,
@@ -93,6 +93,7 @@ public class LoginClient : DefaultClient {
     {
         return _sessionId;
     }
+    
     protected override void CreateAsyncClient() {
         if (_client == null)
         {

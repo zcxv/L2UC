@@ -1,8 +1,6 @@
-﻿using Org.BouncyCastle.Utilities.Encoders;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-
 
 public static class CharTemplateRegistry
 {

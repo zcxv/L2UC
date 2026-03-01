@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections;
 
-public abstract class DefaultClient : MonoBehaviour
+public abstract class AbstractSession : MonoBehaviour
 {
     [SerializeField] protected string _serverIp = SettingServerIp.IpAddressServer;
     [SerializeField] protected int _serverPort = 11000;

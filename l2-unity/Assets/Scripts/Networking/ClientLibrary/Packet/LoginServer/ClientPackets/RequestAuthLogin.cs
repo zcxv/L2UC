@@ -29,7 +29,7 @@ public class RequestAuthLogin : ClientPacket
 
 
             var rsaBlock = LoginClient.Instance.RSACrypt.EncryptRSABlockNoPaddingBoundleCastle(testRsa);
-
+            Debug.LogError($"RSA BLOCK SIZE {rsaBlock.Length}");
 
             WriteB(rsaBlock);
             WriteI(responce);

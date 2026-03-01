@@ -5,7 +5,7 @@ using System.Collections;
 using L2_login;
 
 
-public class GameClient : DefaultClient {
+public class GameClient : AbstractSession {
     [SerializeField] protected PlayerInfo _playerInfo;
     [SerializeField] protected int _serverId;
     [SerializeField] private int _playKey1;

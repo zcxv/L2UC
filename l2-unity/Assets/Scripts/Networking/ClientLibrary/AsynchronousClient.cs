@@ -15,7 +15,7 @@ public class AsynchronousClient
 
     private Socket _socket;
     public NetworkStream _stream;
-    private DefaultClient _client;
+    private AbstractSession _client;
 
     private ClientPacketHandler _clientPacketHandler;
     private ServerPacketHandler _serverPacketHandler;
@@ -39,7 +39,7 @@ public class AsynchronousClient
         }
     }
 
-    public AsynchronousClient(string ip, int port, DefaultClient client, ClientPacketHandler clientPacketHandler, ServerPacketHandler serverPacketHandler, bool enableInitPacket)
+    public AsynchronousClient(string ip, int port, AbstractSession client, ClientPacketHandler clientPacketHandler, ServerPacketHandler serverPacketHandler, bool enableInitPacket)
     {
         _port = port;
         _client = client;
@@ -197,7 +197,7 @@ public class AsynchronousClient
         _socket = null;
     }
 
-    private bool IsLoginClient(DefaultClient client)
+    private bool IsLoginClient(AbstractSession client)
     {
         return client.GetType() == typeof(LoginClient);
     }
