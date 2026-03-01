@@ -41,7 +41,6 @@ public class SkillNameTable
         _names = new Dictionary<int, Dictionary<int, SkillNameData>>();
         ReadActions();
         ReadNameInterlude();
-        Debug.Log("");
     }
 
     private void ReadActions()
@@ -79,10 +78,6 @@ public class SkillNameTable
                     {
                         case "skill_id":
                             nameData.Id = int.Parse(value);
-                            if (nameData.Id.Equals(410))
-                            {
-                                //Debug.Log("");
-                            }
                            break;
                         case "skill_level":
                             nameData.Level = int.Parse(value);

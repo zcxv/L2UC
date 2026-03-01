@@ -113,8 +113,8 @@ public class CraftingItemWindow : L2PopupWindow
 
     private void SetDataHeader(VisualElement container , RecipeData recipeData)
     {
-        int itemId = _packet.RecipeData.ItemId;
-        int count = _packet.RecipeData.Count;
+        int itemId = _packet.RecipeData.Product.ItemId;
+        int count = _packet.RecipeData.Product.Count;
 
 
         ItemInstance createItem = new ItemInstance(itemId, count, 0);

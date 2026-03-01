@@ -119,11 +119,6 @@ public class ItemTable
                 continue;
             }
 
-            if(kvp.Key == 356)
-            {
-                Debug.Log("");
-            }
-
             Armorgrp armorgrp = kvp.Value;
             ItemName itemName = ItemNameTable.Instance.GetItemName(kvp.Key);
             ItemStatData itemStatData = ItemStatDataTable.Instance.GetItemStatData(kvp.Key);
@@ -137,11 +132,6 @@ public class ItemTable
     {
         foreach (KeyValuePair<int, EtcItemgrp> kvp in EtcItemgrpTable.Instance.EtcItemGrps)
         {
-            if (kvp.Key == 7832)
-            {
-                Debug.Log("");
-            }
-
             if (_etcItems.ContainsKey(kvp.Key))
             {
                 continue;

@@ -31,10 +31,8 @@ public class RecipeBookItemList : ServerPacket
             int recipeId = ReadI();
             int position = ReadI();
 
-            RecipeData data = RecipeTable.Instance.GetRecipeData(recipeId);
-
-            if(data != null)
-            {
+            RecipeData data = RecipeTable.Instance[recipeId];
+            if(data != null) {
                 var recipe = new RecipeInstance(data, position);
                 _listItemInstance.Add(recipe.GetItemInstance());
                 _listRecipes.Add(recipe);
@@ -44,14 +42,24 @@ public class RecipeBookItemList : ServerPacket
     }
 }
 
-public class RecipeInstance :ItemInstance
+public class RecipeInstance : ItemInstance
 {
     private RecipeData _data;
     private int _position;
     private ItemInstance _recipeInstance;
-    public RecipeInstance(RecipeData data , int position): 
-        base(-1, data.ItemId, ItemLocation.Void, position, 1, ItemCategory.Item, false, ItemSlot.none, 0, -1)
-    {
+
+    public RecipeInstance(RecipeData data, int position) : base(
+        objectId: -1,
+        itemId: data.Product.ItemId,
+        location: ItemLocation.Void,
+        slot: position,
+        count: 1,
+        category: ItemCategory.Item,
+        equipped: false,
+        bodyPart: ItemSlot.none,
+        enchantLevel: 0,
+        remainingTime: -1
+    ) {
         _data = data;
         _position = position;
         _recipeInstance = new ItemInstance(-1, data.RecipeId, ItemLocation.Void, position, 1, ItemCategory.Item, false, ItemSlot.none, 0, -1);
@@ -74,6 +82,6 @@ public class RecipeInstance :ItemInstance
 
     public int GetIDMK()
     {
-        return _data.IDMk;
+        return _data.Id;
     }
 }

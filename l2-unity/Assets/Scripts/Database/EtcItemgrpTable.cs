@@ -59,10 +59,7 @@ public class EtcItemgrpTable {
                     if (DatUtils.ParseBaseAbstractItemGrpDat(etcItemgrp, key, value)) {
                         continue;
                     }
-                    if(etcItemgrp.ObjectId == 17)
-                    {
-                        Debug.Log("");
-                    }
+                    
                     switch (key) {
                         case "etcitem_type": 
                             etcItemgrp.EtcItemType = value;

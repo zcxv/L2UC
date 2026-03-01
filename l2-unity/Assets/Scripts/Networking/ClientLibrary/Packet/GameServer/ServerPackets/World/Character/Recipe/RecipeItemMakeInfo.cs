@@ -39,19 +39,17 @@ public class RecipeItemMakeInfo : ServerPacket
             _maxMp = ReadI();
             _status = ReadI();
 
-            _data = RecipeTable.Instance.GetRecipeData(_recipeId);
+            _data = RecipeTable.Instance[_recipeId];
             if(_data != null)
             {
-                RecipeMaterials[] materials = _data.Materials;
+                ItemCountEntry[] materials = _data.Materials;
+                for(int i = 0; i < materials.Length; i++) {
+                    var material = materials[i];
 
-                for(int i = 0; i < materials.Length; i++)
-                {
-                    RecipeMaterials material = materials[i];
-
-                    if(material != null && material.MaterialsMCnt > 0)
+                    if(material != null && material.Count > 0)
                     {
-                        var item = new ItemInstance(-1, material.MaterialsMId, ItemLocation.Void, i, material.MaterialsMCnt, ItemCategory.RequiredItem, false, ItemSlot.none, 0, -1);
-                        item.SetItemRequiredType(true, material.MaterialsMCnt);
+                        var item = new ItemInstance(-1, material.ItemId, ItemLocation.Void, i, material.Count, ItemCategory.RequiredItem, false, ItemSlot.none, 0, -1);
+                        item.SetItemRequiredType(true, material.Count);
                         _requiredItems.Add(item);
                     }
 
