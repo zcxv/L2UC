@@ -170,7 +170,7 @@ public class IconManager
             return result;
         }
 
-        Debug.LogWarning($"Missing icon: {name}.");
+        Debug.LogWarning($"Missing icon: {icon}.");
 
         return _noImageIcon;
     }
