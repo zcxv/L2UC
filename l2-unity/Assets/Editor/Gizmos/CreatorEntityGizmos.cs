@@ -11,7 +11,7 @@ public static class CreatorEntityGizmos {
     [DrawGizmo(GizmoType.NonSelected)]
     private static void DrawGizmosNonSelected(CreatorEntity creatorEntity, GizmoType gizmoType) {
         Gizmos.matrix = Matrix4x4.identity;
-        Gizmos.DrawIcon(creatorEntity.transform.position + (Vector3.up * 0.5f), "Gizmo_CharacterStay_MIP4.png");
+        Gizmos.DrawIcon(creatorEntity.transform.position + (Vector3.up * 0.5f), "Gizmo_CharacterStay_MIP0.png");
     }
     
 }
