@@ -24,15 +24,22 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 6b5ea772d119bda4da857efaee74c831, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  m_InvalidKeywords:
+  - _PREVIEWTYPE_SKYBOX
+  - _QUEUE_BACKGROUND
+  - _RENDERTYPE_BACKGROUND
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
+  - DepthOnly
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -67,11 +74,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClip: 1
+    - _AlphaToMask: 1
+    - _Blend: 0
+    - _CastShadows: 0
     - _Cloud_Cutoff: 4.01
     - _Cloud_Distance: 0.8
     - _Clouds_Far_Tiling: 0.352
     - _Clouds_Opacity: 2.54
     - _Clouds_Tiling: 0.12
+    - _Cull: 0
+    - _DstBlend: 0
+    - _DstBlendAlpha: 0
     - _GradientColor1Influence: 0.6
     - _GradientColor2Influence: 0.5
     - _HorizonCloudsRotationSpeed: -0.1
@@ -79,10 +93,15 @@ Material:
     - _Horizon_Clouds_Opacity: 1
     - _Horizon_Clouds_X_Tile: 1
     - _Horizon_Clouds_Y_Tile: 3.17
+    - _PREVIEWTYPE: 0
+    - _QUEUE: 0
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RENDERTYPE: 0
     - _SmoothStep1: 0.59
     - _SmoothStep2: 0.4
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
     - _StarsHeight: 0.16
     - _StarsRotationSpeed: 0.1
     - _Stars_Offset_X: 0
@@ -91,6 +110,10 @@ Material:
     - _Stars_X_Tile: 0.3
     - _Stars_Y_Tile: 1
     - _SunMoonSize: 0.13
+    - _Surface: 0
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 2
     m_Colors:
     - _GradientColor1: {r: 0, g: 0.3529412, b: 0.54901963, a: 1}
     - _GradientColor2: {r: 0, g: 0, b: 0, a: 1}

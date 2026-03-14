@@ -94,7 +94,17 @@
             "m_Id": "0f018f1cd9bb4dda94f81f51f153339b"
         }
     ],
-    "m_Keywords": [],
+    "m_Keywords": [
+        {
+            "m_Id": "bb0520625cdf4430a38fdb2f1895fe82"
+        },
+        {
+            "m_Id": "b8bbca03a90048d292c0f89273d6b837"
+        },
+        {
+            "m_Id": "4acdd4a15d3c495187cb67433e1d286e"
+        }
+    ],
     "m_Dropdowns": [],
     "m_CategoryData": [
         {
@@ -2466,7 +2476,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -2683,8 +2693,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": -1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -3726,7 +3736,7 @@
     },
     "m_DefaultValue": {
         "x": 0.0,
-        "y": 0.0
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -6393,6 +6403,42 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
+    "m_ObjectId": "4acdd4a15d3c495187cb67433e1d286e",
+    "m_Guid": {
+        "m_GuidSerialized": "2f28ac79-cfed-4062-9263-01d0f2102b53"
+    },
+    "m_Name": "PreviewType",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "PreviewType",
+    "m_DefaultReferenceName": "_PREVIEWTYPE",
+    "m_OverrideReferenceName": "PREVIEWTYPE",
+    "m_GeneratePropertyBlock": false,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_KeywordType": 1,
+    "m_KeywordDefinition": 0,
+    "m_KeywordScope": 0,
+    "m_KeywordStages": 63,
+    "m_Entries": [
+        {
+            "id": 1,
+            "displayName": "Skybox",
+            "referenceName": "SKYBOX"
+        },
+        {
+            "id": 3,
+            "displayName": "C",
+            "referenceName": "C"
+        }
+    ],
+    "m_Value": 0,
+    "m_IsEditable": true
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "4b26f3097b85444899f3a8c70c585028",
@@ -6780,6 +6826,15 @@
         },
         {
             "m_Id": "3dcafa2383464e09bf2493b1af090e84"
+        },
+        {
+            "m_Id": "bb0520625cdf4430a38fdb2f1895fe82"
+        },
+        {
+            "m_Id": "b8bbca03a90048d292c0f89273d6b837"
+        },
+        {
+            "m_Id": "4acdd4a15d3c495187cb67433e1d286e"
         }
     ]
 }
@@ -6847,8 +6902,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": -1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -7027,8 +7082,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": -1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -7946,7 +8001,7 @@
     },
     "m_DefaultValue": {
         "x": 0.0,
-        "y": 0.0
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -8010,7 +8065,7 @@
     },
     "m_DefaultValue": {
         "x": 0.0,
-        "y": 0.0
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -8060,8 +8115,8 @@
     "m_ObjectId": "683eecb74f4f4a599706ce581a74efbb",
     "m_Title": "SUN & MOON",
     "m_Position": {
-        "x": -2817.000244140625,
-        "y": -1255.000244140625
+        "x": -2817.0,
+        "y": -1255.0
     }
 }
 
@@ -9883,7 +9938,7 @@
     },
     "m_DefaultValue": {
         "x": 0.0,
-        "y": 0.0
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -10737,7 +10792,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -12480,6 +12535,47 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
+    "m_ObjectId": "b8bbca03a90048d292c0f89273d6b837",
+    "m_Guid": {
+        "m_GuidSerialized": "0e2a6bb2-2041-4575-aec5-28b57658869c"
+    },
+    "m_Name": "RenderType",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "RenderType",
+    "m_DefaultReferenceName": "_RENDERTYPE",
+    "m_OverrideReferenceName": "RENDERTYPE",
+    "m_GeneratePropertyBlock": false,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_KeywordType": 1,
+    "m_KeywordDefinition": 0,
+    "m_KeywordScope": 0,
+    "m_KeywordStages": 63,
+    "m_Entries": [
+        {
+            "id": 1,
+            "displayName": "Background",
+            "referenceName": "BACKGROUND"
+        },
+        {
+            "id": 3,
+            "displayName": "Transparent",
+            "referenceName": "TRANSPARENT"
+        },
+        {
+            "id": 2,
+            "displayName": "Opaque",
+            "referenceName": "OPAQUE"
+        }
+    ],
+    "m_Value": 0,
+    "m_IsEditable": true
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
     "m_ObjectId": "b8ed1d6b335a48c09d763483286f246f",
@@ -12556,7 +12652,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -12678,6 +12774,42 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
+    "m_ObjectId": "bb0520625cdf4430a38fdb2f1895fe82",
+    "m_Guid": {
+        "m_GuidSerialized": "5a63488a-0075-48b9-9580-df83f8675bc3"
+    },
+    "m_Name": "Queue",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Queue",
+    "m_DefaultReferenceName": "_QUEUE",
+    "m_OverrideReferenceName": "QUEUE",
+    "m_GeneratePropertyBlock": false,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_KeywordType": 1,
+    "m_KeywordDefinition": 0,
+    "m_KeywordScope": 0,
+    "m_KeywordStages": 63,
+    "m_Entries": [
+        {
+            "id": 1,
+            "displayName": "Background",
+            "referenceName": "BACKGROUND"
+        },
+        {
+            "id": 3,
+            "displayName": "C",
+            "referenceName": "C"
+        }
+    ],
+    "m_Value": 0,
+    "m_IsEditable": true
 }
 
 {
@@ -15417,8 +15549,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": -1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -15717,15 +15849,18 @@
     "m_ActiveSubTarget": {
         "m_Id": "1c221baa831143a0a1d2033673d6b887"
     },
-    "m_AllowMaterialOverride": false,
-    "m_SurfaceType": 1,
+    "m_AllowMaterialOverride": true,
+    "m_SurfaceType": 0,
     "m_ZTestMode": 4,
-    "m_ZWriteControl": 0,
+    "m_ZWriteControl": 2,
     "m_AlphaMode": 0,
-    "m_RenderFace": 2,
+    "m_RenderFace": 0,
     "m_AlphaClip": true,
     "m_CastShadows": false,
     "m_ReceiveShadows": true,
+    "m_DisableTint": false,
+    "m_AdditionalMotionVectorMode": 0,
+    "m_AlembicMotionVectors": false,
     "m_SupportsLODCrossFade": false,
     "m_CustomEditorGUI": "",
     "m_SupportVFX": false
@@ -15862,7 +15997,7 @@
     "m_Title": "CLOUDS LAYER",
     "m_Position": {
         "x": -3445.0,
-        "y": -163.99984741210938
+        "y": -164.0
     }
 }
 
@@ -15960,7 +16095,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -16127,7 +16262,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
